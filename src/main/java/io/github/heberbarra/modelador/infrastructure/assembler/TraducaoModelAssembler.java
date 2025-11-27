@@ -18,17 +18,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import io.github.heberbarra.modelador.domain.model.MensagemTraduzidaDTO;
 import io.github.heberbarra.modelador.infrastructure.controller.ControladorTraducao;
+import org.jspecify.annotations.NonNull;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TraducaoModelAssembler
-        implements RepresentationModelAssembler<MensagemTraduzidaDTO, EntityModel<MensagemTraduzidaDTO>> {
+        implements RepresentationModelAssembler<
+                @NonNull MensagemTraduzidaDTO, @NonNull EntityModel<@NonNull MensagemTraduzidaDTO>> {
 
     @Override
-    @NonNull public EntityModel<MensagemTraduzidaDTO> toModel(@NonNull MensagemTraduzidaDTO mensagem) {
+    @NonNull public EntityModel<@NonNull MensagemTraduzidaDTO> toModel(@NonNull MensagemTraduzidaDTO mensagem) {
         return EntityModel.of(
                 mensagem,
                 linkTo(methodOn(ControladorTraducao.class).mensagemTraduzida(mensagem.getChave()))

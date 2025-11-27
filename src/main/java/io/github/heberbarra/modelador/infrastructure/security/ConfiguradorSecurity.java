@@ -32,7 +32,7 @@ public class ConfiguradorSecurity {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
         httpSecurity.authorizeHttpRequests(authorize -> authorize

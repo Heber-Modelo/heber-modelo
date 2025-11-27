@@ -13,14 +13,14 @@
 
 package io.github.heberbarra.modelador.infrastructure.configurador;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.configurador.LeitorAbstratoArquivoVerificador;
 import io.github.heberbarra.modelador.domain.verificador.VerificadorAbstratoJSONAtributo;
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Logger;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Responsável por ler e salvar os dados de um modelo de configuração
@@ -42,7 +42,7 @@ public class LeitorArquivoVerificacaoPadrao<T extends VerificadorAbstratoJSONAtr
 
         try {
             informacoesJSON = objectMapper.readValue(arquivoVerificador, tipoVerificador);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             logger.severe(TradutorWrapper.tradutor
                     .traduzirMensagem("error.file.read.template")
                     .formatted(arquivoVerificador));

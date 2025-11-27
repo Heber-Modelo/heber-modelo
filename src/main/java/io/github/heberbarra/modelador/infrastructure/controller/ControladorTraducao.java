@@ -16,6 +16,7 @@ package io.github.heberbarra.modelador.infrastructure.controller;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.model.MensagemTraduzidaDTO;
 import io.github.heberbarra.modelador.infrastructure.assembler.TraducaoModelAssembler;
+import org.jspecify.annotations.NonNull;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class ControladorTraducao {
     }
 
     @RequestMapping("traducao/{chave}")
-    public EntityModel<MensagemTraduzidaDTO> mensagemTraduzida(@PathVariable String chave) {
+    public EntityModel<@NonNull MensagemTraduzidaDTO> mensagemTraduzida(@PathVariable String chave) {
         String mensagem = TradutorWrapper.tradutor.traduzirMensagem(chave);
         MensagemTraduzidaDTO mensagemTraduzidaDTO = new MensagemTraduzidaDTO(chave, mensagem);
 

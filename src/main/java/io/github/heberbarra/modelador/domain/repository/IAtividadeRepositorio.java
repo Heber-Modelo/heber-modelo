@@ -16,9 +16,10 @@ package io.github.heberbarra.modelador.domain.repository;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import java.util.List;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IAtividadeRepositorio extends JpaRepository<Atividade, Integer> {
+public interface IAtividadeRepositorio extends JpaRepository<@NonNull Atividade, @NonNull Integer> {
 
     Atividade getAtividadeByCodigo(int codigo);
 

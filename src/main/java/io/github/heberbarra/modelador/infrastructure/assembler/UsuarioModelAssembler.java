@@ -18,16 +18,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import io.github.heberbarra.modelador.infrastructure.controller.ControladorUsuarios;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
+import org.jspecify.annotations.NonNull;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UsuarioModelAssembler implements RepresentationModelAssembler<Usuario, EntityModel<Usuario>> {
+public class UsuarioModelAssembler
+        implements RepresentationModelAssembler<@NonNull Usuario, @NonNull EntityModel<@NonNull Usuario>> {
 
     @Override
-    @NonNull public EntityModel<Usuario> toModel(@NonNull Usuario usuario) {
+    @NonNull public EntityModel<@NonNull Usuario> toModel(@NonNull Usuario usuario) {
         return EntityModel.of(
                 usuario,
                 linkTo(methodOn(ControladorUsuarios.class).one(usuario.getMatricula()))

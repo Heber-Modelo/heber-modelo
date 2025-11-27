@@ -21,6 +21,7 @@ import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.assembler.UsuarioModelAssembler;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import java.util.List;
+import org.jspecify.annotations.NonNull;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,8 +40,8 @@ public class ControladorUsuarios {
     }
 
     @GetMapping("/usuarios")
-    public CollectionModel<EntityModel<Usuario>> all() {
-        List<EntityModel<Usuario>> usuarios =
+    public CollectionModel<@NonNull EntityModel<@NonNull Usuario>> all() {
+        List<EntityModel<@NonNull Usuario>> usuarios =
                 repositorio.findAll().stream().map(assembler::toModel).toList();
 
         return CollectionModel.of(
@@ -48,7 +49,7 @@ public class ControladorUsuarios {
     }
 
     @GetMapping("/usuarios/{matricula}")
-    public EntityModel<Usuario> one(@PathVariable Long matricula) {
+    public EntityModel<@NonNull Usuario> one(@PathVariable Long matricula) {
         Usuario usuario = repositorio
                 .findUsuarioByMatricula(matricula)
                 .orElseThrow(() -> new UsuarioNotFoundException(matricula));

@@ -31,6 +31,6 @@ public class Tradutor {
     public String traduzirMensagem(String codigoMensagem) {
         Locale locale = LocaleContextHolder.getLocale();
 
-        return messageSource.getMessage(codigoMensagem, null, locale);
+        return messageSource.getMessage(codigoMensagem, new Object[] {}, locale);
     }
 }
