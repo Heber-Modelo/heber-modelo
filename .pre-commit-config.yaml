@@ -1,0 +1,19 @@
+fail_fast: true
+default_language_version:
+  python: 3.13.11
+repos:
+  - repo: local
+    hooks:
+      - id: Format with Spotless
+        name: Format with Spotless
+        types: [java]
+        entry: gradle spotlessJavaApply
+        language: unsupported
+        stages: [pre-commit]
+        pass_filenames: false
+      - id: Format with Prettier
+        name: Format with Prettier
+        types_or: [html, javascript, ts]
+        entry: npx prettier --write
+        language: node
+        stages: [pre-commit]

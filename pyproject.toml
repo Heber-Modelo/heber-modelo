@@ -1,0 +1,9 @@
+[project]
+name = "heber-modelo"
+version = "0.1.0"
+description = "Configuração básica de um projeto python para auxiliar na formatação e manunteção deste projeto."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pre-commit>=4.5.1",
+]
