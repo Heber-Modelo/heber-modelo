@@ -22,6 +22,7 @@ import org.tomlj.TomlTable;
 
 public class CombinadorConfiguracoes implements ICombinadorConfiguracoes {
 
+    @Override
     public Map<String, List<Map<String, String>>> combinarConfiguracoes(
             Map<String, List<Map<String, String>>> configuracaoPadrao,
             TomlTable configuracao,
@@ -58,5 +59,22 @@ public class CombinadorConfiguracoes implements ICombinadorConfiguracoes {
         }
 
         return novaConfiguracao;
+    }
+
+    @Override
+    public Map<String, String> combinarDadosDotEnv(
+            Map<String, String> dotEnvPadrao, Map<String, String> dotEnvUsuario) {
+        Map<String, String> novoDotEnv = new LinkedHashMap<>();
+
+        for (String key : dotEnvPadrao.keySet()) {
+            if (dotEnvUsuario.containsKey(key)) {
+                novoDotEnv.put(key, dotEnvUsuario.get(key));
+                continue;
+            }
+
+            novoDotEnv.put(key, dotEnvPadrao.get(key));
+        }
+
+        return novoDotEnv;
     }
 }

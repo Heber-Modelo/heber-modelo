@@ -154,6 +154,12 @@ public class VerificadorConfiguracao implements IVerificadorConfiguracao {
     }
 
     @Override
+    public void verificarAtributoDotEnv(Map<String, String> map, String s, Object o) {}
+
+    @Override
+    public void verificarArquivoDotEnv(Map<String, String> map, Map<String, String> map1) {}
+
+    @Override
     public void verificarArquivoPaleta(Map<String, List<Map<String, String>>> paletaPadrao, TomlTable dados) {
         TomlTable tabelaPaleta = dados.getTable("paleta");
         List<Map<String, String>> variaveisTabelaPadrao = paletaPadrao.get("paleta");

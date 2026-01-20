@@ -17,6 +17,9 @@ import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.codigo.CodigoSaida;
 import io.github.heberbarra.modelador.domain.configurador.ILeitorConfiguracao;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
@@ -34,6 +37,7 @@ public class LeitorConfiguracao implements ILeitorConfiguracao {
     private String arquivoConfiguracoes;
     private String arquivoPaleta;
     private TomlTable informacoesConfiguracoes;
+    private Map<String, String> informacoesDotEnv;
     private TomlTable informacoesPaleta;
 
     public LeitorConfiguracao(String pastaConfiguracao, String arquivoConfiguracoes, String arquivoPaleta) {
@@ -45,6 +49,7 @@ public class LeitorConfiguracao implements ILeitorConfiguracao {
     @Override
     public void lerArquivos() {
         lerArquivoConfiguracoes();
+        lerArquivoDotEnv();
         lerArquivoPaleta();
     }
 
@@ -116,6 +121,40 @@ public class LeitorConfiguracao implements ILeitorConfiguracao {
         return lerArquivo(arquivoConfiguracoes);
     }
 
+    public void lerArquivoDotEnv() {
+        informacoesDotEnv = lerArquivoDotEnvSemSalvar();
+    }
+
+    @Override
+    public Map<String, String> lerArquivoDotEnvSemSalvar() {
+        File arquivoDotEnv = new File("%s/.env".formatted(pastaConfiguracao));
+        Map<String, String> dados = new LinkedHashMap<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(arquivoDotEnv))) {
+            String line = reader.readLine();
+
+            while (line != null) {
+                String[] partesVariaveis = line.split("=");
+
+                if (partesVariaveis.length == 2) {
+                    dados.put(partesVariaveis[0], partesVariaveis[1]);
+                } else {
+                    dados.put(partesVariaveis[0], "");
+                }
+
+                line = reader.readLine();
+            }
+
+        } catch (IOException e) {
+            logger.severe(
+                    TradutorWrapper.tradutor.traduzirMensagem("error.file.read").formatted(".env", e.getMessage()));
+            logger.severe(TradutorWrapper.tradutor.traduzirMensagem("app.end"));
+            System.exit(CodigoSaida.ERRO_LEITURA_ARQUIVO.getCodigo());
+        }
+
+        return dados;
+    }
+
     private void lerArquivoPaleta() {
         informacoesPaleta = lerArquivo(arquivoPaleta);
     }
@@ -163,6 +202,14 @@ public class LeitorConfiguracao implements ILeitorConfiguracao {
 
     protected void setInformacoesConfiguracoes(TomlTable informacoesConfiguracoes) {
         this.informacoesConfiguracoes = informacoesConfiguracoes;
+    }
+
+    public Map<String, String> getInformacoesDotEnv() {
+        return informacoesDotEnv;
+    }
+
+    public void setInformacoesDotEnv(Map<String, String> informacoesDotEnv) {
+        this.informacoesDotEnv = informacoesDotEnv;
     }
 
     public TomlTable getInformacoesPaleta() {
