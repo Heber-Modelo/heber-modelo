@@ -1,0 +1,30 @@
+{
+  "$schema": "dotenv.schema.json",
+  "atributos": [
+    {
+      "nome": "MYSQL_HOST",
+      "valorPadrao": "localhost",
+      "tipo": "String"
+    },
+    {
+      "nome": "MYSQL_PORT",
+      "valorPadrao": 3306,
+      "tipo": "Long"
+    },
+    {
+      "nome": "MYSQL_ROOT_PASSWORD",
+      "valorPadrao": "root",
+      "tipo": "String"
+    },
+    {
+      "nome": "SENHA_ESTUDANTE",
+      "valorPadrao": "",
+      "tipo": "String"
+    },
+    {
+      "nome": "SENHA_PROFESSOR",
+      "valorPadrao": "",
+      "tipo": "String"
+    }
+  ]
+}

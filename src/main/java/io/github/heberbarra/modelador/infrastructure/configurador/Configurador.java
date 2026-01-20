@@ -69,6 +69,7 @@ public final class Configurador implements IConfigurador {
         if (verificadorConfiguracao instanceof VerificadorConfiguracao verificador) {
             criadorConfiguracoes.pegarConfiguracaoPadrao(
                     verificador.getLeitorConfiguracoes().getInformacoesJSON());
+            criadorConfiguracoes.pegarDotEnvPadrao(verificador.getLeitorDotEnv().getInformacoesJSON());
             criadorConfiguracoes.pegarPaletaPadrao(verificador.getLeitorPaleta().getInformacoesJSON());
         }
     }
@@ -83,6 +84,7 @@ public final class Configurador implements IConfigurador {
         criadorConfiguracoes.criarPastaConfiguracao();
         lerConfiguracaoPadrao();
         criadorConfiguracoes.criarArquivoConfiguracoes(ARQUIVO_CONFIGURACOES);
+        criadorConfiguracoes.criarArquivoDotEnv();
         criadorConfiguracoes.criarArquivoPaleta(ARQUIVO_PALETA);
     }
 
