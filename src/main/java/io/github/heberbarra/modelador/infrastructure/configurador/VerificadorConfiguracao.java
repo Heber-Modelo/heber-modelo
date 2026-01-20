@@ -19,6 +19,7 @@ import io.github.heberbarra.modelador.domain.configurador.IVerificadorConfigurac
 import io.github.heberbarra.modelador.domain.configurador.LeitorAbstratoArquivoVerificador;
 import io.github.heberbarra.modelador.infrastructure.acessador.AcessadorRecursos;
 import io.github.heberbarra.modelador.infrastructure.verificador.JsonVerificadorConfiguracoes;
+import io.github.heberbarra.modelador.infrastructure.verificador.JsonVerificadorDotEnv;
 import io.github.heberbarra.modelador.infrastructure.verificador.JsonVerificadorPaleta;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,8 @@ public class VerificadorConfiguracao implements IVerificadorConfiguracao {
         leitores.add(new LeitorArquivoVerificacaoPadrao<>(
                 JsonVerificadorConfiguracoes.class,
                 acessadorRecursos.pegarArquivoRecurso("config/configuracao.template.json")));
+        leitores.add(new LeitorArquivoVerificacaoPadrao<>(
+                JsonVerificadorDotEnv.class, acessadorRecursos.pegarArquivoRecurso("config/dotenv.template.json")));
         leitores.add(new LeitorArquivoVerificacaoPadrao<>(
                 JsonVerificadorPaleta.class, acessadorRecursos.pegarArquivoRecurso("config/paleta.template.json")));
     }
@@ -69,7 +72,12 @@ public class VerificadorConfiguracao implements IVerificadorConfiguracao {
 
     @SuppressWarnings("unchecked")
     public LeitorArquivoVerificacaoPadrao<JsonVerificadorPaleta> getLeitorPaleta() {
-        return (LeitorArquivoVerificacaoPadrao<JsonVerificadorPaleta>) leitores.get(1);
+        return (LeitorArquivoVerificacaoPadrao<JsonVerificadorPaleta>) leitores.get(2);
+    }
+
+    @SuppressWarnings("unchecked")
+    public LeitorArquivoVerificacaoPadrao<JsonVerificadorDotEnv> getLeitorDotEnv() {
+        return (LeitorArquivoVerificacaoPadrao<JsonVerificadorDotEnv>) leitores.get(1);
     }
 
     @SuppressWarnings("unchecked")
