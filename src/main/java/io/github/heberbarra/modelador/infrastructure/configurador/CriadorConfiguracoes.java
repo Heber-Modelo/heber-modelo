@@ -69,7 +69,7 @@ public class CriadorConfiguracoes extends CriadorConfiguracoesBase {
 
     @Override
     public void criarArquivoDotEnv() {
-        File dotenv = new File(pastaConfiguracao.getPasta() + ".env");
+        File dotenv = new File("%s/.env".formatted(pastaConfiguracao.getPasta()));
 
         if (dotenv.exists() && dotenv.length() != 0) {
             return;
@@ -108,6 +108,24 @@ public class CriadorConfiguracoes extends CriadorConfiguracoesBase {
     @Override
     public void sobrescreverArquivoConfiguracoes(String arquivoConfiguracoes, String dadosToml) {
         criarArquivo(dadosToml, pastaConfiguracao.getPasta() + "/" + arquivoConfiguracoes, false);
+    }
+
+    @Override
+    public void sobrescreverArquivoDotEnv(Map<String, String> dados) {
+        File dotEnvFile = new File("%s/.env".formatted(pastaConfiguracao.getPasta()));
+
+        try (BufferedWriter dotEnvWriter = new BufferedWriter(new FileWriter(dotEnvFile))) {
+            for (String key : dados.keySet()) {
+                dotEnvWriter.write("%s=%s".formatted(key, dados.get(key)));
+                dotEnvWriter.newLine();
+            }
+        } catch (IOException e) {
+            logger.severe(TradutorWrapper.tradutor
+                    .traduzirMensagem("error.file.create")
+                    .formatted(dotEnvFile.getAbsolutePath(), e.getMessage()));
+            logger.severe(TradutorWrapper.tradutor.traduzirMensagem("app.end"));
+            System.exit(CodigoSaida.ERRO_CRIACAO_CONFIG.getCodigo());
+        }
     }
 
     @Override
@@ -183,6 +201,10 @@ public class CriadorConfiguracoes extends CriadorConfiguracoesBase {
 
     public Map<String, List<Map<String, String>>> getConfiguracaoPadrao() {
         return configuracaoPadrao;
+    }
+
+    public Map<String, String> getDotenvPadrao() {
+        return dotenvPadrao;
     }
 
     public Map<String, List<Map<String, String>>> getPaletaPadrao() {
