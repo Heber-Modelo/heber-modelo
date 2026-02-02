@@ -281,7 +281,9 @@ public class ControladorWeb {
 
         modelMap.addAttribute(
                 "incrementoMovimentacaoElemento",
-                configurador.pegarValorConfiguracao("editor", "incrementoMovimentacaoElemento", long.class));
+                configurador
+                        .pegarValorConfiguracao("editor", "incrementoMovimentacaoElemento", long.class)
+                        .orElse(0L));
 
         return "editor";
     }

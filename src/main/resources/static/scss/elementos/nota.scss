@@ -23,6 +23,16 @@
     border-width: 0 0 0.3rem 0.3rem;
   }
 
+  &:hover {
+    &:before {
+      background-color: var(--cor-borda-componente-selecionado);
+    }
+
+    &:after {
+      border-color: var(--cor-borda-componente-selecionado);
+    }
+  }
+
   &.selected {
     &:before {
       background-color: var(--cor-borda-componente-selecionado);
