@@ -18,6 +18,23 @@ import java.util.List;
 
 public class ListadorTiposDiagrama {
 
+    public enum GruposDiagrama {
+        DATABASE("diagramasBD"),
+        UML("diagramasUML"),
+        MISC("diagramasOutros");
+
+        private final String nomeGrupo;
+
+        GruposDiagrama(String nomeGrupo) {
+            this.nomeGrupo = nomeGrupo;
+        }
+
+        @Override
+        public String toString() {
+            return this.nomeGrupo;
+        }
+    }
+
     public static List<TipoDiagramaDTO> pegarDiagramasUML() {
         return List.of(
                 new TipoDiagramaDTO("diagram.activities.label", "DDA", "diagram.activities.title"),

@@ -14,12 +14,12 @@
 package io.github.heberbarra.modelador;
 
 import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama;
+import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama.GruposDiagrama;
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
 import io.github.heberbarra.modelador.domain.model.NovoDiagramaDTO;
 import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
-import io.github.heberbarra.modelador.infrastructure.configurador.Configurador;
 import io.github.heberbarra.modelador.infrastructure.configurador.WatcherConfiguracao;
 import io.github.heberbarra.modelador.infrastructure.controller.ControladorDesligar;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
@@ -75,7 +75,7 @@ public class ControladorWeb {
     public static class InjetorAtributos {
 
         public static void injetarBindings(ModelMap modelMap) {
-            TomlTable tabelaBindings = ((Configurador) configurador)
+            TomlTable tabelaBindings = configurador
                     .getLeitorConfiguracao()
                     .getInformacoesConfiguracoes()
                     .getTable("bindings");
@@ -263,9 +263,9 @@ public class ControladorWeb {
         InjetorAtributos.injetarPaleta(modelMap);
         InjetorAtributos.injetarBindings(modelMap);
         modelMap.addAttribute("novoDiagramaDTO", novoDiagramaDTO);
-        modelMap.addAttribute("diagramasUML", ListadorTiposDiagrama.pegarDiagramasUML());
-        modelMap.addAttribute("diagramasBD", ListadorTiposDiagrama.pegarDiagramasBancoDados());
-        modelMap.addAttribute("diagramasOutros", ListadorTiposDiagrama.pegarDiagramasOutros());
+        modelMap.addAttribute(GruposDiagrama.UML.toString(), ListadorTiposDiagrama.pegarDiagramasUML());
+        modelMap.addAttribute(GruposDiagrama.DATABASE.toString(), ListadorTiposDiagrama.pegarDiagramasBancoDados());
+        modelMap.addAttribute(GruposDiagrama.MISC.toString(), ListadorTiposDiagrama.pegarDiagramasOutros());
 
         Optional<Boolean> exibirGrade = configurador.pegarValorConfiguracao("grade", "exibir", boolean.class);
         if (exibirGrade.isPresent() && exibirGrade.get()) {
@@ -293,9 +293,9 @@ public class ControladorWeb {
         InjetorAtributos.injetarTituloPagina(modelMap, "new-diagram");
         InjetorAtributos.injetarPaleta(modelMap);
         modelMap.addAttribute("novoDiagramaDTO", new NovoDiagramaDTO());
-        modelMap.addAttribute("diagramasUML", ListadorTiposDiagrama.pegarDiagramasUML());
-        modelMap.addAttribute("diagramasBD", ListadorTiposDiagrama.pegarDiagramasBancoDados());
-        modelMap.addAttribute("diagramasOutros", ListadorTiposDiagrama.pegarDiagramasOutros());
+        modelMap.addAttribute(GruposDiagrama.UML.toString(), ListadorTiposDiagrama.pegarDiagramasUML());
+        modelMap.addAttribute(GruposDiagrama.DATABASE.toString(), ListadorTiposDiagrama.pegarDiagramasBancoDados());
+        modelMap.addAttribute(GruposDiagrama.MISC.toString(), ListadorTiposDiagrama.pegarDiagramasOutros());
 
         return "novo";
     }
