@@ -6,8 +6,8 @@
     <xs:element name="diagram">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="creation-datetime" type="xs:date"/>
-                <xs:element name="last-modification" type="xs:date"/>
+                <xs:element name="creation-datetime" type="xs:dateTime"/>
+                <xs:element name="last-modification" type="xs:dateTime"/>
                 <xs:element name="authors" minOccurs="0">
                     <xs:complexType>
                         <xs:sequence maxOccurs="unbounded">
@@ -29,14 +29,14 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="links">
+                <xs:element name="links" minOccurs="0">
                     <xs:complexType>
-                        <xs:sequence>
+                        <xs:sequence maxOccurs="unbounded">
                             <xs:element name="link">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="name-component" type="xs:string" />
-                                        <xs:element name="uri-component" type="xs:anyURI" />
+                                        <xs:element name="name-component" type="xs:string"/>
+                                        <xs:element name="uri-component" type="xs:anyURI"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
@@ -45,7 +45,7 @@
                 </xs:element>
                 <xs:element name="pages">
                     <xs:complexType>
-                        <xs:sequence>
+                        <xs:sequence maxOccurs="unbounded">
                             <xs:element name="page">
                                 <xs:complexType>
                                     <xs:sequence>
@@ -61,8 +61,7 @@
                                                                 <xs:element name="component-width" type="xs:double"/>
                                                                 <xs:element name="component-x" type="xs:double"/>
                                                                 <xs:element name="component-y" type="xs:double"/>
-                                                                <xs:element name="component-font-size"
-                                                                            type="xs:double"/>
+                                                                <xs:element name="component-font-size" type="xs:double"/>
                                                             </xs:sequence>
                                                         </xs:complexType>
                                                     </xs:element>
