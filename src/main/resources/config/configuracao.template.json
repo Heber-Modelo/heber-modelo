@@ -87,6 +87,12 @@
     },
     {
       "categoria": "bindings",
+      "atributo": "reverterUltimaAcao",
+      "tipo": "String",
+      "valorPadrao": "z"
+    },
+    {
+      "categoria": "bindings",
       "atributo": "moverElementoParaCima",
       "tipo": "String",
       "valorPadrao": "ArrowUp"
