@@ -21,7 +21,6 @@ import {
   editorEixoY,
   inputs,
 } from "./editorPropriedades.js";
-import { colarElemento, copiarElemento, cortarElemento } from "../../clipboard/clipboard.js";
 import { carregarCSS } from "./carregarCSS.js";
 import {
   ComponenteDiagrama,
@@ -39,9 +38,16 @@ import { CarregadorDiagrama } from "../../carregador/carregadorDiagrama.js";
 import { FabricaComponenteConexao } from "../../../model/conexao/fabricaComponenteConexao.js";
 import { TipoConexao } from "../../../model/conexao/tipoConexao.js";
 import "./painelLateral.js";
-import ColarComponenteCommandFactory from "../../../infrastructure/factory/command/colarComponenteCommandFactory.js";
-import ColarComponenteCommand from "../../../infrastructure/command/colarComponenteCommand.js";
 import CommandHistory from "../../history/commandHistory.js";
+import ColarComponenteCommand, {
+  ColarComponenteDiagramaBuilder,
+} from "../../../infrastructure/command/colarComponenteCommand.js";
+import CopiarComponenteCommand, {
+  CopiarComponenteCommandBuilder,
+} from "../../../infrastructure/command/copiarComponenteCommand.js";
+import CortarComponenteCommand, {
+  CortarComponenteCommandBuilder,
+} from "../../../infrastructure/command/cortarComponenteCommand.js";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -374,13 +380,6 @@ inputsCarregarDiagrama.forEach((input: HTMLInputElement): void => {
 /***********************/
 
 let teclaAnterior: string | null = null;
-let colarCommandFactory: ColarComponenteCommandFactory = new ColarComponenteCommandFactory(
-  diagrama as HTMLElement,
-  geradorIDComponente,
-  fabricaComponente,
-  registrarEventosComponente,
-  repositorioComponentes,
-);
 
 document.addEventListener("keydown", (event: KeyboardEvent): void => {
   atualizarValorInput(selecionadorComponente.pegarHTMLElementoSelecionado(), editorEixoY, "top");
@@ -391,23 +390,33 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
 
   // Leader key bindings
   if (teclaAnterior === bindings.get("leaderKey") && event.key === bindings.get("copiarElemento")) {
-    copiarElemento(selecionadorComponente.pegarHTMLElementoSelecionado());
+    let command: CopiarComponenteCommand = new CopiarComponenteCommandBuilder()
+      .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
+      .build();
+    commandHistory.saveAndExecuteCommand(command);
     return;
   }
 
   if (teclaAnterior === bindings.get("leaderKey") && event.key === bindings.get("cortarElemento")) {
-    if (cortarElemento(selecionadorComponente.componenteSelecionado)) {
-      repositorioComponentes.remover(
-        selecionadorComponente.componenteSelecionado as ComponenteDiagrama,
-      );
-      selecionadorComponente.removerSelecao();
-    }
+    let command: CortarComponenteCommand = new CortarComponenteCommandBuilder()
+      .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
+      .definirRepositorioComponente(repositorioComponentes)
+      .definirSelecionadorComponente(selecionadorComponente)
+      .build();
+
+    commandHistory.saveAndExecuteCommand(command);
     return;
   }
 
   if (teclaAnterior === bindings.get("leaderKey") && event.key === bindings.get("colarElemento")) {
-    let colarComponenteCommand: ColarComponenteCommand = colarCommandFactory.build();
-    commandHistory.saveAndExecuteCommand(colarComponenteCommand);
+    let command: ColarComponenteCommand = new ColarComponenteDiagramaBuilder()
+      .definirFabricaComponente(fabricaComponente)
+      .definirGeradorID(geradorIDComponente)
+      .definirRegistradorEventos(registrarEventosComponente)
+      .definirRepositorioComponente(repositorioComponentes)
+      .definirPaiComponente(diagrama)
+      .build();
+    commandHistory.saveAndExecuteCommand(command);
 
     return;
   }

@@ -1,4 +1,4 @@
-import ICommand from "../../model/command/iCommand";
+import ICommand from "../../model/command/iCommand.js";
 import { ComponenteFactory } from "../factory/componenteFactory.js";
 import { GeradorIDComponente } from "../gerador/geradorIDComponente.js";
 import { ComponenteDiagrama } from "../../model/componente/componenteDiagrama.js";
@@ -64,6 +64,69 @@ class ColarComponenteCommand implements ICommand {
     this._componenteColado?.htmlComponente.remove();
 
     return 0;
+  }
+}
+
+export class ColarComponenteDiagramaBuilder {
+  private _paiComponente: ParentNode | null = null;
+  private _geradorID: GeradorIDComponente | null = null;
+  private _fabricaComponente: ComponenteFactory | null = null;
+  private _registradorEventos: Function | null = null;
+  private _repositorioComponente: RepositorioComponente | null = null;
+
+  definirPaiComponente(paiComponente: ParentNode | null): this {
+    this._paiComponente = paiComponente;
+    return this;
+  }
+
+  definirGeradorID(geradorID: GeradorIDComponente | null): this {
+    this._geradorID = geradorID;
+    return this;
+  }
+
+  definirFabricaComponente(fabricaComponente: ComponenteFactory | null): this {
+    this._fabricaComponente = fabricaComponente;
+    return this;
+  }
+
+  definirRegistradorEventos(registradorEventos: Function | null): this {
+    this._registradorEventos = registradorEventos;
+    return this;
+  }
+
+  definirRepositorioComponente(repositorioComponente: RepositorioComponente | null): this {
+    this._repositorioComponente = repositorioComponente;
+    return this;
+  }
+
+  public build(): ColarComponenteCommand {
+    if (this._paiComponente === null) {
+      throw new Error("O pai do componente não foi especificado");
+    }
+
+    if (this._geradorID === null) {
+      throw new Error("O gerador de ID não foi especificado");
+    }
+
+    if (this._fabricaComponente === null) {
+      throw new Error("A fábrica de componentes não foi especificado");
+    }
+
+    if (this._registradorEventos === null) {
+      throw new Error("O registrador de eventos não foi especificado");
+    }
+
+    if (this._repositorioComponente === null) {
+      throw new Error("O repositório de componentes não foi especificado");
+    }
+
+    return new ColarComponenteCommand(
+      this._paiComponente,
+      this._geradorID,
+      this._fabricaComponente,
+      this._registradorEventos,
+      this._repositorioComponente,
+    );
   }
 }
 

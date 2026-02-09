@@ -1,4 +1,4 @@
-import ICommand from "../../model/command/iCommand";
+import ICommand from "../../model/command/iCommand.js";
 import { CLASSE_ELEMENTO_SELECIONADO } from "../../application/paginas/editor/classesCSSElementos.js";
 import { ComponenteDiagrama } from "../../model/componente/componenteDiagrama.js";
 
@@ -21,6 +21,23 @@ class CopiarComponenteCommand implements ICommand {
 
   undo(): Number {
     return 0;
+  }
+}
+
+export class CopiarComponenteCommandBuilder {
+  private _componente: ComponenteDiagrama | null = null;
+
+  public definirComponenteAlvo(componente: ComponenteDiagrama | null): this {
+    this._componente = componente;
+    return this;
+  }
+
+  build(): CopiarComponenteCommand {
+    if (this._componente === null) {
+      throw new Error("O componente alvo não foi especificado");
+    }
+
+    return new CopiarComponenteCommand(this._componente);
   }
 }
 
