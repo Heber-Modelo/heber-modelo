@@ -39,12 +39,16 @@ import { CarregadorDiagrama } from "../../carregador/carregadorDiagrama.js";
 import { FabricaComponenteConexao } from "../../../model/conexao/fabricaComponenteConexao.js";
 import { TipoConexao } from "../../../model/conexao/tipoConexao.js";
 import "./painelLateral.js";
+import ColarComponenteCommandFactory from "../../../infrastructure/factory/command/colarComponenteCommandFactory.js";
+import ColarComponenteCommand from "../../../infrastructure/command/colarComponenteCommand.js";
+import CommandHistory from "../../history/commandHistory.js";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
 /****************************/
 
 let abaPropriedades: HTMLDivElement | null = document.querySelector("section#propriedades");
+let commandHistory: CommandHistory = new CommandHistory();
 let diagrama: HTMLElement | null = document.querySelector("main");
 let fabricaComponente: ComponenteFactory = new ComponenteFactory();
 let geradorIDComponente: GeradorIDComponente = GeradorIDComponente.pegarInstance();
@@ -108,12 +112,12 @@ function dragElement(event: MouseEvent): void {
 /* EVENTOS COMPONENTES */
 /***********************/
 
-const registrarEventosComponente = (componente: HTMLDivElement): void => {
+function registrarEventosComponente(componente: HTMLDivElement): void {
   componente.addEventListener("click", conectarElementos);
   componente.addEventListener("mousedown", mouseDownSelecionarElemento);
   componente.addEventListener("mousedown", mouseDownComecarMoverElemento);
   componente.addEventListener("mouseup", mouseUpPararMoverElemento);
-};
+}
 
 componentes.forEach((componente: HTMLDivElement): void => {
   registrarEventosComponente(componente);
@@ -370,6 +374,13 @@ inputsCarregarDiagrama.forEach((input: HTMLInputElement): void => {
 /***********************/
 
 let teclaAnterior: string | null = null;
+let colarCommandFactory: ColarComponenteCommandFactory = new ColarComponenteCommandFactory(
+  diagrama as HTMLElement,
+  geradorIDComponente,
+  fabricaComponente,
+  registrarEventosComponente,
+  repositorioComponentes,
+);
 
 document.addEventListener("keydown", (event: KeyboardEvent): void => {
   atualizarValorInput(selecionadorComponente.pegarHTMLElementoSelecionado(), editorEixoY, "top");
@@ -395,29 +406,17 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
   }
 
   if (teclaAnterior === bindings.get("leaderKey") && event.key === bindings.get("colarElemento")) {
-    let ultimoElemento: HTMLDivElement = diagrama?.lastElementChild as HTMLDivElement;
-    colarElemento(diagrama);
+    let colarComponenteCommand: ColarComponenteCommand = colarCommandFactory.build();
+    commandHistory.saveAndExecuteCommand(colarComponenteCommand);
 
-    setTimeout((): void => {
-      let novoElemento: HTMLDivElement = diagrama?.lastElementChild as HTMLDivElement;
+    return;
+  }
 
-      if (ultimoElemento !== novoElemento) {
-        registrarEventosComponente(novoElemento);
-        novoElemento.setAttribute("data-id", String(geradorIDComponente.pegarProximoID()));
-        let nomeNovoComponente: string | null = novoElemento.getAttribute(
-          ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-        );
-
-        if (nomeNovoComponente !== null) {
-          fabricaComponente
-            .criarComponente(nomeNovoComponente)
-            .then((componente: ComponenteDiagrama): void => {
-              componente.htmlComponente = novoElemento;
-              repositorioComponentes.adicionar(componente);
-            });
-        }
-      }
-    }, 200);
+  if (
+    teclaAnterior === bindings.get("leaderKey") &&
+    event.key === bindings.get("reverterUltimaAcao")
+  ) {
+    commandHistory.undoLastCommand();
     return;
   }
 
