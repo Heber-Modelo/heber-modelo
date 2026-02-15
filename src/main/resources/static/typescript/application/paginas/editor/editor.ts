@@ -48,6 +48,7 @@ import CortarComponenteCommand, {
   CortarComponenteCommandBuilder,
 } from "../../../infrastructure/command/cortarComponenteCommand.js";
 import CarregarDiagramaCommand, {
+  ATRIBUTO_NOME_ELEMENTO,
   CarregarDiagramaCommandBuilder,
 } from "../../../infrastructure/command/carregarDiagramaCommand.js";
 
@@ -326,7 +327,7 @@ let tiposDiagrama: HTMLElement | null = document.querySelector("#tipos-diagrama"
 
 function callbackCriarComponente(event: Event): void {
   let btn: HTMLButtonElement = event.target as HTMLButtonElement;
-  let nomeElemento: string | null = btn.getAttribute("data-nome-elemento");
+  let nomeElemento: string | null = btn.getAttribute(ATRIBUTO_NOME_ELEMENTO);
 
   if (nomeElemento === null) {
     return;
@@ -335,7 +336,10 @@ function callbackCriarComponente(event: Event): void {
   fabricaComponente.criarComponente(nomeElemento).then((componente: ComponenteDiagrama): void => {
     carregarCSS(nomeElemento);
     registrarEventosComponente(componente.htmlComponente);
-    componente.htmlComponente.setAttribute("data-id", String(geradorIDComponente.pegarProximoID()));
+    componente.htmlComponente.setAttribute(
+      ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+      String(geradorIDComponente.pegarProximoID()),
+    );
     repositorioComponentes.adicionar(componente);
     diagrama?.appendChild(componente.htmlComponente);
   });
