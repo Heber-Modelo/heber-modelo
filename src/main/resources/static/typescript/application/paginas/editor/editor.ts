@@ -34,7 +34,6 @@ import { GeradorIDComponente } from "../../../infrastructure/gerador/geradorIDCo
 import { ComponenteFactory } from "../../../infrastructure/factory/componenteFactory.js";
 import { Ponto } from "../../../model/ponto.js";
 import { DirecoesMovimento, moverComponente } from "./manipularComponente.js";
-import { CarregadorDiagrama } from "../../carregador/carregadorDiagrama.js";
 import { FabricaComponenteConexao } from "../../../model/conexao/fabricaComponenteConexao.js";
 import { TipoConexao } from "../../../model/conexao/tipoConexao.js";
 import "./painelLateral.js";
@@ -48,6 +47,9 @@ import CopiarComponenteCommand, {
 import CortarComponenteCommand, {
   CortarComponenteCommandBuilder,
 } from "../../../infrastructure/command/cortarComponenteCommand.js";
+import CarregarDiagramaCommand, {
+  CarregarDiagramaCommandBuilder,
+} from "../../../infrastructure/command/carregarDiagramaCommand.js";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -317,7 +319,6 @@ setas.forEach((seta: HTMLElement): void => {
 /* CARREGAMENTO DIAGRAMAS */
 /**************************/
 
-let carregadorDiagrama: CarregadorDiagrama = new CarregadorDiagrama();
 let sectionComponentes: HTMLElement | null = document.querySelector("#componentes");
 let inputsCarregarDiagrama: NodeListOf<HTMLInputElement> =
   document.querySelectorAll("input.carregar-diagrama");
@@ -340,40 +341,38 @@ function callbackCriarComponente(event: Event): void {
   });
 }
 
-tiposDiagrama?.innerText
-  ?.substring(1, tiposDiagrama?.innerText.length - 1)
-  .toLowerCase()
-  .split(",")
-  .forEach((tipo: string): void => {
-    tipo = tipo.trim();
-    if (tipo !== "") {
-      carregadorDiagrama
-        .carregarDiagrama(tipo, callbackCriarComponente)
-        .then((fieldset: HTMLFieldSetElement): void => {
-          sectionComponentes?.append(fieldset);
-        });
-
-      inputsCarregarDiagrama.forEach((input: HTMLInputElement): void => {
-        if (input.value.toLowerCase() === tipo) {
-          input.checked = true;
-          input.disabled = true;
-        }
-      });
-    }
-  });
+let inputsPorTipo: { [tipoDiagrama: string]: HTMLInputElement } = {};
 
 inputsCarregarDiagrama.forEach((input: HTMLInputElement): void => {
+  inputsPorTipo[input.value] = input;
+
+  const command: CarregarDiagramaCommand = new CarregarDiagramaCommandBuilder()
+    .definirSectionComponentes(sectionComponentes as HTMLElement)
+    .definirCallCriarComponente(callbackCriarComponente)
+    .definirNomeDiagrama(input.value.toLowerCase())
+    .build();
+
   input.addEventListener("click", (event: Event): void => {
-    let elementoAlvo: HTMLInputElement = event.target as HTMLInputElement;
-    carregadorDiagrama
-      .carregarDiagrama(elementoAlvo.value.toLowerCase(), callbackCriarComponente)
-      .then((fieldset: HTMLFieldSetElement): void => {
-        sectionComponentes?.append(fieldset);
-        // TODO: Criar maneira para remover botões
-        input.disabled = true;
-      });
+    let target: HTMLInputElement = event.target as HTMLInputElement;
+
+    if (target.checked) {
+      command.execute();
+    } else {
+      command.undo();
+    }
   });
 });
+
+tiposDiagrama?.innerText
+  ?.substring(1, tiposDiagrama?.innerText.length - 1)
+  .toUpperCase()
+  .split(",")
+  .map((tipo: string): string => tipo.trim())
+  .forEach((tipo: string): void => {
+    if (inputsPorTipo[tipo]) {
+      inputsPorTipo[tipo].click();
+    }
+  });
 
 /***********************/
 /* BINDINGS DO USUÁRIO */
