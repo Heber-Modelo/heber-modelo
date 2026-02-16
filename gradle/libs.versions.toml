@@ -1,13 +1,13 @@
 [plugins]
-spotless = { id = "com.diffplug.spotless", version = "8.1.0" }
+spotless = { id = "com.diffplug.spotless", version = "8.2.1" }
 springdependency = { id = "io.spring.dependency-management", version = "1.1.7" }
-springboot = { id = "org.springframework.boot", version = "4.0.0" }
+springboot = { id = "org.springframework.boot", version = "4.0.2" }
 [libraries]
 apachePDFBox = { module = "org.apache.pdfbox:pdfbox", version = "3.0.6" }
 cdimascioDotenv = { module = "io.github.cdimascio:dotenv-java", version = "3.2.0" }
-jakartaXML = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.4" }
+jakartaXML = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.5" }
 jlineJansi = { module = "org.jline:jansi", version = "3.30.6" }
 heberModeloAPI = { module = "io.github.heberbarra:heber-modelo-api", version = "0.0.13-SNAP" }
-hibernateCore = { module = "org.hibernate:hibernate-core", version = "7.1.10.Final" }
-mysqlConnector = { module = "com.mysql:mysql-connector-j", version = "9.5.0" }
+hibernateCore = { module = "org.hibernate:hibernate-core", version = "7.2.4.Final" }
+mysqlConnector = { module = "com.mysql:mysql-connector-j", version = "9.6.0" }
 tomlj = { module = "org.tomlj:tomlj", version = "1.1.1" }
