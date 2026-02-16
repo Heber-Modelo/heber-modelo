@@ -33,6 +33,7 @@ public class ConfiguradorSecurity {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
+        // TODO: Configurar apropriadamente o token CSRF após configurar o sistema de contas
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
         httpSecurity.authorizeHttpRequests(authorize -> authorize
