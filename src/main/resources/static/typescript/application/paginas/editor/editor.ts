@@ -21,8 +21,6 @@ import {
   editorEixoY,
   inputs,
 } from "./editorPropriedades.js";
-import { colarElemento, copiarElemento, cortarElemento } from "../../clipboard/clipboard.js";
-import { carregarCSS } from "./carregarCSS.js";
 import {
   ComponenteDiagrama,
   LateralComponente,
@@ -35,16 +33,33 @@ import { GeradorIDComponente } from "../../../infrastructure/gerador/geradorIDCo
 import { ComponenteFactory } from "../../../infrastructure/factory/componenteFactory.js";
 import { Ponto } from "../../../model/ponto.js";
 import { DirecoesMovimento, moverComponente } from "./manipularComponente.js";
-import { CarregadorDiagrama } from "../../carregador/carregadorDiagrama.js";
 import { FabricaComponenteConexao } from "../../../model/conexao/fabricaComponenteConexao.js";
 import { TipoConexao } from "../../../model/conexao/tipoConexao.js";
 import "./painelLateral.js";
+import CommandHistory from "../../history/commandHistory.js";
+import ColarComponenteCommand, {
+  ColarComponenteDiagramaBuilder,
+} from "../../../infrastructure/command/colarComponenteCommand.js";
+import CopiarComponenteCommand, {
+  CopiarComponenteCommandBuilder,
+} from "../../../infrastructure/command/copiarComponenteCommand.js";
+import CortarComponenteCommand, {
+  CortarComponenteCommandBuilder,
+} from "../../../infrastructure/command/cortarComponenteCommand.js";
+import CarregarDiagramaCommand, {
+  ATRIBUTO_NOME_ELEMENTO,
+  CarregarDiagramaCommandBuilder,
+} from "../../../infrastructure/command/carregarDiagramaCommand.js";
+import CarregarCSSCommand, {
+  CarregarCSSCommandBuilder,
+} from "../../../infrastructure/command/carregarCSSCommand.js";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
 /****************************/
 
 let abaPropriedades: HTMLDivElement | null = document.querySelector("section#propriedades");
+let commandHistory: CommandHistory = new CommandHistory();
 let diagrama: HTMLElement | null = document.querySelector("main");
 let fabricaComponente: ComponenteFactory = new ComponenteFactory();
 let geradorIDComponente: GeradorIDComponente = GeradorIDComponente.pegarInstance();
@@ -108,12 +123,12 @@ function dragElement(event: MouseEvent): void {
 /* EVENTOS COMPONENTES */
 /***********************/
 
-const registrarEventosComponente = (componente: HTMLDivElement): void => {
+function registrarEventosComponente(componente: HTMLDivElement): void {
   componente.addEventListener("click", conectarElementos);
   componente.addEventListener("mousedown", mouseDownSelecionarElemento);
   componente.addEventListener("mousedown", mouseDownComecarMoverElemento);
   componente.addEventListener("mouseup", mouseUpPararMoverElemento);
-};
+}
 
 componentes.forEach((componente: HTMLDivElement): void => {
   registrarEventosComponente(componente);
@@ -129,7 +144,7 @@ let primeiroComponente: ComponenteDiagrama | null = null;
 let lateralPrimeiroComponente: LateralComponente | null;
 let ponto1: Ponto | null = null;
 
-carregarCSS(TipoConexao.CONEXAO_ANGULADA);
+new CarregarCSSCommandBuilder().definirNomeArquivo(TipoConexao.CONEXAO_ANGULADA).build().execute();
 
 setas.forEach((seta: HTMLElement): void =>
   seta.addEventListener("click", (): void => {
@@ -244,7 +259,10 @@ function conectarElementos(event: MouseEvent): void {
     btnTipoConexao.addEventListener("click", (event: MouseEvent): void => {
       event.stopPropagation();
       fabricaComponente.criarComponente(tipo).then((componente: ComponenteDiagrama): void => {
-        carregarCSS(tipoConexao);
+        let command: CarregarCSSCommand = new CarregarCSSCommandBuilder()
+          .definirNomeArquivo(tipoConexao)
+          .build();
+        command.execute();
         registrarEventosComponente(componente.htmlComponente);
 
         let componenteConexao: ComponenteDiagrama = fabricaConexao.criarConexao(
@@ -307,7 +325,6 @@ setas.forEach((seta: HTMLElement): void => {
 /* CARREGAMENTO DIAGRAMAS */
 /**************************/
 
-let carregadorDiagrama: CarregadorDiagrama = new CarregadorDiagrama();
 let sectionComponentes: HTMLElement | null = document.querySelector("#componentes");
 let inputsCarregarDiagrama: NodeListOf<HTMLInputElement> =
   document.querySelectorAll("input.carregar-diagrama");
@@ -315,55 +332,59 @@ let tiposDiagrama: HTMLElement | null = document.querySelector("#tipos-diagrama"
 
 function callbackCriarComponente(event: Event): void {
   let btn: HTMLButtonElement = event.target as HTMLButtonElement;
-  let nomeElemento: string | null = btn.getAttribute("data-nome-elemento");
+  let nomeElemento: string | null = btn.getAttribute(ATRIBUTO_NOME_ELEMENTO);
 
   if (nomeElemento === null) {
     return;
   }
 
   fabricaComponente.criarComponente(nomeElemento).then((componente: ComponenteDiagrama): void => {
-    carregarCSS(nomeElemento);
+    let command: CarregarCSSCommand = new CarregarCSSCommandBuilder()
+      .definirNomeArquivo(nomeElemento)
+      .build();
+    command.execute();
     registrarEventosComponente(componente.htmlComponente);
-    componente.htmlComponente.setAttribute("data-id", String(geradorIDComponente.pegarProximoID()));
+    componente.htmlComponente.setAttribute(
+      ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+      String(geradorIDComponente.pegarProximoID()),
+    );
     repositorioComponentes.adicionar(componente);
     diagrama?.appendChild(componente.htmlComponente);
   });
 }
 
-tiposDiagrama?.innerText
-  ?.substring(1, tiposDiagrama?.innerText.length - 1)
-  .toLowerCase()
-  .split(",")
-  .forEach((tipo: string): void => {
-    tipo = tipo.trim();
-    if (tipo !== "") {
-      carregadorDiagrama
-        .carregarDiagrama(tipo, callbackCriarComponente)
-        .then((fieldset: HTMLFieldSetElement): void => {
-          sectionComponentes?.append(fieldset);
-        });
-
-      inputsCarregarDiagrama.forEach((input: HTMLInputElement): void => {
-        if (input.value.toLowerCase() === tipo) {
-          input.checked = true;
-          input.disabled = true;
-        }
-      });
-    }
-  });
+let inputsPorTipo: { [tipoDiagrama: string]: HTMLInputElement } = {};
 
 inputsCarregarDiagrama.forEach((input: HTMLInputElement): void => {
+  inputsPorTipo[input.value] = input;
+
+  const command: CarregarDiagramaCommand = new CarregarDiagramaCommandBuilder()
+    .definirSectionComponentes(sectionComponentes as HTMLElement)
+    .definirCallCriarComponente(callbackCriarComponente)
+    .definirNomeDiagrama(input.value.toLowerCase())
+    .build();
+
   input.addEventListener("click", (event: Event): void => {
-    let elementoAlvo: HTMLInputElement = event.target as HTMLInputElement;
-    carregadorDiagrama
-      .carregarDiagrama(elementoAlvo.value.toLowerCase(), callbackCriarComponente)
-      .then((fieldset: HTMLFieldSetElement): void => {
-        sectionComponentes?.append(fieldset);
-        // TODO: Criar maneira para remover botões
-        input.disabled = true;
-      });
+    let target: HTMLInputElement = event.target as HTMLInputElement;
+
+    if (target.checked) {
+      command.execute();
+    } else {
+      command.undo();
+    }
   });
 });
+
+tiposDiagrama?.innerText
+  ?.substring(1, tiposDiagrama?.innerText.length - 1)
+  .toUpperCase()
+  .split(",")
+  .map((tipo: string): string => tipo.trim())
+  .forEach((tipo: string): void => {
+    if (inputsPorTipo[tipo]) {
+      inputsPorTipo[tipo].click();
+    }
+  });
 
 /***********************/
 /* BINDINGS DO USUÁRIO */
@@ -380,44 +401,42 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
 
   // Leader key bindings
   if (teclaAnterior === bindings.get("leaderKey") && event.key === bindings.get("copiarElemento")) {
-    copiarElemento(selecionadorComponente.pegarHTMLElementoSelecionado());
+    let command: CopiarComponenteCommand = new CopiarComponenteCommandBuilder()
+      .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
+      .build();
+    commandHistory.saveAndExecuteCommand(command);
     return;
   }
 
   if (teclaAnterior === bindings.get("leaderKey") && event.key === bindings.get("cortarElemento")) {
-    if (cortarElemento(selecionadorComponente.componenteSelecionado)) {
-      repositorioComponentes.remover(
-        selecionadorComponente.componenteSelecionado as ComponenteDiagrama,
-      );
-      selecionadorComponente.removerSelecao();
-    }
+    let command: CortarComponenteCommand = new CortarComponenteCommandBuilder()
+      .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
+      .definirRepositorioComponente(repositorioComponentes)
+      .definirSelecionadorComponente(selecionadorComponente)
+      .build();
+
+    commandHistory.saveAndExecuteCommand(command);
     return;
   }
 
   if (teclaAnterior === bindings.get("leaderKey") && event.key === bindings.get("colarElemento")) {
-    let ultimoElemento: HTMLDivElement = diagrama?.lastElementChild as HTMLDivElement;
-    colarElemento(diagrama);
+    let command: ColarComponenteCommand = new ColarComponenteDiagramaBuilder()
+      .definirFabricaComponente(fabricaComponente)
+      .definirGeradorID(geradorIDComponente)
+      .definirRegistradorEventos(registrarEventosComponente)
+      .definirRepositorioComponente(repositorioComponentes)
+      .definirPaiComponente(diagrama)
+      .build();
+    commandHistory.saveAndExecuteCommand(command);
 
-    setTimeout((): void => {
-      let novoElemento: HTMLDivElement = diagrama?.lastElementChild as HTMLDivElement;
+    return;
+  }
 
-      if (ultimoElemento !== novoElemento) {
-        registrarEventosComponente(novoElemento);
-        novoElemento.setAttribute("data-id", String(geradorIDComponente.pegarProximoID()));
-        let nomeNovoComponente: string | null = novoElemento.getAttribute(
-          ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-        );
-
-        if (nomeNovoComponente !== null) {
-          fabricaComponente
-            .criarComponente(nomeNovoComponente)
-            .then((componente: ComponenteDiagrama): void => {
-              componente.htmlComponente = novoElemento;
-              repositorioComponentes.adicionar(componente);
-            });
-        }
-      }
-    }, 200);
+  if (
+    teclaAnterior === bindings.get("leaderKey") &&
+    event.key === bindings.get("reverterUltimaAcao")
+  ) {
+    commandHistory.undoLastCommand();
     return;
   }
 

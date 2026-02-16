@@ -11,7 +11,7 @@
  *
  */
 
-import { IFactory } from "../../model/factory/IFactory.js";
+import { IFactory } from "../../model/factory/iFactory";
 import { SelecionadorComponente } from "../../application/paginas/editor/selecionadorComponente.js";
 
 class SelecionadorComponenteFactory implements IFactory<SelecionadorComponente> {

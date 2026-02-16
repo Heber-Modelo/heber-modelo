@@ -17,6 +17,7 @@ import { PropriedadeFactory } from "./propriedadeFactory.js";
 import { PropriedadeComponente } from "../../model/propriedade/propriedadeComponente.js";
 
 export class ComponenteFactory {
+  public static PROPRIEDADE_ID_COMPONENTE: string = "data-id";
   public static PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
   private static _CLASSE_COMUM_ELEMENTOS: string = "componente";
 

@@ -22,6 +22,7 @@ import io.github.heberbarra.modelador.domain.verificador.VerificadorAbstratoJSON
 import io.github.heberbarra.modelador.infrastructure.conversor.ConversorTomlPrograma;
 import io.github.heberbarra.modelador.infrastructure.conversor.IConversorTOMLString;
 import io.github.heberbarra.modelador.infrastructure.verificador.JsonVerificadorConfiguracoes;
+import io.github.heberbarra.modelador.infrastructure.verificador.JsonVerificadorDotEnv;
 import io.github.heberbarra.modelador.infrastructure.verificador.JsonVerificadorPaleta;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,12 +39,14 @@ public class CriadorConfiguracoes extends CriadorConfiguracoesBase {
     private static final Logger logger = JavaLogger.obterLogger(CriadorConfiguracoes.class.getName());
     private final IConversorTOMLString conversorToml;
     private final Map<String, List<Map<String, String>>> configuracaoPadrao;
+    private final Map<String, String> dotenvPadrao;
     private final Map<String, List<Map<String, String>>> paletaPadrao;
 
     public CriadorConfiguracoes(IPastaConfiguracao pastaConfiguracao) {
         super(pastaConfiguracao);
         conversorToml = new ConversorTomlPrograma();
         configuracaoPadrao = new LinkedHashMap<>();
+        dotenvPadrao = new LinkedHashMap<>();
         paletaPadrao = new LinkedHashMap<>();
         paletaPadrao.put("paleta", new ArrayList<>());
     }
@@ -66,14 +69,27 @@ public class CriadorConfiguracoes extends CriadorConfiguracoesBase {
 
     @Override
     public void criarArquivoDotEnv() {
-        File dotenv = new File(pastaConfiguracao.getPasta() + ".env");
+        File dotenv = new File("%s/.env".formatted(pastaConfiguracao.getPasta()));
 
-        try {
+        if (dotenv.exists() && dotenv.length() != 0) {
+            return;
+        }
+
+        try (BufferedWriter dotenvWriter = new BufferedWriter(new FileWriter(dotenv))) {
             if (dotenv.createNewFile()) {
                 logger.info(TradutorWrapper.tradutor
                         .traduzirMensagem("file.creation.success")
                         .formatted(dotenv.getAbsoluteFile()));
             }
+
+            if (dotenv.length() == 0) {
+
+                for (String key : dotenvPadrao.keySet()) {
+                    dotenvWriter.write("%s=%s".formatted(key, dotenvPadrao.get(key)));
+                    dotenvWriter.newLine();
+                }
+            }
+
         } catch (IOException e) {
             logger.severe(TradutorWrapper.tradutor
                     .traduzirMensagem("error.file.create")
@@ -95,6 +111,24 @@ public class CriadorConfiguracoes extends CriadorConfiguracoesBase {
     }
 
     @Override
+    public void sobrescreverArquivoDotEnv(Map<String, String> dados) {
+        File dotEnvFile = new File("%s/.env".formatted(pastaConfiguracao.getPasta()));
+
+        try (BufferedWriter dotEnvWriter = new BufferedWriter(new FileWriter(dotEnvFile))) {
+            for (String key : dados.keySet()) {
+                dotEnvWriter.write("%s=%s".formatted(key, dados.get(key)));
+                dotEnvWriter.newLine();
+            }
+        } catch (IOException e) {
+            logger.severe(TradutorWrapper.tradutor
+                    .traduzirMensagem("error.file.create")
+                    .formatted(dotEnvFile.getAbsolutePath(), e.getMessage()));
+            logger.severe(TradutorWrapper.tradutor.traduzirMensagem("app.end"));
+            System.exit(CodigoSaida.ERRO_CRIACAO_CONFIG.getCodigo());
+        }
+    }
+
+    @Override
     public void sobrescreverArquivoPaleta(String arquivoPaleta, String dadosToml) {
         criarArquivo(dadosToml, pastaConfiguracao.getPasta() + "/" + arquivoPaleta, false);
     }
@@ -113,7 +147,13 @@ public class CriadorConfiguracoes extends CriadorConfiguracoesBase {
     }
 
     @Override
-    public void pegarDotEnvPadrao(VerificadorAbstratoJSONAtributo<?> verificadorAbstratoJSONAtributo) {}
+    public void pegarDotEnvPadrao(VerificadorAbstratoJSONAtributo<?> verificadorAbstratoJSONAtributo) {
+        if (verificadorAbstratoJSONAtributo instanceof JsonVerificadorDotEnv verificador) {
+            verificador.getAtributos().forEach(atributo -> {
+                dotenvPadrao.put(atributo.getNome(), atributo.getValorPadrao());
+            });
+        }
+    }
 
     @Override
     public void pegarPaletaPadrao(VerificadorAbstratoJSONAtributo<?> verificadorAbstratoJSONAtributo) {
@@ -161,6 +201,10 @@ public class CriadorConfiguracoes extends CriadorConfiguracoesBase {
 
     public Map<String, List<Map<String, String>>> getConfiguracaoPadrao() {
         return configuracaoPadrao;
+    }
+
+    public Map<String, String> getDotenvPadrao() {
+        return dotenvPadrao;
     }
 
     public Map<String, List<Map<String, String>>> getPaletaPadrao() {

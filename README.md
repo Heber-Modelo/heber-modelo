@@ -93,5 +93,5 @@ num terminal(na mesma pasta na qual o programa foi posto):
 # Autores
 
 <a href="https://github.com/HeberBarra/heber-modelo/graphs/contributors">
-    <img src="https://contributors-img.web.app/image?repo=HeberBarra/heber-modelo&max=500" alt="Lista de contribuidores" width="40%"
+    <img src="https://contributors-img.web.app/image?repo=HeberBarra/heber-modelo&max=500" alt="Lista de contribuidores" width="20%">
 </a>

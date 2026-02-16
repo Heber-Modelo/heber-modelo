@@ -69,6 +69,7 @@ public final class Configurador implements IConfigurador {
         if (verificadorConfiguracao instanceof VerificadorConfiguracao verificador) {
             criadorConfiguracoes.pegarConfiguracaoPadrao(
                     verificador.getLeitorConfiguracoes().getInformacoesJSON());
+            criadorConfiguracoes.pegarDotEnvPadrao(verificador.getLeitorDotEnv().getInformacoesJSON());
             criadorConfiguracoes.pegarPaletaPadrao(verificador.getLeitorPaleta().getInformacoesJSON());
         }
     }
@@ -83,6 +84,7 @@ public final class Configurador implements IConfigurador {
         criadorConfiguracoes.criarPastaConfiguracao();
         lerConfiguracaoPadrao();
         criadorConfiguracoes.criarArquivoConfiguracoes(ARQUIVO_CONFIGURACOES);
+        criadorConfiguracoes.criarArquivoDotEnv();
         criadorConfiguracoes.criarArquivoPaleta(ARQUIVO_PALETA);
     }
 
@@ -137,6 +139,7 @@ public final class Configurador implements IConfigurador {
     @Override
     public void combinarConfiguracoes() {
         Map<String, List<Map<String, String>>> dadosConfiguracoes = new LinkedHashMap<>();
+        Map<String, String> dadosDotEnv = new LinkedHashMap<>();
         Map<String, List<Map<String, String>>> dadosPaleta = new LinkedHashMap<>();
 
         if (criadorConfiguracoes instanceof CriadorConfiguracoes criador) {
@@ -145,6 +148,8 @@ public final class Configurador implements IConfigurador {
                     leitorConfiguracao.getInformacoesConfiguracoes(),
                     "atributo",
                     "valorPadrao");
+            dadosDotEnv = combinadorConfiguracoes.combinarDadosDotEnv(
+                    criador.getDotenvPadrao(), leitorConfiguracao.getInformacoesDotEnv());
             dadosPaleta = combinadorConfiguracoes.combinarConfiguracoes(
                     criador.getPaletaPadrao(),
                     leitorConfiguracao.getInformacoesPaleta(),
@@ -156,6 +161,7 @@ public final class Configurador implements IConfigurador {
         String dadosPaletaToml = conversorToml.converterMapPaletaParaStringTOML(dadosPaleta);
 
         criadorConfiguracoes.sobrescreverArquivoConfiguracoes(ARQUIVO_CONFIGURACOES, dadosConfiguracoesToml);
+        criadorConfiguracoes.sobrescreverArquivoDotEnv(dadosDotEnv);
         criadorConfiguracoes.sobrescreverArquivoPaleta(ARQUIVO_PALETA, dadosPaletaToml);
         this.lerConfiguracao();
     }
