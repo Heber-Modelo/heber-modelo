@@ -21,7 +21,6 @@ import {
   editorEixoY,
   inputs,
 } from "./editorPropriedades.js";
-import { carregarCSS } from "./carregarCSS.js";
 import {
   ComponenteDiagrama,
   LateralComponente,
@@ -51,6 +50,9 @@ import CarregarDiagramaCommand, {
   ATRIBUTO_NOME_ELEMENTO,
   CarregarDiagramaCommandBuilder,
 } from "../../../infrastructure/command/carregarDiagramaCommand.js";
+import CarregarCSSCommand, {
+  CarregarCSSCommandBuilder,
+} from "../../../infrastructure/command/carregarCSSCommand.js";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -142,7 +144,7 @@ let primeiroComponente: ComponenteDiagrama | null = null;
 let lateralPrimeiroComponente: LateralComponente | null;
 let ponto1: Ponto | null = null;
 
-carregarCSS(TipoConexao.CONEXAO_ANGULADA);
+new CarregarCSSCommandBuilder().definirNomeArquivo(TipoConexao.CONEXAO_ANGULADA).build().execute();
 
 setas.forEach((seta: HTMLElement): void =>
   seta.addEventListener("click", (): void => {
@@ -257,7 +259,10 @@ function conectarElementos(event: MouseEvent): void {
     btnTipoConexao.addEventListener("click", (event: MouseEvent): void => {
       event.stopPropagation();
       fabricaComponente.criarComponente(tipo).then((componente: ComponenteDiagrama): void => {
-        carregarCSS(tipoConexao);
+        let command: CarregarCSSCommand = new CarregarCSSCommandBuilder()
+          .definirNomeArquivo(tipoConexao)
+          .build();
+        command.execute();
         registrarEventosComponente(componente.htmlComponente);
 
         let componenteConexao: ComponenteDiagrama = fabricaConexao.criarConexao(
@@ -334,7 +339,10 @@ function callbackCriarComponente(event: Event): void {
   }
 
   fabricaComponente.criarComponente(nomeElemento).then((componente: ComponenteDiagrama): void => {
-    carregarCSS(nomeElemento);
+    let command: CarregarCSSCommand = new CarregarCSSCommandBuilder()
+      .definirNomeArquivo(nomeElemento)
+      .build();
+    command.execute();
     registrarEventosComponente(componente.htmlComponente);
     componente.htmlComponente.setAttribute(
       ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
