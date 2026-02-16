@@ -9,6 +9,9 @@ on:
 
 jobs:
   tests:
+    permissions:
+      contents: read
+
     runs-on: ubuntu-22.04
     if: startsWith(github.ref, 'refs/tags')
     steps:
