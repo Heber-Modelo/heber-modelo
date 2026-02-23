@@ -1,2 +1,3 @@
 * text eol=lf
 *.ttf binary
+gradlew.bat eol=crlf
