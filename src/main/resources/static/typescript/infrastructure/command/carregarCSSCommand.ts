@@ -28,7 +28,7 @@ class CacheCSSElementos {
   }
 
   static remove(nome: string): void {
-    this._cache = this._cache.filter((valor: string) => valor !== nome);
+    this._cache = this._cache.filter((valor: string): boolean => valor !== nome);
   }
 }
 
