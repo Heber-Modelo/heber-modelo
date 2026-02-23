@@ -8,6 +8,6 @@ cdimascioDotenv = { module = "io.github.cdimascio:dotenv-java", version = "3.2.0
 jakartaXML = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.5" }
 jlineJansi = { module = "org.jline:jansi", version = "3.30.6" }
 heberModeloAPI = { module = "io.github.heberbarra:heber-modelo-api", version = "0.0.13-SNAP" }
-hibernateCore = { module = "org.hibernate:hibernate-core", version = "7.2.4.Final" }
+hibernateCore = { module = "org.hibernate:hibernate-core", version = "7.2.5.Final" }
 mysqlConnector = { module = "com.mysql:mysql-connector-j", version = "9.6.0" }
 tomlj = { module = "org.tomlj:tomlj", version = "1.1.1" }
