@@ -56,7 +56,7 @@ jobs:
       - name: Create jar file
         run: ./gradlew bootJar
       - name: Upload jar
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           path: ./build/libs/heber-modelo.jar
           name: heber-modelo.jar
