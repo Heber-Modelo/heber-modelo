@@ -186,6 +186,7 @@ public class ControladorWeb {
         InjetorAtributos.injetarPaleta(modelMap);
         Cookie cookieTokenDesligar = new Cookie("TOKEN_DESLIGAR", ControladorDesligar.TOKEN_SECRETO);
         modelMap.addAttribute("desligar", "");
+        cookieTokenDesligar.setSecure(true);
         response.addCookie(cookieTokenDesligar);
 
         return "index";
