@@ -3,7 +3,7 @@ spotless = { id = "com.diffplug.spotless", version = "8.2.1" }
 springdependency = { id = "io.spring.dependency-management", version = "1.1.7" }
 springboot = { id = "org.springframework.boot", version = "4.0.3" }
 [libraries]
-apachePDFBox = { module = "org.apache.pdfbox:pdfbox", version = "3.0.6" }
+apachePDFBox = { module = "org.apache.pdfbox:pdfbox", version = "3.0.7" }
 cdimascioDotenv = { module = "io.github.cdimascio:dotenv-java", version = "3.2.0" }
 jakartaXML = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.5" }
 jlineJansi = { module = "org.jline:jansi", version = "3.30.6" }
