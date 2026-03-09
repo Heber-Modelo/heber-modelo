@@ -7,7 +7,7 @@ repos:
       - id: Format with Spotless
         name: Format with Spotless
         types: [java]
-        entry: gradle spotlessJavaApply
+        entry: ./gradlew spotlessJavaApply
         language: unsupported
         stages: [pre-commit]
         pass_filenames: false
