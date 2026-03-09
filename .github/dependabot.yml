@@ -5,11 +5,15 @@ updates:
     schedule:
       interval: weekly
     rebase-strategy: disabled
+    commit-message:
+      prefix: "[ NPM ] "
   - package-ecosystem: docker
     directory: /src/main/resources/database
     schedule:
       interval: weekly
     rebase-strategy: disabled
+    commit-message:
+      prefix: "[ DOCKER ] "
   - package-ecosystem: github-actions
     directory: /
     schedule:
@@ -20,3 +24,5 @@ updates:
     schedule:
       interval: weekly
     rebase-strategy: disabled
+    commit-message:
+      prefix: "[ GRADLE ] "
