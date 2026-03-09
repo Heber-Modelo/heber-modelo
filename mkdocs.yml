@@ -1,0 +1,8 @@
+site_name: Heber Modelo
+nav:
+  - Home: index.md
+  - Sobre:
+    - Licença: LICENSE.md
+    - Política de Privacidade: políticaPrivacidade.md
+    - Termos de Uso: termosGerais.md
+theme: material
