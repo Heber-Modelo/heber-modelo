@@ -6,7 +6,7 @@ springboot = { id = "org.springframework.boot", version = "4.0.3" }
 apachePDFBox = { module = "org.apache.pdfbox:pdfbox", version = "3.0.7" }
 cdimascioDotenv = { module = "io.github.cdimascio:dotenv-java", version = "3.2.0" }
 jakartaXML = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.5" }
-jlineJansi = { module = "org.jline:jansi", version = "3.30.6" }
+jlineJansi = { module = "org.jline:jansi", version = "4.0.0" }
 heberModeloAPI = { module = "io.github.heberbarra:heber-modelo-api", version = "0.0.13-SNAP" }
 hibernateCore = { module = "org.hibernate:hibernate-core", version = "7.2.6.Final" }
 mysqlConnector = { module = "com.mysql:mysql-connector-j", version = "9.6.0" }
