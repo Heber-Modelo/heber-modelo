@@ -5,6 +5,7 @@ repo_url: https://github.com/Heber-Modelo/Heber-Modelo
 
 nav:
   - Home: index.md
+  - Configuração: configuração.md
   - Sobre:
     - Licença: LICENSE.md
     - Política de Privacidade: políticaPrivacidade.md
