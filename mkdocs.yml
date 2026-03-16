@@ -1,8 +1,43 @@
 site_name: Heber Modelo
+repo_name: Heber-Modelo
+repo_url: https://github.com/Heber-Modelo/Heber-Modelo
+
 nav:
   - Home: index.md
   - Sobre:
     - Licença: LICENSE.md
     - Política de Privacidade: políticaPrivacidade.md
     - Termos de Uso: termosGerais.md
-theme: material
+
+theme:
+  favicon: img/favicon.ico
+  name: material
+
+  features:
+    - navigation.path
+    - navigation.tracking
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      toggle:
+        icon: material/brightness-3
+        name: Alternar para o tema escuro
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      toggle:
+        icon: material/brightness-5
+        name: Alternar para o tema claro
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+      htmlmin_opts:
+        remove_comments: true
+      cache_safe: true
