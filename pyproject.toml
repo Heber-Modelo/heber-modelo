@@ -1,11 +1,15 @@
 [project]
 name = "heber-modelo"
 version = "0.1.0"
-description = "Configuração básica de um projeto python para auxiliar na formatação e manunteção deste projeto."
+description = "Configuração básica de um projeto python para auxiliar na formatação e outras funcionalides do projeto."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "mkdocs>=1.6.1",
     "mkdocs-material>=9.7.4",
+    "mkdocs-minify-plugin>=0.8.0",
+]
+
+[dependency-groups]
+dev = [
     "pre-commit>=4.5.1",
 ]
