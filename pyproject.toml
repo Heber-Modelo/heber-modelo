@@ -5,6 +5,7 @@ description = "Configuração básica de um projeto python para auxiliar na form
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "mike>=2.1.4",
     "mkdocs-material>=9.7.4",
     "mkdocs-minify-plugin>=0.8.0",
 ]
