@@ -16,13 +16,13 @@ de configuração, sem modificar as opções alteradas feitas pelo usuário.
 ## OPÇÕES DE CONFIGURAÇÃO
 
 Estas são as opções que podem ser modificados no arquivo config.toml.
-Cada valor permitido para uma opção pode ser um dos seguintes tipos de dados: string, boolean, integer ou number.
+O valor permitido para uma opção pode ser de um dos seguintes tipos de dados: string, boolean, integer ou number.
 
 ### Atualizador
 
 Opções relacionados ao componente de autoatualização do programa.
 
-```
+``` toml title="config.toml"
 [atualizador]
   atualizacao_automatica=true
 ```
@@ -34,7 +34,7 @@ o programa somente avisará que há uma atualização disponível.
 
 ### Bindings
 
-```
+``` toml title="config.toml"
 [bindings]
   leaderKey="Control"
   removerSelecao="Escape"
@@ -52,7 +52,7 @@ o programa somente avisará que há uma atualização disponível.
 As `keymaps` do programa, sendo cada uma associada a uma função da página de edição de diagramas.
 
 ### Editor
-```
+``` toml title="config.toml"
 [editor]
   incrementoMovimentacaoElemento=10
 ```
@@ -63,7 +63,7 @@ Define a quantidade de pixeis que um elemento se moverá quando o usuário o mov
 
 ### Ejetor
 
-```
+``` toml title="config.toml"
 [ejetor]
   destino="db/"
   copiar_arquivo_env=true
@@ -88,7 +88,7 @@ Complementar à opção anterior, define o nome do arquivo env que deve ser copi
 
 ### Grade
 
-```
+``` toml title="config.toml"
 [grade]
   exibir=true
   espessura=1
@@ -111,15 +111,18 @@ Define em píxeis o tamanho de cada quadrado que compõe a grade de fundo.
 
 ### MySQL
 
-```
+``` toml title="config.toml"
 [mysql]
   porta=3306
   modoProfessor=false
   host="localhost"
 ```
 
-Estas são as opções relacionadas a conexão com o banco de dados MySQL, as funcionalidades que interagem
-o banco ainda não estão implementadas, por isso essas opções ainda não são revelantes.
+Estas são as opções relacionadas a conexão com o banco de dados MySQL.
+
+!!! info "Aviso"
+    As funcionalidades que interagem o banco ainda não estão implementadas, por isso essas opções ainda não são revelantes
+    e podem ser ignoradas.
 
 #### Host (String)
 
@@ -135,7 +138,7 @@ Ainda não implementado, mas servirá para ativar o modo específico para o prof
 
 ### Programa
 
-```
+``` toml title="config.toml"
 [programa]
   porta=8080
   dominio="localhost"
