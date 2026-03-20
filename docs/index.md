@@ -3,4 +3,6 @@
     Heber Modelo
 </h1>
 
-
+!!! Warning "Documentação em Construção"
+    A documentação está sendo construída paralelamente ao desenvolvimento do programa, por isso, ela está incompleta.
+    À medida que o programa for sendo atualizado a documentação o será também.
