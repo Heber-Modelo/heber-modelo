@@ -43,7 +43,7 @@ div {
   }
 
   p {
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
     color: var(--cor-botao);
@@ -58,6 +58,6 @@ header {
 }
 
 
-svg-color-fill {
+.svg-color-fill {
   color: var(--cor-botao);
 }
