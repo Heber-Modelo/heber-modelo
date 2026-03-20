@@ -136,5 +136,5 @@ jobs:
             --update-aliases \
             --branch gh-pages \
             --push \
-            $VERSION \
+            "${VERSION//\"}" \
             latest
