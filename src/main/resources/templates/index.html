@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <th:block th:replace="~{fragments/head :: head}"></th:block>
-  <link rel="stylesheet" th:if="${desligar != null}" th:href="@{/css/desligar.css}"/>
-  <link rel="stylesheet" th:href="@{/css/index.css}"/>
-  <script th:src="@{/javascript/application/paginas/desligar.js}" defer></script>
-  <title>Heber-Modelo</title>
-</head>
-<body>
-<!--
+  <head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" th:if="${desligar != null}" th:href="@{/css/desligar.css}" />
+    <link rel="stylesheet" th:href="@{/css/index.css}" />
+    <script th:src="@{/javascript/application/paginas/desligar.js}" defer></script>
+    <title>Heber-Modelo</title>
+  </head>
+  <body>
+    <!--
 Copyright (C) 2025 Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
 
 Licensed under the Massachusetts Institute of Technology (MIT) License.
@@ -19,125 +19,207 @@ https://choosealicense.com/licenses/mit/
 A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
 Licensed works, modifications, and larger works may be distributed under different terms and without source code.
 -->
-<!--<header th:replace="~{fragments/header :: header}"></header>-->
-
-<header>
-  <h1 th:text="${programa}" ></h1>
-</header>
-
-<main>
-  <div>
-    <a href="novo.html">
-      <button>
-        <svg width="332" height="351" viewBox="0 0 332 351" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="332" height="351" rx="15" fill="svg-color-fill"/>
-          <rect x="105" y="66" width="122" height="76" rx="5" fill="currentColor"/>
-          <rect x="186" y="208" width="122" height="76" rx="5" fill="currentColor"/>
-          <rect x="24" y="208" width="122" height="76" rx="5" fill="currentColor"/>
-          <rect x="163" y="142" width="6" height="30" fill="currentColor"/>
-          <rect x="244" y="175" width="6" height="33" fill="currentColor"/>
-          <rect x="82" y="175" width="6" height="33" fill="currentColor"/>
-          <rect x="82" y="172" width="168" height="6" rx="2" fill="currentColor"/>
-        </svg>
-      </button>
-    </a>
-    <p th:text="#{web.page.home.menu.1}"></p>
-  </div>
-
-  <div>
-    <a href="editor.html">
-      <button>
-        <svg width="332" height="351" viewBox="0 0 332 351" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="332" height="351" rx="15" fill="svg-color-fill"/>
-          <mask id="path-2-inside-1_296_97" fill="white">
-            <rect x="80" y="55" width="172" height="241" rx="10"/>
-          </mask>
-          <rect x="80" y="55" width="172" height="241" rx="10" fill="svg-color-fill" stroke="currentColor"
-                stroke-width="30" mask="url(#path-2-inside-1_296_97)"/>
-          <rect x="120" y="173" width="91" height="13" fill="currentColor"/>
-          <rect x="120" y="241" width="91" height="14" fill="currentColor"/>
-          <rect x="120" y="104" width="91" height="14" fill="currentColor"/>
-          <rect x="120" y="139" width="91" height="13" fill="currentColor"/>
-          <rect x="120" y="207" width="68" height="14" fill="currentColor"/>
-          <rect x="265.329" y="145" width="20.5078" height="10.9375" rx="3" transform="rotate(44.766 265.329 145)"
-                fill="currentColor"/>
-          <rect x="269.298" y="170.12" width="61.5234" height="20.5078" transform="rotate(134.766 269.298 170.12)"
-                fill="currentColor"/>
-          <rect x="260.514" y="149.854" width="20.5078" height="4.10156" transform="rotate(44.766 260.514 149.854)"
-                fill="currentColor"/>
-          <path d="M204.251 221.14L223.672 215.851L209.381 201.676L204.251 221.14Z" fill="currentColor"/>
-          <rect x="265.329" y="145" width="20.5078" height="10.9375" rx="3" transform="rotate(44.766 265.329 145)"
-                fill="currentColor"/>
-          <rect x="269.298" y="170.12" width="61.5234" height="20.5078" transform="rotate(134.766 269.298 170.12)"
-                fill="currentColor"/>
-          <rect x="260.514" y="149.854" width="20.5078" height="4.10156" transform="rotate(44.766 260.514 149.854)"
-                fill="currentColor"/>
-        </svg>
-      </button>
-    </a>
-    <p th:text="#{web.page.home.menu.2}"></p>
-  </div>
-
-  <div>
-    <button>
-      <svg width="332" height="351" viewBox="0 0 332 351" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="332" height="351" rx="15" fill="svg-color-fill"/>
-        <mask id="path-2-inside-1_293_39" fill="currentColor">
-          <rect x="80" y="55" width="172" height="241" rx="10"/>
-        </mask>
-        <rect x="80" y="55" width="172" height="241" rx="10" fill="svg-color-fill" stroke="currentColor"
-              stroke-width="30" mask="url(#path-2-inside-1_293_39)"/>
-        <rect x="120" y="173" width="57" height="13" fill="currentColor"/>
-        <rect x="120" y="207" width="55" height="14" fill="currentColor"/>
-        <rect x="120" y="241" width="75" height="14" fill="currentColor"/>
-        <rect x="120" y="104" width="91" height="14" fill="currentColor"/>
-        <rect x="120" y="139" width="91" height="13" fill="currentColor"/>
-        <mask id="path-10-inside-2_293_39" fill="currentColor">
-          <rect x="80" y="55" width="172" height="241" rx="10"/>
-        </mask>
-        <rect x="80" y="55" width="172" height="241" rx="10" fill="svg-color-fill" stroke="currentColor"
-              stroke-width="30" mask="url(#path-10-inside-2_293_39)"/>
-
-        <path
-          d="M254.696 223.972C256.258 222.409 258.791 222.409 260.353 223.972L302.172 265.79C303.734 267.353 303.734 269.885 302.172 271.447L298.161 275.458C296.599 277.02 294.066 277.02 292.504 275.458L250.685 233.639C249.123 232.077 249.123 229.544 250.685 227.982L254.696 223.972Z"
-          fill="currentColor"/>
-        <path
-          d="M227.5 163.5C248.487 163.5 265.5 180.513 265.5 201.5C265.5 222.487 248.487 239.5 227.5 239.5C206.513 239.5 189.5 222.487 189.5 201.5C189.5 180.513 206.513 163.5 227.5 163.5Z"
-          fill="#5E01AF" stroke="white" stroke-width="13"/>
-      </svg>
-    </button>
-    <p th:text="#{web.page.home.menu.3}"></p>
-  </div>
-</main>
-
-
-<div th:replace="~{fragments/cookiesBanner :: #cookies-banner}"></div>
-<footer>
+    <header>
+      <h1>Heber-Modelo</h1>
+    </header>
+    <main>
+      <div>
+        <a href="novo.html">
+          <button>
+            <svg
+              width="332"
+              height="351"
+              viewBox="0 0 332 351"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="332" height="351" rx="15" fill="svg-color-fill" />
+              <rect x="105" y="66" width="122" height="76" rx="5" fill="currentColor" />
+              <rect x="186" y="208" width="122" height="76" rx="5" fill="currentColor" />
+              <rect x="24" y="208" width="122" height="76" rx="5" fill="currentColor" />
+              <rect x="163" y="142" width="6" height="30" fill="currentColor" />
+              <rect x="244" y="175" width="6" height="33" fill="currentColor" />
+              <rect x="82" y="175" width="6" height="33" fill="currentColor" />
+              <rect x="82" y="172" width="168" height="6" rx="2" fill="currentColor" />
+            </svg>
+          </button>
+        </a>
+        <p th:text="#{web.page.home.menu.1}"></p>
+      </div>
+      <div>
+        <a href="editor.html">
+          <button>
+            <svg
+              width="332"
+              height="351"
+              viewBox="0 0 332 351"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="332" height="351" rx="15" fill="svg-color-fill" />
+              <mask id="path-2-inside-1_296_97" fill="white">
+                <rect x="80" y="55" width="172" height="241" rx="10" />
+              </mask>
+              <rect
+                x="80"
+                y="55"
+                width="172"
+                height="241"
+                rx="10"
+                fill="svg-color-fill"
+                stroke="currentColor"
+                stroke-width="30"
+                mask="url(#path-2-inside-1_296_97)"
+              />
+              <rect x="120" y="173" width="91" height="13" fill="currentColor" />
+              <rect x="120" y="241" width="91" height="14" fill="currentColor" />
+              <rect x="120" y="104" width="91" height="14" fill="currentColor" />
+              <rect x="120" y="139" width="91" height="13" fill="currentColor" />
+              <rect x="120" y="207" width="68" height="14" fill="currentColor" />
+              <rect
+                x="265.329"
+                y="145"
+                width="20.5078"
+                height="10.9375"
+                rx="3"
+                transform="rotate(44.766 265.329 145)"
+                fill="currentColor"
+              />
+              <rect
+                x="269.298"
+                y="170.12"
+                width="61.5234"
+                height="20.5078"
+                transform="rotate(134.766 269.298 170.12)"
+                fill="currentColor"
+              />
+              <rect
+                x="260.514"
+                y="149.854"
+                width="20.5078"
+                height="4.10156"
+                transform="rotate(44.766 260.514 149.854)"
+                fill="currentColor"
+              />
+              <path
+                d="M204.251 221.14L223.672 215.851L209.381 201.676L204.251 221.14Z"
+                fill="currentColor"
+              />
+              <rect
+                x="265.329"
+                y="145"
+                width="20.5078"
+                height="10.9375"
+                rx="3"
+                transform="rotate(44.766 265.329 145)"
+                fill="currentColor"
+              />
+              <rect
+                x="269.298"
+                y="170.12"
+                width="61.5234"
+                height="20.5078"
+                transform="rotate(134.766 269.298 170.12)"
+                fill="currentColor"
+              />
+              <rect
+                x="260.514"
+                y="149.854"
+                width="20.5078"
+                height="4.10156"
+                transform="rotate(44.766 260.514 149.854)"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </a>
+        <p th:text="#{web.page.home.menu.2}"></p>
+      </div>
+      <div>
+        <button>
+          <svg
+            width="332"
+            height="351"
+            viewBox="0 0 332 351"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="332" height="351" rx="15" fill="svg-color-fill" />
+            <mask id="path-2-inside-1_293_39" fill="currentColor">
+              <rect x="80" y="55" width="172" height="241" rx="10" />
+            </mask>
+            <rect
+              x="80"
+              y="55"
+              width="172"
+              height="241"
+              rx="10"
+              fill="svg-color-fill"
+              stroke="currentColor"
+              stroke-width="30"
+              mask="url(#path-2-inside-1_293_39)"
+            />
+            <rect x="120" y="173" width="57" height="13" fill="currentColor" />
+            <rect x="120" y="207" width="55" height="14" fill="currentColor" />
+            <rect x="120" y="241" width="75" height="14" fill="currentColor" />
+            <rect x="120" y="104" width="91" height="14" fill="currentColor" />
+            <rect x="120" y="139" width="91" height="13" fill="currentColor" />
+            <mask id="path-10-inside-2_293_39" fill="currentColor">
+              <rect x="80" y="55" width="172" height="241" rx="10" />
+            </mask>
+            <rect
+              x="80"
+              y="55"
+              width="172"
+              height="241"
+              rx="10"
+              fill="svg-color-fill"
+              stroke="currentColor"
+              stroke-width="30"
+              mask="url(#path-10-inside-2_293_39)"
+            />
+            <path
+              d="M254.696 223.972C256.258 222.409 258.791 222.409 260.353 223.972L302.172 265.79C303.734 267.353 303.734 269.885 302.172 271.447L298.161 275.458C296.599 277.02 294.066 277.02 292.504 275.458L250.685 233.639C249.123 232.077 249.123 229.544 250.685 227.982L254.696 223.972Z"
+              fill="currentColor"
+            />
+            <path
+              d="M227.5 163.5C248.487 163.5 265.5 180.513 265.5 201.5C265.5 222.487 248.487 239.5 227.5 239.5C206.513 239.5 189.5 222.487 189.5 201.5C189.5 180.513 206.513 163.5 227.5 163.5Z"
+              fill="#5E01AF"
+              stroke="white"
+              stroke-width="13"
+            />
+          </svg>
+        </button>
+        <p th:text="#{web.page.home.menu.3}"></p>
+      </div>
+    </main>
+    <div th:replace="~{fragments/cookiesBanner :: #cookies-banner}"></div>
+    <footer>
       <span>
         MIT &copy; Heber Ferreira Barra; Matheus de Assis de Paula; Matheus Jun Alves Matuda.
       </span>
-  <button th:if="${desligar != null}" type="submit" id="btn-desligar">
-    <svg
-      width="256"
-      height="256"
-      viewBox="0 0 256 256"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect width="256" height="256" rx="15" fill="currentColor"/>
-      <circle
-        cx="128"
-        cy="128"
-        r="80"
-        stroke="currentColor"
-        stroke-width="20"
-        class="svg-cor-fonte-stroke"
-      />
-      <rect x="91" y="33" width="25" height="67" fill="currentColor"/>
-      <rect x="116" y="15" width="25" height="65" fill="currentColor" class="svg-cor-fonte"/>
-      <rect x="141" y="33" width="25" height="67" fill="currentColor"/>
-    </svg>
-  </button>
-</footer>
-</body>
+      <button th:if="${desligar != null}" type="submit" id="btn-desligar">
+        <svg
+          width="256"
+          height="256"
+          viewBox="0 0 256 256"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="256" height="256" rx="15" fill="currentColor" />
+          <circle
+            cx="128"
+            cy="128"
+            r="80"
+            stroke="currentColor"
+            stroke-width="20"
+            class="svg-cor-fonte-stroke"
+          />
+          <rect x="91" y="33" width="25" height="67" fill="currentColor" />
+          <rect x="116" y="15" width="25" height="65" fill="currentColor" class="svg-cor-fonte" />
+          <rect x="141" y="33" width="25" height="67" fill="currentColor" />
+        </svg>
+      </button>
+    </footer>
+  </body>
 </html>
