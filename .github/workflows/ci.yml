@@ -110,13 +110,13 @@ jobs:
 
     needs: build
     runs-on: ubuntu-22.04
-    steps:
-      - env:
-          REPO_URL: "https://github.com/Heber-Modelo/heber-modelo"
-          VERSION: ${{ needs.build.outputs.version }}
-          SITE_URL: "heber-modelo.github.io/heber-modelo"
-        run: echo "$VERSION"
 
+    env:
+      REPO_URL: "https://github.com/Heber-Modelo/heber-modelo"
+      VERSION: ${{ needs.build.outputs.version }}
+      SITE_URL: "heber-modelo.github.io/heber-modelo"
+
+    steps:
       - uses: actions/checkout@v6.0.2
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -136,5 +136,5 @@ jobs:
             --update-aliases \
             --branch gh-pages \
             --push \
-            ${{ env.VERSION }} \
+            $VERSION \
             latest
