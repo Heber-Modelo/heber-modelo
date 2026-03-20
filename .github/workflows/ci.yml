@@ -114,7 +114,7 @@ jobs:
     env:
       REPO_URL: "https://github.com/Heber-Modelo/heber-modelo"
       VERSION: ${{ needs.build.outputs.version }}
-      SITE_URL: "heber-modelo.github.io/heber-modelo"
+      SITE_URL: "https://heber-modelo.github.io/heber-modelo/"
 
     steps:
       - uses: actions/checkout@v6.0.2
