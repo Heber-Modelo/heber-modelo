@@ -32,8 +32,15 @@ jobs:
 
     runs-on: ubuntu-22.04
     needs: tests
+    outputs:
+      version: ${{ steps.program-version.outputs.version }}
     steps:
       - uses: actions/checkout@v6.0.2
+
+      - id: program-version
+        name: Get Version to Output
+        run: echo "version=$(awk -F' ' '/version/ {print $3}' build.gradle.kts)" >> "$GITHUB_OUTPUT"
+
       - name: Setup Java
         uses: actions/setup-java@v5.2.0
         with:
@@ -41,6 +48,18 @@ jobs:
           distribution: 'corretto'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: pyproject.toml
+      - name: Setup UV
+        uses: astral-sh/setup-uv@v7
+      - name: Sync dependencies
+        run: uv sync --frozen --no-dev
+      - name: Compile documentation
+        run: uv run mkdocs build --clean --no-directory-urls --site-dir src/main/resources/static/docs
+
       - name: Setup Node
         uses: actions/setup-node@v6.3.0
         with:
@@ -53,6 +72,7 @@ jobs:
         run: npm run compile-ts
       - name: Minify Javascript
         run: npm run minify-js
+
       - name: Create jar file
         run: ./gradlew bootJar
       - name: Upload jar
@@ -83,3 +103,38 @@ jobs:
             SHA256SUM
             heber-modelo.jar
           make_latest: true
+
+  deploy-docs-github-pages:
+    permissions:
+      contents: write
+
+    needs: build
+    runs-on: ubuntu-22.04
+    steps:
+      - env:
+          REPO_URL: "https://github.com/Heber-Modelo/heber-modelo"
+          VERSION: ${{ needs.build.outputs.version }}
+          SITE_URL: "heber-modelo.github.io/heber-modelo"
+        run: echo "$VERSION"
+
+      - uses: actions/checkout@v6.0.2
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: pyproject.toml
+      - name: Setup UV
+        uses: astral-sh/setup-uv@v7
+      - name: Sync dependencies
+        run: uv sync --frozen --no-dev
+
+      - name: Deploy using Mike
+        run: |
+          git config user.name "mike-deploy [actions]"
+          git config user.email mike-deploy.no-reply@heber-modelo.github.io
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/gh-pages:refs/remotes/origin/gh-pages
+          mike deploy \
+            --update-aliases
+            --branch gh-pages
+            --push \
+            "$VERSION"
+            latest
