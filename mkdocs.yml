@@ -1,0 +1,56 @@
+site_name: Heber Modelo
+site_url: !ENV [SITE_URL]
+repo_name: Heber-Modelo
+repo_url: !ENV [REPO_URL]
+
+nav:
+  - Home: index.md
+  - Configuração: configuração.md
+  - Sobre:
+    - Licença: LICENSE.md
+    - Política de Privacidade: políticaPrivacidade.md
+    - Termos de Uso: termosGerais.md
+
+theme:
+  favicon: img/favicon.ico
+  name: material
+
+  features:
+    - navigation.path
+    - navigation.tracking
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      toggle:
+        icon: material/brightness-3
+        name: Alternar para o tema escuro
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      toggle:
+        icon: material/brightness-5
+        name: Alternar para o tema claro
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+      htmlmin_opts:
+        remove_comments: true
+      cache_safe: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

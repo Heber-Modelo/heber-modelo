@@ -59,6 +59,7 @@ doc-doxygen/
 ### Generated Files ###
 src/main/resources/static/css
 src/main/resources/static/javascript
-
+src/main/resources/static/docs
+site
 
 .env
