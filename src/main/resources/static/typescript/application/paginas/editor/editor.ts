@@ -55,7 +55,7 @@ import CarregarCSSCommand, {
 } from "../../../infrastructure/command/carregarCSSCommand.js";
 import ApagarComponenteCommand, {
   ApagarComponenteCommandBuilder,
-} from "../../../infrastructure/command/apagarComponenteCommand";
+} from "../../../infrastructure/command/apagarComponenteCommand.js";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
