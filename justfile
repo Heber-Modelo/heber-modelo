@@ -9,6 +9,9 @@ refresh:
     uv run mkdocs --clean --no-directory-ulrs --site-dir ./src/main/resources/docs
     ./gradlew bootJar
 
+run-as-dev:
+    ./gradlew bootRun --args="springs.profiles.active=local"
+
 setup:
     ./setup.bat
     pnpm install
