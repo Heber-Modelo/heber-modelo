@@ -53,6 +53,9 @@ import CarregarDiagramaCommand, {
 import CarregarCSSCommand, {
   CarregarCSSCommandBuilder,
 } from "../../../infrastructure/command/carregarCSSCommand.js";
+import ApagarComponenteCommand, {
+  ApagarComponenteCommandBuilder,
+} from "../../../infrastructure/command/apagarComponenteCommand";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -452,12 +455,20 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
     case bindings.get("apagarElemento"):
       let componenteAlvo: ComponenteDiagrama | null = selecionadorComponente.componenteSelecionado;
 
-      if (componenteAlvo !== null) {
-        repositorioComponentes.remover(componenteAlvo);
-        selecionadorComponente.removerSelecao();
-        limparPropriedades(abaPropriedades);
-        atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
+      if (componenteAlvo === null || diagrama === null) {
+        return;
       }
+
+      let command: ApagarComponenteCommand = new ApagarComponenteCommandBuilder()
+        .definirComponenteAlvo(componenteAlvo)
+        .definirDiagrama(diagrama)
+        .definirRepositorioComponente(repositorioComponentes)
+        .build();
+      commandHistory.saveAndExecuteCommand(command);
+
+      limparPropriedades(abaPropriedades);
+      atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
+
       break;
 
     // Mover elemento

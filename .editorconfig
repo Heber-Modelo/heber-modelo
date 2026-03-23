@@ -6,7 +6,7 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 ij_javascript_enforce_trailing_comma = keep
 
-[*.html]
+[*.{html,scss,ts}]
 charset = utf-8
 indent_size = 2
 indent_style = space

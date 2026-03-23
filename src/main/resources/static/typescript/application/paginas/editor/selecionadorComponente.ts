@@ -42,6 +42,8 @@ export class SelecionadorComponente {
     this.moverSetas(componente);
   }
 
+  public adicionarElementoASelecao(componente: ComponenteDiagrama): void {}
+
   public removerSelecao(): void {
     if (this._componenteSelecionado !== null) {
       this._componenteSelecionado.htmlComponente.classList.remove(CLASSE_ELEMENTO_SELECIONADO);
