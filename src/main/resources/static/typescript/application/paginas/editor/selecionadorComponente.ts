@@ -11,9 +11,10 @@
  *
  */
 
-import { CLASSE_ELEMENTO_SELECIONADO } from "./classesCSSElementos.js";
 import { converterPixeisParaNumero } from "../../../infrastructure/conversor/conversor.js";
 import { ComponenteDiagrama } from "../../../model/componente/componenteDiagrama.js";
+
+export const CLASSE_ELEMENTO_SELECIONADO: string = "selected";
 
 export class SelecionadorComponente {
   constructor() {
