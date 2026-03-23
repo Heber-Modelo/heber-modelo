@@ -13,12 +13,137 @@
 
 import { converterPixeisParaNumero } from "../../../infrastructure/conversor/conversor.js";
 import { ComponenteDiagrama } from "../../../model/componente/componenteDiagrama.js";
+import { Ponto } from "../../../model/ponto.js";
 
 export const CLASSE_ELEMENTO_SELECIONADO: string = "selected";
+
+enum PosicaoRelativaPontoExtensor {
+  TOP,
+  TOP_RIGHT,
+  TOP_LEFT,
+  CENTER_RIGHT,
+  CENTER_LEFT,
+  BOTTOM,
+  BOTTOM_RIGHT,
+  BOTTOM_LEFT,
+}
+
+class PontoExtensor {
+  public static readonly CLASSE_PONTO_EXTENSOR: string = "ponto-extensor";
+
+  private readonly _elemento: HTMLElement;
+  private readonly _posicaoRelativa: PosicaoRelativaPontoExtensor;
+  private _posicaoAbsoluta: Ponto | null = null;
+  private _elementoAtual: HTMLElement | null = null;
+
+  constructor(elementoPai: HTMLElement, posicao: PosicaoRelativaPontoExtensor) {
+    this._elemento = document.createElement("div");
+    elementoPai.appendChild(elementoPai);
+    elementoPai.classList.add(CLASSE_ELEMENTO_SELECIONADO);
+    this._posicaoRelativa = posicao;
+  }
+
+  public trocarElementoAtual(novoElementoAtual: HTMLElement | null): void {
+    this._elementoAtual = novoElementoAtual;
+
+    if (this._elementoAtual === null) {
+      this._posicaoAbsoluta = null;
+      return;
+    }
+
+    this._posicaoAbsoluta = this.calcularPosicaoAbsoluta(
+      this._elementoAtual,
+      this._posicaoRelativa,
+    );
+  }
+
+  private calcularPosicaoAbsoluta(
+    elementoAlvo: HTMLElement,
+    posicaoRelativa: PosicaoRelativaPontoExtensor,
+  ): Ponto {
+    let x: number = 0;
+    let y: number = 0;
+
+    let estiloElemento: CSSStyleDeclaration = getComputedStyle(elementoAlvo);
+
+    switch (posicaoRelativa) {
+      case PosicaoRelativaPontoExtensor.TOP:
+        x =
+          converterPixeisParaNumero(estiloElemento.left) +
+          converterPixeisParaNumero(estiloElemento.width) / 2;
+        y = converterPixeisParaNumero(estiloElemento.top);
+
+        break;
+
+      case PosicaoRelativaPontoExtensor.TOP_LEFT:
+        x = converterPixeisParaNumero(estiloElemento.left);
+        y = converterPixeisParaNumero(estiloElemento.top);
+
+        break;
+
+      case PosicaoRelativaPontoExtensor.TOP_RIGHT:
+        x =
+          converterPixeisParaNumero(estiloElemento.left) +
+          converterPixeisParaNumero(estiloElemento.width);
+        y = converterPixeisParaNumero(estiloElemento.top);
+
+        break;
+
+      case PosicaoRelativaPontoExtensor.CENTER_LEFT:
+        x = converterPixeisParaNumero(estiloElemento.left);
+        y =
+          converterPixeisParaNumero(estiloElemento.top) +
+          converterPixeisParaNumero(estiloElemento.height) / 2;
+
+        break;
+
+      case PosicaoRelativaPontoExtensor.CENTER_RIGHT:
+        x =
+          converterPixeisParaNumero(estiloElemento.left) +
+          converterPixeisParaNumero(estiloElemento.width);
+        y =
+          converterPixeisParaNumero(estiloElemento.top) +
+          converterPixeisParaNumero(estiloElemento.height) / 2;
+
+        break;
+
+      case PosicaoRelativaPontoExtensor.BOTTOM:
+        x =
+          converterPixeisParaNumero(estiloElemento.left) +
+          converterPixeisParaNumero(estiloElemento.width) / 2;
+        y =
+          converterPixeisParaNumero(estiloElemento.top) +
+          converterPixeisParaNumero(estiloElemento.height);
+
+        break;
+
+      case PosicaoRelativaPontoExtensor.BOTTOM_LEFT:
+        x = converterPixeisParaNumero(estiloElemento.left);
+        y =
+          converterPixeisParaNumero(estiloElemento.top) +
+          converterPixeisParaNumero(estiloElemento.height);
+
+        break;
+
+      case PosicaoRelativaPontoExtensor.BOTTOM_RIGHT:
+        x =
+          converterPixeisParaNumero(estiloElemento.left) +
+          converterPixeisParaNumero(estiloElemento.width);
+        y =
+          converterPixeisParaNumero(estiloElemento.top) +
+          converterPixeisParaNumero(estiloElemento.height);
+
+        break;
+    }
+
+    return new Ponto(x, y);
+  }
+}
 
 export class SelecionadorComponente {
   constructor() {
     this._componenteSelecionado = null;
+    this._pontosExtensores = [];
     this._setas = document.querySelectorAll(".seta");
     this._setaSuperior = document.querySelector(".seta-superior") as HTMLElement;
     this._setaInferior = document.querySelector(".seta-inferior") as HTMLElement;
@@ -27,6 +152,7 @@ export class SelecionadorComponente {
   }
 
   private _componenteSelecionado: ComponenteDiagrama | null;
+  private readonly _pontosExtensores: PontoExtensor[];
   private readonly _setas: NodeListOf<HTMLElement>;
   private readonly _setaSuperior: HTMLElement;
   private readonly _setaInferior: HTMLElement;
