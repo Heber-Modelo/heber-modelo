@@ -1,6 +1,7 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "<div><div contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">RELACIONAMENTO</div></div>",
+  "svgSimbolo": "<svg width=\"500\" height=\"500\" viewBox=\"0 0 500 500\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"25\" y=\"25\" width=\"450\" height=\"400\" fill=\"currentColor\"/>\n<path d=\"M415 225L250 129.737L250 320.263L415 225Z\" fill=\"currentColor\" class=\"svg-cor-borda\"/>\n<path d=\"M85 225L250 129.737L250 320.263L85 225Z\" fill=\"currentColor\" class=\"svg-cor-borda\"/>\n<path d=\"M95 225L245 138.397L245 311.603L95 225Z\" fill=\"currentColor\"/>\n<path d=\"M405 225L255 138.397L255 311.603L405 225Z\" fill=\"currentColor\"/>\n<rect x=\"239.679\" y=\"141.473\" width=\"11.9215\" height=\"10.5693\" transform=\"rotate(-30.0535 239.679 141.473)\" fill=\"currentColor\"/>\n<rect width=\"12.7304\" height=\"10.7205\" transform=\"matrix(-0.865558 -0.500808 -0.500808 0.865558 261.025 141.877)\" fill=\"currentColor\"/>\n<rect width=\"11.5607\" height=\"10.5942\" transform=\"matrix(0.865558 0.500808 0.500808 -0.865558 239.987 308.705)\" fill=\"currentColor\"/>\n<rect x=\"261.196\" y=\"308.02\" width=\"12.9404\" height=\"10.4208\" transform=\"rotate(149.947 261.196 308.02)\" fill=\"currentColor\"/>\n<rect x=\"245\" y=\"147\" width=\"10\" height=\"156\" fill=\"currentColor\"/>\n</svg>\n",
   "classesElemento": [
     "elemento-relacionamento"
   ],

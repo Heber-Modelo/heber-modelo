@@ -1,6 +1,7 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "<div class=\"losango-interno\"><div contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">AGREGAÇÃO</div></div>",
+  "svgSimbolo": "<svg width=\"500\" height=\"500\" viewBox=\"0 0 500 500\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"25\" y=\"25\" width=\"450\" height=\"400\" fill=\"currentColor\"/>\n<rect x=\"60.5\" y=\"80.5\" width=\"375\" height=\"275\" fill=\"currentColor\" class=\"svg-cor-borda\"/>\n<path d=\"M100 225L250 138.397L250 311.603L100 225Z\" fill=\"currentColor\"/>\n<path d=\"M400 225L250 138.397L250 311.603L400 225Z\" fill=\"currentColor\"/>\n</svg>\n",
   "classesElemento": [
     "elemento-agregacao"
   ],

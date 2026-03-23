@@ -1,6 +1,7 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "<div></div>",
+  "svgSimbolo": "<svg width=\"500\" height=\"500\" viewBox=\"0 0 500 500\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"25\" y=\"25\" width=\"450\" height=\"400\" fill=\"currentColor\"/>\n<path d=\"M416.294 370H83.7061L250 84.9238L416.294 370Z\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"10\" class=\"svg-cor-borda\"/>\n</svg>\n",
   "classesElemento": [
     "elemento-especializacao"
   ],
