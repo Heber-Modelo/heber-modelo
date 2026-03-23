@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="SCSS" pattern="file[heber-modelo.main]:resources/static/scss//*" />
+</component>
