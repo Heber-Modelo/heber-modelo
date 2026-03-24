@@ -18,8 +18,8 @@
 form {
   display: flex;
   flex-direction: column;
-  gap: variaveis.$gapForm;
-  margin: 1rem 0;
+  gap: 2rem;
+  margin: 3rem 0;
   width: 50%;
 
   div.botoes {
@@ -39,15 +39,17 @@ form {
 
   div.diagramas {
     align-self: center;
-    width: 70%;
+    width: 100%;
 
-    fieldset {
+    fieldset{
+      width: 100%;
       align-items: center;
       border: var(--cor-borda) solid variaveis.$tamanhoBordaInput;
       border-radius: variaveis.$borderRadiusInput;
       display: flex;
       flex-direction: column;
-      padding: variaveis.$paddingPadrao;
+      padding-top: 3rem;
+      padding-bottom: 3rem;
 
       &#diagramas-banco {
         align-items: center;
@@ -56,10 +58,25 @@ form {
         flex-direction: column;
         grid-column: 1;
 
+        legend {
+          padding-left: 2rem;
+          padding-right: 2rem;
+          font-size: 2rem;
+        }
+
         div.checkbox-group {
           display: grid;
-          grid-template-columns: repeat(2, 50%);
           width: calc(100% - 10rem);
+
+          input[type="checkbox"]{
+            width: 2.5rem;
+            height: 2.5rem;
+          }
+
+          span {
+            font-size: 1.5rem;
+          }
+
         }
       }
 

@@ -23,10 +23,11 @@ Licensed works, modifications, and larger works may be distributed under differe
       <form action="/editor" method="post" th:object="${novoDiagramaDTO}">
         <div class="diagramas">
           <fieldset id="diagramas-banco">
-            <legend th:text="#{web.page.new-diagram.label.database}"></legend>
+            <legend th:text="#{web.page.new-diagram.label.diagram}"></legend>
             <div class="checkbox-group">
               <label th:each="d : ${diagramasBD}" th:title="${d.getTitulo()}">
                 <input type="checkbox" th:field="*{tiposDiagrama}" th:value="${d.getValor()}" />
+                <span th:text="${d.getTitulo()}"></span>
                 <span class="traco">-</span>
                 <span th:text="${d.getNome()}"></span>
               </label>
