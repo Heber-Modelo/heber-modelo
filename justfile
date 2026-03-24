@@ -6,7 +6,7 @@ set windows-shell := ["powershell.exe", "-C"]
 refresh:
     pnpm run compile-scss
     pnpm run compile-ts
-    uv run mkdocs build --clean --no-directory-ulrs --site-dir ./src/main/resources/docs
+    uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/docs
     ./gradlew bootJar
 
 run-as-dev:
