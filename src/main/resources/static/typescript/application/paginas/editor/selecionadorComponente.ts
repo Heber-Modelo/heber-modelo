@@ -13,137 +13,14 @@
 
 import { converterPixeisParaNumero } from "../../../infrastructure/conversor/conversor.js";
 import { ComponenteDiagrama } from "../../../model/componente/componenteDiagrama.js";
-import { Ponto } from "../../../model/ponto.js";
+import PontoExtensor from "./pontoExtensor.js";
 
 export const CLASSE_ELEMENTO_SELECIONADO: string = "selected";
 
-enum PosicaoRelativaPontoExtensor {
-  TOP,
-  TOP_RIGHT,
-  TOP_LEFT,
-  CENTER_RIGHT,
-  CENTER_LEFT,
-  BOTTOM,
-  BOTTOM_RIGHT,
-  BOTTOM_LEFT,
-}
-
-class PontoExtensor {
-  public static readonly CLASSE_PONTO_EXTENSOR: string = "ponto-extensor";
-
-  private readonly _elemento: HTMLElement;
-  private readonly _posicaoRelativa: PosicaoRelativaPontoExtensor;
-  private _posicaoAbsoluta: Ponto | null = null;
-  private _elementoAtual: HTMLElement | null = null;
-
-  constructor(elementoPai: HTMLElement, posicao: PosicaoRelativaPontoExtensor) {
-    this._elemento = document.createElement("div");
-    elementoPai.appendChild(elementoPai);
-    elementoPai.classList.add(CLASSE_ELEMENTO_SELECIONADO);
-    this._posicaoRelativa = posicao;
-  }
-
-  public trocarElementoAtual(novoElementoAtual: HTMLElement | null): void {
-    this._elementoAtual = novoElementoAtual;
-
-    if (this._elementoAtual === null) {
-      this._posicaoAbsoluta = null;
-      return;
-    }
-
-    this._posicaoAbsoluta = this.calcularPosicaoAbsoluta(
-      this._elementoAtual,
-      this._posicaoRelativa,
-    );
-  }
-
-  private calcularPosicaoAbsoluta(
-    elementoAlvo: HTMLElement,
-    posicaoRelativa: PosicaoRelativaPontoExtensor,
-  ): Ponto {
-    let x: number = 0;
-    let y: number = 0;
-
-    let estiloElemento: CSSStyleDeclaration = getComputedStyle(elementoAlvo);
-
-    switch (posicaoRelativa) {
-      case PosicaoRelativaPontoExtensor.TOP:
-        x =
-          converterPixeisParaNumero(estiloElemento.left) +
-          converterPixeisParaNumero(estiloElemento.width) / 2;
-        y = converterPixeisParaNumero(estiloElemento.top);
-
-        break;
-
-      case PosicaoRelativaPontoExtensor.TOP_LEFT:
-        x = converterPixeisParaNumero(estiloElemento.left);
-        y = converterPixeisParaNumero(estiloElemento.top);
-
-        break;
-
-      case PosicaoRelativaPontoExtensor.TOP_RIGHT:
-        x =
-          converterPixeisParaNumero(estiloElemento.left) +
-          converterPixeisParaNumero(estiloElemento.width);
-        y = converterPixeisParaNumero(estiloElemento.top);
-
-        break;
-
-      case PosicaoRelativaPontoExtensor.CENTER_LEFT:
-        x = converterPixeisParaNumero(estiloElemento.left);
-        y =
-          converterPixeisParaNumero(estiloElemento.top) +
-          converterPixeisParaNumero(estiloElemento.height) / 2;
-
-        break;
-
-      case PosicaoRelativaPontoExtensor.CENTER_RIGHT:
-        x =
-          converterPixeisParaNumero(estiloElemento.left) +
-          converterPixeisParaNumero(estiloElemento.width);
-        y =
-          converterPixeisParaNumero(estiloElemento.top) +
-          converterPixeisParaNumero(estiloElemento.height) / 2;
-
-        break;
-
-      case PosicaoRelativaPontoExtensor.BOTTOM:
-        x =
-          converterPixeisParaNumero(estiloElemento.left) +
-          converterPixeisParaNumero(estiloElemento.width) / 2;
-        y =
-          converterPixeisParaNumero(estiloElemento.top) +
-          converterPixeisParaNumero(estiloElemento.height);
-
-        break;
-
-      case PosicaoRelativaPontoExtensor.BOTTOM_LEFT:
-        x = converterPixeisParaNumero(estiloElemento.left);
-        y =
-          converterPixeisParaNumero(estiloElemento.top) +
-          converterPixeisParaNumero(estiloElemento.height);
-
-        break;
-
-      case PosicaoRelativaPontoExtensor.BOTTOM_RIGHT:
-        x =
-          converterPixeisParaNumero(estiloElemento.left) +
-          converterPixeisParaNumero(estiloElemento.width);
-        y =
-          converterPixeisParaNumero(estiloElemento.top) +
-          converterPixeisParaNumero(estiloElemento.height);
-
-        break;
-    }
-
-    return new Ponto(x, y);
-  }
-}
-
 export class SelecionadorComponente {
-  constructor() {
+  constructor(pontosExtensores: PontoExtensor[]) {
     this._componenteSelecionado = null;
-    this._pontosExtensores = [];
+    this._pontosExtensores = pontosExtensores;
     this._setas = document.querySelectorAll(".seta");
     this._setaSuperior = document.querySelector(".seta-superior") as HTMLElement;
     this._setaInferior = document.querySelector(".seta-inferior") as HTMLElement;
@@ -166,6 +43,27 @@ export class SelecionadorComponente {
     this._componenteSelecionado = componente;
     this._componenteSelecionado.htmlComponente.classList.add(CLASSE_ELEMENTO_SELECIONADO);
     this.moverSetas(componente);
+    this._pontosExtensores.forEach((ponto: PontoExtensor): void =>
+      ponto.trocarElementoAtual(componente.htmlComponente),
+    );
+  }
+
+  public esconderPontosExtensores(): void {
+    this._pontosExtensores.forEach((ponto: PontoExtensor): void => ponto.esconderPonto());
+  }
+
+  public mostrarPontosExtensores(): void {
+    this._pontosExtensores.forEach((ponto: PontoExtensor): void => ponto.mostrarPonto());
+  }
+
+  public reposicionarPontosExtensores(): void {
+    let elementoAtual: HTMLElement | undefined = this.componenteSelecionado?.htmlComponente;
+
+    if (elementoAtual) {
+      this._pontosExtensores.forEach((ponto: PontoExtensor): void =>
+        ponto.trocarElementoAtual(elementoAtual),
+      );
+    }
   }
 
   public adicionarElementoASelecao(componente: ComponenteDiagrama): void {}
@@ -176,7 +74,8 @@ export class SelecionadorComponente {
       this._componenteSelecionado = null;
     }
 
-    this._setas.forEach((s: HTMLElement): string => (s.style.display = "none"));
+    this._setas.forEach((seta: HTMLElement): string => (seta.style.display = "none"));
+    this.esconderPontosExtensores();
   }
 
   public moverSetas(componente: ComponenteDiagrama): void {
@@ -209,7 +108,7 @@ export class SelecionadorComponente {
     this._setaEsquerda.style.top = `${centroVertical - alturaSeta / 2}px`;
     this._setaEsquerda.style.left = `${centroHorizontal - larguraSeta * 3}px`;
 
-    this._setas.forEach((s) => s.style.removeProperty("display"));
+    this._setas.forEach((seta: HTMLElement): string => seta.style.removeProperty("display"));
   }
 
   public moverSetasParaComponenteSelecionado(): void {

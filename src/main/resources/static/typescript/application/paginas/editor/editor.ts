@@ -94,12 +94,15 @@ function mouseDownComecarMoverElemento(event: MouseEvent): void {
   componente.classList.add("dragging");
   document.addEventListener("mousemove", dragElement);
   componenteAtual = componente;
+  selecionadorComponente.esconderPontosExtensores();
 }
 
 function mouseUpPararMoverElemento(event: Event): void {
   let componente: HTMLElement = event.target as HTMLElement;
   componente.classList.remove("dragging");
   document.removeEventListener("mousemove", dragElement);
+  selecionadorComponente.mostrarPontosExtensores();
+  selecionadorComponente.reposicionarPontosExtensores();
 }
 
 function dragElement(event: MouseEvent): void {
@@ -319,10 +322,6 @@ function ajustarTamanhoComponente(event: MouseEvent): void {
   elemento.style.height = Math.abs(event.clientY - elemento.offsetTop) + "px";
   elemento.style.width = Math.abs(event.clientX - elemento.offsetLeft) + "px";
 }
-
-setas.forEach((seta: HTMLElement): void => {
-  seta.addEventListener("mousedown", iniciarReajusteTamanho);
-});
 
 /**************************/
 /* CARREGAMENTO DIAGRAMAS */

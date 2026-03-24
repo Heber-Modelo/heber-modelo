@@ -13,13 +13,31 @@
 
 import { IFactory } from "../../model/factory/iFactory";
 import { SelecionadorComponente } from "../../application/paginas/editor/selecionadorComponente.js";
+import PontoExtensor from "../../application/paginas/editor/pontoExtensor.js";
+import PosicoesRelativasPontoExtensor from "../../model/posicoesRelativasPontoExtensor.js";
 
 class SelecionadorComponenteFactory implements IFactory<SelecionadorComponente> {
   private _selecionador: SelecionadorComponente | null = null;
 
   public build(): SelecionadorComponente {
     if (this._selecionador === null) {
-      this._selecionador = new SelecionadorComponente();
+      let diagrama: HTMLElement = document.querySelector("main") as HTMLElement;
+      let pontosExtensores: PontoExtensor[] = Object.keys(PosicoesRelativasPontoExtensor)
+        .slice(
+          Object.keys(PosicoesRelativasPontoExtensor).length / 2,
+          Object.keys(PosicoesRelativasPontoExtensor).length,
+        )
+        .map(
+          (posicao: string): PontoExtensor =>
+            new PontoExtensor(
+              diagrama,
+              PosicoesRelativasPontoExtensor[
+                posicao as keyof typeof PosicoesRelativasPontoExtensor
+              ],
+            ),
+        );
+
+      this._selecionador = new SelecionadorComponente(pontosExtensores);
     }
 
     return this._selecionador;
