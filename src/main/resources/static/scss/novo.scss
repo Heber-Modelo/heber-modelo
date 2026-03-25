@@ -41,15 +41,15 @@ form {
     align-self: center;
     width: 100%;
 
-    fieldset{
+    fieldset {
       width: 100%;
-      align-items: center;
       border: var(--cor-borda) solid variaveis.$tamanhoBordaInput;
       border-radius: variaveis.$borderRadiusInput;
-      display: flex;
-      flex-direction: column;
       padding-top: 3rem;
       padding-bottom: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
       &#diagramas-banco {
         align-items: center;
@@ -59,8 +59,9 @@ form {
         grid-column: 1;
 
         legend {
-          padding-left: 2rem;
-          padding-right: 2rem;
+          margin-left: 3.5rem;
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
           font-size: 2rem;
         }
 
@@ -68,14 +69,41 @@ form {
           display: grid;
           width: calc(100% - 10rem);
 
-          input[type="checkbox"]{
-            width: 2.5rem;
-            height: 2.5rem;
+          label {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+
+            input[type="checkbox"] {
+              appearance: none;
+              width: 2.5rem;
+              height: 2.5rem;
+              border: 3px solid var(--cor-borda);
+              border-radius: 4px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            input[type="checkbox"]:checked {
+              border: 4.5px solid var(--cor-botao);
+            }
+
+            input[type="checkbox"]:checked::before {
+              content: "✔";
+              font-size: 1.5rem;
+              text-align: center;
+              color: var(--cor-botao);
+            }
+
+            span {
+              font-size: 1.5rem;
+            }
           }
 
-          span {
-            font-size: 1.5rem;
-          }
 
         }
       }
