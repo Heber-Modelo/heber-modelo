@@ -11,9 +11,9 @@
  *
  */
 
-import { converterPixeisParaNumero } from "../../../infrastructure/conversor/conversor.js";
-import { ComponenteDiagrama } from "../../../model/componente/componenteDiagrama.js";
-import PontoExtensor from "./pontoExtensor.js";
+import converterPixeisParaNumero from "infrastructure/conversor/conversor.js";
+import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
+import PontoExtensor from "infrastructure/pontoExtensor.js";
 
 export const CLASSE_ELEMENTO_SELECIONADO: string = "selected";
 

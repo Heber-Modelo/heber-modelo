@@ -11,6 +11,6 @@
  *
  */
 
-export interface IFactory<T> {
+export default interface IFactory<T> {
   build(): T;
 }

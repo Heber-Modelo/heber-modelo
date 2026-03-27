@@ -11,7 +11,7 @@
  *
  */
 
-export interface ValoresJSONComponente {
+export default interface ValoresJSONComponente {
   classesElemento: string[];
   valorHtmlInterno: string;
   propriedades: JSONPropriedade[];

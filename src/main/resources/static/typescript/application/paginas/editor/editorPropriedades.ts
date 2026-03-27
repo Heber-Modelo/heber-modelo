@@ -11,12 +11,12 @@
  *
  */
 
-import { ComponenteDiagrama } from "../../../model/componente/componenteDiagrama.js";
-import { PropriedadeComponente } from "../../../model/propriedade/propriedadeComponente.js";
-import { RepositorioComponente } from "../../../infrastructure/repositorio/repositorioComponente.js";
-import { repositorioComponenteFactory } from "../../../infrastructure/factory/repositorioComponenteFactory.js";
-import { SelecionadorComponente } from "./selecionadorComponente.js";
-import { selecionadorComponenteFactory } from "../../../infrastructure/factory/selecionadorComponenteFactory.js";
+import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente.js";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente.js";
+import { repositorioComponenteFactory } from "infrastructure/factory/repositorioComponenteFactory.js";
+import { SelecionadorComponente } from "application/paginas/editor/selecionadorComponente.js";
+import { selecionadorComponenteFactory } from "infrastructure/factory/selecionadorComponenteFactory.js";
 
 class InputPropriedade {
   private readonly _elementoInput: HTMLInputElement | null;

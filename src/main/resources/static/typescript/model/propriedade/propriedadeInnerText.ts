@@ -11,10 +11,10 @@
  *
  */
 
-import { ComponenteDiagrama } from "../componente/componenteDiagrama.js";
-import { PropriedadeComponente } from "./propriedadeComponente.js";
+import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente.js";
 
-export class PropriedadeInnerText extends PropriedadeComponente {
+export default class PropriedadeInnerText extends PropriedadeComponente {
   constructor(
     componente: ComponenteDiagrama,
     sufixo: string,

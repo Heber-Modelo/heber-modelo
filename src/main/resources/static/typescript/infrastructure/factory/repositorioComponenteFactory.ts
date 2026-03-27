@@ -11,8 +11,8 @@
  *
  */
 
-import { IFactory } from "../../model/factory/iFactory";
-import { RepositorioComponente } from "../repositorio/repositorioComponente.js";
+import IFactory from "model/factory/iFactory";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente.js";
 
 class RepositorioComponenteFactory implements IFactory<RepositorioComponente> {
   private _repositorio: RepositorioComponente | null = null;

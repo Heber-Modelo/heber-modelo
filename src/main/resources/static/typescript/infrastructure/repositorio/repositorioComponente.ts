@@ -11,12 +11,12 @@
  *
  */
 
-import { AbstractComponenteConexao } from "../../model/conexao/abstractComponenteConexao.js";
-import { ComponenteDiagrama } from "../../model/componente/componenteDiagrama.js";
-import { ComponenteDiagramaOuvinte } from "../../model/componente/componenteDiagramaOuvinte.js";
-import { IRepositorioComponente } from "../../model/repositorio/IRepositorioComponente.js";
+import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao.js";
+import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
+import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte.js";
+import IRepositorioComponente from "model/repositorio/IRepositorioComponente.js";
 
-export class RepositorioComponente implements IRepositorioComponente {
+export default class RepositorioComponente implements IRepositorioComponente {
   private _componentesDiagrama: ComponenteDiagrama[] = [];
 
   public adicionar(componenteDiagrama: ComponenteDiagrama): void {

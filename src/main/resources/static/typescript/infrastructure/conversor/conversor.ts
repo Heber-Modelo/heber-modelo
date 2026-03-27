@@ -11,6 +11,6 @@
  *
  */
 
-export function converterPixeisParaNumero(valorPixeis: string): number {
+export default function converterPixeisParaNumero(valorPixeis: string): number {
   return Number(valorPixeis.substring(0, valorPixeis.length - 2));
 }

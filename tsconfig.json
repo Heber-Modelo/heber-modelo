@@ -5,6 +5,7 @@
     "declaration": false,
     "declarationMap": false,
     "sourceMap": false,
+    "baseUrl": "./src/main/resources/static/typescript",
     "rootDir": "./src/main/resources/static/typescript",
     "outDir": "./src/main/resources/static/javascript",
     "removeComments": true,

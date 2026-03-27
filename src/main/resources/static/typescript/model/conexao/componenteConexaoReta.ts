@@ -11,9 +11,9 @@
  *
  */
 
-import { AbstractComponenteConexao } from "./abstractComponenteConexao.js";
+import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao.js";
 
-export class ComponenteConexaoReta extends AbstractComponenteConexao {
+export default class ComponenteConexaoReta extends AbstractComponenteConexao {
   protected ajustarConexao(): void {
     let deltaX: number = this._ponto1.x - this._ponto2.x;
     let deltaY: number = this._ponto1.y - this._ponto2.y;

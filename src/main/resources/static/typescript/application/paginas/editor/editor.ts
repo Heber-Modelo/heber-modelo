@@ -11,7 +11,7 @@
  *
  */
 
-import { converterPixeisParaNumero } from "../../../infrastructure/conversor/conversor.js";
+import converterPixeisParaNumero from "infrastructure/conversor/conversor.js";
 import {
   atualizarInputs,
   atualizarValorInput,
@@ -20,42 +20,42 @@ import {
   editorEixoX,
   editorEixoY,
   inputs,
-} from "./editorPropriedades.js";
+} from "application/paginas/editor/editorPropriedades.js";
+import ComponenteDiagrama, { LateralComponente } from "model/componente/componenteDiagrama.js";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente.js";
+import { repositorioComponenteFactory } from "infrastructure/factory/repositorioComponenteFactory.js";
+import { SelecionadorComponente } from "application/paginas/editor/selecionadorComponente.js";
+import { selecionadorComponenteFactory } from "infrastructure/factory/selecionadorComponenteFactory.js";
+import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente.js";
+import ComponenteFactory from "infrastructure/factory/componenteFactory.js";
+import Ponto from "model/ponto.js";
 import {
-  ComponenteDiagrama,
-  LateralComponente,
-} from "../../../model/componente/componenteDiagrama.js";
-import { RepositorioComponente } from "../../../infrastructure/repositorio/repositorioComponente.js";
-import { repositorioComponenteFactory } from "../../../infrastructure/factory/repositorioComponenteFactory.js";
-import { SelecionadorComponente } from "./selecionadorComponente.js";
-import { selecionadorComponenteFactory } from "../../../infrastructure/factory/selecionadorComponenteFactory.js";
-import { GeradorIDComponente } from "../../../infrastructure/gerador/geradorIDComponente.js";
-import { ComponenteFactory } from "../../../infrastructure/factory/componenteFactory.js";
-import { Ponto } from "../../../model/ponto.js";
-import { DirecoesMovimento, moverComponente } from "./manipularComponente.js";
-import { FabricaComponenteConexao } from "../../../model/conexao/fabricaComponenteConexao.js";
-import { TipoConexao } from "../../../model/conexao/tipoConexao.js";
-import "./painelLateral.js";
-import CommandHistory from "../../history/commandHistory.js";
+  DirecoesMovimento,
+  moverComponente,
+} from "application/paginas/editor/manipularComponente.js";
+import FabricaComponenteConexao from "model/conexao/fabricaComponenteConexao.js";
+import TipoConexao from "model/conexao/tipoConexao.js";
+import CommandHistory from "application/history/commandHistory.js";
 import ColarComponenteCommand, {
   ColarComponenteDiagramaBuilder,
-} from "../../../infrastructure/command/colarComponenteCommand.js";
+} from "infrastructure/command/colarComponenteCommand.js";
 import CopiarComponenteCommand, {
   CopiarComponenteCommandBuilder,
-} from "../../../infrastructure/command/copiarComponenteCommand.js";
+} from "infrastructure/command/copiarComponenteCommand.js";
 import CortarComponenteCommand, {
   CortarComponenteCommandBuilder,
-} from "../../../infrastructure/command/cortarComponenteCommand.js";
+} from "infrastructure/command/cortarComponenteCommand.js";
 import CarregarDiagramaCommand, {
   ATRIBUTO_NOME_ELEMENTO,
   CarregarDiagramaCommandBuilder,
-} from "../../../infrastructure/command/carregarDiagramaCommand.js";
+} from "infrastructure/command/carregarDiagramaCommand.js";
 import CarregarCSSCommand, {
   CarregarCSSCommandBuilder,
-} from "../../../infrastructure/command/carregarCSSCommand.js";
+} from "infrastructure/command/carregarCSSCommand.js";
 import ApagarComponenteCommand, {
   ApagarComponenteCommandBuilder,
-} from "../../../infrastructure/command/apagarComponenteCommand.js";
+} from "infrastructure/command/apagarComponenteCommand.js";
+import "application/paginas/editor/painelLateral.js";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -154,9 +154,10 @@ new CarregarCSSCommandBuilder().definirNomeArquivo(TipoConexao.CONEXAO_ANGULADA)
 
 setas.forEach((seta: HTMLElement): void =>
   seta.addEventListener("click", (): void => {
-    if (selecionadorComponente.componenteSelecionado === null) return;
-
     primeiroComponente = selecionadorComponente.componenteSelecionado;
+
+    if (primeiroComponente === null) return;
+
     let ponto: number[];
 
     if (seta.classList.contains("seta-direita")) {

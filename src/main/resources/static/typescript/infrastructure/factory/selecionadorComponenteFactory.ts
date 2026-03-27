@@ -11,9 +11,9 @@
  *
  */
 
-import { IFactory } from "../../model/factory/iFactory";
+import IFactory from "../../model/factory/iFactory";
 import { SelecionadorComponente } from "../../application/paginas/editor/selecionadorComponente.js";
-import PontoExtensor from "../../application/paginas/editor/pontoExtensor.js";
+import PontoExtensor from "../pontoExtensor";
 import PosicoesRelativasPontoExtensor from "../../model/posicoesRelativasPontoExtensor.js";
 import PontoExtensorFactory from "./pontoExtensorFactory.js";
 

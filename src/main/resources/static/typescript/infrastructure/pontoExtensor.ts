@@ -11,11 +11,11 @@
  *
  */
 
-import { converterPixeisParaNumero } from "../../../infrastructure/conversor/conversor.js";
-import { Ponto } from "../../../model/ponto.js";
-import PosicoesRelativasPontoExtensor from "../../../model/posicoesRelativasPontoExtensor.js";
+import converterPixeisParaNumero from "infrastructure/conversor/conversor";
+import Ponto from "model/ponto";
+import PosicoesRelativasPontoExtensor from "model/posicoesRelativasPontoExtensor";
 
-class PontoExtensor {
+export default class PontoExtensor {
   public static readonly CLASSE_PONTO_EXTENSOR: string = "ponto-extensor";
 
   private readonly _elemento: HTMLElement;
@@ -132,5 +132,3 @@ class PontoExtensor {
     return new Ponto(x, y);
   }
 }
-
-export default PontoExtensor;

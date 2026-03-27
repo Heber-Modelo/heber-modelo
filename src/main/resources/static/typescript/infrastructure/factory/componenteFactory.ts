@@ -11,12 +11,12 @@
  *
  */
 
-import { ComponenteDiagrama } from "../../model/componente/componenteDiagrama.js";
-import { JSONPropriedade, ValoresJSONComponente } from "../../model/json/valoresJSONComponente.js";
-import { PropriedadeFactory } from "./propriedadeFactory.js";
-import { PropriedadeComponente } from "../../model/propriedade/propriedadeComponente.js";
+import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
+import PropriedadeFactory from "infrastructure/factory/propriedadeFactory.js";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente.js";
+import ValoresJSONComponente, { JSONPropriedade } from "../../model/json/valoresJSONComponente";
 
-export class ComponenteFactory {
+export default class ComponenteFactory {
   public static PROPRIEDADE_ID_COMPONENTE: string = "data-id";
   public static PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
   private static _CLASSE_COMUM_ELEMENTOS: string = "componente";

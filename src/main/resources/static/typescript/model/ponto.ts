@@ -11,7 +11,7 @@
  *
  */
 
-export class Ponto {
+export default class Ponto {
   private _x: number;
   private _y: number;
 

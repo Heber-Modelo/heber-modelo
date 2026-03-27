@@ -11,15 +11,15 @@
  *
  */
 
-import { AbstractComponenteConexao } from "./abstractComponenteConexao.js";
-import { ComponenteConexaoAngulada } from "./componenteConexaoAngulada.js";
-import { ComponenteConexaoReta } from "./componenteConexaoReta.js";
-import { ComponenteDiagrama, LateralComponente } from "../componente/componenteDiagrama.js";
-import { Ponto } from "../ponto.js";
-import { PropriedadeComponente } from "../propriedade/propriedadeComponente.js";
-import { TipoConexao } from "./tipoConexao.js";
+import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao.js";
+import ComponenteConexaoAngulada from "model/conexao/componenteConexaoAngulada.js";
+import ComponenteConexaoReta from "model/conexao/componenteConexaoReta.js";
+import ComponenteDiagrama, { LateralComponente } from "model/componente/componenteDiagrama.js";
+import Ponto from "model/ponto.js";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente.js";
+import TipoConexao from "model/conexao/tipoConexao.js";
 
-export class FabricaComponenteConexao {
+export default class FabricaComponenteConexao {
   public criarConexao(
     tipoConexao: TipoConexao,
     componenteHTML: HTMLDivElement,

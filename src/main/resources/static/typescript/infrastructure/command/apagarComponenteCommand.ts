@@ -11,9 +11,9 @@
  *
  */
 
-import ICommand from "../../model/command/iCommand";
-import { ComponenteDiagrama } from "../../model/componente/componenteDiagrama";
-import { IRepositorioComponente } from "../../model/repositorio/IRepositorioComponente";
+import ICommand from "model/command/iCommand";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import IRepositorioComponente from "model/repositorio/IRepositorioComponente";
 
 export default class ApagarComponenteCommand implements ICommand {
   private readonly _componente: ComponenteDiagrama;

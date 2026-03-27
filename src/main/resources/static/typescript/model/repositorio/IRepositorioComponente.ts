@@ -11,7 +11,7 @@
  *
  */
 
-import { IRepositorio } from "./IRepositorio.js";
-import { ComponenteDiagrama } from "../componente/componenteDiagrama.js";
+import IRepositorio from "model/repositorio/IRepositorio.js";
+import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
 
-export interface IRepositorioComponente extends IRepositorio<ComponenteDiagrama> {}
+export default interface IRepositorioComponente extends IRepositorio<ComponenteDiagrama> {}

@@ -11,10 +11,10 @@
  *
  */
 
-import PosicoesRelativasPontoExtensor from "../../model/posicoesRelativasPontoExtensor.js";
-import PontoExtensor from "../../application/paginas/editor/pontoExtensor.js";
+import PosicoesRelativasPontoExtensor from "model/posicoesRelativasPontoExtensor.js";
+import PontoExtensor from "infrastructure/pontoExtensor.js";
 
-class PontoExtensorFactory {
+export default class PontoExtensorFactory {
   public build(
     elementoPai: HTMLElement,
     posicaoPontoExtensor: PosicoesRelativasPontoExtensor,
@@ -22,5 +22,3 @@ class PontoExtensorFactory {
     return new PontoExtensor(elementoPai, posicaoPontoExtensor);
   }
 }
-
-export default PontoExtensorFactory;

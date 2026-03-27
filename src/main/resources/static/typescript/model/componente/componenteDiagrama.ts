@@ -11,10 +11,10 @@
  *
  */
 
-import { ComponenteDiagramaOuvido } from "./componenteDiagramaOuvido.js";
-import { ComponenteDiagramaOuvinte } from "./componenteDiagramaOuvinte.js";
-import { PropriedadeComponente } from "../propriedade/propriedadeComponente.js";
-import { converterPixeisParaNumero } from "../../infrastructure/conversor/conversor.js";
+import ComponenteDiagramaOuvido from "model/componente/componenteDiagramaOuvido.js";
+import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte.js";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente.js";
+import converterPixeisParaNumero from "infrastructure/conversor/conversor.js";
 
 export enum LateralComponente {
   NORTE,
@@ -23,7 +23,7 @@ export enum LateralComponente {
   OESTE,
 }
 
-export class ComponenteDiagrama implements ComponenteDiagramaOuvido {
+export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
   constructor(htmlComponente: HTMLDivElement, propriedades: PropriedadeComponente[] | null) {
     this._htmlComponente = htmlComponente;
     this._propriedades = propriedades ?? [];

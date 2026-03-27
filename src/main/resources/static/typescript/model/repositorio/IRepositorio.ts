@@ -11,7 +11,7 @@
  *
  */
 
-export interface IRepositorio<T> {
+export default interface IRepositorio<T> {
   adicionar(t: T): void;
 
   atualizar(t: T): void;

@@ -11,7 +11,7 @@
  *
  */
 
-export interface ComponenteDiagramaOuvinte {
+export default interface ComponenteDiagramaOuvinte {
   atualizar(htmlElemento: HTMLDivElement): void;
 
   alertarRemovido(): void;

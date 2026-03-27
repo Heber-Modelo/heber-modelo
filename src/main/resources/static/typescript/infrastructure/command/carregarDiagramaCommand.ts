@@ -11,9 +11,9 @@
  *
  */
 
-import ICommand from "../../model/command/iCommand.js";
-import { ResponseDiagramaJSON } from "../../model/response/responseDiagramaJSON.js";
-import { ResponseTraducaoJSON } from "../../model/response/responseTraducaoJSON.js";
+import ICommand from "model/command/iCommand.js";
+import ResponseDiagramaJSON from "model/response/responseDiagramaJSON.js";
+import ResponseTraducaoJSON from "model/response/responseTraducaoJSON.js";
 
 export const ATRIBUTO_NOME_ELEMENTO = "data-nome-elemento";
 
