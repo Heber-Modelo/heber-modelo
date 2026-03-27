@@ -15,6 +15,7 @@ import { IFactory } from "../../model/factory/iFactory";
 import { SelecionadorComponente } from "../../application/paginas/editor/selecionadorComponente.js";
 import PontoExtensor from "../../application/paginas/editor/pontoExtensor.js";
 import PosicoesRelativasPontoExtensor from "../../model/posicoesRelativasPontoExtensor.js";
+import PontoExtensorFactory from "./pontoExtensorFactory.js";
 
 class SelecionadorComponenteFactory implements IFactory<SelecionadorComponente> {
   private _selecionador: SelecionadorComponente | null = null;
@@ -22,6 +23,7 @@ class SelecionadorComponenteFactory implements IFactory<SelecionadorComponente> 
   public build(): SelecionadorComponente {
     if (this._selecionador === null) {
       let diagrama: HTMLElement = document.querySelector("main") as HTMLElement;
+      let pontoExtensorFactory: PontoExtensorFactory = new PontoExtensorFactory();
       let pontosExtensores: PontoExtensor[] = Object.keys(PosicoesRelativasPontoExtensor)
         .slice(
           Object.keys(PosicoesRelativasPontoExtensor).length / 2,
@@ -29,7 +31,7 @@ class SelecionadorComponenteFactory implements IFactory<SelecionadorComponente> 
         )
         .map(
           (posicao: string): PontoExtensor =>
-            new PontoExtensor(
+            pontoExtensorFactory.build(
               diagrama,
               PosicoesRelativasPontoExtensor[
                 posicao as keyof typeof PosicoesRelativasPontoExtensor
