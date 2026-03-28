@@ -30,7 +30,7 @@ import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import Ponto from "model/ponto";
 import { DirecoesMovimento, moverComponente } from "application/paginas/editor/manipularComponente";
-import FabricaComponenteConexao from "model/conexao/fabricaComponenteConexao";
+import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import TipoConexao from "model/conexao/tipoConexao";
 import CommandHistory from "application/history/commandHistory";
 import ColarComponenteCommand, {
@@ -143,7 +143,7 @@ componentes.forEach((componente: HTMLDivElement): void => {
 /********************/
 
 const setas: NodeListOf<HTMLElement> = document.querySelectorAll(".seta");
-let fabricaConexao: FabricaComponenteConexao = new FabricaComponenteConexao();
+let fabricaConexao: ComponenteConexaoFactory = new ComponenteConexaoFactory();
 let primeiroComponente: ComponenteDiagrama | null = null;
 let lateralPrimeiroComponente: LateralComponente | null;
 let ponto1: Ponto | null = null;
