@@ -14,7 +14,7 @@
 import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import PontoExtensor from "infrastructure/pontoExtensor";
 import PontoExtensorFactory from "infrastructure/factory/pontoExtensorFactory";
-import PosicoesRelativasPontoExtensor from "model/posicoesRelativasPontoExtensor";
+import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
 
 export default class SelecionadorComponenteFactory {
   private static _selecionador: SelecionadorComponente | null = null;

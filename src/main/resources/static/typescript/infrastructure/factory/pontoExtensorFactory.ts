@@ -11,14 +11,132 @@
  *
  */
 
-import PosicoesRelativasPontoExtensor from "model/posicoesRelativasPontoExtensor";
+import converterPixeisParaNumero from "infrastructure/conversor/conversor";
 import PontoExtensor from "infrastructure/pontoExtensor";
+import Ponto from "model/ponto";
+import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
+import FormulaPosicaoAbsoluta from "model/formulaPosicaoAbsoluta";
 
 export default class PontoExtensorFactory {
+  private decidirFormulaPosicaoAbsoluta(
+    posicao: PosicoesRelativasPontoExtensor,
+  ): FormulaPosicaoAbsoluta {
+    switch (posicao) {
+      case PosicoesRelativasPontoExtensor.TOP:
+        return (
+          estiloElementoAtual: CSSStyleDeclaration,
+          estiloPonto: CSSStyleDeclaration,
+        ): Ponto =>
+          new Ponto(
+            converterPixeisParaNumero(estiloElementoAtual.left) +
+              converterPixeisParaNumero(estiloElementoAtual.width) / 2 -
+              converterPixeisParaNumero(estiloPonto.width) / 2,
+            converterPixeisParaNumero(estiloElementoAtual.top) -
+              converterPixeisParaNumero(estiloPonto.height) / 2,
+          );
+
+      case PosicoesRelativasPontoExtensor.TOP_LEFT:
+        return (
+          estiloElementoAtual: CSSStyleDeclaration,
+          estiloPonto: CSSStyleDeclaration,
+        ): Ponto =>
+          new Ponto(
+            converterPixeisParaNumero(estiloElementoAtual.left) -
+              converterPixeisParaNumero(estiloPonto.width) / 2,
+            converterPixeisParaNumero(estiloElementoAtual.top) -
+              converterPixeisParaNumero(estiloPonto.height) / 2,
+          );
+
+      case PosicoesRelativasPontoExtensor.TOP_RIGHT:
+        return (
+          estiloElementoAtual: CSSStyleDeclaration,
+          estiloPonto: CSSStyleDeclaration,
+        ): Ponto =>
+          new Ponto(
+            converterPixeisParaNumero(estiloElementoAtual.left) +
+              converterPixeisParaNumero(estiloElementoAtual.width) -
+              converterPixeisParaNumero(estiloPonto.width) / 2,
+            converterPixeisParaNumero(estiloElementoAtual.top) -
+              converterPixeisParaNumero(estiloPonto.height) / 2,
+          );
+
+      case PosicoesRelativasPontoExtensor.CENTER_LEFT:
+        return (
+          estiloElementoAtual: CSSStyleDeclaration,
+          estiloPonto: CSSStyleDeclaration,
+        ): Ponto =>
+          new Ponto(
+            converterPixeisParaNumero(estiloElementoAtual.left) -
+              converterPixeisParaNumero(estiloPonto.height) / 2,
+            converterPixeisParaNumero(estiloElementoAtual.top) +
+              converterPixeisParaNumero(estiloElementoAtual.height) / 2 -
+              converterPixeisParaNumero(estiloPonto.height) / 2,
+          );
+
+      case PosicoesRelativasPontoExtensor.CENTER_RIGHT:
+        return (
+          estiloElementoAtual: CSSStyleDeclaration,
+          estiloPonto: CSSStyleDeclaration,
+        ): Ponto =>
+          new Ponto(
+            converterPixeisParaNumero(estiloElementoAtual.left) +
+              converterPixeisParaNumero(estiloElementoAtual.width) -
+              converterPixeisParaNumero(estiloPonto.width) / 2,
+            converterPixeisParaNumero(estiloElementoAtual.top) +
+              converterPixeisParaNumero(estiloElementoAtual.height) / 2 -
+              converterPixeisParaNumero(estiloPonto.height) / 2,
+          );
+
+      case PosicoesRelativasPontoExtensor.BOTTOM:
+        return (
+          estiloElementoAtual: CSSStyleDeclaration,
+          estiloPonto: CSSStyleDeclaration,
+        ): Ponto =>
+          new Ponto(
+            converterPixeisParaNumero(estiloElementoAtual.left) +
+              converterPixeisParaNumero(estiloElementoAtual.width) / 2 -
+              converterPixeisParaNumero(estiloPonto.width) / 2,
+            converterPixeisParaNumero(estiloElementoAtual.top) +
+              converterPixeisParaNumero(estiloElementoAtual.height) -
+              converterPixeisParaNumero(estiloPonto.height) / 2,
+          );
+
+      case PosicoesRelativasPontoExtensor.BOTTOM_LEFT:
+        return (
+          estiloElementoAtual: CSSStyleDeclaration,
+          estiloPonto: CSSStyleDeclaration,
+        ): Ponto =>
+          new Ponto(
+            converterPixeisParaNumero(estiloElementoAtual.left) -
+              converterPixeisParaNumero(estiloPonto.width) / 2,
+            converterPixeisParaNumero(estiloElementoAtual.top) +
+              converterPixeisParaNumero(estiloElementoAtual.height) -
+              converterPixeisParaNumero(estiloPonto.height) / 2,
+          );
+
+      case PosicoesRelativasPontoExtensor.BOTTOM_RIGHT:
+        return (
+          estiloElementoAtual: CSSStyleDeclaration,
+          estiloPonto: CSSStyleDeclaration,
+        ): Ponto =>
+          new Ponto(
+            converterPixeisParaNumero(estiloElementoAtual.left) +
+              converterPixeisParaNumero(estiloElementoAtual.width) -
+              converterPixeisParaNumero(estiloPonto.width) / 2,
+            converterPixeisParaNumero(estiloElementoAtual.top) +
+              converterPixeisParaNumero(estiloElementoAtual.height) -
+              converterPixeisParaNumero(estiloPonto.height) / 2,
+          );
+    }
+  }
+
   public build(
     elementoPai: HTMLElement,
     posicaoPontoExtensor: PosicoesRelativasPontoExtensor,
   ): PontoExtensor {
-    return new PontoExtensor(elementoPai, posicaoPontoExtensor);
+    let formulaPosicaoAbsoluta: FormulaPosicaoAbsoluta =
+      this.decidirFormulaPosicaoAbsoluta(posicaoPontoExtensor);
+
+    return new PontoExtensor(elementoPai, formulaPosicaoAbsoluta, posicaoPontoExtensor);
   }
 }
