@@ -11,13 +11,12 @@
  *
  */
 
-import IFactory from "../../model/factory/iFactory";
 import { SelecionadorComponente } from "../../application/paginas/editor/selecionadorComponente.js";
-import PontoExtensor from "../pontoExtensor";
+import PontoExtensor from "../pontoExtensor.js";
 import PosicoesRelativasPontoExtensor from "../../model/posicoesRelativasPontoExtensor.js";
 import PontoExtensorFactory from "./pontoExtensorFactory.js";
 
-class SelecionadorComponenteFactory implements IFactory<SelecionadorComponente> {
+class SelecionadorComponenteFactory {
   private _selecionador: SelecionadorComponente | null = null;
 
   public build(): SelecionadorComponente {

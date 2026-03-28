@@ -11,10 +11,9 @@
  *
  */
 
-import IFactory from "model/factory/iFactory";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente.js";
 
-class RepositorioComponenteFactory implements IFactory<RepositorioComponente> {
+class RepositorioComponenteFactory {
   private _repositorio: RepositorioComponente | null = null;
 
   public build(): RepositorioComponente {
