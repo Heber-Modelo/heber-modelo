@@ -6,14 +6,15 @@ set windows-shell := ["powershell.exe", "-C"]
 refresh:
     pnpm run compile-scss
     pnpm run compile-ts
-    uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/docs
     ./gradlew bootJar
+
+build-docs:
+    uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/docs
 
 run-as-dev:
     ./gradlew bootRun --args="springs.profiles.active=local"
 
 setup:
-    ./setup.bat
     pnpm install
     uv sync --dev
     uv run pre-commit install
