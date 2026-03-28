@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build-ts": "webpack --watch --mode development",
-    "compile-ts": "webpack --mode production && tsc",
+    "compile-ts": "webpack --mode production && tsc -p tsconfig-compilation.json",
     "clean-js": "rm -r src/main/resources/static/javascript",
     "build-scss": "sass --no-source-map --watch ./src/main/resources/static/scss:./src/main/resources/static/css --style compressed",
     "compile-scss": "sass --no-source-map ./src/main/resources/static/scss:./src/main/resources/static/css --style compressed",

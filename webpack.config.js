@@ -17,7 +17,6 @@ export default {
     desligar: path.resolve(baseDirectory, "application/paginas/desligar.ts"),
     editor: path.resolve(baseDirectory, "application/paginas/editor/editor.ts"),
     login: path.resolve(baseDirectory, "application/paginas/login.ts"),
-    salvar: path.resolve(baseDirectory, "application/paginas/editor/salvar.ts"),
   },
   output: {
     path: path.resolve(__dirname, "src/main/resources/static/javascript"),

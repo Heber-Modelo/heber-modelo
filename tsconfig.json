@@ -14,10 +14,6 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "files": [
-    "src/main/resources/static/typescript/application/paginas/editor/grade.ts",
-    "src/main/resources/static/typescript/infrastructure/bindings.ts"
-  ],
   "exclude": [
     "build"
   ]
