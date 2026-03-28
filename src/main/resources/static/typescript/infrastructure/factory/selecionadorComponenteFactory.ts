@@ -16,10 +16,10 @@ import PontoExtensor from "infrastructure/pontoExtensor";
 import PontoExtensorFactory from "infrastructure/factory/pontoExtensorFactory";
 import PosicoesRelativasPontoExtensor from "model/posicoesRelativasPontoExtensor";
 
-class SelecionadorComponenteFactory {
-  private _selecionador: SelecionadorComponente | null = null;
+export default class SelecionadorComponenteFactory {
+  private static _selecionador: SelecionadorComponente | null = null;
 
-  public build(): SelecionadorComponente {
+  public static build(): SelecionadorComponente {
     if (this._selecionador === null) {
       let diagrama: HTMLElement = document.querySelector("main") as HTMLElement;
       let pontoExtensorFactory: PontoExtensorFactory = new PontoExtensorFactory();
@@ -44,6 +44,3 @@ class SelecionadorComponenteFactory {
     return this._selecionador;
   }
 }
-
-export const selecionadorComponenteFactory: SelecionadorComponenteFactory =
-  new SelecionadorComponenteFactory();

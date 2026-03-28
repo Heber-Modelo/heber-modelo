@@ -23,9 +23,9 @@ import {
 } from "application/paginas/editor/editorPropriedades";
 import ComponenteDiagrama, { LateralComponente } from "model/componente/componenteDiagrama";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
-import { repositorioComponenteFactory } from "infrastructure/factory/repositorioComponenteFactory";
+import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
 import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
-import { selecionadorComponenteFactory } from "infrastructure/factory/selecionadorComponenteFactory";
+import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import Ponto from "model/ponto";
@@ -64,9 +64,9 @@ let commandHistory: CommandHistory = new CommandHistory();
 let diagrama: HTMLElement | null = document.querySelector("main");
 let fabricaComponente: ComponenteFactory = new ComponenteFactory();
 let geradorIDComponente: GeradorIDComponente = GeradorIDComponente.pegarInstance();
-let repositorioComponentes: RepositorioComponente = repositorioComponenteFactory.build();
+let repositorioComponentes: RepositorioComponente = RepositorioComponenteFactory.build();
 let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
-let selecionadorComponente: SelecionadorComponente = selecionadorComponenteFactory.build();
+let selecionadorComponente: SelecionadorComponente = SelecionadorComponenteFactory.build();
 
 componentes.forEach((componente: HTMLDivElement): void => {
   repositorioComponentes.adicionar(new ComponenteDiagrama(componente, []));

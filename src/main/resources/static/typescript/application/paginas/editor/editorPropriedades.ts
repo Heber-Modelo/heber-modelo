@@ -14,9 +14,9 @@
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
-import { repositorioComponenteFactory } from "infrastructure/factory/repositorioComponenteFactory";
-import { SelecionadorComponente } from "application/paginas/editor/selecionadorComponente";
-import { selecionadorComponenteFactory } from "infrastructure/factory/selecionadorComponenteFactory";
+import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
+import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
+import selecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
 
 class InputPropriedade {
   private readonly _elementoInput: HTMLInputElement | null;
@@ -113,7 +113,7 @@ export let inputs: InputPropriedade[] = [];
 
 export function mouseDownSelecionarElemento(event: Event): void {
   let selecionador: SelecionadorComponente = selecionadorComponenteFactory.build();
-  let repositorio: RepositorioComponente = repositorioComponenteFactory.build();
+  let repositorio: RepositorioComponente = RepositorioComponenteFactory.build();
   let abaPropriedades: HTMLElement | null = document.querySelector("section#propriedades");
   let componente: ComponenteDiagrama | null = repositorio.pegarPorHTML(event.target as HTMLElement);
 

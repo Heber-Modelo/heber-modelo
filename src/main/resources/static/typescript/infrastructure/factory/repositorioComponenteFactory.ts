@@ -13,10 +13,10 @@
 
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 
-class RepositorioComponenteFactory {
-  private _repositorio: RepositorioComponente | null = null;
+export default class RepositorioComponenteFactory {
+  private static _repositorio: RepositorioComponente | null = null;
 
-  public build(): RepositorioComponente {
+  public static build(): RepositorioComponente {
     if (this._repositorio === null) {
       this._repositorio = new RepositorioComponente();
     }
@@ -24,6 +24,3 @@ class RepositorioComponenteFactory {
     return this._repositorio;
   }
 }
-
-export const repositorioComponenteFactory: RepositorioComponenteFactory =
-  new RepositorioComponenteFactory();
