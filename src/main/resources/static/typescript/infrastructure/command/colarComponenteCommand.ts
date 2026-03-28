@@ -11,11 +11,11 @@
  *
  */
 
-import ICommand from "model/command/iCommand.js";
-import ComponenteFactory from "infrastructure/factory/componenteFactory.js";
-import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente.js";
-import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
-import RepositorioComponente from "infrastructure/repositorio/repositorioComponente.js";
+import ICommand from "model/command/iCommand";
+import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 
 export default class ColarComponenteCommand implements ICommand {
   private readonly _paiComponente: ParentNode;

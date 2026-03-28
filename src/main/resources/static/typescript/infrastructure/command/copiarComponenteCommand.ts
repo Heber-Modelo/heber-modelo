@@ -11,9 +11,9 @@
  *
  */
 
-import ICommand from "model/command/iCommand.js";
-import { CLASSE_ELEMENTO_SELECIONADO } from "application/paginas/editor/selecionadorComponente.js";
-import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
+import ICommand from "model/command/iCommand";
+import { CLASSE_ELEMENTO_SELECIONADO } from "application/paginas/editor/selecionadorComponente";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
 
 export default class CopiarComponenteCommand implements ICommand {
   private _componente: ComponenteDiagrama;

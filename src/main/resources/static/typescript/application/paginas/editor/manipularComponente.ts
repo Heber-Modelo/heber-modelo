@@ -11,8 +11,8 @@
  *
  */
 
-import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
-import converterPixeisParaNumero from "infrastructure/conversor/conversor.js";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import converterPixeisParaNumero from "infrastructure/conversor/conversor";
 
 export enum DirecoesMovimento {
   CIMA,

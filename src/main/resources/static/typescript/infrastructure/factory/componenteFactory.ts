@@ -11,9 +11,9 @@
  *
  */
 
-import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
-import PropriedadeFactory from "infrastructure/factory/propriedadeFactory.js";
-import PropriedadeComponente from "model/propriedade/propriedadeComponente.js";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import PropriedadeFactory from "infrastructure/factory/propriedadeFactory";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 import ValoresJSONComponente, { JSONPropriedade } from "../../model/json/valoresJSONComponente";
 
 export default class ComponenteFactory {

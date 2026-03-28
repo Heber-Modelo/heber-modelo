@@ -1,4 +1,4 @@
-import ICommand from "model/command/iCommand.js";
+import ICommand from "model/command/iCommand";
 
 export default class CommandHistory {
   private _commands: ICommand[] = [];

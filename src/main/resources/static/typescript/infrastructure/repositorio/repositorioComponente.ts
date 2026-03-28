@@ -11,10 +11,10 @@
  *
  */
 
-import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao.js";
-import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
-import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte.js";
-import IRepositorioComponente from "model/repositorio/IRepositorioComponente.js";
+import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
+import IRepositorioComponente from "model/repositorio/IRepositorioComponente";
 
 export default class RepositorioComponente implements IRepositorioComponente {
   private _componentesDiagrama: ComponenteDiagrama[] = [];

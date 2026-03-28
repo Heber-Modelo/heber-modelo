@@ -2,11 +2,12 @@
   "name": "heber-modelo",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
+  "private": true,
   "scripts": {
-    "build-ts": "tsc --watch",
-    "compile-ts": "tsc",
+    "build-ts": "webpack --watch --mode development",
+    "compile-ts": "webpack --mode production && tsc",
     "clean-js": "rm -r src/main/resources/static/javascript",
-    "minify-js": "grunt",
     "build-scss": "sass --no-source-map --watch ./src/main/resources/static/scss:./src/main/resources/static/css --style compressed",
     "compile-scss": "sass --no-source-map ./src/main/resources/static/scss:./src/main/resources/static/css --style compressed",
     "clean-css": "rm -r src/main/resources/static/css"
@@ -19,12 +20,16 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "grunt": "^1.6.1",
-    "grunt-cli": "^1.5.0",
-    "grunt-contrib-uglify": "^5.2.2",
-    "grunt-contrib-watch": "^1.1.0",
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.2",
+    "@babel/preset-typescript": "^7.28.5",
+    "babel-loader": "^10.1.1",
+    "babel-plugin-module-resolver": "^5.0.3",
     "prettier": "^3.8.1",
     "sass": "^1.98.0",
-    "typescript": "^5.9.3"
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.3",
+    "webpack": "^5.105.4",
+    "webpack-cli": "^7.0.2"
   }
 }

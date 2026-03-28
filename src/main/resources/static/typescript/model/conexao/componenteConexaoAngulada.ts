@@ -11,7 +11,7 @@
  *
  */
 
-import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao.js";
+import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao";
 
 export default class ComponenteConexaoAngulada extends AbstractComponenteConexao {
   protected ajustarConexao(): void {

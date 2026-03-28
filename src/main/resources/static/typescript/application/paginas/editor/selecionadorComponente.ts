@@ -11,13 +11,13 @@
  *
  */
 
-import converterPixeisParaNumero from "infrastructure/conversor/conversor.js";
-import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
-import PontoExtensor from "infrastructure/pontoExtensor.js";
+import converterPixeisParaNumero from "infrastructure/conversor/conversor";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import PontoExtensor from "infrastructure/pontoExtensor";
 
 export const CLASSE_ELEMENTO_SELECIONADO: string = "selected";
 
-export class SelecionadorComponente {
+export default class SelecionadorComponente {
   constructor(pontosExtensores: PontoExtensor[]) {
     this._componenteSelecionado = null;
     this._pontosExtensores = pontosExtensores;

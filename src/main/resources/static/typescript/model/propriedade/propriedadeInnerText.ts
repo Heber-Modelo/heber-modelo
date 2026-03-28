@@ -11,8 +11,8 @@
  *
  */
 
-import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
-import PropriedadeComponente from "model/propriedade/propriedadeComponente.js";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 
 export default class PropriedadeInnerText extends PropriedadeComponente {
   constructor(

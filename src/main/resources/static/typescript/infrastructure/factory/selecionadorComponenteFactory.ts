@@ -11,10 +11,10 @@
  *
  */
 
-import { SelecionadorComponente } from "../../application/paginas/editor/selecionadorComponente.js";
-import PontoExtensor from "../pontoExtensor.js";
-import PosicoesRelativasPontoExtensor from "../../model/posicoesRelativasPontoExtensor.js";
-import PontoExtensorFactory from "./pontoExtensorFactory.js";
+import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
+import PontoExtensor from "infrastructure/pontoExtensor";
+import PontoExtensorFactory from "infrastructure/factory/pontoExtensorFactory";
+import PosicoesRelativasPontoExtensor from "model/posicoesRelativasPontoExtensor";
 
 class SelecionadorComponenteFactory {
   private _selecionador: SelecionadorComponente | null = null;

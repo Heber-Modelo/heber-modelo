@@ -11,7 +11,7 @@
  *
  */
 
-import RepositorioComponente from "infrastructure/repositorio/repositorioComponente.js";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 
 class RepositorioComponenteFactory {
   private _repositorio: RepositorioComponente | null = null;

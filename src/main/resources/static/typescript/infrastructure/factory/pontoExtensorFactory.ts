@@ -11,8 +11,8 @@
  *
  */
 
-import PosicoesRelativasPontoExtensor from "model/posicoesRelativasPontoExtensor.js";
-import PontoExtensor from "infrastructure/pontoExtensor.js";
+import PosicoesRelativasPontoExtensor from "model/posicoesRelativasPontoExtensor";
+import PontoExtensor from "infrastructure/pontoExtensor";
 
 export default class PontoExtensorFactory {
   public build(

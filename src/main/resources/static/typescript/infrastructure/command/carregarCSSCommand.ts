@@ -11,7 +11,7 @@
  *
  */
 
-import ICommand from "model/command/iCommand.js";
+import ICommand from "model/command/iCommand";
 
 export const ATRIBUTO_NOME_ARQUIVO = "arquivo";
 export const CLASSE_LINK_CSS_ELEMENTO = "css-carregado";

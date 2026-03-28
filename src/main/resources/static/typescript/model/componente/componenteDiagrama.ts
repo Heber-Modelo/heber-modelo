@@ -11,10 +11,10 @@
  *
  */
 
-import ComponenteDiagramaOuvido from "model/componente/componenteDiagramaOuvido.js";
-import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte.js";
-import PropriedadeComponente from "model/propriedade/propriedadeComponente.js";
-import converterPixeisParaNumero from "infrastructure/conversor/conversor.js";
+import converterPixeisParaNumero from "infrastructure/conversor/conversor";
+import ComponenteDiagramaOuvido from "model/componente/componenteDiagramaOuvido";
+import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 
 export enum LateralComponente {
   NORTE,

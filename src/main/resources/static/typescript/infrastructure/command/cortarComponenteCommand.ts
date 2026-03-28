@@ -11,10 +11,10 @@
  *
  */
 
-import ICommand from "model/command/iCommand.js";
-import ComponenteDiagrama from "model/componente/componenteDiagrama.js";
-import { SelecionadorComponente } from "application/paginas/editor/selecionadorComponente.js";
-import RepositorioComponente from "infrastructure/repositorio/repositorioComponente.js";
+import ICommand from "model/command/iCommand";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 
 export default class CortarComponenteCommand implements ICommand {
   private readonly _componente: ComponenteDiagrama;
