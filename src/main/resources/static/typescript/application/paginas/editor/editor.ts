@@ -464,6 +464,7 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
         .build();
       commandHistory.saveAndExecuteCommand(command);
 
+      selecionadorComponente.removerSelecao();
       limparPropriedades(abaPropriedades);
       atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
 
@@ -477,6 +478,7 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
         incrementoMovimentacao,
       );
       selecionadorComponente.moverSetasParaComponenteSelecionado();
+      selecionadorComponente.reposicionarPontosExtensores();
       break;
 
     case bindings.get("moverElementoParaBaixo"):
@@ -486,6 +488,7 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
         incrementoMovimentacao,
       );
       selecionadorComponente.moverSetasParaComponenteSelecionado();
+      selecionadorComponente.reposicionarPontosExtensores();
       break;
 
     case bindings.get("moverElementoParaDireita"):
@@ -495,6 +498,7 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
         incrementoMovimentacao,
       );
       selecionadorComponente.moverSetasParaComponenteSelecionado();
+      selecionadorComponente.reposicionarPontosExtensores();
       break;
 
     case bindings.get("moverElementoParaEsquerda"):
@@ -504,6 +508,7 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
         incrementoMovimentacao,
       );
       selecionadorComponente.moverSetasParaComponenteSelecionado();
+      selecionadorComponente.reposicionarPontosExtensores();
       break;
   }
 
