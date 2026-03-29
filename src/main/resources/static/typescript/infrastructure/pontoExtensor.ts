@@ -12,32 +12,41 @@
  */
 
 import Ponto from "model/ponto";
-import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
 import FormulaPosicaoAbsoluta from "model/formulaPosicaoAbsoluta";
 
 export default class PontoExtensor {
   public static readonly CLASSE_PONTO_EXTENSOR: string = "ponto-extensor";
 
   private readonly _elemento: HTMLElement;
+  private readonly _callback: (event: MouseEvent) => void;
   private readonly _formulaPosicaoAbsoluta: FormulaPosicaoAbsoluta;
-  private readonly _posicaoRelativa: PosicoesRelativasPontoExtensor;
   private _posicaoAbsoluta: Ponto | null = null;
   private _elementoAtual: HTMLElement | null = null;
 
   constructor(
     elementoPai: HTMLElement,
+    callback: (event: MouseEvent) => void,
     formulaPosicaoAbsoluta: FormulaPosicaoAbsoluta,
-    posicao: PosicoesRelativasPontoExtensor,
   ) {
+    this._callback = callback;
+    this._formulaPosicaoAbsoluta = formulaPosicaoAbsoluta;
+
     this._elemento = document.createElement("div");
     elementoPai.appendChild(this._elemento);
     this._elemento.classList.add(PontoExtensor.CLASSE_PONTO_EXTENSOR);
     this._elemento.style.display = "none";
-    this._elemento.style.position = "absolute";
-    this._elemento.style.zIndex = "3";
-    this._formulaPosicaoAbsoluta = formulaPosicaoAbsoluta;
-    this._posicaoRelativa = posicao;
+    this._elemento.addEventListener("mousedown", this.iniciarReajuste);
   }
+
+  public iniciarReajuste = (): void => {
+    this._elemento?.addEventListener("mouseleave", this.pararReajuste);
+    this._elementoAtual?.addEventListener("mousemove", this._callback);
+  };
+
+  public pararReajuste = (): void => {
+    this._elemento?.removeEventListener("mouseleave", this.pararReajuste);
+    this._elementoAtual?.removeEventListener("mousemove", this._callback);
+  };
 
   public trocarElementoAtual(novoElementoAtual: HTMLElement | null): void {
     this._elementoAtual = novoElementoAtual;

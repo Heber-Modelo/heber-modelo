@@ -239,7 +239,9 @@ fieldset#conexoes-basicas {
   border: var(--cor-borda-ponto-extensor) solid 0.3rem;
   background-color: var(--cor-ponto-extensor);
   height: 1rem;
+  position: absolute;
   width: 1rem;
+  z-index: 3;
 
   &:hover {
     background-color: var(--cor-hover-ponto-extensor);

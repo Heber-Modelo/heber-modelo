@@ -18,6 +18,52 @@ import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPont
 import FormulaPosicaoAbsoluta from "model/formulaPosicaoAbsoluta";
 
 export default class PontoExtensorFactory {
+  private decidirCallbackPontoExtensor(
+    posicao: PosicoesRelativasPontoExtensor,
+  ): (event: MouseEvent) => void {
+    switch (posicao) {
+      case PosicoesRelativasPontoExtensor.TOP:
+        return function callback(event: MouseEvent): void {
+          let target: HTMLElement | null = event.target as HTMLElement | null;
+        };
+
+      case PosicoesRelativasPontoExtensor.TOP_LEFT:
+        return function callback(event: MouseEvent): void {
+          let target: HTMLElement | null = event.target as HTMLElement | null;
+        };
+
+      case PosicoesRelativasPontoExtensor.TOP_RIGHT:
+        return function callback(event: MouseEvent): void {
+          let target: HTMLElement | null = event.target as HTMLElement | null;
+        };
+
+      case PosicoesRelativasPontoExtensor.CENTER_LEFT:
+        return function callback(event: MouseEvent): void {
+          let target: HTMLElement | null = event.target as HTMLElement | null;
+        };
+
+      case PosicoesRelativasPontoExtensor.CENTER_RIGHT:
+        return function callback(event: MouseEvent): void {
+          let target: HTMLElement | null = event.target as HTMLElement | null;
+        };
+
+      case PosicoesRelativasPontoExtensor.BOTTOM:
+        return function callback(event: MouseEvent): void {
+          let target: HTMLElement | null = event.target as HTMLElement | null;
+        };
+
+      case PosicoesRelativasPontoExtensor.BOTTOM_LEFT:
+        return function callback(event: MouseEvent): void {
+          let target: HTMLElement | null = event.target as HTMLElement | null;
+        };
+
+      case PosicoesRelativasPontoExtensor.BOTTOM_RIGHT:
+        return function callback(event: MouseEvent): void {
+          let target: HTMLElement | null = event.target as HTMLElement | null;
+        };
+    }
+  }
+
   private decidirFormulaPosicaoAbsoluta(
     posicao: PosicoesRelativasPontoExtensor,
   ): FormulaPosicaoAbsoluta {
@@ -134,9 +180,11 @@ export default class PontoExtensorFactory {
     elementoPai: HTMLElement,
     posicaoPontoExtensor: PosicoesRelativasPontoExtensor,
   ): PontoExtensor {
+    let callbackPontoExtensor: (event: MouseEvent) => void =
+      this.decidirCallbackPontoExtensor(posicaoPontoExtensor);
     let formulaPosicaoAbsoluta: FormulaPosicaoAbsoluta =
       this.decidirFormulaPosicaoAbsoluta(posicaoPontoExtensor);
 
-    return new PontoExtensor(elementoPai, formulaPosicaoAbsoluta, posicaoPontoExtensor);
+    return new PontoExtensor(elementoPai, callbackPontoExtensor, formulaPosicaoAbsoluta);
   }
 }
