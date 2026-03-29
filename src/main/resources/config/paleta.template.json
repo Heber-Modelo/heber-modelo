@@ -74,6 +74,18 @@
       "valorPadraoVariavel": "#D6D5D4"
     },
     {
+      "nomeVariavel": "cor_ponto_extensor",
+      "valorPadraoVariavel": "#000000"
+    },
+    {
+      "nomeVariavel": "cor_borda_ponto_extensor",
+      "valorPadraoVariavel": "#FFDC73"
+    },
+    {
+      "nomeVariavel": "cor_hover_ponto_extensor",
+      "valorPadraoVariavel": "#FFDC73"
+    },
+    {
       "nomeVariavel": "cor_botao_desativado",
       "valorPadraoVariavel": "#241A3B"
     }
