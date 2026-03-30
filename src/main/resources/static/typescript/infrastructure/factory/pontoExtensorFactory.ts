@@ -51,10 +51,28 @@ export default class PontoExtensorFactory {
 
       case PosicoesRelativasPontoExtensor.CENTER_RIGHT:
         return function callback(event: MouseEvent): void {
-          let target: HTMLElement = event.target as HTMLElement;
+          let selecionadorComponente: SelecionadorComponente =
+            SelecionadorComponenteFactory.build();
+          let elementoAtual: HTMLDivElement | undefined =
+            selecionadorComponente.componenteSelecionado?.htmlComponente;
 
-          target.style.width = `${converterPixeisParaNumero(target.style.width) + (PontoAnterior.x - event.clientX)}px`;
+          if (elementoAtual === undefined) {
+            return;
+          }
+
+          if (PontoAnterior.x === 0) {
+            PontoAnterior.x = event.clientX;
+            return;
+          }
+
+          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let deltaX: number = event.clientX - PontoAnterior.x;
+          let newWidth: number = boundingRectangle.width + deltaX;
+          elementoAtual.style.width = `${newWidth}px`;
+
           PontoAnterior.x = event.clientX;
+          selecionadorComponente.reposicionarPontosExtensores();
+          selecionadorComponente.moverSetasParaComponenteSelecionado();
         };
 
       case PosicoesRelativasPontoExtensor.BOTTOM:

@@ -296,32 +296,6 @@ function conectarElementos(event: MouseEvent): void {
 
 diagrama?.addEventListener("click", limparCoordenadaInicial);
 
-/*******************************/
-/* AJUSTAR TAMANHO COM O MOUSE */
-/*******************************/
-
-function iniciarReajusteTamanho(): void {
-  window.addEventListener("mousemove", ajustarTamanhoComponente);
-  window.addEventListener("mouseup", pararReajusteTamanho);
-}
-
-function pararReajusteTamanho(): void {
-  window.removeEventListener("mousemove", ajustarTamanhoComponente);
-  window.removeEventListener("mouseup", pararReajusteTamanho);
-}
-
-function ajustarTamanhoComponente(event: MouseEvent): void {
-  let elemento: HTMLElement | undefined =
-    selecionadorComponente.componenteSelecionado?.htmlComponente;
-
-  if (elemento === undefined) {
-    return;
-  }
-
-  elemento.style.height = Math.abs(event.clientY - elemento.offsetTop) + "px";
-  elemento.style.width = Math.abs(event.clientX - elemento.offsetLeft) + "px";
-}
-
 /**************************/
 /* CARREGAMENTO DIAGRAMAS */
 /**************************/
