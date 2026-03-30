@@ -12,10 +12,12 @@
  */
 
 import converterPixeisParaNumero from "infrastructure/conversor/conversor";
+import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
 import PontoExtensor from "infrastructure/pontoExtensor";
 import Ponto from "model/ponto";
 import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
 import FormulaPosicaoAbsoluta from "model/formulaPosicaoAbsoluta";
+import SelecionadorComponente from "../../application/paginas/editor/selecionadorComponente";
 
 export class PontoAnterior {
   static x: number = 0;
@@ -57,26 +59,36 @@ export default class PontoExtensorFactory {
 
       case PosicoesRelativasPontoExtensor.BOTTOM:
         return function callback(event: MouseEvent): void {
-          let target: HTMLElement = event.target as HTMLElement;
+          let elementoAtual: HTMLDivElement | undefined =
+            SelecionadorComponenteFactory.build().componenteSelecionado?.htmlComponente;
 
-          let boundingRectangle: DOMRect = target.getBoundingClientRect();
+          if (elementoAtual === undefined) {
+            return;
+          }
+
+          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
           let deltaY: number = (event.clientY - PontoAnterior.y) * -5;
           let newHeight: number = boundingRectangle.width - deltaY;
-          let oldTop: string = target.style.top;
-          target.style.height = `${newHeight}px`;
-          target.style.top = oldTop;
+          elementoAtual.style.height = `${newHeight}px`;
 
           PontoAnterior.y = event.clientY;
         };
 
       case PosicoesRelativasPontoExtensor.BOTTOM_LEFT:
         return function callback(event: MouseEvent): void {
-          let target: HTMLElement = event.target as HTMLElement;
-          let boundingRectangle: DOMRect = target.getBoundingClientRect();
+          let elementoAtual: HTMLDivElement | undefined =
+            SelecionadorComponenteFactory.build().componenteSelecionado?.htmlComponente;
 
-          target.style.height = boundingRectangle.height - (PontoAnterior.y - event.clientY) + "px";
-          target.style.width = boundingRectangle.width - (PontoAnterior.x - event.clientX) + "px";
-          target.style.left = boundingRectangle.left - (PontoAnterior.x - event.clientX) + "px";
+          if (elementoAtual === undefined) {
+            return;
+          }
+
+          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+
+          elementoAtual.style.height =
+            boundingRectangle.height - (PontoAnterior.y - event.clientY) + "px";
+          elementoAtual.style.width =
+            boundingRectangle.width - (PontoAnterior.x - event.clientX) + "px";
 
           PontoAnterior.x = event.clientX;
           PontoAnterior.y = event.clientY;

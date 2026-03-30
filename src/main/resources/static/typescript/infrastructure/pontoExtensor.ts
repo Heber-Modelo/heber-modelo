@@ -44,12 +44,12 @@ export default class PontoExtensor {
     PontoAnterior.y = 0;
 
     window.addEventListener("mouseup", this.pararReajuste);
-    this._elementoAtual?.addEventListener("mousemove", this._callback);
+    window.addEventListener("mousemove", this._callback);
   };
 
   public pararReajuste = (): void => {
     window.removeEventListener("mouseup", this.pararReajuste);
-    this._elementoAtual?.removeEventListener("mousemove", this._callback);
+    window.removeEventListener("mousemove", this._callback);
   };
 
   public trocarElementoAtual(novoElementoAtual: HTMLElement | null): void {
