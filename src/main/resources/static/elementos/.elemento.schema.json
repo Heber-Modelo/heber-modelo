@@ -21,12 +21,6 @@
         "string"
       ]
     },
-    "svgSimbolo": {
-      "description": "O SVG do ícone apresentado no botão de criação do elemento",
-      "type": [
-        "string"
-      ]
-    },
     "propriedades": {
       "description": "Define as propriedades deste tipo de elemento que podem ser editadas",
       "type": "array",
