@@ -96,17 +96,17 @@ export default class SelecionadorComponente {
     let alturaSeta: number = converterPixeisParaNumero(estiloSeta.height);
     let larguraSeta: number = converterPixeisParaNumero(estiloSeta.width);
 
-    this._setaSuperior.style.top = `${centroVertical - alturaSeta * 2.5}px`;
+    this._setaSuperior.style.top = `${topElemento - alturaSeta * 1.5}px`;
     this._setaSuperior.style.left = `${centroHorizontal - larguraSeta / 2}px`;
 
-    this._setaInferior.style.top = `${centroVertical + alturaSeta * 1.5}px`;
+    this._setaInferior.style.top = `${topElemento + alturaElemento + alturaSeta * 0.5}px`;
     this._setaInferior.style.left = `${centroHorizontal - larguraSeta / 2}px`;
 
     this._setaDireita.style.top = `${centroVertical - alturaSeta / 2}px`;
-    this._setaDireita.style.left = `${centroHorizontal + larguraSeta * 2}px`;
+    this._setaDireita.style.left = `${leftElemento + larguraElemento + larguraSeta * 0.5}px`;
 
     this._setaEsquerda.style.top = `${centroVertical - alturaSeta / 2}px`;
-    this._setaEsquerda.style.left = `${centroHorizontal - larguraSeta * 3}px`;
+    this._setaEsquerda.style.left = `${leftElemento - larguraSeta * 1.5}px`;
 
     this._setas.forEach((seta: HTMLElement): string => seta.style.removeProperty("display"));
   }
