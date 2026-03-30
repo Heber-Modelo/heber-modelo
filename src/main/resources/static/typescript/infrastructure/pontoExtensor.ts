@@ -13,6 +13,7 @@
 
 import Ponto from "model/ponto";
 import FormulaPosicaoAbsoluta from "model/formulaPosicaoAbsoluta";
+import { PontoAnterior } from "./factory/pontoExtensorFactory";
 
 export default class PontoExtensor {
   public static readonly CLASSE_PONTO_EXTENSOR: string = "ponto-extensor";
@@ -39,12 +40,15 @@ export default class PontoExtensor {
   }
 
   public iniciarReajuste = (): void => {
-    this._elemento?.addEventListener("mouseleave", this.pararReajuste);
+    PontoAnterior.x = 0;
+    PontoAnterior.y = 0;
+
+    window.addEventListener("mouseup", this.pararReajuste);
     this._elementoAtual?.addEventListener("mousemove", this._callback);
   };
 
   public pararReajuste = (): void => {
-    this._elemento?.removeEventListener("mouseleave", this.pararReajuste);
+    window.removeEventListener("mouseup", this.pararReajuste);
     this._elementoAtual?.removeEventListener("mousemove", this._callback);
   };
 

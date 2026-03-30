@@ -17,6 +17,11 @@ import Ponto from "model/ponto";
 import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
 import FormulaPosicaoAbsoluta from "model/formulaPosicaoAbsoluta";
 
+export class PontoAnterior {
+  static x: number = 0;
+  static y: number = 0;
+}
+
 export default class PontoExtensorFactory {
   private decidirCallbackPontoExtensor(
     posicao: PosicoesRelativasPontoExtensor,
@@ -44,17 +49,37 @@ export default class PontoExtensorFactory {
 
       case PosicoesRelativasPontoExtensor.CENTER_RIGHT:
         return function callback(event: MouseEvent): void {
-          let target: HTMLElement | null = event.target as HTMLElement | null;
+          let target: HTMLElement = event.target as HTMLElement;
+
+          target.style.width = `${converterPixeisParaNumero(target.style.width) + (PontoAnterior.x - event.clientX)}px`;
+          PontoAnterior.x = event.clientX;
         };
 
       case PosicoesRelativasPontoExtensor.BOTTOM:
         return function callback(event: MouseEvent): void {
-          let target: HTMLElement | null = event.target as HTMLElement | null;
+          let target: HTMLElement = event.target as HTMLElement;
+
+          let boundingRectangle: DOMRect = target.getBoundingClientRect();
+          let deltaY: number = (event.clientY - PontoAnterior.y) * -5;
+          let newHeight: number = boundingRectangle.width - deltaY;
+          let oldTop: string = target.style.top;
+          target.style.height = `${newHeight}px`;
+          target.style.top = oldTop;
+
+          PontoAnterior.y = event.clientY;
         };
 
       case PosicoesRelativasPontoExtensor.BOTTOM_LEFT:
         return function callback(event: MouseEvent): void {
-          let target: HTMLElement | null = event.target as HTMLElement | null;
+          let target: HTMLElement = event.target as HTMLElement;
+          let boundingRectangle: DOMRect = target.getBoundingClientRect();
+
+          target.style.height = boundingRectangle.height - (PontoAnterior.y - event.clientY) + "px";
+          target.style.width = boundingRectangle.width - (PontoAnterior.x - event.clientX) + "px";
+          target.style.left = boundingRectangle.left - (PontoAnterior.x - event.clientX) + "px";
+
+          PontoAnterior.x = event.clientX;
+          PontoAnterior.y = event.clientY;
         };
 
       case PosicoesRelativasPontoExtensor.BOTTOM_RIGHT:
