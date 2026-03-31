@@ -54,8 +54,7 @@ export default class PontoExtensorFactory {
           elementoAtual.style.height = `${newHeight}px`;
 
           PontoAnterior.y = event.clientY;
-          selecionadorComponente.reposicionarPontosExtensores();
-          selecionadorComponente.moverSetasParaComponenteSelecionado();
+          selecionadorComponente.atualizar();
         };
 
       case PosicoesRelativasPontoExtensor.TOP_LEFT:
@@ -92,8 +91,7 @@ export default class PontoExtensorFactory {
 
           PontoAnterior.x = event.clientX;
           PontoAnterior.y = event.clientY;
-          selecionadorComponente.reposicionarPontosExtensores();
-          selecionadorComponente.moverSetasParaComponenteSelecionado();
+          selecionadorComponente.atualizar();
         };
 
       case PosicoesRelativasPontoExtensor.TOP_RIGHT:
@@ -130,8 +128,7 @@ export default class PontoExtensorFactory {
 
           PontoAnterior.x = event.clientX;
           PontoAnterior.y = event.clientY;
-          selecionadorComponente.reposicionarPontosExtensores();
-          selecionadorComponente.moverSetasParaComponenteSelecionado();
+          selecionadorComponente.atualizar();
         };
 
       case PosicoesRelativasPontoExtensor.CENTER_LEFT:
@@ -159,8 +156,7 @@ export default class PontoExtensorFactory {
           elementoAtual.style.width = `${newWidth}px`;
 
           PontoAnterior.x = event.clientX;
-          selecionadorComponente.reposicionarPontosExtensores();
-          selecionadorComponente.moverSetasParaComponenteSelecionado();
+          selecionadorComponente.atualizar();
         };
 
       case PosicoesRelativasPontoExtensor.CENTER_RIGHT:
@@ -185,8 +181,7 @@ export default class PontoExtensorFactory {
           elementoAtual.style.width = `${newWidth}px`;
 
           PontoAnterior.x = event.clientX;
-          selecionadorComponente.reposicionarPontosExtensores();
-          selecionadorComponente.moverSetasParaComponenteSelecionado();
+          selecionadorComponente.atualizar();
         };
 
       case PosicoesRelativasPontoExtensor.BOTTOM:
@@ -211,8 +206,7 @@ export default class PontoExtensorFactory {
           elementoAtual.style.height = `${newHeight}px`;
 
           PontoAnterior.y = event.clientY;
-          selecionadorComponente.reposicionarPontosExtensores();
-          selecionadorComponente.moverSetasParaComponenteSelecionado();
+          selecionadorComponente.atualizar();
         };
 
       case PosicoesRelativasPontoExtensor.BOTTOM_LEFT:
@@ -247,8 +241,7 @@ export default class PontoExtensorFactory {
 
           PontoAnterior.x = event.clientX;
           PontoAnterior.y = event.clientY;
-          selecionadorComponente.reposicionarPontosExtensores();
-          selecionadorComponente.moverSetasParaComponenteSelecionado();
+          selecionadorComponente.atualizar();
         };
 
       case PosicoesRelativasPontoExtensor.BOTTOM_RIGHT:
@@ -283,8 +276,7 @@ export default class PontoExtensorFactory {
 
           PontoAnterior.x = event.clientX;
           PontoAnterior.y = event.clientY;
-          selecionadorComponente.reposicionarPontosExtensores();
-          selecionadorComponente.moverSetasParaComponenteSelecionado();
+          selecionadorComponente.atualizar();
         };
     }
   }

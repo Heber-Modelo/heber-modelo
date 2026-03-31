@@ -28,6 +28,12 @@ export default class SelecionadorComponente {
     this._setasConectoras = setasConectoras;
   }
 
+  public atualizar(): void {
+    this.reposicionarPontosExtensores();
+    this.moverSetasParaComponenteSelecionado();
+    this.componenteSelecionado?.atualizarOuvintes();
+  }
+
   public selecionarElemento(componente: ComponenteDiagrama): void {
     if (this._componenteSelecionado !== null) {
       this._componenteSelecionado.htmlComponente.classList.remove(CLASSE_ELEMENTO_SELECIONADO);
