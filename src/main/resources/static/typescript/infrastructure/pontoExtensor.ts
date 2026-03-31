@@ -12,7 +12,7 @@
  */
 
 import Ponto from "model/ponto";
-import FormulaPosicaoAbsoluta from "model/formulaPosicaoAbsoluta";
+import FormulaPosicaoAbsoluta from "model/formula/formulaPosicaoAbsoluta";
 import { PontoAnterior } from "./factory/pontoExtensorFactory";
 
 export default class PontoExtensor {

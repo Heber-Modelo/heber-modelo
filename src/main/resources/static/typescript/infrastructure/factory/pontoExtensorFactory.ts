@@ -17,7 +17,7 @@ import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorCo
 import PontoExtensor from "infrastructure/pontoExtensor";
 import Ponto from "model/ponto";
 import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
-import FormulaPosicaoAbsoluta from "model/formulaPosicaoAbsoluta";
+import FormulaPosicaoAbsoluta from "model/formula/formulaPosicaoAbsoluta";
 
 export class PontoAnterior {
   static x: number = 0;

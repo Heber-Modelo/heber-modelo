@@ -14,7 +14,10 @@
 import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import PontoExtensor from "infrastructure/pontoExtensor";
 import PontoExtensorFactory from "infrastructure/factory/pontoExtensorFactory";
+import SetaConectoraFactory from "infrastructure/factory/setaConectoraFactory";
+import SetaConectora from "infrastructure/setaConectora";
 import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
+import PosicoesRelativasSetasConectoras from "model/posicoes/posicoesRelativasSetasConectoras";
 
 export default class SelecionadorComponenteFactory {
   private static _selecionador: SelecionadorComponente | null = null;
@@ -38,7 +41,17 @@ export default class SelecionadorComponenteFactory {
             ),
         );
 
-      this._selecionador = new SelecionadorComponente(pontosExtensores);
+      let setaConectoraFactory: SetaConectoraFactory = new SetaConectoraFactory();
+      let setasConectoras: SetaConectora[] = Object.keys(PosicoesRelativasSetasConectoras).map(
+        (posicao: string): SetaConectora =>
+          setaConectoraFactory.build(
+            PosicoesRelativasSetasConectoras[
+              posicao as keyof typeof PosicoesRelativasSetasConectoras
+            ],
+          ),
+      );
+
+      this._selecionador = new SelecionadorComponente(pontosExtensores, setasConectoras);
     }
 
     return this._selecionador;

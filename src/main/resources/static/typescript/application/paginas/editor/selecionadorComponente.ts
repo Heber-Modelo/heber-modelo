@@ -11,30 +11,22 @@
  *
  */
 
-import converterPixeisParaNumero from "infrastructure/conversor/conversor";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import PontoExtensor from "infrastructure/pontoExtensor";
+import SetaConectora from "infrastructure/setaConectora";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
 
 export const CLASSE_ELEMENTO_SELECIONADO: string = "selected";
 
 export default class SelecionadorComponente {
-  constructor(pontosExtensores: PontoExtensor[]) {
-    this._componenteSelecionado = null;
-    this._pontosExtensores = pontosExtensores;
-    this._setas = document.querySelectorAll(".seta");
-    this._setaSuperior = document.querySelector(".seta-superior") as HTMLElement;
-    this._setaInferior = document.querySelector(".seta-inferior") as HTMLElement;
-    this._setaDireita = document.querySelector(".seta-direita") as HTMLElement;
-    this._setaEsquerda = document.querySelector(".seta-esquerda") as HTMLElement;
-  }
-
   private _componenteSelecionado: ComponenteDiagrama | null;
   private readonly _pontosExtensores: PontoExtensor[];
-  private readonly _setas: NodeListOf<HTMLElement>;
-  private readonly _setaSuperior: HTMLElement;
-  private readonly _setaInferior: HTMLElement;
-  private readonly _setaDireita: HTMLElement;
-  private readonly _setaEsquerda: HTMLElement;
+  private readonly _setasConectoras: SetaConectora[];
+
+  constructor(pontosExtensores: PontoExtensor[], setasConectoras: SetaConectora[]) {
+    this._componenteSelecionado = null;
+    this._pontosExtensores = pontosExtensores;
+    this._setasConectoras = setasConectoras;
+  }
 
   public selecionarElemento(componente: ComponenteDiagrama): void {
     if (this._componenteSelecionado !== null) {
@@ -66,15 +58,13 @@ export default class SelecionadorComponente {
     }
   }
 
-  public adicionarElementoASelecao(componente: ComponenteDiagrama): void {}
-
   public removerSelecao(): void {
     if (this._componenteSelecionado !== null) {
       this._componenteSelecionado.htmlComponente.classList.remove(CLASSE_ELEMENTO_SELECIONADO);
       this._componenteSelecionado = null;
     }
 
-    this._setas.forEach((seta: HTMLElement): string => (seta.style.display = "none"));
+    this._setasConectoras.forEach((seta: SetaConectora): void => seta.esconderSeta());
     this.esconderPontosExtensores();
   }
 
@@ -83,32 +73,10 @@ export default class SelecionadorComponente {
       return;
     }
 
-    let estiloElemento: CSSStyleDeclaration = componente.pegarEstiloElemento();
-    let estiloSeta: CSSStyleDeclaration = getComputedStyle(this._setas[0]);
-
-    let alturaElemento: number = converterPixeisParaNumero(estiloElemento.height);
-    let larguraElemento: number = converterPixeisParaNumero(estiloElemento.width);
-    let topElemento: number = converterPixeisParaNumero(estiloElemento.top);
-    let leftElemento: number = converterPixeisParaNumero(estiloElemento.left);
-    let centroVertical: number = topElemento + alturaElemento / 2;
-    let centroHorizontal: number = leftElemento + larguraElemento / 2;
-
-    let alturaSeta: number = converterPixeisParaNumero(estiloSeta.height);
-    let larguraSeta: number = converterPixeisParaNumero(estiloSeta.width);
-
-    this._setaSuperior.style.top = `${topElemento - alturaSeta * 1.5}px`;
-    this._setaSuperior.style.left = `${centroHorizontal - larguraSeta / 2}px`;
-
-    this._setaInferior.style.top = `${topElemento + alturaElemento + alturaSeta * 0.5}px`;
-    this._setaInferior.style.left = `${centroHorizontal - larguraSeta / 2}px`;
-
-    this._setaDireita.style.top = `${centroVertical - alturaSeta / 2}px`;
-    this._setaDireita.style.left = `${leftElemento + larguraElemento + larguraSeta * 0.5}px`;
-
-    this._setaEsquerda.style.top = `${centroVertical - alturaSeta / 2}px`;
-    this._setaEsquerda.style.left = `${leftElemento - larguraSeta * 1.5}px`;
-
-    this._setas.forEach((seta: HTMLElement): string => seta.style.removeProperty("display"));
+    this._setasConectoras.forEach((seta: SetaConectora): void => {
+      seta.reposicionarSeta(componente.htmlComponente);
+      seta.mostrarSeta();
+    });
   }
 
   public moverSetasParaComponenteSelecionado(): void {
