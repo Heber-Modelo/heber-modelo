@@ -31,7 +31,31 @@ export default class PontoExtensorFactory {
     switch (posicao) {
       case PosicoesRelativasPontoExtensor.TOP:
         return function callback(event: MouseEvent): void {
-          let target: HTMLElement | null = event.target as HTMLElement | null;
+          let selecionadorComponente: SelecionadorComponente =
+            SelecionadorComponenteFactory.build();
+          let elementoAtual: HTMLDivElement | undefined =
+            selecionadorComponente.componenteSelecionado?.htmlComponente;
+
+          if (elementoAtual === undefined) {
+            return;
+          }
+
+          if (PontoAnterior.y === 0) {
+            PontoAnterior.y = event.clientY;
+            return;
+          }
+
+          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let deltaY: number = (event.clientY - PontoAnterior.y) * -1;
+          let newTop: number = boundingRectangle.top - deltaY;
+          let newHeight: number = boundingRectangle.height + deltaY;
+
+          elementoAtual.style.top = `${newTop}px`;
+          elementoAtual.style.height = `${newHeight}px`;
+
+          PontoAnterior.y = event.clientY;
+          selecionadorComponente.reposicionarPontosExtensores();
+          selecionadorComponente.moverSetasParaComponenteSelecionado();
         };
 
       case PosicoesRelativasPontoExtensor.TOP_LEFT:
@@ -46,7 +70,31 @@ export default class PontoExtensorFactory {
 
       case PosicoesRelativasPontoExtensor.CENTER_LEFT:
         return function callback(event: MouseEvent): void {
-          let target: HTMLElement | null = event.target as HTMLElement | null;
+          let selecionadorComponente: SelecionadorComponente =
+            SelecionadorComponenteFactory.build();
+          let elementoAtual: HTMLDivElement | undefined =
+            selecionadorComponente.componenteSelecionado?.htmlComponente;
+
+          if (elementoAtual === undefined) {
+            return;
+          }
+
+          if (PontoAnterior.x === 0) {
+            PontoAnterior.x = event.clientX;
+            return;
+          }
+
+          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let deltaX: number = (event.clientX - PontoAnterior.x) * -1;
+          let newLeft: number = boundingRectangle.left - deltaX;
+          let newWidth: number = boundingRectangle.width + deltaX;
+
+          elementoAtual.style.left = `${newLeft}px`;
+          elementoAtual.style.width = `${newWidth}px`;
+
+          PontoAnterior.x = event.clientX;
+          selecionadorComponente.reposicionarPontosExtensores();
+          selecionadorComponente.moverSetasParaComponenteSelecionado();
         };
 
       case PosicoesRelativasPontoExtensor.CENTER_RIGHT:
