@@ -11,13 +11,13 @@
  *
  */
 
+import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import converterPixeisParaNumero from "infrastructure/conversor/conversor";
 import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
 import PontoExtensor from "infrastructure/pontoExtensor";
 import Ponto from "model/ponto";
 import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
 import FormulaPosicaoAbsoluta from "model/formulaPosicaoAbsoluta";
-import SelecionadorComponente from "../../application/paginas/editor/selecionadorComponente";
 
 export class PontoAnterior {
   static x: number = 0;
@@ -60,12 +60,78 @@ export default class PontoExtensorFactory {
 
       case PosicoesRelativasPontoExtensor.TOP_LEFT:
         return function callback(event: MouseEvent): void {
-          let target: HTMLElement | null = event.target as HTMLElement | null;
+          // noinspection DuplicatedCode
+          let selecionadorComponente: SelecionadorComponente =
+            SelecionadorComponenteFactory.build();
+          let elementoAtual: HTMLDivElement | undefined =
+            selecionadorComponente.componenteSelecionado?.htmlComponente;
+
+          if (elementoAtual === undefined) {
+            return;
+          }
+
+          if (PontoAnterior.x === 0 || PontoAnterior.y === 0) {
+            PontoAnterior.x = event.clientX;
+            PontoAnterior.y = event.clientY;
+            return;
+          }
+
+          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let deltaX: number = (event.clientX - PontoAnterior.x) * -1;
+          let deltaY: number = (event.clientY - PontoAnterior.y) * -1;
+          let newLeft: number = boundingRectangle.left - deltaX;
+          let newTop: number = boundingRectangle.top - deltaY;
+          let newHeight: number = boundingRectangle.height + deltaY;
+          let newWidth: number = boundingRectangle.width + deltaX;
+
+          elementoAtual.style.left = `${newLeft}px`;
+          // noinspection DuplicatedCode
+          elementoAtual.style.top = `${newTop}px`;
+          elementoAtual.style.height = `${newHeight}px`;
+          elementoAtual.style.width = `${newWidth}px`;
+
+          PontoAnterior.x = event.clientX;
+          PontoAnterior.y = event.clientY;
+          selecionadorComponente.reposicionarPontosExtensores();
+          selecionadorComponente.moverSetasParaComponenteSelecionado();
         };
 
       case PosicoesRelativasPontoExtensor.TOP_RIGHT:
         return function callback(event: MouseEvent): void {
-          let target: HTMLElement | null = event.target as HTMLElement | null;
+          // noinspection DuplicatedCode
+          let selecionadorComponente: SelecionadorComponente =
+            SelecionadorComponenteFactory.build();
+          let elementoAtual: HTMLDivElement | undefined =
+            selecionadorComponente.componenteSelecionado?.htmlComponente;
+
+          if (elementoAtual === undefined) {
+            return;
+          }
+
+          if (PontoAnterior.x === 0 || PontoAnterior.y === 0) {
+            PontoAnterior.x = event.clientX;
+            PontoAnterior.y = event.clientY;
+            return;
+          }
+
+          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let deltaX: number = event.clientX - PontoAnterior.x;
+          let deltaY: number = (event.clientY - PontoAnterior.y) * -1;
+          let oldLeft: number = boundingRectangle.left;
+          let newTop: number = boundingRectangle.top - deltaY;
+          let newHeight: number = boundingRectangle.height + deltaY;
+          let newWidth: number = boundingRectangle.width + deltaX;
+
+          elementoAtual.style.left = `${oldLeft}px`;
+          // noinspection DuplicatedCode
+          elementoAtual.style.top = `${newTop}px`;
+          elementoAtual.style.height = `${newHeight}px`;
+          elementoAtual.style.width = `${newWidth}px`;
+
+          PontoAnterior.x = event.clientX;
+          PontoAnterior.y = event.clientY;
+          selecionadorComponente.reposicionarPontosExtensores();
+          selecionadorComponente.moverSetasParaComponenteSelecionado();
         };
 
       case PosicoesRelativasPontoExtensor.CENTER_LEFT:
