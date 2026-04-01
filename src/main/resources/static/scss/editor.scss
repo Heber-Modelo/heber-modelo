@@ -52,11 +52,12 @@ aside {
   background-color: var(--cor-painel-lateral);
   color: var(--cor-fonte-alternativa);
   grid-row: 2 / 4;
+  height: calc(100vh - 5rem);
   padding: 0.5rem;
   z-index: 1;
   position: fixed;
   top: 5rem;
-  height: 100%;
+  width: 20%;
 
   h2 {
     text-align: center;
@@ -170,6 +171,11 @@ section.pagina {
   align-items: center;
 }
 
+section#componentes {
+  height: 90%;
+  overflow: scroll;
+}
+
 section#diagramas > section {
   display: grid;
   grid-template-columns: 50% 50%;
@@ -188,13 +194,46 @@ main {
 }
 
 fieldset.componentes-diagrama {
+  align-items: center;
   border: $estiloBordaPainel;
   border-radius: 0.5rem;
-  display: grid;
-  grid-template-columns: 50% 50%;
-  gap: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   padding: 0.5rem;
-  width: 100%;
+  width: 90%;
+
+  button {
+    align-items: center;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 80%;
+
+    h4 {
+      pointer-events: none;
+    }
+
+    svg {
+      aspect-ratio: 1 / 1;
+      pointer-events: none;
+      color: var(--cor-fundo);
+      width: 90%;
+
+      .svg-cor-borda {
+        color: var(--cor-borda);
+      }
+
+    }
+
+  }
+
+  legend {
+    text-align: center;
+    width: 100%;
+  }
+
 }
 
 fieldset#conexoes-basicas {

@@ -1,0 +1,6 @@
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="25" y="25" width="450" height="400" fill="currentColor"/>
+    <rect x="60.5" y="80.5" width="375" height="275" fill="currentColor" class="svg-cor-borda"/>
+    <path d="M100 225L250 138.397L250 311.603L100 225Z" fill="currentColor"/>
+    <path d="M400 225L250 138.397L250 311.603L400 225Z" fill="currentColor"/>
+</svg>
