@@ -11,9 +11,9 @@
  *
  */
 
+import { PontoAnterior } from "infrastructure/factory/pontoExtensorFactory";
 import Ponto from "model/ponto";
 import FormulaPosicaoAbsoluta from "model/formula/formulaPosicaoAbsoluta";
-import { PontoAnterior } from "./factory/pontoExtensorFactory";
 
 export default class PontoExtensor {
   public static readonly CLASSE_PONTO_EXTENSOR: string = "ponto-extensor";

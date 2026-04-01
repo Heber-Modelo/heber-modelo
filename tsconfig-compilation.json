@@ -1,5 +1,21 @@
 {
-  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "rootDir": "./src/main/resources/static/typescript",
+    "outDir": "./src/main/resources/static/javascript",
+    "removeComments": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "build"
+  ],
   "files": [
     "src/main/resources/static/typescript/application/paginas/editor/grade.ts",
     "src/main/resources/static/typescript/application/paginas/editor/salvar.ts",

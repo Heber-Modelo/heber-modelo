@@ -11,10 +11,10 @@
  *
  */
 
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import PropriedadeFactory from "infrastructure/factory/propriedadeFactory";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
-import ValoresJSONComponente, { JSONPropriedade } from "../../model/json/valoresJSONComponente";
+import ValoresJSONComponente, { JSONPropriedade } from "model/json/valoresJSONComponente";
 
 export default class ComponenteFactory {
   public static PROPRIEDADE_ID_COMPONENTE: string = "data-id";

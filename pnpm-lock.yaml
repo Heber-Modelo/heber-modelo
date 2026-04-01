@@ -2848,3 +2848,5 @@ snapshots:
   wildcard@2.0.1: {}
 
   yallist@3.1.1: {}
+
+  yocto-queue@0.1.0: {}
