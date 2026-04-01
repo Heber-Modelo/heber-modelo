@@ -1,6 +1,6 @@
 <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="25" y="25" width="450" height="400" fill="currentColor"/>
-    <rect x="75.5" y="95.9387" width="350" height="260" fill="currentColor" stroke="currentColor" stroke-width="15" class="svg-cor-borda"/>
+    <rect x="75.5" y="95.9387" width="350" height="260" fill="none" stroke="currentColor" stroke-width="15" class="svg-cor-borda"/>
     <rect x="327.14" y="88.009" width="58.1083" height="150" transform="rotate(-45 327.14 88.009)" fill="currentColor"/>
     <rect width="138.923" height="14.554" transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 428.909 189.741)" fill="currentColor" class="svg-cor-borda"/>
     <rect x="307" y="103.439" width="15" height="111" fill="currentColor" class="svg-cor-borda"/>
