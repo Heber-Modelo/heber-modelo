@@ -11,9 +11,9 @@
  *
  */
 
-import { ComponenteDiagramaOuvinte } from "./componenteDiagramaOuvinte.js";
+import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
 
-export interface ComponenteDiagramaOuvido {
+export default interface ComponenteDiagramaOuvido {
   adicionarOuvinte(ouvinte: ComponenteDiagramaOuvinte): void;
 
   atualizarOuvintes(): void;

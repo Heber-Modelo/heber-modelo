@@ -1,6 +1,6 @@
-import ICommand from "../../model/command/iCommand.js";
+import ICommand from "model/command/iCommand";
 
-class CommandHistory {
+export default class CommandHistory {
   private _commands: ICommand[] = [];
 
   public saveAndExecuteCommand(command: ICommand): void {
@@ -12,5 +12,3 @@ class CommandHistory {
     this._commands.pop()?.undo();
   }
 }
-
-export default CommandHistory;

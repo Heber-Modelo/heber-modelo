@@ -11,7 +11,7 @@
  *
  */
 
-import { converterPixeisParaNumero } from "../../../infrastructure/conversor/conversor.js";
+import converterPixeisParaNumero from "infrastructure/conversor/conversor";
 import {
   atualizarInputs,
   atualizarValorInput,
@@ -20,39 +20,40 @@ import {
   editorEixoX,
   editorEixoY,
   inputs,
-} from "./editorPropriedades.js";
-import {
-  ComponenteDiagrama,
-  LateralComponente,
-} from "../../../model/componente/componenteDiagrama.js";
-import { RepositorioComponente } from "../../../infrastructure/repositorio/repositorioComponente.js";
-import { repositorioComponenteFactory } from "../../../infrastructure/factory/repositorioComponenteFactory.js";
-import { SelecionadorComponente } from "./selecionadorComponente.js";
-import { selecionadorComponenteFactory } from "../../../infrastructure/factory/selecionadorComponenteFactory.js";
-import { GeradorIDComponente } from "../../../infrastructure/gerador/geradorIDComponente.js";
-import { ComponenteFactory } from "../../../infrastructure/factory/componenteFactory.js";
-import { Ponto } from "../../../model/ponto.js";
-import { DirecoesMovimento, moverComponente } from "./manipularComponente.js";
-import { FabricaComponenteConexao } from "../../../model/conexao/fabricaComponenteConexao.js";
-import { TipoConexao } from "../../../model/conexao/tipoConexao.js";
-import "./painelLateral.js";
-import CommandHistory from "../../history/commandHistory.js";
+} from "application/paginas/editor/editorPropriedades";
+import ComponenteDiagrama, { LateralComponente } from "model/componente/componenteDiagrama";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
+import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
+import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
+import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
+import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
+import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import Ponto from "model/ponto";
+import { DirecoesMovimento, moverComponente } from "application/paginas/editor/manipularComponente";
+import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
+import TipoConexao from "model/conexao/tipoConexao";
+import CommandHistory from "application/history/commandHistory";
 import ColarComponenteCommand, {
   ColarComponenteDiagramaBuilder,
-} from "../../../infrastructure/command/colarComponenteCommand.js";
+} from "infrastructure/command/colarComponenteCommand";
 import CopiarComponenteCommand, {
   CopiarComponenteCommandBuilder,
-} from "../../../infrastructure/command/copiarComponenteCommand.js";
+} from "infrastructure/command/copiarComponenteCommand";
 import CortarComponenteCommand, {
   CortarComponenteCommandBuilder,
-} from "../../../infrastructure/command/cortarComponenteCommand.js";
+} from "infrastructure/command/cortarComponenteCommand";
 import CarregarDiagramaCommand, {
   ATRIBUTO_NOME_ELEMENTO,
   CarregarDiagramaCommandBuilder,
-} from "../../../infrastructure/command/carregarDiagramaCommand.js";
+} from "infrastructure/command/carregarDiagramaCommand";
 import CarregarCSSCommand, {
   CarregarCSSCommandBuilder,
-} from "../../../infrastructure/command/carregarCSSCommand.js";
+} from "infrastructure/command/carregarCSSCommand";
+import ApagarComponenteCommand, {
+  ApagarComponenteCommandBuilder,
+} from "infrastructure/command/apagarComponenteCommand";
+import "application/paginas/editor/painelLateral";
+import "infrastructure/variaveisConfiguracao";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -63,9 +64,9 @@ let commandHistory: CommandHistory = new CommandHistory();
 let diagrama: HTMLElement | null = document.querySelector("main");
 let fabricaComponente: ComponenteFactory = new ComponenteFactory();
 let geradorIDComponente: GeradorIDComponente = GeradorIDComponente.pegarInstance();
-let repositorioComponentes: RepositorioComponente = repositorioComponenteFactory.build();
+let repositorioComponentes: RepositorioComponente = RepositorioComponenteFactory.build();
 let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
-let selecionadorComponente: SelecionadorComponente = selecionadorComponenteFactory.build();
+let selecionadorComponente: SelecionadorComponente = SelecionadorComponenteFactory.build();
 
 componentes.forEach((componente: HTMLDivElement): void => {
   repositorioComponentes.adicionar(new ComponenteDiagrama(componente, []));
@@ -91,12 +92,15 @@ function mouseDownComecarMoverElemento(event: MouseEvent): void {
   componente.classList.add("dragging");
   document.addEventListener("mousemove", dragElement);
   componenteAtual = componente;
+  selecionadorComponente.esconderPontosExtensores();
 }
 
 function mouseUpPararMoverElemento(event: Event): void {
   let componente: HTMLElement = event.target as HTMLElement;
   componente.classList.remove("dragging");
   document.removeEventListener("mousemove", dragElement);
+  selecionadorComponente.mostrarPontosExtensores();
+  selecionadorComponente.reposicionarPontosExtensores();
 }
 
 function dragElement(event: MouseEvent): void {
@@ -139,7 +143,7 @@ componentes.forEach((componente: HTMLDivElement): void => {
 /********************/
 
 const setas: NodeListOf<HTMLElement> = document.querySelectorAll(".seta");
-let fabricaConexao: FabricaComponenteConexao = new FabricaComponenteConexao();
+let fabricaConexao: ComponenteConexaoFactory = new ComponenteConexaoFactory();
 let primeiroComponente: ComponenteDiagrama | null = null;
 let lateralPrimeiroComponente: LateralComponente | null;
 let ponto1: Ponto | null = null;
@@ -148,9 +152,10 @@ new CarregarCSSCommandBuilder().definirNomeArquivo(TipoConexao.CONEXAO_ANGULADA)
 
 setas.forEach((seta: HTMLElement): void =>
   seta.addEventListener("click", (): void => {
-    if (selecionadorComponente.componenteSelecionado === null) return;
-
     primeiroComponente = selecionadorComponente.componenteSelecionado;
+
+    if (primeiroComponente === null) return;
+
     let ponto: number[];
 
     if (seta.classList.contains("seta-direita")) {
@@ -291,36 +296,6 @@ function conectarElementos(event: MouseEvent): void {
 
 diagrama?.addEventListener("click", limparCoordenadaInicial);
 
-/*******************************/
-/* AJUSTAR TAMANHO COM O MOUSE */
-/*******************************/
-
-function iniciarReajusteTamanho(): void {
-  window.addEventListener("mousemove", ajustarTamanhoComponente);
-  window.addEventListener("mouseup", pararReajusteTamanho);
-}
-
-function pararReajusteTamanho(): void {
-  window.removeEventListener("mousemove", ajustarTamanhoComponente);
-  window.removeEventListener("mouseup", pararReajusteTamanho);
-}
-
-function ajustarTamanhoComponente(event: MouseEvent): void {
-  let elemento: HTMLElement | undefined =
-    selecionadorComponente.componenteSelecionado?.htmlComponente;
-
-  if (elemento === undefined) {
-    return;
-  }
-
-  elemento.style.height = Math.abs(event.clientY - elemento.offsetTop) + "px";
-  elemento.style.width = Math.abs(event.clientX - elemento.offsetLeft) + "px";
-}
-
-setas.forEach((seta: HTMLElement): void => {
-  seta.addEventListener("mousedown", iniciarReajusteTamanho);
-});
-
 /**************************/
 /* CARREGAMENTO DIAGRAMAS */
 /**************************/
@@ -452,12 +427,21 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
     case bindings.get("apagarElemento"):
       let componenteAlvo: ComponenteDiagrama | null = selecionadorComponente.componenteSelecionado;
 
-      if (componenteAlvo !== null) {
-        repositorioComponentes.remover(componenteAlvo);
-        selecionadorComponente.removerSelecao();
-        limparPropriedades(abaPropriedades);
-        atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
+      if (componenteAlvo === null || diagrama === null) {
+        return;
       }
+
+      let command: ApagarComponenteCommand = new ApagarComponenteCommandBuilder()
+        .definirComponenteAlvo(componenteAlvo)
+        .definirDiagrama(diagrama)
+        .definirRepositorioComponente(repositorioComponentes)
+        .build();
+      commandHistory.saveAndExecuteCommand(command);
+
+      selecionadorComponente.removerSelecao();
+      limparPropriedades(abaPropriedades);
+      atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
+
       break;
 
     // Mover elemento
@@ -468,6 +452,7 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
         incrementoMovimentacao,
       );
       selecionadorComponente.moverSetasParaComponenteSelecionado();
+      selecionadorComponente.reposicionarPontosExtensores();
       break;
 
     case bindings.get("moverElementoParaBaixo"):
@@ -477,6 +462,7 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
         incrementoMovimentacao,
       );
       selecionadorComponente.moverSetasParaComponenteSelecionado();
+      selecionadorComponente.reposicionarPontosExtensores();
       break;
 
     case bindings.get("moverElementoParaDireita"):
@@ -486,6 +472,7 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
         incrementoMovimentacao,
       );
       selecionadorComponente.moverSetasParaComponenteSelecionado();
+      selecionadorComponente.reposicionarPontosExtensores();
       break;
 
     case bindings.get("moverElementoParaEsquerda"):
@@ -495,6 +482,7 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
         incrementoMovimentacao,
       );
       selecionadorComponente.moverSetasParaComponenteSelecionado();
+      selecionadorComponente.reposicionarPontosExtensores();
       break;
   }
 

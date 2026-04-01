@@ -1,0 +1,9 @@
+<component name="CopyrightManager">
+  <settings default="Copyright">
+    <module2copyright>
+      <element module="Java" copyright="Copyright" />
+      <element module="SCSS" copyright="Copyright" />
+      <element module="TypeScript" copyright="Copyright" />
+    </module2copyright>
+  </settings>
+</component>

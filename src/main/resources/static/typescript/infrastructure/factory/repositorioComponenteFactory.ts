@@ -11,13 +11,12 @@
  *
  */
 
-import { IFactory } from "../../model/factory/iFactory";
-import { RepositorioComponente } from "../repositorio/repositorioComponente.js";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 
-class RepositorioComponenteFactory implements IFactory<RepositorioComponente> {
-  private _repositorio: RepositorioComponente | null = null;
+export default class RepositorioComponenteFactory {
+  private static _repositorio: RepositorioComponente | null = null;
 
-  public build(): RepositorioComponente {
+  public static build(): RepositorioComponente {
     if (this._repositorio === null) {
       this._repositorio = new RepositorioComponente();
     }
@@ -25,6 +24,3 @@ class RepositorioComponenteFactory implements IFactory<RepositorioComponente> {
     return this._repositorio;
   }
 }
-
-export const repositorioComponenteFactory: RepositorioComponenteFactory =
-  new RepositorioComponenteFactory();

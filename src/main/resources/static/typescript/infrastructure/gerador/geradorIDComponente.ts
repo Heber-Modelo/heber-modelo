@@ -11,7 +11,7 @@
  *
  */
 
-export class GeradorIDComponente {
+export default class GeradorIDComponente {
   private constructor() {
     this._id = 0;
   }

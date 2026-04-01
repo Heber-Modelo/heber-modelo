@@ -11,9 +11,9 @@
  *
  */
 
-import { ComponenteDiagrama } from "../componente/componenteDiagrama.js";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
 
-export class PropriedadeComponente {
+export default class PropriedadeComponente {
   constructor(
     nome: string,
     componente: ComponenteDiagrama,

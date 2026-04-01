@@ -11,26 +11,28 @@
  *
  */
 
-import { CLASSE_ELEMENTO_SELECIONADO } from "./classesCSSElementos.js";
-import { converterPixeisParaNumero } from "../../../infrastructure/conversor/conversor.js";
-import { ComponenteDiagrama } from "../../../model/componente/componenteDiagrama.js";
+import PontoExtensor from "infrastructure/pontoExtensor";
+import SetaConectora from "infrastructure/setaConectora";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
 
-export class SelecionadorComponente {
-  constructor() {
+export const CLASSE_ELEMENTO_SELECIONADO: string = "selected";
+
+export default class SelecionadorComponente {
+  private _componenteSelecionado: ComponenteDiagrama | null;
+  private readonly _pontosExtensores: PontoExtensor[];
+  private readonly _setasConectoras: SetaConectora[];
+
+  constructor(pontosExtensores: PontoExtensor[], setasConectoras: SetaConectora[]) {
     this._componenteSelecionado = null;
-    this._setas = document.querySelectorAll(".seta");
-    this._setaSuperior = document.querySelector(".seta-superior") as HTMLElement;
-    this._setaInferior = document.querySelector(".seta-inferior") as HTMLElement;
-    this._setaDireita = document.querySelector(".seta-direita") as HTMLElement;
-    this._setaEsquerda = document.querySelector(".seta-esquerda") as HTMLElement;
+    this._pontosExtensores = pontosExtensores;
+    this._setasConectoras = setasConectoras;
   }
 
-  private _componenteSelecionado: ComponenteDiagrama | null;
-  private readonly _setas: NodeListOf<HTMLElement>;
-  private readonly _setaSuperior: HTMLElement;
-  private readonly _setaInferior: HTMLElement;
-  private readonly _setaDireita: HTMLElement;
-  private readonly _setaEsquerda: HTMLElement;
+  public atualizar(): void {
+    this.reposicionarPontosExtensores();
+    this.moverSetasParaComponenteSelecionado();
+    this.componenteSelecionado?.atualizarOuvintes();
+  }
 
   public selecionarElemento(componente: ComponenteDiagrama): void {
     if (this._componenteSelecionado !== null) {
@@ -39,6 +41,27 @@ export class SelecionadorComponente {
     this._componenteSelecionado = componente;
     this._componenteSelecionado.htmlComponente.classList.add(CLASSE_ELEMENTO_SELECIONADO);
     this.moverSetas(componente);
+    this._pontosExtensores.forEach((ponto: PontoExtensor): void =>
+      ponto.trocarElementoAtual(componente.htmlComponente),
+    );
+  }
+
+  public esconderPontosExtensores(): void {
+    this._pontosExtensores.forEach((ponto: PontoExtensor): void => ponto.esconderPonto());
+  }
+
+  public mostrarPontosExtensores(): void {
+    this._pontosExtensores.forEach((ponto: PontoExtensor): void => ponto.mostrarPonto());
+  }
+
+  public reposicionarPontosExtensores(): void {
+    let elementoAtual: HTMLElement | undefined = this.componenteSelecionado?.htmlComponente;
+
+    if (elementoAtual) {
+      this._pontosExtensores.forEach((ponto: PontoExtensor): void =>
+        ponto.trocarElementoAtual(elementoAtual),
+      );
+    }
   }
 
   public removerSelecao(): void {
@@ -47,7 +70,8 @@ export class SelecionadorComponente {
       this._componenteSelecionado = null;
     }
 
-    this._setas.forEach((s: HTMLElement): string => (s.style.display = "none"));
+    this._setasConectoras.forEach((seta: SetaConectora): void => seta.esconderSeta());
+    this.esconderPontosExtensores();
   }
 
   public moverSetas(componente: ComponenteDiagrama): void {
@@ -55,32 +79,10 @@ export class SelecionadorComponente {
       return;
     }
 
-    let estiloElemento: CSSStyleDeclaration = componente.pegarEstiloElemento();
-    let estiloSeta: CSSStyleDeclaration = getComputedStyle(this._setas[0]);
-
-    let alturaElemento: number = converterPixeisParaNumero(estiloElemento.height);
-    let larguraElemento: number = converterPixeisParaNumero(estiloElemento.width);
-    let topElemento: number = converterPixeisParaNumero(estiloElemento.top);
-    let leftElemento: number = converterPixeisParaNumero(estiloElemento.left);
-    let centroVertical: number = topElemento + alturaElemento / 2;
-    let centroHorizontal: number = leftElemento + larguraElemento / 2;
-
-    let alturaSeta: number = converterPixeisParaNumero(estiloSeta.height);
-    let larguraSeta: number = converterPixeisParaNumero(estiloSeta.width);
-
-    this._setaSuperior.style.top = `${centroVertical - alturaSeta * 2.5}px`;
-    this._setaSuperior.style.left = `${centroHorizontal - larguraSeta / 2}px`;
-
-    this._setaInferior.style.top = `${centroVertical + alturaSeta * 1.5}px`;
-    this._setaInferior.style.left = `${centroHorizontal - larguraSeta / 2}px`;
-
-    this._setaDireita.style.top = `${centroVertical - alturaSeta / 2}px`;
-    this._setaDireita.style.left = `${centroHorizontal + larguraSeta * 2}px`;
-
-    this._setaEsquerda.style.top = `${centroVertical - alturaSeta / 2}px`;
-    this._setaEsquerda.style.left = `${centroHorizontal - larguraSeta * 3}px`;
-
-    this._setas.forEach((s) => s.style.removeProperty("display"));
+    this._setasConectoras.forEach((seta: SetaConectora): void => {
+      seta.reposicionarSeta(componente.htmlComponente);
+      seta.mostrarSeta();
+    });
   }
 
   public moverSetasParaComponenteSelecionado(): void {

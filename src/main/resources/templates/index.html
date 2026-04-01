@@ -4,7 +4,7 @@
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <link rel="stylesheet" th:if="${desligar != null}" th:href="@{/css/desligar.css}" />
     <link rel="stylesheet" th:href="@{/css/index.css}" />
-    <script th:src="@{/javascript/application/paginas/desligar.js}" defer></script>
+    <script th:src="@{/javascript/desligar.js}" defer></script>
     <title>Heber-Modelo</title>
   </head>
   <body>
@@ -137,60 +137,60 @@ Licensed works, modifications, and larger works may be distributed under differe
       </div>
       <div>
         <a th:href="@{/docs/index.html}">
-        <button>
-          <svg
-            width="332"
-            height="351"
-            viewBox="0 0 332 351"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="332" height="351" rx="15" fill="svg-color-fill" />
-            <mask id="path-2-inside-1_293_39" fill="currentColor">
-              <rect x="80" y="55" width="172" height="241" rx="10" />
-            </mask>
-            <rect
-              x="80"
-              y="55"
-              width="172"
-              height="241"
-              rx="10"
-              fill="svg-color-fill"
-              stroke="currentColor"
-              stroke-width="30"
-              mask="url(#path-2-inside-1_293_39)"
-            />
-            <rect x="120" y="173" width="57" height="13" fill="currentColor" />
-            <rect x="120" y="207" width="55" height="14" fill="currentColor" />
-            <rect x="120" y="241" width="75" height="14" fill="currentColor" />
-            <rect x="120" y="104" width="91" height="14" fill="currentColor" />
-            <rect x="120" y="139" width="91" height="13" fill="currentColor" />
-            <mask id="path-10-inside-2_293_39" fill="currentColor">
-              <rect x="80" y="55" width="172" height="241" rx="10" />
-            </mask>
-            <rect
-              x="80"
-              y="55"
-              width="172"
-              height="241"
-              rx="10"
-              fill="svg-color-fill"
-              stroke="currentColor"
-              stroke-width="30"
-              mask="url(#path-10-inside-2_293_39)"
-            />
-            <path
-              d="M254.696 223.972C256.258 222.409 258.791 222.409 260.353 223.972L302.172 265.79C303.734 267.353 303.734 269.885 302.172 271.447L298.161 275.458C296.599 277.02 294.066 277.02 292.504 275.458L250.685 233.639C249.123 232.077 249.123 229.544 250.685 227.982L254.696 223.972Z"
-              fill="currentColor"
-            />
-            <path
-              d="M227.5 163.5C248.487 163.5 265.5 180.513 265.5 201.5C265.5 222.487 248.487 239.5 227.5 239.5C206.513 239.5 189.5 222.487 189.5 201.5C189.5 180.513 206.513 163.5 227.5 163.5Z"
-              fill="#5E01AF"
-              stroke="white"
-              stroke-width="13"
-            />
-          </svg>
-        </button>
+          <button>
+            <svg
+              width="332"
+              height="351"
+              viewBox="0 0 332 351"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="332" height="351" rx="15" fill="svg-color-fill" />
+              <mask id="path-2-inside-1_293_39" fill="currentColor">
+                <rect x="80" y="55" width="172" height="241" rx="10" />
+              </mask>
+              <rect
+                x="80"
+                y="55"
+                width="172"
+                height="241"
+                rx="10"
+                fill="svg-color-fill"
+                stroke="currentColor"
+                stroke-width="30"
+                mask="url(#path-2-inside-1_293_39)"
+              />
+              <rect x="120" y="173" width="57" height="13" fill="currentColor" />
+              <rect x="120" y="207" width="55" height="14" fill="currentColor" />
+              <rect x="120" y="241" width="75" height="14" fill="currentColor" />
+              <rect x="120" y="104" width="91" height="14" fill="currentColor" />
+              <rect x="120" y="139" width="91" height="13" fill="currentColor" />
+              <mask id="path-10-inside-2_293_39" fill="currentColor">
+                <rect x="80" y="55" width="172" height="241" rx="10" />
+              </mask>
+              <rect
+                x="80"
+                y="55"
+                width="172"
+                height="241"
+                rx="10"
+                fill="svg-color-fill"
+                stroke="currentColor"
+                stroke-width="30"
+                mask="url(#path-10-inside-2_293_39)"
+              />
+              <path
+                d="M254.696 223.972C256.258 222.409 258.791 222.409 260.353 223.972L302.172 265.79C303.734 267.353 303.734 269.885 302.172 271.447L298.161 275.458C296.599 277.02 294.066 277.02 292.504 275.458L250.685 233.639C249.123 232.077 249.123 229.544 250.685 227.982L254.696 223.972Z"
+                fill="currentColor"
+              />
+              <path
+                d="M227.5 163.5C248.487 163.5 265.5 180.513 265.5 201.5C265.5 222.487 248.487 239.5 227.5 239.5C206.513 239.5 189.5 222.487 189.5 201.5C189.5 180.513 206.513 163.5 227.5 163.5Z"
+                fill="#5E01AF"
+                stroke="white"
+                stroke-width="13"
+              />
+            </svg>
+          </button>
         </a>
         <p th:text="#{web.page.home.menu.3}"></p>
       </div>

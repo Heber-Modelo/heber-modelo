@@ -1,0 +1,6 @@
+<component name="CopyrightManager">
+  <copyright>
+    <option name="notice" value="Copyright (c) &amp;#36;originalComment.match(&quot;Copyright \(c\) (\d+)&quot;, 1, &quot;-&quot;, &quot;&amp;#36;today.year&quot;)&amp;#36;today.year. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.&#10; &#10;Licensed under the Massachusetts Institute of Technology (MIT) License.&#10;You may obtain a copy of the license at:&#10; &#10;   https://choosealicense.com/licenses/mit/&#10;&#10;A short and simple permissive license with conditions only requiring preservation of copyright and license notices.&#10;Licensed works, modifications, and larger works may be distributed under different terms and without source code.&#10;" />
+    <option name="myName" value="Copyright" />
+  </copyright>
+</component>

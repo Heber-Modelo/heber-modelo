@@ -145,3 +145,22 @@ Ainda não implementado, mas servirá para ativar o modo específico para o prof
   abrir_navegador_automaticamente=true
   desativar_botao_desligar=false
 ```
+
+Opções de configuração de certas funcionalidades principais do programa.
+
+#### Porta (Integer)
+
+Define a `port` (porta) que deve ser utilizada pelo usuário para se conectar ao programa.
+
+#### Domínio (String)
+
+Define o domínio que deve ser utilizado pelo usuário para se a conectar ao programa. Lembre-se de usar tanto a porta quanto o domínio na hora de acessar o programa.
+
+#### Abrir Navegador Automaticamente (Boolean)
+
+Controla se o programa deve tentar abrir o navegador padrão do sistema de forma automática, já com uma aba aberta no domínio e porta
+do programa. Pode não funcionar em alguns sistemas devido às configurações de segurança ou seguranças.
+
+#### Desativar Botão Desligar (Boolean)
+
+Desativa o botão de desligar presente na tela inicial do aplicativo, não só escondendo o botão, como também bloqueando a sua funcionalidade.

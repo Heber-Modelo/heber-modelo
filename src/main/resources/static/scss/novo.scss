@@ -18,8 +18,8 @@
 form {
   display: flex;
   flex-direction: column;
-  gap: variaveis.$gapForm;
-  margin: 1rem 0;
+  gap: 2rem;
+  margin: 3rem 0;
   width: 50%;
 
   div.botoes {
@@ -39,15 +39,17 @@ form {
 
   div.diagramas {
     align-self: center;
-    width: 70%;
+    width: 100%;
 
     fieldset {
-      align-items: center;
+      width: 100%;
       border: var(--cor-borda) solid variaveis.$tamanhoBordaInput;
       border-radius: variaveis.$borderRadiusInput;
+      padding-top: 3rem;
+      padding-bottom: 3rem;
       display: flex;
       flex-direction: column;
-      padding: variaveis.$paddingPadrao;
+      align-items: center;
 
       &#diagramas-banco {
         align-items: center;
@@ -56,10 +58,53 @@ form {
         flex-direction: column;
         grid-column: 1;
 
+        legend {
+          margin-left: 3.5rem;
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
+          font-size: 2rem;
+        }
+
         div.checkbox-group {
           display: grid;
-          grid-template-columns: repeat(2, 50%);
           width: calc(100% - 10rem);
+
+          label {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+
+            input[type="checkbox"] {
+              appearance: none;
+              width: 2.5rem;
+              height: 2.5rem;
+              border: 3px solid var(--cor-borda);
+              border-radius: 4px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            input[type="checkbox"]:checked {
+              border: 4.5px solid var(--cor-botao);
+            }
+
+            input[type="checkbox"]:checked::before {
+              content: "✔";
+              font-size: 1.5rem;
+              text-align: center;
+              color: var(--cor-botao);
+            }
+
+            span {
+              font-size: 1.5rem;
+            }
+          }
+
+
         }
       }
 

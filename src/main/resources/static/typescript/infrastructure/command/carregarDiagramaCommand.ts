@@ -11,9 +11,9 @@
  *
  */
 
-import ICommand from "../../model/command/iCommand.js";
-import { ResponseDiagramaJSON } from "../../model/response/responseDiagramaJSON.js";
-import { ResponseTraducaoJSON } from "../../model/response/responseTraducaoJSON.js";
+import ICommand from "model/command/iCommand";
+import ResponseDiagramaJSON from "model/response/responseDiagramaJSON";
+import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 
 export const ATRIBUTO_NOME_ELEMENTO = "data-nome-elemento";
 
@@ -39,12 +39,17 @@ export default class CarregarDiagramaCommand implements ICommand {
     return responseTraducao.mensagem;
   }
 
-  private criarBotaoElemento(nomeElemento: string, tipoElemento: string): HTMLButtonElement {
+  private async criarBotaoElemento(
+    nomeElemento: string,
+    tipoElemento: string,
+  ): Promise<HTMLButtonElement> {
     let botao: HTMLButtonElement = document.createElement("button");
+    let responseSimbolo: Response = await fetch(`elementos/simbolos/${tipoElemento}.svg`);
+    let textoSimboloSvg: string = await responseSimbolo.text();
     botao.classList.add("btn-criar-elemento");
     botao.setAttribute(ATRIBUTO_NOME_ELEMENTO, tipoElemento);
     botao.title = nomeElemento;
-    botao.innerText = nomeElemento.toUpperCase();
+    botao.innerHTML = `${textoSimboloSvg} <h3>${nomeElemento.toUpperCase()}</h3>`;
     botao.addEventListener("click", this._callbackCriarComponente);
 
     return botao;
@@ -77,7 +82,9 @@ export default class CarregarDiagramaCommand implements ICommand {
             );
           }
 
-          this._fieldSetElementos.append(this.criarBotaoElemento(nomeElemento, tipoElemento.tipo));
+          this._fieldSetElementos.append(
+            await this.criarBotaoElemento(nomeElemento, tipoElemento.tipo),
+          );
         }
 
         this._sectionComponentes?.append(this._fieldSetElementos);

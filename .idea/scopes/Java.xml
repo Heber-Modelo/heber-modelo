@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Java" pattern="file[heber-modelo.main]:java//*" />
+</component>

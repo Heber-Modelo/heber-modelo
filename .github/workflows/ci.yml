@@ -70,8 +70,6 @@ jobs:
         run: npm run compile-scss
       - name: Compile Typescript
         run: npm run compile-ts
-      - name: Minify Javascript
-        run: npm run minify-js
 
       - name: Create jar file
         run: ./gradlew bootJar
@@ -136,5 +134,5 @@ jobs:
             --update-aliases \
             --branch gh-pages \
             --push \
-            $VERSION \
+            "${VERSION//\"}" \
             latest

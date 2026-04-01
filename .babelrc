@@ -1,0 +1,14 @@
+{
+  "plugins": [
+    ["module-resolver", {
+      "alias": {
+        "application": "./src/main/resources/static/typescript/application",
+        "infrastructure": "./src/main/resources/static/typescript/infrastructure",
+        "model": "./src/main/resources/static/typescript/model"
+      },
+      "root": "./src/main/resources/static/typescript",
+      "extensions": [".js", ".ts"]
+    }]
+  ],
+  "presets": ["@babel/preset-env", "@babel/preset-typescript"]
+}

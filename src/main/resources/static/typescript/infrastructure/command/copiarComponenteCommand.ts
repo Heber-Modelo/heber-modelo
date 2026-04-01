@@ -11,11 +11,11 @@
  *
  */
 
-import ICommand from "../../model/command/iCommand.js";
-import { CLASSE_ELEMENTO_SELECIONADO } from "../../application/paginas/editor/classesCSSElementos.js";
-import { ComponenteDiagrama } from "../../model/componente/componenteDiagrama.js";
+import ICommand from "model/command/iCommand";
+import { CLASSE_ELEMENTO_SELECIONADO } from "application/paginas/editor/selecionadorComponente";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
 
-class CopiarComponenteCommand implements ICommand {
+export default class CopiarComponenteCommand implements ICommand {
   private _componente: ComponenteDiagrama;
 
   constructor(componente: ComponenteDiagrama) {
@@ -53,5 +53,3 @@ export class CopiarComponenteCommandBuilder {
     return new CopiarComponenteCommand(this._componente);
   }
 }
-
-export default CopiarComponenteCommand;

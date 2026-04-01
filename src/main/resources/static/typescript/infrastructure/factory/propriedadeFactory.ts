@@ -11,11 +11,11 @@
  *
  */
 
-import { ComponenteDiagrama } from "../../model/componente/componenteDiagrama.js";
-import { PropriedadeComponente } from "../../model/propriedade/propriedadeComponente.js";
-import { PropriedadeInnerText } from "../../model/propriedade/propriedadeInnerText.js";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente";
+import PropriedadeInnerText from "model/propriedade/propriedadeInnerText";
 
-export class PropriedadeFactory {
+export default class PropriedadeFactory {
   public criarPropriedade(
     nomePropriedade: string,
     sufixo: string,

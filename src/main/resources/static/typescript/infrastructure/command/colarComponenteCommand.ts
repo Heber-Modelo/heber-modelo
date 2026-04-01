@@ -11,13 +11,13 @@
  *
  */
 
-import ICommand from "../../model/command/iCommand.js";
-import { ComponenteFactory } from "../factory/componenteFactory.js";
-import { GeradorIDComponente } from "../gerador/geradorIDComponente.js";
-import { ComponenteDiagrama } from "../../model/componente/componenteDiagrama.js";
-import { RepositorioComponente } from "../repositorio/repositorioComponente.js";
+import ICommand from "model/command/iCommand";
+import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 
-class ColarComponenteCommand implements ICommand {
+export default class ColarComponenteCommand implements ICommand {
   private readonly _paiComponente: ParentNode;
   private _geradorID: GeradorIDComponente;
   private _fabricaComponente: ComponenteFactory;
@@ -142,5 +142,3 @@ export class ColarComponenteDiagramaBuilder {
     );
   }
 }
-
-export default ColarComponenteCommand;

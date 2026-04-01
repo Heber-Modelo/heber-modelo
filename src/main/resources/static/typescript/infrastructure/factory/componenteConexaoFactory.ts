@@ -1,25 +1,25 @@
 /*
- * Copyright (c) 2025. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+ * Copyright (c) 2025-2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
  *
  * Licensed under the Massachusetts Institute of Technology (MIT) License.
  * You may obtain a copy of the license at:
  *
- *   https://choosealicense.com/licenses/mit/
+ *    https://choosealicense.com/licenses/mit/
  *
  * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
  * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
  *
  */
 
-import { AbstractComponenteConexao } from "./abstractComponenteConexao.js";
-import { ComponenteConexaoAngulada } from "./componenteConexaoAngulada.js";
-import { ComponenteConexaoReta } from "./componenteConexaoReta.js";
-import { ComponenteDiagrama, LateralComponente } from "../componente/componenteDiagrama.js";
-import { Ponto } from "../ponto.js";
-import { PropriedadeComponente } from "../propriedade/propriedadeComponente.js";
-import { TipoConexao } from "./tipoConexao.js";
+import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao";
+import ComponenteConexaoAngulada from "model/conexao/componenteConexaoAngulada";
+import ComponenteConexaoReta from "model/conexao/componenteConexaoReta";
+import ComponenteDiagrama, { LateralComponente } from "model/componente/componenteDiagrama";
+import Ponto from "model/ponto";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente";
+import TipoConexao from "model/conexao/tipoConexao";
 
-export class FabricaComponenteConexao {
+export default class ComponenteConexaoFactory {
   public criarConexao(
     tipoConexao: TipoConexao,
     componenteHTML: HTMLDivElement,

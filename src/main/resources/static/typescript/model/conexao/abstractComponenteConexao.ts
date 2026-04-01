@@ -11,12 +11,12 @@
  *
  */
 
-import { ComponenteDiagrama, LateralComponente } from "../componente/componenteDiagrama.js";
-import { ComponenteDiagramaOuvinte } from "../componente/componenteDiagramaOuvinte.js";
-import { Ponto } from "../ponto.js";
-import { PropriedadeComponente } from "../propriedade/propriedadeComponente.js";
+import ComponenteDiagrama, { LateralComponente } from "model/componente/componenteDiagrama";
+import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
+import Ponto from "model/ponto";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 
-export abstract class AbstractComponenteConexao
+export default abstract class AbstractComponenteConexao
   extends ComponenteDiagrama
   implements ComponenteDiagramaOuvinte
 {

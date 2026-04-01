@@ -11,9 +11,9 @@
  *
  */
 
-import { AbstractComponenteConexao } from "./abstractComponenteConexao.js";
+import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao";
 
-export class ComponenteConexaoAngulada extends AbstractComponenteConexao {
+export default class ComponenteConexaoAngulada extends AbstractComponenteConexao {
   protected ajustarConexao(): void {
     let angulo: number = this.calcularAnguloConexao();
     let distancia: number = this.calcularDistanciaConexao();

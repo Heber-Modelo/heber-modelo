@@ -10,7 +10,7 @@
  * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
  */
 
-export interface ResponseDiagramaJSON {
+export default interface ResponseDiagramaJSON {
   nome: string;
   chaveI18N: string;
   elementos: TipoComponenteJSON[];

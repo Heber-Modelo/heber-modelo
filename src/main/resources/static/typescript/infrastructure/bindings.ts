@@ -11,6 +11,6 @@
  *
  */
 
-// This file is required so typescript can know about the bindings map used by bindings.html
-// Este arquivo é necessário para que o typescript sabia sobre o bindings map usado pelo bindings.html
+// This file is required so TypeScript can know about the bindings map used by bindings.html
+// Este arquivo é necessário para que o TypeScript sabia sobre o bindings map usado pelo bindings.html
 let bindings: Map<string, string> = new Map();
