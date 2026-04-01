@@ -22,7 +22,7 @@ jobs:
           java-version: '24'
           distribution: 'corretto'
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
       - name: Run tests
         run: ./gradlew test
 
@@ -47,7 +47,7 @@ jobs:
           java-version: '24'
           distribution: 'corretto'
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Setup Python
         uses: actions/setup-python@v6
