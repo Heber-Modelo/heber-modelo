@@ -182,7 +182,7 @@ public final class Configurador implements IConfigurador {
     }
 
     public CriadorConfiguracoesBase getCriadorConfiguracoes() {
-        return null;
+        return criadorConfiguracoes;
     }
 
     @Override
