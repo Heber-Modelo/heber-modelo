@@ -17,6 +17,7 @@
     "build"
   ],
   "files": [
+    "src/main/resources/static/typescript/application/paginas/editor/callbacksElementos.ts",
     "src/main/resources/static/typescript/application/paginas/editor/grade.ts",
     "src/main/resources/static/typescript/application/paginas/editor/salvar.ts",
     "src/main/resources/static/typescript/infrastructure/bindings.ts"

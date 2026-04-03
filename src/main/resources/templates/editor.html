@@ -4,8 +4,8 @@
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <th:block th:insert="~{fragments/bindings :: script}"></th:block>
     <link rel="stylesheet" th:href="@{/css/editor.css}" />
-    <script th:src="@{/javascript/callbacksElementos.js}"></script>
     <script th:src="@{/javascript/editor.js}" type="module" defer></script>
+    <script th:src="@{/javascript/application/paginas/editor/callbacksElementos.js}"></script>
     <script th:src="@{/javascript/application/paginas/editor/grade.js}"></script>
     <script th:src="@{/javascript/application/paginas/editor/salvar.js}" defer></script>
     <script th:inline="javascript">
