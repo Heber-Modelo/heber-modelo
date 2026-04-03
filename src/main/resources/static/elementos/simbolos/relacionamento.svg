@@ -8,5 +8,5 @@
     <rect width="12.7304" height="10.7205" transform="matrix(-0.865558 -0.500808 -0.500808 0.865558 261.025 141.877)" fill="currentColor"/>
     <rect width="11.5607" height="10.5942" transform="matrix(0.865558 0.500808 0.500808 -0.865558 239.987 308.705)" fill="currentColor"/>
     <rect x="261.196" y="308.02" width="12.9404" height="10.4208" transform="rotate(149.947 261.196 308.02)" fill="currentColor"/>
-    <rect x="245" y="147" width="10" height="156" fill="currentColor"/>
+    <rect x="242" y="147" width="20" height="156" fill="currentColor"/>
 </svg>
