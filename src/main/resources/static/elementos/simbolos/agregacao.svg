@@ -1,6 +1,11 @@
 <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="25" y="25" width="450" height="400" fill="currentColor"/>
-    <rect x="60.5" y="80.5" width="375" height="275" fill="currentColor" class="svg-cor-borda"/>
-    <path d="M100 225L250 138.397L250 311.603L100 225Z" fill="currentColor"/>
-    <path d="M400 225L250 138.397L250 311.603L400 225Z" fill="currentColor"/>
+    <rect x="68" y="88" width="365" height="275" fill="currentColor" class="svg-cor-borda"/>
+    <path d="M416 225L251 129.737L251 320.263L416 225Z" fill="currentColor"/>
+    <path d="M85 225L250 129.737L250 320.263L85 225Z" fill="currentColor"/>
+    <rect x="247" y="133" width="7" height="185" fill="currentColor"/>
+    <rect x="249.139" y="318.2" width="3.12358" height="2.71714" transform="rotate(-30.0139 249.139 318.2)" fill="currentColor"/>
+    <rect width="2.77041" height="2.23267" transform="matrix(-0.865816 -0.500363 -0.500363 0.865816 251.618 318.619)" fill="currentColor"/>
+    <rect width="3.58751" height="2.47396" transform="matrix(0.865904 0.50021 0.50021 -0.865904 249.266 131.591)" fill="currentColor"/>
+    <rect x="252.179" y="132.346" width="3.74879" height="3.35074" transform="rotate(149.976 252.179 132.346)" fill="currentColor"/>
 </svg>
