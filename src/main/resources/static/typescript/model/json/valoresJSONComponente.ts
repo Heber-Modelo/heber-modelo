@@ -13,6 +13,7 @@
 
 export default interface ValoresJSONComponente {
   classesElemento: string[];
+  recebePontoExtensor: string;
   valorHtmlInterno: string;
   propriedades: JSONPropriedade[];
 }

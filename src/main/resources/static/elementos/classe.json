@@ -1,9 +1,8 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "<div class='nome-classe'>CLASSE</div><div class='atributos-classe'></div><div class='metodos-classe'></div>",
-  "classesElemento": [
-    "elemento-classe"
-  ],
+  "classesElemento": ["elemento-classe"],
+  "recebePontoExtensor": true,
   "propriedades": [
     {
       "classeElemento": "nome",

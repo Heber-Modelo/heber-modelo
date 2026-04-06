@@ -8,18 +8,17 @@
   "properties": {
     "classesElemento": {
       "description": "Define quais classes este tipo de elemento deve ter.",
-      "type": [
-        "array"
-      ],
+      "type": ["array"],
       "items": {
         "type": "string"
       }
     },
+    "recebePontoExtensor": {
+      "type": "boolean"
+    },
     "valorHtmlInterno": {
       "description": "Define a estrutura interna do HTML deste tipo de elemento",
-      "type": [
-        "string"
-      ]
+      "type": ["string"]
     },
     "propriedades": {
       "description": "Define as propriedades deste tipo de elemento que podem ser editadas",

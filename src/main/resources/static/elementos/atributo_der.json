@@ -1,9 +1,8 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "<div class=\"marcador-atributo\" onclick=\"callbackMarcador(event)\"></div><div  onmouseup=\"callbackInverterAtributo(event)\" contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">atributo</div>",
-  "classesElemento": [
-    "elemento-atributo"
-  ],
+  "classesElemento": ["elemento-atributo"],
+  "recebePontoExtensor": false,
   "propriedades": [
     {
       "classeElemento": "nome",
