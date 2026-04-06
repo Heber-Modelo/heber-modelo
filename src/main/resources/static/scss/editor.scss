@@ -172,6 +172,7 @@ section.pagina {
 }
 
 section#componentes {
+  gap: 1.5rem;
   height: 90%;
   overflow: scroll;
 }
@@ -205,6 +206,7 @@ fieldset.componentes-diagrama {
   gap: 0.5rem;
   padding: 0.5rem;
   width: 95%;
+  margin-bottom: 3rem;
   grid-template-columns: repeat(2, calc(50% - 0.25rem));
 
   button {
