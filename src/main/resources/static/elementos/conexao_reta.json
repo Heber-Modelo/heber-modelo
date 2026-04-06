@@ -4,5 +4,6 @@
   "classesElemento": [
     "elemento-conexao-reta"
   ],
+  "recebePontoExtensor": false,
   "propriedades": []
 }

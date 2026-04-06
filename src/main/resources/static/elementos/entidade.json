@@ -4,6 +4,7 @@
   "classesElemento": [
     "elemento-entidade"
   ],
+  "recebePontoExtensor": true,
   "propriedades": [
     {
       "classeElemento": "nome",

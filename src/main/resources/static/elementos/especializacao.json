@@ -1,8 +1,7 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "<div></div>",
-  "classesElemento": [
-    "elemento-especializacao"
-  ],
+  "classesElemento": ["elemento-especializacao"],
+  "recebePontoExtensor": true,
   "propriedades": []
 }

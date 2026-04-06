@@ -11,12 +11,13 @@
  *
  */
 
+import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
+import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
+import selecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
-import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
-import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
-import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
-import selecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
 
 class InputPropriedade {
   private readonly _elementoInput: HTMLInputElement | null;
@@ -129,6 +130,17 @@ export function mouseDownSelecionarElemento(event: Event): void {
   });
 
   atualizarInputs(selecionador.componenteSelecionado?.htmlComponente ?? null, inputs);
+
+  let recebePontosExtensores: string | null = componente.htmlComponente.getAttribute(
+    ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
+  );
+
+  console.log(recebePontosExtensores);
+  console.log(recebePontosExtensores == "false");
+  console.log(recebePontosExtensores === "false");
+  if (recebePontosExtensores === "false") {
+    selecionador.esconderPontosExtensores();
+  }
 }
 
 export const editorEixoX: HTMLInputElement | null = document.querySelector(

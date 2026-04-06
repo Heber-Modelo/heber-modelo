@@ -1,8 +1,7 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "",
-  "classesElemento": [
-    "elemento-conexao-angulada"
-  ],
+  "classesElemento": ["elemento-conexao-angulada"],
+  "recebePontoExtensor": false,
   "propriedades": []
 }

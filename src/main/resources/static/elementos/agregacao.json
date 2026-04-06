@@ -1,9 +1,8 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "<div class=\"losango-interno\"><div contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">AGREGAÇÃO</div></div>",
-  "classesElemento": [
-    "elemento-agregacao"
-  ],
+  "classesElemento": ["elemento-agregacao"],
+  "recebePontoExtensor": true,
   "propriedades": [
     {
       "classeElemento": "nome",

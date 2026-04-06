@@ -1,5 +1,5 @@
 <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="25" y="25" width="450" height="400" fill="currentColor"/>
-    <circle cx="300" cy="250" r="95" fill="none" stroke="currentColor" stroke-width="10" class="svg-cor-borda"/>
-    <rect x="100" y="245" width="101" height="10" fill="currentColor" class="svg-cor-borda"/>
+    <circle cx="325" cy="225" r="95" fill="none" stroke="currentColor" stroke-width="10" class="svg-cor-borda"/>
+    <rect x="75" y="220" width="151" height="10" fill="currentColor" class="svg-cor-borda"/>
 </svg>

@@ -13,6 +13,7 @@
 
 import PontoExtensor from "infrastructure/pontoExtensor";
 import SetaConectora from "infrastructure/setaConectora";
+import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 
 export const CLASSE_ELEMENTO_SELECIONADO: string = "selected";
@@ -41,6 +42,16 @@ export default class SelecionadorComponente {
     this._componenteSelecionado = componente;
     this._componenteSelecionado.htmlComponente.classList.add(CLASSE_ELEMENTO_SELECIONADO);
     this.moverSetas(componente);
+
+    let recebePontosExtensores: string | null | undefined =
+      this._componenteSelecionado?.htmlComponente.getAttribute(
+        ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
+      );
+
+    if (recebePontosExtensores === "false") {
+      this.esconderPontosExtensores();
+    }
+
     this._pontosExtensores.forEach((ponto: PontoExtensor): void =>
       ponto.trocarElementoAtual(componente.htmlComponente),
     );
@@ -55,6 +66,16 @@ export default class SelecionadorComponente {
   }
 
   public reposicionarPontosExtensores(): void {
+    let recebePontosExtensores: string | null | undefined =
+      this._componenteSelecionado?.htmlComponente.getAttribute(
+        ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
+      );
+
+    if (recebePontosExtensores === "false") {
+      this.esconderPontosExtensores();
+      return;
+    }
+
     let elementoAtual: HTMLElement | undefined = this.componenteSelecionado?.htmlComponente;
 
     if (elementoAtual) {

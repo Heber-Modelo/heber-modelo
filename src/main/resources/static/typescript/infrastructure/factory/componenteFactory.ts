@@ -19,6 +19,7 @@ import ValoresJSONComponente, { JSONPropriedade } from "model/json/valoresJSONCo
 export default class ComponenteFactory {
   public static PROPRIEDADE_ID_COMPONENTE: string = "data-id";
   public static PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
+  public static PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string = "data-recebe-pontos-extensores";
   private static _CLASSE_COMUM_ELEMENTOS: string = "componente";
 
   static get CLASSE_COMUM_ELEMENTOS(): string {
@@ -38,6 +39,10 @@ export default class ComponenteFactory {
         let elementoHTML: HTMLDivElement = document.createElement("div");
         elementoHTML.innerHTML = valores.valorHtmlInterno;
         elementoHTML.setAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE, nomeComponente);
+        elementoHTML.setAttribute(
+          ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
+          valores.recebePontoExtensor,
+        );
         elementoHTML.classList.add(ComponenteFactory.CLASSE_COMUM_ELEMENTOS);
         elementoHTML.classList.add(...valores.classesElemento);
         let componente: ComponenteDiagrama = new ComponenteDiagrama(elementoHTML, []);

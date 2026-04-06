@@ -9,7 +9,7 @@ refresh:
     ./gradlew bootJar
 
 build-docs:
-    uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/docs
+    uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/static/docs
 
 run-as-dev:
     ./gradlew bootRun --args="springs.profiles.active=local"
@@ -22,4 +22,4 @@ setup:
 compile-sources:
     pnpm run compile-scss
     pnpm run compile-ts
-    uv run mkdocs --clean --no-directory-ulrs --site-dir ./src/main/resources/docs
+    uv run mkdocs --clean --no-directory-ulrs --site-dir ./src/main/resources/static/docs

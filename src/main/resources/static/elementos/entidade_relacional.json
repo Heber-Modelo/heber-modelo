@@ -1,9 +1,8 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "<div contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">tbEntidade</div><div class=\"atributo\" onmouseup=\"callbackAlterarAtributoRelacional(event)\"><span class=\"chave\"><span class=\"desc-chave\"></span></span><span contenteditable=\"true\" spellcheck=\"true\" class=\"texto\">atributo: tipo</span></div><button onclick=\"callbackCriarAtributoRelacional(event)\">+</button>",
-  "classesElemento": [
-    "elemento-entidade-relacional"
-  ],
+  "classesElemento": ["elemento-entidade-relacional"],
+  "recebePontoExtensor": true,
   "propriedades": [
     {
       "classeElemento": "nome",

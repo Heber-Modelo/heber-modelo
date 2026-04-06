@@ -6,6 +6,11 @@ repo_url: !ENV [REPO_URL]
 nav:
   - Home: index.md
   - Configuração: configuração.md
+  - Diagramas:
+     - Dicionário de Dados: diagramas/dicionárioDados.md
+     - Diagrama de Entidade e Relacionamento: diagramas/diagramaEntidadeRelacionamento.md
+     - Modelo Relacional: diagramas/modeloRelacional.md
+     - Diagrama do Modelo Relacional: diagramas/diagramaModeloRelacional.md
   - Sobre:
     - Licença: LICENSE.md
     - Política de Privacidade: políticaPrivacidade.md
