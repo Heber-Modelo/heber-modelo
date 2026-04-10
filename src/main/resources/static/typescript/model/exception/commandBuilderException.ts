@@ -11,11 +11,8 @@
  *
  */
 
-enum PosicoesRelativasSetasConectoras {
-  TOP = ".seta-superior",
-  BOTTOM = ".seta-inferior",
-  RIGHT = ".seta-direita",
-  LEFT = ".seta-esquerda",
+export default class CommandBuilderException extends Error {
+  constructor(message: string) {
+    super(message);
+  }
 }
-
-export default PosicoesRelativasSetasConectoras;

@@ -11,7 +11,9 @@
  *
  */
 
-import ICommand from "model/command/iCommand";
+import ICommand, { CommandResult } from "model/command/iCommand";
+import ICommandBuilder from "model/command/iCommandBuilder";
+import CommandBuilderException from "model/exception/commandBuilderException";
 
 export const ATRIBUTO_NOME_ARQUIVO = "arquivo";
 export const CLASSE_LINK_CSS_ELEMENTO = "css-carregado";
@@ -59,12 +61,15 @@ export default class CarregarCSSCommand implements ICommand {
     return nomeArquivo.match(regexValidator)?.at(0) === nomeArquivo;
   }
 
-  execute(): Number {
+  execute(): CommandResult {
     if (
       document.head.contains(this._linkElement) ||
       CacheCSSElementos.includes(this._nomeArquivo)
     ) {
-      return 0;
+      return {
+        ok: true,
+        error: undefined,
+      };
     }
 
     if (this._linkElement === null) {
@@ -79,17 +84,31 @@ export default class CarregarCSSCommand implements ICommand {
     document.head.appendChild(this._linkElement);
     CacheCSSElementos.insert(this._nomeArquivo);
 
-    return 0;
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 
-  undo(): Number {
-    this._linkElement?.remove();
+  redo(): CommandResult {
+    return {
+      ok: true,
+      error: undefined,
+    };
+  }
 
-    return 0;
+  undo(): CommandResult {
+    this._linkElement?.remove();
+    CacheCSSElementos.remove(this._nomeArquivo);
+
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 }
 
-export class CarregarCSSCommandBuilder {
+export class CarregarCSSCommandBuilder implements ICommandBuilder<CarregarCSSCommand> {
   private _nomeArquivo: string | null = null;
 
   definirNomeArquivo(nomeArquivo: string): this {
@@ -99,7 +118,7 @@ export class CarregarCSSCommandBuilder {
 
   build(): CarregarCSSCommand {
     if (this._nomeArquivo === null) {
-      throw new Error("O nome do arquivo não foi definido");
+      throw new CommandBuilderException("O nome do arquivo não foi definido");
     }
 
     return new CarregarCSSCommand(this._nomeArquivo);

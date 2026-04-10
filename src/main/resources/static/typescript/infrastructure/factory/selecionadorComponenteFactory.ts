@@ -15,7 +15,8 @@ import SelecionadorComponente from "application/paginas/editor/selecionadorCompo
 import PontoExtensor from "infrastructure/pontoExtensor";
 import PontoExtensorFactory from "infrastructure/factory/pontoExtensorFactory";
 import SetaConectoraFactory from "infrastructure/factory/setaConectoraFactory";
-import SetaConectora from "infrastructure/setaConectora";
+import SetaConectora from "infrastructure/conexao/setaConectora";
+import LateraisComponente from "model/componente/lateraisComponente";
 import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
 import PosicoesRelativasSetasConectoras from "model/posicoes/posicoesRelativasSetasConectoras";
 
@@ -42,12 +43,17 @@ export default class SelecionadorComponenteFactory {
         );
 
       let setaConectoraFactory: SetaConectoraFactory = new SetaConectoraFactory();
-      let setasConectoras: SetaConectora[] = Object.keys(PosicoesRelativasSetasConectoras).map(
-        (posicao: string): SetaConectora =>
+      let zippedEnums: string[][] = Object.keys(PosicoesRelativasSetasConectoras).map(
+        (posicao: string, index: number): string[] => [posicao, LateraisComponente[index]],
+      );
+
+      let setasConectoras: SetaConectora[] = zippedEnums.map(
+        (zippedValue: string[]): SetaConectora =>
           setaConectoraFactory.build(
             PosicoesRelativasSetasConectoras[
-              posicao as keyof typeof PosicoesRelativasSetasConectoras
+              zippedValue[0] as keyof typeof PosicoesRelativasSetasConectoras
             ],
+            LateraisComponente[zippedValue[1] as keyof typeof LateraisComponente],
           ),
       );
 

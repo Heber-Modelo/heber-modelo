@@ -12,9 +12,10 @@
  */
 
 import converterPixeisParaNumero from "infrastructure/conversor/conversor";
-import SetaConectora from "infrastructure/setaConectora";
-import PosicoesRelativasSetasConectoras from "model/posicoes/posicoesRelativasSetasConectoras";
+import SetaConectora from "infrastructure/conexao/setaConectora";
+import LateraisComponente from "model/componente/lateraisComponente";
 import FormulaPosicaoSeta from "model/formula/formulaPosicaoSeta";
+import PosicoesRelativasSetasConectoras from "model/posicoes/posicoesRelativasSetasConectoras";
 import Ponto from "model/ponto";
 
 export default class SetaConectoraFactory {
@@ -89,9 +90,12 @@ export default class SetaConectoraFactory {
     }
   }
 
-  public build(posicaoSeta: PosicoesRelativasSetasConectoras): SetaConectora {
+  public build(
+    posicaoSeta: PosicoesRelativasSetasConectoras,
+    lateralComponente: LateraisComponente,
+  ): SetaConectora {
     let formulaPosicao: FormulaPosicaoSeta = this.decidirFormulaPosicaoSeta(posicaoSeta);
 
-    return new SetaConectora(posicaoSeta, formulaPosicao);
+    return new SetaConectora(posicaoSeta, formulaPosicao, lateralComponente);
   }
 }

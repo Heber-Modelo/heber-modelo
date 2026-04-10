@@ -13,28 +13,29 @@
 
 import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao";
 import ComponenteConexaoAngulada from "model/conexao/componenteConexaoAngulada";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import LateraisComponente from "model/componente/lateraisComponente";
 import ComponenteConexaoReta from "model/conexao/componenteConexaoReta";
-import ComponenteDiagrama, { LateralComponente } from "model/componente/componenteDiagrama";
-import Ponto from "model/ponto";
+import TiposConexao from "model/conexao/tiposConexao";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
-import TipoConexao from "model/conexao/tipoConexao";
+import Ponto from "model/ponto";
 
 export default class ComponenteConexaoFactory {
   public criarConexao(
-    tipoConexao: TipoConexao,
+    tipoConexao: TiposConexao,
     componenteHTML: HTMLDivElement,
     propriedades: PropriedadeComponente[],
     ponto1: Ponto,
     ponto2: Ponto,
-    lateralPrimeiroComponente: LateralComponente,
-    lateralSegundoComponente: LateralComponente,
+    lateralPrimeiroComponente: LateraisComponente,
+    lateralSegundoComponente: LateraisComponente,
     primeiroComponente: ComponenteDiagrama,
     segundoComponente: ComponenteDiagrama,
   ): AbstractComponenteConexao {
     switch (tipoConexao) {
-      case TipoConexao.CONEXAO_SETA:
-      case TipoConexao.CONEXAO_ENTIDADE_FRACA:
-      case TipoConexao.CONEXAO_ANGULADA:
+      case TiposConexao.CONEXAO_SETA:
+      case TiposConexao.CONEXAO_ENTIDADE_FRACA:
+      case TiposConexao.CONEXAO_ANGULADA:
         return new ComponenteConexaoAngulada(
           componenteHTML,
           propriedades,
@@ -46,7 +47,7 @@ export default class ComponenteConexaoFactory {
           segundoComponente,
         );
 
-      case TipoConexao.CONEXAO_RETA:
+      case TiposConexao.CONEXAO_RETA:
         return new ComponenteConexaoReta(
           componenteHTML,
           propriedades,

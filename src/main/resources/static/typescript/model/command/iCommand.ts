@@ -1,5 +1,12 @@
-export default interface ICommand {
-  execute(): Number;
+export type CommandResult = {
+  ok: boolean;
+  error: string | undefined;
+};
 
-  undo(): Number;
+export default interface ICommand {
+  execute(): CommandResult;
+
+  redo(): CommandResult;
+
+  undo(): CommandResult;
 }

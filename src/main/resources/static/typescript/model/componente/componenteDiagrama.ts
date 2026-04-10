@@ -13,15 +13,10 @@
 
 import converterPixeisParaNumero from "infrastructure/conversor/conversor";
 import ComponenteDiagramaOuvido from "model/componente/componenteDiagramaOuvido";
+import LateraisComponente from "model/componente/lateraisComponente";
 import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
-
-export enum LateralComponente {
-  NORTE,
-  SUL,
-  LESTE,
-  OESTE,
-}
+import Ponto from "model/ponto";
 
 export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
   constructor(htmlComponente: HTMLDivElement, propriedades: PropriedadeComponente[] | null) {
@@ -76,20 +71,20 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
     return Number(this._htmlComponente.getAttribute("data-id"));
   }
 
-  public calcularPontoLateralComponente(lateralComponente: LateralComponente): number[] {
+  public calcularPontoLateralComponente(lateralComponente: LateraisComponente): Ponto {
     let estiloComponente: CSSStyleDeclaration = this.pegarEstiloElemento();
     let x: number = 0;
     let y: number = 0;
 
     switch (lateralComponente) {
-      case LateralComponente.NORTE:
+      case LateraisComponente.NORTE:
         x =
           converterPixeisParaNumero(estiloComponente.left) +
           converterPixeisParaNumero(estiloComponente.width) / 2;
         y = converterPixeisParaNumero(estiloComponente.top);
         break;
 
-      case LateralComponente.SUL:
+      case LateraisComponente.SUL:
         x =
           converterPixeisParaNumero(estiloComponente.left) +
           converterPixeisParaNumero(estiloComponente.width) / 2;
@@ -98,14 +93,14 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
           converterPixeisParaNumero(estiloComponente.height);
         break;
 
-      case LateralComponente.OESTE:
+      case LateraisComponente.OESTE:
         x = converterPixeisParaNumero(estiloComponente.left);
         y =
           converterPixeisParaNumero(estiloComponente.top) +
           converterPixeisParaNumero(estiloComponente.height) / 2;
         break;
 
-      case LateralComponente.LESTE:
+      case LateraisComponente.LESTE:
         x =
           converterPixeisParaNumero(estiloComponente.left) +
           converterPixeisParaNumero(estiloComponente.width);
@@ -115,7 +110,7 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
         break;
     }
 
-    return [x, y];
+    return new Ponto(x, y);
   }
 
   adicionarOuvinte(ouvinte: ComponenteDiagramaOuvinte): void {

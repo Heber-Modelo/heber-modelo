@@ -11,10 +11,11 @@
  *
  */
 
-import ComponenteDiagrama, { LateralComponente } from "model/componente/componenteDiagrama";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
-import Ponto from "model/ponto";
+import LateraisComponente from "model/componente/lateraisComponente";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
+import Ponto from "model/ponto";
 
 export default abstract class AbstractComponenteConexao
   extends ComponenteDiagrama
@@ -22,8 +23,8 @@ export default abstract class AbstractComponenteConexao
 {
   protected _ponto1: Ponto;
   protected _ponto2: Ponto;
-  protected readonly _lateralPrimeiroPonto: LateralComponente;
-  protected readonly _lateralSegundoPonto: LateralComponente;
+  protected readonly _lateralPrimeiroPonto: LateraisComponente;
+  protected readonly _lateralSegundoPonto: LateraisComponente;
   protected readonly _primeiroComponente: ComponenteDiagrama;
   protected readonly _segundoComponente: ComponenteDiagrama;
 
@@ -32,8 +33,8 @@ export default abstract class AbstractComponenteConexao
     propriedades: PropriedadeComponente[],
     ponto1: Ponto,
     ponto2: Ponto,
-    lateralPrimeiroPonto: LateralComponente,
-    lateralSegundoPonto: LateralComponente,
+    lateralPrimeiroPonto: LateraisComponente,
+    lateralSegundoPonto: LateraisComponente,
     primeiroComponente: ComponenteDiagrama,
     segundoComponente: ComponenteDiagrama,
   ) {
@@ -54,15 +55,13 @@ export default abstract class AbstractComponenteConexao
 
   atualizar(htmlElemento: HTMLDivElement): void {
     if (this._primeiroComponente.htmlComponente === htmlElemento) {
-      let ponto: number[] = this._primeiroComponente.calcularPontoLateralComponente(
+      this._ponto1 = this._primeiroComponente.calcularPontoLateralComponente(
         this._lateralPrimeiroPonto,
       );
-      this._ponto1 = new Ponto(ponto[0], ponto[1]);
     } else {
-      let ponto: number[] = this._segundoComponente.calcularPontoLateralComponente(
+      this._ponto2 = this._segundoComponente.calcularPontoLateralComponente(
         this._lateralSegundoPonto,
       );
-      this._ponto2 = new Ponto(ponto[0], ponto[1]);
     }
     this.ajustarConexao();
   }
