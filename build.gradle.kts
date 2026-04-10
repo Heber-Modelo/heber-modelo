@@ -58,5 +58,22 @@ tasks.test {
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
     exclude("static/scss/")
     exclude("static/typescript")
+
+    layered {
+        application {
+            intoLayer("spring-boot-loader") {
+                include("org/springframework/boot/loader/**")
+            }
+            intoLayer("application")
+        }
+        dependencies {
+            intoLayer("snapshot-dependencies") {
+                include("*:*:*SNAPSHOT")
+            }
+            intoLayer("dependencies")
+        }
+        layerOrder = listOf("dependencies", "spring-boot-loader", "snapshot-dependencies", "application")
+    }
+
     this.archiveFileName.set("${archiveBaseName.get()}.${archiveExtension.get()}")
 }
