@@ -11,16 +11,27 @@
  *
  */
 
+import LateraisComponente from "model/componente/lateraisComponente";
 import FormulaPosicaoSeta from "model/formula/formulaPosicaoSeta";
 import Ponto from "model/ponto";
 
 export default class SetaConectora {
+  public static readonly ATRIBUTO_LATERAL_COMPONENTE: string = "data-lateral-componente";
   private readonly _elemento: HTMLElement | null;
   private readonly _formulaPosicao: FormulaPosicaoSeta;
 
-  constructor(classe: string, formulaPosicao: FormulaPosicaoSeta) {
+  constructor(
+    classe: string,
+    formulaPosicao: FormulaPosicaoSeta,
+    lateralComponente: LateraisComponente,
+  ) {
     this._elemento = document.querySelector(classe);
     this._formulaPosicao = formulaPosicao;
+
+    this._elemento?.setAttribute(
+      SetaConectora.ATRIBUTO_LATERAL_COMPONENTE,
+      LateraisComponente[lateralComponente],
+    );
   }
 
   public reposicionarSeta(elementoAtual: HTMLElement): void {
@@ -42,5 +53,9 @@ export default class SetaConectora {
 
   public esconderSeta(): void {
     this._elemento?.style.setProperty("display", "none");
+  }
+
+  set callback(callback: (event: MouseEvent) => void) {
+    this._elemento?.addEventListener("mousedown", callback);
   }
 }

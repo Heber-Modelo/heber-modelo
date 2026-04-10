@@ -14,7 +14,7 @@
 import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
-import IRepositorioComponente from "model/repositorio/IRepositorioComponente";
+import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
 
 export default class RepositorioComponente implements IRepositorioComponente {
   private _componentesDiagrama: ComponenteDiagrama[] = [];

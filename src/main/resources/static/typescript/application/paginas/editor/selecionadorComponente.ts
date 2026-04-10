@@ -11,9 +11,9 @@
  *
  */
 
-import PontoExtensor from "infrastructure/pontoExtensor";
-import SetaConectora from "infrastructure/setaConectora";
+import SetaConectora from "infrastructure/conexao/setaConectora";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import PontoExtensor from "infrastructure/pontoExtensor";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 
 export const CLASSE_ELEMENTO_SELECIONADO: string = "selected";
@@ -122,5 +122,9 @@ export default class SelecionadorComponente {
 
   get componenteSelecionado(): ComponenteDiagrama | null {
     return this._componenteSelecionado;
+  }
+
+  get setasConectoras(): SetaConectora[] {
+    return this._setasConectoras;
   }
 }

@@ -408,6 +408,9 @@ Licensed works, modifications, and larger works may be distributed under differe
           <input type="text" name="componente-tamanho-fonte" />
         </label>
       </section>
+      <section id="seletor-tipos-conexao" class="pagina">
+        <h2>SELETOR TIPO CONEXÃO</h2>
+      </section>
       <section id="paginas" class="pagina">
         <h2 th:text="#{web.page.editor.section.pages}"></h2>
       </section>
@@ -423,6 +426,7 @@ Licensed works, modifications, and larger works may be distributed under differe
       <div class="seta seta-inferior" style="display: none; rotate: -270deg"></div>
       <div class="seta seta-direita" style="display: none"></div>
       <div class="seta seta-esquerda" style="display: none; rotate: 180deg"></div>
+      <div id="seta-placeholder" style="display: none; position: absolute">X</div>
     </main>
     <div th:replace="~{fragments/cookiesBanner :: #cookies-banner}"></div>
   </body>

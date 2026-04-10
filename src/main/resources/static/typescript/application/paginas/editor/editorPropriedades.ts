@@ -135,9 +135,6 @@ export function mouseDownSelecionarElemento(event: Event): void {
     ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
   );
 
-  console.log(recebePontosExtensores);
-  console.log(recebePontosExtensores == "false");
-  console.log(recebePontosExtensores === "false");
   if (recebePontosExtensores === "false") {
     selecionador.esconderPontosExtensores();
   }

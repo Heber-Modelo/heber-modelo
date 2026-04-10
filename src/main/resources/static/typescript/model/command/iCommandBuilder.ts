@@ -11,11 +11,8 @@
  *
  */
 
-enum PosicoesRelativasSetasConectoras {
-  TOP = ".seta-superior",
-  BOTTOM = ".seta-inferior",
-  RIGHT = ".seta-direita",
-  LEFT = ".seta-esquerda",
-}
+import ICommand from "model/command/iCommand";
 
-export default PosicoesRelativasSetasConectoras;
+export default interface ICommandBuilder<T extends ICommand> {
+  build(): T;
+}

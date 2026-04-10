@@ -11,7 +11,9 @@
  *
  */
 
-import ICommand from "model/command/iCommand";
+import ICommand, { CommandResult } from "model/command/iCommand";
+import ICommandBuilder from "model/command/iCommandBuilder";
+import CommandBuilderException from "model/exception/commandBuilderException";
 import ResponseDiagramaJSON from "model/response/responseDiagramaJSON";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 
@@ -55,7 +57,7 @@ export default class CarregarDiagramaCommand implements ICommand {
     return botao;
   }
 
-  execute(): Number {
+  execute(): CommandResult {
     fetch(`diagramas/${this._nomeDiagrama}.json`).then(
       async (response: Response): Promise<void> => {
         const diagramaJSON: ResponseDiagramaJSON = await response.json();
@@ -92,17 +94,30 @@ export default class CarregarDiagramaCommand implements ICommand {
       },
     );
 
-    return 0;
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 
-  undo(): Number {
+  redo(): CommandResult {
+    return {
+      ok: true,
+      error: undefined,
+    };
+  }
+
+  undo(): CommandResult {
     this._fieldSetElementos?.remove();
 
-    return 0;
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 }
 
-export class CarregarDiagramaCommandBuilder {
+export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarDiagramaCommand> {
   private _callbackCriarComponente: null | ((event: Event) => void) = null;
   private _nomeDiagrama: string | null = null;
   private _sectionComponentes: HTMLElement | null = null;
@@ -127,15 +142,15 @@ export class CarregarDiagramaCommandBuilder {
 
   build(): CarregarDiagramaCommand {
     if (this._callbackCriarComponente === null) {
-      throw new Error("CallbackCriarComponente não foi definido");
+      throw new CommandBuilderException("CallbackCriarComponente não foi definido");
     }
 
     if (this._nomeDiagrama === null) {
-      throw new Error("Nome do diagrama não foi definido");
+      throw new CommandBuilderException("Nome do diagrama não foi definido");
     }
 
     if (this._sectionComponentes === null) {
-      throw new Error("SectionComponentes não foi definida");
+      throw new CommandBuilderException("SectionComponentes não foi definida");
     }
 
     return new CarregarDiagramaCommand(

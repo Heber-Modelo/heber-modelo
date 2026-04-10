@@ -11,28 +11,24 @@
  *
  */
 
-import converterPixeisParaNumero from "infrastructure/conversor/conversor";
+import CommandHistory from "application/history/commandHistory";
 import {
   atualizarInputs,
   atualizarValorInput,
-  limparPropriedades,
-  mouseDownSelecionarElemento,
   editorEixoX,
   editorEixoY,
   inputs,
+  limparPropriedades,
+  mouseDownSelecionarElemento,
 } from "application/paginas/editor/editorPropriedades";
-import ComponenteDiagrama, { LateralComponente } from "model/componente/componenteDiagrama";
+import { DirecoesMovimento, moverComponente } from "application/paginas/editor/manipularComponente";
+import "application/paginas/editor/painelLateral";
+import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
-import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
-import Ponto from "model/ponto";
-import { DirecoesMovimento, moverComponente } from "application/paginas/editor/manipularComponente";
-import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
-import TipoConexao from "model/conexao/tipoConexao";
-import CommandHistory from "application/history/commandHistory";
 import ColarComponenteCommand, {
   ColarComponenteDiagramaBuilder,
 } from "infrastructure/command/colarComponenteCommand";
@@ -52,8 +48,16 @@ import CarregarCSSCommand, {
 import ApagarComponenteCommand, {
   ApagarComponenteCommandBuilder,
 } from "infrastructure/command/apagarComponenteCommand";
-import "application/paginas/editor/painelLateral";
+import ConectarComponentesCommand, {
+  ConectarComponentesCommandBuilder,
+} from "infrastructure/command/conectarComponentesCommand";
 import "infrastructure/variaveisConfiguracao";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import TiposConexao from "model/conexao/tiposConexao";
+import SeletorTipoConexao from "infrastructure/conexao/seletorTipoConexao";
+import SetaConectora from "infrastructure/conexao/setaConectora";
+import LateraisComponente from "model/componente/lateraisComponente";
+import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -91,6 +95,7 @@ function mouseDownComecarMoverElemento(event: MouseEvent): void {
   offsetY = event.clientY - componente.getBoundingClientRect().top;
   componente.classList.add("dragging");
   document.addEventListener("mousemove", dragElement);
+  document.body.style.setProperty("user-select", "none");
   componenteAtual = componente;
   selecionadorComponente.esconderPontosExtensores();
 }
@@ -99,6 +104,7 @@ function mouseUpPararMoverElemento(event: Event): void {
   let componente: HTMLElement = event.target as HTMLElement;
   componente.classList.remove("dragging");
   document.removeEventListener("mousemove", dragElement);
+  document.body.style.removeProperty("user-select");
   selecionadorComponente.mostrarPontosExtensores();
   selecionadorComponente.reposicionarPontosExtensores();
 }
@@ -128,173 +134,15 @@ function dragElement(event: MouseEvent): void {
 /***********************/
 
 function registrarEventosComponente(componente: HTMLDivElement): void {
-  componente.addEventListener("click", conectarElementos);
   componente.addEventListener("mousedown", mouseDownSelecionarElemento);
   componente.addEventListener("mousedown", mouseDownComecarMoverElemento);
   componente.addEventListener("mouseup", mouseUpPararMoverElemento);
+  componente.addEventListener("mouseup", conectarElementos);
 }
 
 componentes.forEach((componente: HTMLDivElement): void => {
   registrarEventosComponente(componente);
 });
-
-/********************/
-/* CONEXÕES E SETAS */
-/********************/
-
-const setas: NodeListOf<HTMLElement> = document.querySelectorAll(".seta");
-let fabricaConexao: ComponenteConexaoFactory = new ComponenteConexaoFactory();
-let primeiroComponente: ComponenteDiagrama | null = null;
-let lateralPrimeiroComponente: LateralComponente | null;
-let ponto1: Ponto | null = null;
-
-new CarregarCSSCommandBuilder().definirNomeArquivo(TipoConexao.CONEXAO_ANGULADA).build().execute();
-
-setas.forEach((seta: HTMLElement): void =>
-  seta.addEventListener("click", (): void => {
-    primeiroComponente = selecionadorComponente.componenteSelecionado;
-
-    if (primeiroComponente === null) return;
-
-    let ponto: number[];
-
-    if (seta.classList.contains("seta-direita")) {
-      ponto = primeiroComponente.calcularPontoLateralComponente(LateralComponente.LESTE);
-      lateralPrimeiroComponente = LateralComponente.LESTE;
-    } else if (seta.classList.contains("seta-esquerda")) {
-      ponto = primeiroComponente.calcularPontoLateralComponente(LateralComponente.OESTE);
-      lateralPrimeiroComponente = LateralComponente.OESTE;
-    } else if (seta.classList.contains("seta-superior")) {
-      ponto = primeiroComponente.calcularPontoLateralComponente(LateralComponente.NORTE);
-      lateralPrimeiroComponente = LateralComponente.NORTE;
-    } else {
-      ponto = primeiroComponente.calcularPontoLateralComponente(LateralComponente.SUL);
-      lateralPrimeiroComponente = LateralComponente.SUL;
-    }
-
-    ponto1 = new Ponto(ponto[0], ponto[1]);
-  }),
-);
-
-function limparCoordenadaInicial(): void {
-  lateralPrimeiroComponente = null;
-  ponto1 = null;
-}
-
-function conectarElementos(event: MouseEvent): void {
-  diagrama?.removeEventListener("click", limparCoordenadaInicial);
-  event.stopPropagation();
-  event.stopImmediatePropagation();
-  let elementoAlvo: HTMLElement = event.target as HTMLElement;
-
-  let segundoComponente: ComponenteDiagrama | null =
-    repositorioComponentes.pegarPorHTML(elementoAlvo);
-  if (
-    ponto1 === null ||
-    ponto1 === undefined ||
-    lateralPrimeiroComponente === undefined ||
-    lateralPrimeiroComponente === null ||
-    primeiroComponente === null ||
-    segundoComponente === null
-  )
-    return;
-
-  diagrama?.addEventListener("click", limparCoordenadaInicial);
-  let estiloElementoAlvo: CSSStyleDeclaration = getComputedStyle(elementoAlvo);
-  let alturaElementoAlvo: number = converterPixeisParaNumero(estiloElementoAlvo.height);
-  let larguraElementoAlvo: number = converterPixeisParaNumero(estiloElementoAlvo.width);
-  let leftElementoAlvo: number = converterPixeisParaNumero(estiloElementoAlvo.left);
-  let topElemento: number = converterPixeisParaNumero(estiloElementoAlvo.top);
-  let posX: number = event.pageX - leftElementoAlvo;
-  let posY: number = event.pageY - topElemento;
-
-  let centroX: boolean = false;
-  let centroY: boolean = false;
-  let direita: boolean = false;
-  let esquerda: boolean = false;
-  let cima: boolean = false;
-  let baixo: boolean = false;
-  let lateralSegundoComponente: LateralComponente;
-  let x2: number;
-  let y2: number;
-
-  if (posX > larguraElementoAlvo * 0.2 && posX < larguraElementoAlvo * 0.8) {
-    x2 = larguraElementoAlvo / 2 + leftElementoAlvo;
-    centroX = true;
-  } else if (posX <= larguraElementoAlvo * 0.2) {
-    x2 = leftElementoAlvo;
-    esquerda = true;
-  } else {
-    x2 = larguraElementoAlvo + leftElementoAlvo;
-    direita = true;
-  }
-
-  if (posY > alturaElementoAlvo * 0.4 && posY < alturaElementoAlvo * 0.6) {
-    y2 = alturaElementoAlvo / 2 + topElemento;
-    centroY = true;
-  } else if (posY <= alturaElementoAlvo * 0.4) {
-    y2 = topElemento;
-    baixo = true;
-  } else {
-    y2 = alturaElementoAlvo + topElemento;
-    cima = true;
-  }
-
-  if ((centroY || baixo || cima) && esquerda) {
-    lateralSegundoComponente = LateralComponente.OESTE;
-  } else if ((centroY || baixo || cima) && direita) {
-    lateralSegundoComponente = LateralComponente.LESTE;
-  } else if ((centroX && centroX) || cima) {
-    lateralSegundoComponente = LateralComponente.NORTE;
-  } else {
-    lateralSegundoComponente = LateralComponente.SUL;
-  }
-
-  let ponto2: Ponto = new Ponto(x2, y2);
-  let seletorTipoConexao: HTMLDivElement = document.createElement("div");
-  diagrama?.append(seletorTipoConexao);
-  seletorTipoConexao.classList.add("seletor-tipo-conexao");
-
-  for (let tipo in TipoConexao) {
-    let btnTipoConexao: HTMLButtonElement = document.createElement("button");
-    let tipoConexao: TipoConexao = TipoConexao[tipo as keyof typeof TipoConexao];
-
-    btnTipoConexao.innerText = tipoConexao.split("_").join(" ");
-
-    btnTipoConexao.addEventListener("click", (event: MouseEvent): void => {
-      event.stopPropagation();
-      fabricaComponente.criarComponente(tipo).then((componente: ComponenteDiagrama): void => {
-        let command: CarregarCSSCommand = new CarregarCSSCommandBuilder()
-          .definirNomeArquivo(tipoConexao)
-          .build();
-        command.execute();
-        registrarEventosComponente(componente.htmlComponente);
-
-        let componenteConexao: ComponenteDiagrama = fabricaConexao.criarConexao(
-          tipoConexao,
-          componente.htmlComponente,
-          componente.propriedades,
-          ponto1 as Ponto,
-          ponto2,
-          lateralPrimeiroComponente as LateralComponente,
-          lateralSegundoComponente,
-          primeiroComponente as ComponenteDiagrama,
-          segundoComponente,
-        );
-
-        repositorioComponentes.adicionar(componenteConexao);
-        diagrama?.append(componenteConexao.htmlComponente);
-        limparCoordenadaInicial();
-      });
-      seletorTipoConexao.remove();
-    });
-    seletorTipoConexao.append(btnTipoConexao);
-  }
-
-  seletorTipoConexao.focus();
-}
-
-diagrama?.addEventListener("click", limparCoordenadaInicial);
 
 /**************************/
 /* CARREGAMENTO DIAGRAMAS */
@@ -361,6 +209,147 @@ tiposDiagrama?.innerText
     }
   });
 
+/**********************/
+/* CONECTAR ELEMENTOS */
+/**********************/
+
+new CarregarCSSCommandBuilder().definirNomeArquivo(TiposConexao.CONEXAO_ANGULADA).build().execute();
+let fabricaConexao: ComponenteConexaoFactory = new ComponenteConexaoFactory();
+let seletorTipoConexao: SeletorTipoConexao = new SeletorTipoConexao();
+let setaPlaceholder: HTMLElement = document.querySelector("#seta-placeholder") as HTMLElement;
+let conectarComponentesCommandBuilder: ConectarComponentesCommandBuilder =
+  new ConectarComponentesCommandBuilder();
+
+function callbackInicialSetaConectora(event: MouseEvent): void {
+  document.addEventListener("mousemove", callbackMoverSeta);
+  document.body.style.setProperty("user-select", "none");
+  document.body.style.setProperty("cursor", "crosshair");
+
+  setaPlaceholder.style.left = `${event.clientX}px`;
+  setaPlaceholder.style.top = `${event.clientY}px`;
+  setaPlaceholder.style.removeProperty("display");
+
+  conectarComponentesCommandBuilder = new ConectarComponentesCommandBuilder()
+    .definirDiagrama(diagrama)
+    .definirFabricaComponente(fabricaComponente)
+    .definirFabricaConexao(fabricaConexao)
+    .definirRepositorioComponentes(repositorioComponentes);
+  let targetEvent: HTMLElement = event.target as HTMLElement;
+  let lateralComponente: LateraisComponente =
+    LateraisComponente[
+      targetEvent.getAttribute(
+        SetaConectora.ATRIBUTO_LATERAL_COMPONENTE,
+      ) as keyof typeof LateraisComponente
+    ];
+
+  let componenteSelecionado: ComponenteDiagrama | undefined =
+    selecionadorComponente.componenteSelecionado || undefined;
+  conectarComponentesCommandBuilder.definirPrimeiroComponente(componenteSelecionado);
+  conectarComponentesCommandBuilder.definirLateralPrimeiroComponente(lateralComponente);
+}
+
+function conectarElementos(event: MouseEvent): void {
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+
+  const HEIGHT_MINIMAL_THRESHOLD: number = 0.4;
+  const HEIGHT_MAXIMAL_THRESHOLD: number = 0.6;
+  const WIDTH_MINIMAL_THRESHOLD: number = 0.2;
+  const WIDTH_MAXIMAL_THRESHOLD: number = 0.8;
+
+  let elementoAlvo: HTMLElement = event.target as HTMLElement;
+  let elementoAlvoBoundingRectangle: DOMRect = elementoAlvo.getBoundingClientRect();
+  let componenteAlvo: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(elementoAlvo);
+
+  if (componenteAlvo === null) {
+    return;
+  }
+
+  let alturaElemento: number = elementoAlvoBoundingRectangle.height;
+  let larguraElemento: number = elementoAlvoBoundingRectangle.width;
+  let topElemento: number = elementoAlvoBoundingRectangle.top;
+  let leftElemento: number = elementoAlvoBoundingRectangle.left;
+
+  let positionX: number = event.pageX - leftElemento;
+  let positionY: number = event.pageY - topElemento;
+
+  let esquerda: boolean = false;
+  let direita: boolean = false;
+  let centroX: boolean = false;
+
+  if (
+    positionX > larguraElemento * WIDTH_MINIMAL_THRESHOLD &&
+    positionX < larguraElemento * WIDTH_MAXIMAL_THRESHOLD
+  ) {
+    centroX = true;
+  } else if (positionX <= larguraElemento * WIDTH_MINIMAL_THRESHOLD) {
+    esquerda = true;
+  } else {
+    direita = true;
+  }
+
+  let cima: boolean = false;
+  let baixo: boolean = false;
+  let centroY: boolean = false;
+
+  if (
+    positionY > alturaElemento * HEIGHT_MINIMAL_THRESHOLD &&
+    positionY < alturaElemento * HEIGHT_MAXIMAL_THRESHOLD
+  ) {
+    centroY = true;
+  } else if (positionY <= alturaElemento * HEIGHT_MINIMAL_THRESHOLD) {
+    baixo = true;
+  } else {
+    cima = true;
+  }
+
+  let lateralSegundoComponente: LateraisComponente;
+
+  if ((centroY || baixo || cima) && esquerda) {
+    lateralSegundoComponente = LateraisComponente.OESTE;
+  } else if ((centroY || baixo || cima) && direita) {
+    lateralSegundoComponente = LateraisComponente.LESTE;
+  } else if ((centroX && centroY) || cima) {
+    lateralSegundoComponente = LateraisComponente.NORTE;
+  } else {
+    lateralSegundoComponente = LateraisComponente.SUL;
+  }
+
+  conectarComponentesCommandBuilder.definirSegundoComponente(componenteAlvo);
+  conectarComponentesCommandBuilder.definirLateralSegundoComponente(lateralSegundoComponente);
+  conectarComponentesCommandBuilder.definirTipoConexao(seletorTipoConexao.tipoConexaoAtual);
+  let command: ConectarComponentesCommand = conectarComponentesCommandBuilder.build();
+  commandHistory.saveAndExecuteCommand(command);
+
+  callbackFinalSetaConectora();
+}
+
+function callbackFinalSetaConectora(): void {
+  conectarComponentesCommandBuilder = new ConectarComponentesCommandBuilder();
+
+  document.removeEventListener("mousemove", callbackMoverSeta);
+  document.body.style.removeProperty("user-select");
+  document.body.style.removeProperty("cursor");
+
+  setaPlaceholder.style.setProperty("display", "none");
+}
+
+function callbackMoverSeta(event: MouseEvent): void {
+  let x: number = event.clientX;
+  let y: number = event.clientY;
+
+  window.scrollTo(x, y);
+
+  setaPlaceholder.style.left = `${x}px`;
+  setaPlaceholder.style.top = `${y}px`;
+}
+
+document.addEventListener("mouseup", callbackFinalSetaConectora);
+
+selecionadorComponente.setasConectoras.forEach((setaConectora: SetaConectora): void => {
+  setaConectora.callback = callbackInicialSetaConectora;
+});
+
 /***********************/
 /* BINDINGS DO USUÁRIO */
 /***********************/
@@ -379,6 +368,7 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
     let command: CopiarComponenteCommand = new CopiarComponenteCommandBuilder()
       .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
       .build();
+
     commandHistory.saveAndExecuteCommand(command);
     return;
   }
@@ -433,7 +423,6 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
 
       let command: ApagarComponenteCommand = new ApagarComponenteCommandBuilder()
         .definirComponenteAlvo(componenteAlvo)
-        .definirDiagrama(diagrama)
         .definirRepositorioComponente(repositorioComponentes)
         .build();
       commandHistory.saveAndExecuteCommand(command);

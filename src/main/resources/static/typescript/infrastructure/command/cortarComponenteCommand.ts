@@ -11,10 +11,12 @@
  *
  */
 
-import ICommand from "model/command/iCommand";
+import ICommand, { CommandResult } from "model/command/iCommand";
+import ICommandBuilder from "model/command/iCommandBuilder";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
+import CommandBuilderException from "model/exception/commandBuilderException";
 
 export default class CortarComponenteCommand implements ICommand {
   private readonly _componente: ComponenteDiagrama;
@@ -33,7 +35,7 @@ export default class CortarComponenteCommand implements ICommand {
     this._selecionadorComponente = selecionadorComponente;
   }
 
-  execute(): Number {
+  execute(): CommandResult {
     navigator.clipboard
       .writeText(this._componente.htmlComponente.outerHTML)
       .then((): void => {})
@@ -43,19 +45,32 @@ export default class CortarComponenteCommand implements ICommand {
     this._componente.htmlComponente.remove();
     this._repositorio.remover(this._componente);
 
-    return 0;
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 
-  undo(): Number {
+  redo(): CommandResult {
+    return {
+      ok: true,
+      error: undefined,
+    };
+  }
+
+  undo(): CommandResult {
     this._paiComponente?.append(this._componente.htmlComponente);
     this._selecionadorComponente.selecionarElemento(this._componente);
     this._repositorio.adicionar(this._componente);
 
-    return 0;
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 }
 
-export class CortarComponenteCommandBuilder {
+export class CortarComponenteCommandBuilder implements ICommandBuilder<CortarComponenteCommand> {
   private _componente: ComponenteDiagrama | null = null;
   private _repositorio: RepositorioComponente | null = null;
   private _selecionadorComponente: SelecionadorComponente | null = null;
@@ -77,15 +92,15 @@ export class CortarComponenteCommandBuilder {
 
   build(): CortarComponenteCommand {
     if (this._componente === null) {
-      throw new Error("Componente alvo não foi especificado");
+      throw new CommandBuilderException("Componente alvo não foi especificado");
     }
 
     if (this._repositorio === null) {
-      throw new Error("Repositório de componentes não foi especificado");
+      throw new CommandBuilderException("Repositório de componentes não foi especificado");
     }
 
     if (this._selecionadorComponente === null) {
-      throw new Error("Selecionador componente não foi especificado");
+      throw new CommandBuilderException("Selecionador componente não foi especificado");
     }
 
     return new CortarComponenteCommand(

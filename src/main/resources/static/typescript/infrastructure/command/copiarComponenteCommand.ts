@@ -11,8 +11,10 @@
  *
  */
 
-import ICommand from "model/command/iCommand";
 import { CLASSE_ELEMENTO_SELECIONADO } from "application/paginas/editor/selecionadorComponente";
+import ICommand, { CommandResult } from "model/command/iCommand";
+import ICommandBuilder from "model/command/iCommandBuilder";
+import CommandBuilderException from "model/exception/commandBuilderException";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 
 export default class CopiarComponenteCommand implements ICommand {
@@ -22,22 +24,36 @@ export default class CopiarComponenteCommand implements ICommand {
     this._componente = componente;
   }
 
-  execute(): Number {
+  execute(): CommandResult {
     this._componente.htmlComponente.classList.remove(CLASSE_ELEMENTO_SELECIONADO);
     navigator.clipboard
       .writeText(this._componente.htmlComponente.outerHTML)
       .then((): void => {})
       .catch((): void => {});
     this._componente.htmlComponente.classList.add(CLASSE_ELEMENTO_SELECIONADO);
-    return 0;
+
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 
-  undo(): Number {
-    return 0;
+  redo(): CommandResult {
+    return {
+      ok: true,
+      error: undefined,
+    };
+  }
+
+  undo(): CommandResult {
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 }
 
-export class CopiarComponenteCommandBuilder {
+export class CopiarComponenteCommandBuilder implements ICommandBuilder<CopiarComponenteCommand> {
   private _componente: ComponenteDiagrama | null = null;
 
   public definirComponenteAlvo(componente: ComponenteDiagrama | null): this {
@@ -47,7 +63,7 @@ export class CopiarComponenteCommandBuilder {
 
   build(): CopiarComponenteCommand {
     if (this._componente === null) {
-      throw new Error("O componente alvo não foi especificado");
+      throw new CommandBuilderException("O componente alvo não foi especificado");
     }
 
     return new CopiarComponenteCommand(this._componente);

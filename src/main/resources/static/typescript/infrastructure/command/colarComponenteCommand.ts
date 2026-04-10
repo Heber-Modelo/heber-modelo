@@ -11,7 +11,9 @@
  *
  */
 
-import ICommand from "model/command/iCommand";
+import ICommand, { CommandResult } from "model/command/iCommand";
+import ICommandBuilder from "model/command/iCommandBuilder";
+import CommandBuilderException from "model/exception/commandBuilderException";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
@@ -40,7 +42,7 @@ export default class ColarComponenteCommand implements ICommand {
     this._repositorioComponentes = repositorioComponente;
   }
 
-  execute(): Number {
+  execute(): CommandResult {
     navigator.clipboard.readText().then((conteudo: string): void => {
       let novoElemento: HTMLDivElement = document.createElement("div");
 
@@ -70,17 +72,30 @@ export default class ColarComponenteCommand implements ICommand {
       novoElemento.outerHTML = conteudo;
     });
 
-    return 0;
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 
-  undo(): Number {
+  redo(): CommandResult {
+    return {
+      ok: true,
+      error: undefined,
+    };
+  }
+
+  undo(): CommandResult {
     this._componenteColado?.htmlComponente.remove();
 
-    return 0;
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 }
 
-export class ColarComponenteDiagramaBuilder {
+export class ColarComponenteDiagramaBuilder implements ICommandBuilder<ColarComponenteCommand> {
   private _paiComponente: ParentNode | null = null;
   private _geradorID: GeradorIDComponente | null = null;
   private _fabricaComponente: ComponenteFactory | null = null;
@@ -114,23 +129,23 @@ export class ColarComponenteDiagramaBuilder {
 
   public build(): ColarComponenteCommand {
     if (this._paiComponente === null) {
-      throw new Error("O pai do componente não foi especificado");
+      throw new CommandBuilderException("O pai do componente não foi especificado");
     }
 
     if (this._geradorID === null) {
-      throw new Error("O gerador de ID não foi especificado");
+      throw new CommandBuilderException("O gerador de ID não foi especificado");
     }
 
     if (this._fabricaComponente === null) {
-      throw new Error("A fábrica de componentes não foi especificado");
+      throw new CommandBuilderException("A fábrica de componentes não foi especificado");
     }
 
     if (this._registradorEventos === null) {
-      throw new Error("O registrador de eventos não foi especificado");
+      throw new CommandBuilderException("O registrador de eventos não foi especificado");
     }
 
     if (this._repositorioComponente === null) {
-      throw new Error("O repositório de componentes não foi especificado");
+      throw new CommandBuilderException("O repositório de componentes não foi especificado");
     }
 
     return new ColarComponenteCommand(
