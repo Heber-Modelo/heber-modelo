@@ -95,7 +95,7 @@ jobs:
         run: sha256sum heber-modelo.jar > SHA256SUM
 
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             SHA256SUM
