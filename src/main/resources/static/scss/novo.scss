@@ -32,7 +32,7 @@ form {
     button {
       align-items: center;
       display: flex;
-      height: variaveis.$tamanhoBotaoInput;
+      height: 3.5rem;
       justify-content: center;
     }
   }
@@ -44,7 +44,7 @@ form {
     fieldset {
       width: 100%;
       border: var(--cor-borda) solid variaveis.$tamanhoBordaInput;
-      border-radius: variaveis.$borderRadiusInput;
+      border-radius: 1rem;
       padding-top: 3rem;
       padding-bottom: 3rem;
       display: flex;
