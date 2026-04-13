@@ -21,11 +21,9 @@ $estiloBordaPainel: var(--cor-borda) solid 0.1rem;
 body {
   display: grid;
   grid-template-columns: 20% 60% 20%;
-  grid-template-rows: 5rem calc(100% - 5rem);
+  grid-template-rows: 5rem 5rem calc(100% - 10rem);
   max-width: 100vw;
   overflow: auto;
-  padding-right: 2rem;
-  padding-bottom: 2rem;
   background-image:
     repeating-linear-gradient(
       var(--cor-grade-horizontal) 0 var(--espessura-grade),
@@ -41,11 +39,37 @@ body {
 
 header {
   grid-column: 1 / 4;
-  z-index: 1;
+  grid-row: 1;
   height: 5rem;
   position: fixed;
   top: 0;
   left: 0;
+}
+
+.barra-de-tarefas {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--cor-painel-lateral);
+  grid-row: 2;
+  height: 5rem;
+  column-gap: 5rem;
+  grid-column: 1 / 4;
+  border-bottom: 0.1rem solid var(--cor-borda);
+
+  button{
+    background-color: unset;
+  }
+
+  svg {
+    height: 3rem;
+    width: 3rem;
+  }
+
+  .svg-cor-contorno {
+    color: var(--cor-botao);
+  }
 }
 
 aside {
