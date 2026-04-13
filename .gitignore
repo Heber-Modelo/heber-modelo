@@ -18,6 +18,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 !.idea/copyright
+!.idea/codeStyles
 !.idea/scopes
 !.idea/.gitignore
 
