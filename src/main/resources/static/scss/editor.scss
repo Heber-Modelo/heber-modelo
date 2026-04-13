@@ -60,11 +60,24 @@ header {
 
   button{
     background-color: unset;
+    z-index: 2;
+  }
+
+  button:hover {
+    svg {
+      transform: scale(1.2);
+      transition: 0.5s;
+
+      .svg-cor-contorno {
+        color: var(--cor-botao-hover);
+      }
+    }
   }
 
   svg {
     height: 3rem;
     width: 3rem;
+    pointer-events: none;
   }
 
   .svg-cor-contorno {
