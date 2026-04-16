@@ -233,6 +233,7 @@ function callbackInicialSetaConectora(event: MouseEvent): void {
     .definirDiagrama(diagrama)
     .definirFabricaComponente(fabricaComponente)
     .definirFabricaConexao(fabricaConexao)
+    .definirRegistradorEventosElemento(registrarEventosComponente)
     .definirRepositorioComponentes(repositorioComponentes);
   let targetEvent: HTMLElement = event.target as HTMLElement;
   let lateralComponente: LateraisComponente =
@@ -318,8 +319,11 @@ function conectarElementos(event: MouseEvent): void {
   conectarComponentesCommandBuilder.definirSegundoComponente(componenteAlvo);
   conectarComponentesCommandBuilder.definirLateralSegundoComponente(lateralSegundoComponente);
   conectarComponentesCommandBuilder.definirTipoConexao(seletorTipoConexao.tipoConexaoAtual);
-  let command: ConectarComponentesCommand = conectarComponentesCommandBuilder.build();
-  commandHistory.saveAndExecuteCommand(command);
+
+  if (conectarComponentesCommandBuilder.validate()) {
+    let command: ConectarComponentesCommand = conectarComponentesCommandBuilder.build();
+    commandHistory.saveAndExecuteCommand(command);
+  }
 
   callbackFinalSetaConectora();
 }
