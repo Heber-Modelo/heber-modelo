@@ -26,9 +26,12 @@ import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
 import Ponto from "model/ponto";
 
 export default class ConectarComponentesCommand implements ICommand {
+  public static readonly NOME_ELEMENTO_ENTIDADE: string = "entidade";
+  public static readonly NOME_ELEMENTO_RELACIONAMENTO: string = "relacionamento";
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
+  private readonly _registradorEventosElemento: (elemento: HTMLDivElement) => void;
   private readonly _repositorioComponentes: IRepositorioComponente;
   private readonly _primeiroComponente: ComponenteDiagrama;
   private readonly _segundoComponente: ComponenteDiagrama;
@@ -41,6 +44,7 @@ export default class ConectarComponentesCommand implements ICommand {
     diagrama: HTMLElement,
     fabricaComponente: ComponenteFactory,
     fabricaConexao: ComponenteConexaoFactory,
+    registradorEventosElemento: (elemento: HTMLDivElement) => void,
     repositorioComponentes: IRepositorioComponente,
     primeiroComponente: ComponenteDiagrama,
     segundoComponente: ComponenteDiagrama,
@@ -51,6 +55,7 @@ export default class ConectarComponentesCommand implements ICommand {
     this._diagrama = diagrama;
     this._fabricaComponente = fabricaComponente;
     this._fabricaConexao = fabricaConexao;
+    this._registradorEventosElemento = registradorEventosElemento;
     this._repositorioComponentes = repositorioComponentes;
     this._primeiroComponente = primeiroComponente;
     this._segundoComponente = segundoComponente;
@@ -59,7 +64,127 @@ export default class ConectarComponentesCommand implements ICommand {
     this._tipoConexao = tipoConexao;
   }
 
+  private pegarLateralOposta(lateralComponente: LateraisComponente): LateraisComponente {
+    switch (lateralComponente) {
+      case LateraisComponente.NORTE:
+        return LateraisComponente.SUL;
+
+      case LateraisComponente.SUL:
+        return LateraisComponente.NORTE;
+
+      case LateraisComponente.LESTE:
+        return LateraisComponente.OESTE;
+
+      case LateraisComponente.OESTE:
+        return LateraisComponente.LESTE;
+    }
+  }
+
   execute(): CommandResult {
+    let primeiroPonto: Ponto = this._primeiroComponente.calcularPontoLateralComponente(
+      this._lateralPrimeiroComponente,
+    );
+    let segundoPonto: Ponto = this._segundoComponente.calcularPontoLateralComponente(
+      this._lateralSegundoComponente,
+    );
+
+    if (
+      this._primeiroComponente.htmlComponente.getAttribute(
+        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+      ) === ConectarComponentesCommand.NOME_ELEMENTO_ENTIDADE
+    ) {
+      if (
+        this._segundoComponente.htmlComponente.getAttribute(
+          ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+        ) === ConectarComponentesCommand.NOME_ELEMENTO_ENTIDADE
+      ) {
+        let commandCarregarCSSConexao: CarregarCSSCommand = new CarregarCSSCommandBuilder()
+          .definirNomeArquivo(this._tipoConexao)
+          .build();
+        commandCarregarCSSConexao.execute();
+        let commandCarregarCSSRelacionamento: CarregarCSSCommand = new CarregarCSSCommandBuilder()
+          .definirNomeArquivo(ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO)
+          .build();
+        commandCarregarCSSRelacionamento.execute();
+
+        let componenteRelacionamento: ComponenteDiagrama;
+        this._fabricaComponente
+          .criarComponente(ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO)
+          .then(async (componente: ComponenteDiagrama): Promise<void> => {
+            this._diagrama.append(componente.htmlComponente);
+            this._registradorEventosElemento(componente.htmlComponente);
+            this._repositorioComponentes.adicionar(componente);
+
+            let componenteBoundingRectangle: DOMRect =
+              componente.htmlComponente.getBoundingClientRect();
+            componente.htmlComponente.style.setProperty(
+              "left",
+              `${(primeiroPonto.x + segundoPonto.x) / 2 - componenteBoundingRectangle.width / 2}px`,
+            );
+            componente.htmlComponente.style.setProperty(
+              "top",
+              `${(primeiroPonto.y + segundoPonto.y) / 2 - componenteBoundingRectangle.height / 2}px`,
+            );
+
+            componenteRelacionamento = componente;
+
+            let primeiraLateralRelacionamento: LateraisComponente = this.pegarLateralOposta(
+              this._lateralPrimeiroComponente,
+            );
+            let primeiroPontoAuxiliar: Ponto =
+              componenteRelacionamento.calcularPontoLateralComponente(
+                primeiraLateralRelacionamento,
+              );
+
+            let primeiraConexao: ComponenteDiagrama = await this._fabricaComponente.criarComponente(
+              this._tipoConexao,
+            );
+            let primeiroComponenteConexao: ComponenteDiagrama = this._fabricaConexao.criarConexao(
+              this._tipoConexao,
+              primeiraConexao.htmlComponente,
+              primeiraConexao.propriedades,
+              primeiroPonto,
+              primeiroPontoAuxiliar,
+              this._lateralPrimeiroComponente,
+              primeiraLateralRelacionamento,
+              this._primeiroComponente,
+              componenteRelacionamento,
+            );
+
+            this._repositorioComponentes.adicionar(primeiroComponenteConexao);
+            this._diagrama.append(primeiroComponenteConexao.htmlComponente);
+
+            let segundaLateralRelacionamento: LateraisComponente = this.pegarLateralOposta(
+              this._lateralSegundoComponente,
+            );
+            let segundoPontoAuxiliar: Ponto =
+              componenteRelacionamento.calcularPontoLateralComponente(segundaLateralRelacionamento);
+
+            let segundaConexao: ComponenteDiagrama = await this._fabricaComponente.criarComponente(
+              this._tipoConexao,
+            );
+            let segundoComponenteConexao: ComponenteDiagrama = this._fabricaConexao.criarConexao(
+              this._tipoConexao,
+              segundaConexao.htmlComponente,
+              segundaConexao.propriedades,
+              segundoPontoAuxiliar,
+              segundoPonto,
+              segundaLateralRelacionamento,
+              this._lateralSegundoComponente,
+              componenteRelacionamento,
+              this._segundoComponente,
+            );
+
+            this._repositorioComponentes.adicionar(segundoComponenteConexao);
+            this._diagrama.append(segundoComponenteConexao.htmlComponente);
+          });
+        return {
+          ok: true,
+          error: undefined,
+        };
+      }
+    }
+
     this._fabricaComponente
       .criarComponente(this._tipoConexao)
       .then((componente: ComponenteDiagrama): void => {
@@ -67,13 +192,6 @@ export default class ConectarComponentesCommand implements ICommand {
           .definirNomeArquivo(this._tipoConexao)
           .build();
         commandCarregarCSS.execute();
-
-        let primeiroPonto: Ponto = this._primeiroComponente.calcularPontoLateralComponente(
-          this._lateralPrimeiroComponente,
-        );
-        let segundoPonto: Ponto = this._segundoComponente.calcularPontoLateralComponente(
-          this._lateralSegundoComponente,
-        );
 
         this._componenteConexao = this._fabricaConexao.criarConexao(
           this._tipoConexao,
@@ -121,6 +239,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
   private _diagrama: HTMLElement | undefined | null;
   private _fabricaComponente: ComponenteFactory | undefined;
   private _fabricaConexao: ComponenteConexaoFactory | undefined;
+  private _registradorEventosElemento: ((elemento: HTMLDivElement) => void) | undefined;
   private _repositorioComponentes: IRepositorioComponente | undefined;
   private _primeiroComponente: ComponenteDiagrama | undefined;
   private _segundoComponente: ComponenteDiagrama | undefined;
@@ -142,6 +261,14 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
 
   definirFabricaConexao(fabricaConexao: ComponenteConexaoFactory | undefined): this {
     this._fabricaConexao = fabricaConexao;
+
+    return this;
+  }
+
+  definirRegistradorEventosElemento(
+    registradorEventosElemento: ((elemento: HTMLDivElement) => void) | undefined,
+  ): this {
+    this._registradorEventosElemento = registradorEventosElemento;
 
     return this;
   }
@@ -184,6 +311,21 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
     return this;
   }
 
+  validate(): boolean {
+    return [
+      this._diagrama,
+      this._fabricaComponente,
+      this._fabricaConexao,
+      this._registradorEventosElemento,
+      this._repositorioComponentes,
+      this._primeiroComponente,
+      this._segundoComponente,
+      this._lateralPrimeiroComponente,
+      this._lateralSegundoComponente,
+      this._tipoConexao,
+    ].every((item: any): boolean => !!item);
+  }
+
   build(): ConectarComponentesCommand {
     if (this._diagrama === undefined || this._diagrama === null) {
       throw new CommandBuilderException("O diagrama não foi definido");
@@ -195,6 +337,10 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
 
     if (this._fabricaConexao === undefined) {
       throw new CommandBuilderException("A fábrica de conexões não foi definida");
+    }
+
+    if (this._registradorEventosElemento === undefined) {
+      throw new CommandBuilderException("O registrador de eventos de elemento não foi definido");
     }
 
     if (this._repositorioComponentes === undefined) {
@@ -225,6 +371,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
       this._diagrama,
       this._fabricaComponente,
       this._fabricaConexao,
+      this._registradorEventosElemento,
       this._repositorioComponentes,
       this._primeiroComponente,
       this._segundoComponente,
