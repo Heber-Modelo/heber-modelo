@@ -54,7 +54,7 @@ header {
   background-color: var(--cor-painel-lateral);
   grid-row: 2;
   height: 5rem;
-  column-gap: 5rem;
+  column-gap: 2rem;
   grid-column: 1 / 4;
   border-bottom: 0.1rem solid var(--cor-borda);
 
@@ -85,12 +85,17 @@ header {
   }
 }
 
+aside#painel-esquerdo {
+  display: flex;
+  flex-direction: column;
+}
+
 aside {
   background-color: var(--cor-painel-lateral);
   color: var(--cor-fonte-alternativa);
   grid-row: 2 / 4;
   height: calc(100vh - 5rem);
-  padding: 0.5rem;
+  padding: 1rem;
   z-index: 1;
   position: fixed;
   top: 5rem;
@@ -129,13 +134,6 @@ aside {
   button.btn-esconder {
     position: relative;
     top: calc(50% - 3rem);
-  }
-
-  div.wrapper-botoes-alterar-secoes {
-    display: flex;
-    gap: 0.7rem;
-    justify-content: space-between;
-    width: 100%;
   }
 
   section#propriedades {
@@ -193,24 +191,19 @@ aside.hidden {
   &#painel-direito button.btn-mostrar {
     right: 5px;
   }
-
-  button.btn-proxima-secao,
-  button.btn-voltar-secao {
-    display: none;
-  }
 }
 
 section.pagina {
   width: 100%;
-  height: 100%;
+  height: 30%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 section#componentes {
-  gap: 1.5rem;
   height: 90%;
+  gap: 1rem;
   overflow: scroll;
 }
 
@@ -240,10 +233,10 @@ fieldset.componentes-diagrama {
   border: $estiloBordaPainel;
   border-radius: 0.5rem;
   display: grid;
-  gap: 0.5rem;
+  gap: 1rem;
   padding: 0.5rem;
   width: 95%;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
   grid-template-columns: repeat(2, calc(50% - 0.25rem));
 
   button {
