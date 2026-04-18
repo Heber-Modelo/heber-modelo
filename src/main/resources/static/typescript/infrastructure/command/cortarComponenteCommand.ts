@@ -52,10 +52,7 @@ export default class CortarComponenteCommand implements ICommand {
   }
 
   redo(): CommandResult {
-    return {
-      ok: true,
-      error: undefined,
-    };
+    return this.execute();
   }
 
   undo(): CommandResult {
