@@ -11,7 +11,6 @@
  *
  */
 
-import CommandHistory from "application/history/commandHistory";
 import {
   atualizarInputs,
   atualizarValorInput,
@@ -51,20 +50,22 @@ import ApagarComponenteCommand, {
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
+import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
+import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
+import CommandHistory from "infrastructure/history/commandHistory";
 import "infrastructure/variaveisConfiguracao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import TiposConexao from "model/conexao/tiposConexao";
 import SeletorTipoConexao from "infrastructure/conexao/seletorTipoConexao";
 import SetaConectora from "infrastructure/conexao/setaConectora";
 import LateraisComponente from "model/componente/lateraisComponente";
-import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
 /****************************/
 
 let abaPropriedades: HTMLDivElement | null = document.querySelector("section#propriedades");
-let commandHistory: CommandHistory = new CommandHistory();
+let commandHistory: CommandHistory = CommandHistoryFactory.build();
 let diagrama: HTMLElement | null = document.querySelector("main");
 let fabricaComponente: ComponenteFactory = new ComponenteFactory();
 let geradorIDComponente: GeradorIDComponente = GeradorIDComponente.pegarInstance();
