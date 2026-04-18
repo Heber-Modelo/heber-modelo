@@ -395,7 +395,7 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
       .definirGeradorID(geradorIDComponente)
       .definirRegistradorEventos(registrarEventosComponente)
       .definirRepositorioComponente(repositorioComponentes)
-      .definirPaiComponente(diagrama)
+      .definirDiagrama(diagrama)
       .build();
     commandHistory.saveAndExecuteCommand(command);
 
