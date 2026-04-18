@@ -410,6 +410,14 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
     return;
   }
 
+  if (
+    teclaAnterior === bindings.get("leaderKey") &&
+    event.key === bindings.get("desfazerUltimaReversao")
+  ) {
+    commandHistory.redoLastCommand();
+    return;
+  }
+
   switch (event.key) {
     // Limpar seleção
     case bindings.get("removerSelecao"):
@@ -422,12 +430,9 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
     case bindings.get("apagarElemento"):
       let componenteAlvo: ComponenteDiagrama | null = selecionadorComponente.componenteSelecionado;
 
-      if (componenteAlvo === null || diagrama === null) {
-        return;
-      }
-
       let command: ApagarComponenteCommand = new ApagarComponenteCommandBuilder()
         .definirComponenteAlvo(componenteAlvo)
+        .definirDiagrama(diagrama)
         .definirRepositorioComponente(repositorioComponentes)
         .build();
       commandHistory.saveAndExecuteCommand(command);
