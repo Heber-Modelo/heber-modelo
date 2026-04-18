@@ -39,10 +39,7 @@ export default class CopiarComponenteCommand implements ICommand {
   }
 
   redo(): CommandResult {
-    return {
-      ok: true,
-      error: undefined,
-    };
+    return this.execute();
   }
 
   undo(): CommandResult {
