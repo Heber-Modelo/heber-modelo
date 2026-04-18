@@ -83,10 +83,14 @@ header {
   .svg-cor-contorno {
     color: var(--cor-botao);
   }
+
+  .svg-cor-completar {
+    color: var(--cor-painel-lateral);
+  }
 }
 
 aside#painel-esquerdo {
-  display: flex;
+    display: flex;
   flex-direction: column;
 }
 
