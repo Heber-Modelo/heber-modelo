@@ -93,6 +93,12 @@
     },
     {
       "categoria": "bindings",
+      "atributo": "desfazerUltimaReversao",
+      "tipo": "String",
+      "valorPadrao": "y"
+    },
+    {
+      "categoria": "bindings",
       "atributo": "moverElementoParaCima",
       "tipo": "String",
       "valorPadrao": "ArrowUp"

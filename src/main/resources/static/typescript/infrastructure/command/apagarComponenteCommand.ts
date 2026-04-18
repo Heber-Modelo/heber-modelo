@@ -19,10 +19,16 @@ import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
 
 export default class ApagarComponenteCommand implements ICommand {
   private readonly _componente: ComponenteDiagrama;
+  private readonly _diagrama: HTMLElement;
   private readonly _repositorioComponente: IRepositorioComponente;
 
-  constructor(componente: ComponenteDiagrama, repositorioComponente: IRepositorioComponente) {
+  constructor(
+    componente: ComponenteDiagrama,
+    diagrama: HTMLElement,
+    repositorioComponente: IRepositorioComponente,
+  ) {
     this._componente = componente;
+    this._diagrama = diagrama;
     this._repositorioComponente = repositorioComponente;
   }
 
@@ -36,6 +42,8 @@ export default class ApagarComponenteCommand implements ICommand {
   }
 
   redo(): CommandResult {
+    this._repositorioComponente.remover(this._componente);
+
     return {
       ok: true,
       error: undefined,
@@ -43,6 +51,9 @@ export default class ApagarComponenteCommand implements ICommand {
   }
 
   undo(): CommandResult {
+    this._diagrama.append(this._componente.htmlComponente);
+    this._repositorioComponente.adicionar(this._componente);
+
     return {
       ok: true,
       error: undefined,
@@ -52,10 +63,17 @@ export default class ApagarComponenteCommand implements ICommand {
 
 export class ApagarComponenteCommandBuilder implements ICommandBuilder<ApagarComponenteCommand> {
   private _componente: ComponenteDiagrama | null = null;
+  private _diagrama: HTMLElement | null | undefined = null;
   private _repositorioComponente: IRepositorioComponente | null = null;
 
-  public definirComponenteAlvo(componente: ComponenteDiagrama): this {
+  public definirComponenteAlvo(componente: ComponenteDiagrama | null): this {
     this._componente = componente;
+
+    return this;
+  }
+
+  public definirDiagrama(diagrama: HTMLElement | undefined | null): this {
+    this._diagrama = diagrama;
 
     return this;
   }
@@ -71,10 +89,18 @@ export class ApagarComponenteCommandBuilder implements ICommandBuilder<ApagarCom
       throw new CommandBuilderException("O componente alvo não foi definido");
     }
 
+    if (this._diagrama === undefined || this._diagrama === null) {
+      throw new CommandBuilderException("O diagrama não foi definido");
+    }
+
     if (this._repositorioComponente === null) {
       throw new CommandBuilderException("O repositório de componentes não foi definido");
     }
 
-    return new ApagarComponenteCommand(this._componente, this._repositorioComponente);
+    return new ApagarComponenteCommand(
+      this._componente,
+      this._diagrama,
+      this._repositorioComponente,
+    );
   }
 }
