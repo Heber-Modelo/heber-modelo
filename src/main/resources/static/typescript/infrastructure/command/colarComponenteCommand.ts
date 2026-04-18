@@ -20,7 +20,7 @@ import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 
 export default class ColarComponenteCommand implements ICommand {
-  private readonly _paiComponente: ParentNode;
+  private readonly _diagrama: HTMLElement;
   private _geradorID: GeradorIDComponente;
   private _fabricaComponente: ComponenteFactory;
   private _registradorEventos: Function;
@@ -29,13 +29,13 @@ export default class ColarComponenteCommand implements ICommand {
   private _componenteColado: ComponenteDiagrama | null = null;
 
   constructor(
-    paiComponente: ParentNode,
+    paiComponente: HTMLElement,
     geradorID: GeradorIDComponente,
     fabricaComponente: ComponenteFactory,
     registradorEventos: Function,
     repositorioComponente: RepositorioComponente,
   ) {
-    this._paiComponente = paiComponente;
+    this._diagrama = paiComponente;
     this._geradorID = geradorID;
     this._fabricaComponente = fabricaComponente;
     this._registradorEventos = registradorEventos;
@@ -47,7 +47,7 @@ export default class ColarComponenteCommand implements ICommand {
       let novoElemento: HTMLDivElement = document.createElement("div");
 
       setTimeout((): void => {
-        let ultimoElemento: HTMLDivElement = this._paiComponente.lastElementChild as HTMLDivElement;
+        let ultimoElemento: HTMLDivElement = this._diagrama.lastElementChild as HTMLDivElement;
         let nomeNovoComponente: string | null = ultimoElemento.getAttribute(
           ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
         );
@@ -68,7 +68,7 @@ export default class ColarComponenteCommand implements ICommand {
         );
       }, 200);
 
-      this._paiComponente.append(novoElemento);
+      this._diagrama.append(novoElemento);
       novoElemento.outerHTML = conteudo;
     });
 
@@ -79,6 +79,11 @@ export default class ColarComponenteCommand implements ICommand {
   }
 
   redo(): CommandResult {
+    if (this._componenteColado) {
+      this._diagrama.append(this._componenteColado.htmlComponente);
+      this._repositorioComponentes.adicionar(this._componenteColado);
+    }
+
     return {
       ok: true,
       error: undefined,
@@ -86,7 +91,10 @@ export default class ColarComponenteCommand implements ICommand {
   }
 
   undo(): CommandResult {
-    this._componenteColado?.htmlComponente.remove();
+    if (this._componenteColado) {
+      this._componenteColado.htmlComponente.remove();
+      this._repositorioComponentes.remover(this._componenteColado);
+    }
 
     return {
       ok: true,
@@ -96,14 +104,14 @@ export default class ColarComponenteCommand implements ICommand {
 }
 
 export class ColarComponenteDiagramaBuilder implements ICommandBuilder<ColarComponenteCommand> {
-  private _paiComponente: ParentNode | null = null;
+  private _diagrama: HTMLElement | undefined | null = null;
   private _geradorID: GeradorIDComponente | null = null;
   private _fabricaComponente: ComponenteFactory | null = null;
   private _registradorEventos: Function | null = null;
   private _repositorioComponente: RepositorioComponente | null = null;
 
-  definirPaiComponente(paiComponente: ParentNode | null): this {
-    this._paiComponente = paiComponente;
+  definirDiagrama(diagrama: HTMLElement | undefined | null): this {
+    this._diagrama = diagrama;
     return this;
   }
 
@@ -128,8 +136,8 @@ export class ColarComponenteDiagramaBuilder implements ICommandBuilder<ColarComp
   }
 
   public build(): ColarComponenteCommand {
-    if (this._paiComponente === null) {
-      throw new CommandBuilderException("O pai do componente não foi especificado");
+    if (this._diagrama === null || this._diagrama === undefined) {
+      throw new CommandBuilderException("O diagrama não foi especificado");
     }
 
     if (this._geradorID === null) {
@@ -149,7 +157,7 @@ export class ColarComponenteDiagramaBuilder implements ICommandBuilder<ColarComp
     }
 
     return new ColarComponenteCommand(
-      this._paiComponente,
+      this._diagrama,
       this._geradorID,
       this._fabricaComponente,
       this._registradorEventos,
