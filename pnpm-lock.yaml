@@ -31,10 +31,10 @@ importers:
         version: 1.99.0
       ts-loader:
         specifier: ^9.5.7
-        version: 9.5.7(typescript@6.0.2)(webpack@5.106.2)
+        version: 9.5.7(typescript@6.0.3)(webpack@5.106.2)
       typescript:
-        specifier: ^6.0.2
-        version: 6.0.2
+        specifier: ^6.0.3
+        version: 6.0.3
       webpack:
         specifier: ^5.106.2
         version: 5.106.2(webpack-cli@7.0.2)
@@ -1305,8 +1305,8 @@ packages:
       typescript: '*'
       webpack: ^5.0.0
 
-  typescript@6.0.2:
-    resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==}
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -2737,17 +2737,17 @@ snapshots:
     dependencies:
       is-number: 7.0.0
 
-  ts-loader@9.5.7(typescript@6.0.2)(webpack@5.106.2):
+  ts-loader@9.5.7(typescript@6.0.3)(webpack@5.106.2):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.20.1
       micromatch: 4.0.8
       semver: 7.7.4
       source-map: 0.7.6
-      typescript: 6.0.2
+      typescript: 6.0.3
       webpack: 5.106.2(webpack-cli@7.0.2)
 
-  typescript@6.0.2: {}
+  typescript@6.0.3: {}
 
   undici-types@7.19.2: {}
 
