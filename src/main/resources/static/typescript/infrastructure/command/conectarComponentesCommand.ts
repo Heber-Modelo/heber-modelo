@@ -16,6 +16,7 @@ import CarregarCSSCommand, {
 } from "infrastructure/command/carregarCSSCommand";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
+import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import TiposConexao from "model/conexao/tiposConexao";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
@@ -31,6 +32,7 @@ export default class ConectarComponentesCommand implements ICommand {
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
+  private readonly _geradorID: GeradorIDComponente;
   private readonly _registradorEventosElemento: (elemento: HTMLDivElement) => void;
   private readonly _repositorioComponentes: IRepositorioComponente;
   private readonly _primeiroComponente: ComponenteDiagrama;
@@ -44,6 +46,7 @@ export default class ConectarComponentesCommand implements ICommand {
     diagrama: HTMLElement,
     fabricaComponente: ComponenteFactory,
     fabricaConexao: ComponenteConexaoFactory,
+    geradorID: GeradorIDComponente,
     registradorEventosElemento: (elemento: HTMLDivElement) => void,
     repositorioComponentes: IRepositorioComponente,
     primeiroComponente: ComponenteDiagrama,
@@ -55,6 +58,7 @@ export default class ConectarComponentesCommand implements ICommand {
     this._diagrama = diagrama;
     this._fabricaComponente = fabricaComponente;
     this._fabricaConexao = fabricaConexao;
+    this._geradorID = geradorID;
     this._registradorEventosElemento = registradorEventosElemento;
     this._repositorioComponentes = repositorioComponentes;
     this._primeiroComponente = primeiroComponente;
@@ -126,6 +130,10 @@ export default class ConectarComponentesCommand implements ICommand {
           componente.htmlComponente.style.setProperty(
             "top",
             `${(primeiroPonto.y + segundoPonto.y) / 2 - componenteBoundingRectangle.height / 2}px`,
+          );
+          componente.htmlComponente.setAttribute(
+            ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+            String(this._geradorID.pegarProximoID()),
           );
 
           componenteRelacionamento = componente;
@@ -239,6 +247,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
   private _diagrama: HTMLElement | undefined | null;
   private _fabricaComponente: ComponenteFactory | undefined;
   private _fabricaConexao: ComponenteConexaoFactory | undefined;
+  private _geradorID: GeradorIDComponente | undefined;
   private _registradorEventosElemento: ((elemento: HTMLDivElement) => void) | undefined;
   private _repositorioComponentes: IRepositorioComponente | undefined;
   private _primeiroComponente: ComponenteDiagrama | undefined;
@@ -261,6 +270,12 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
 
   definirFabricaConexao(fabricaConexao: ComponenteConexaoFactory | undefined): this {
     this._fabricaConexao = fabricaConexao;
+
+    return this;
+  }
+
+  definirGeradorID(geradorID: GeradorIDComponente | undefined): this {
+    this._geradorID = geradorID;
 
     return this;
   }
@@ -316,6 +331,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
       this._diagrama,
       this._fabricaComponente,
       this._fabricaConexao,
+      this._geradorID,
       this._registradorEventosElemento,
       this._repositorioComponentes,
       this._primeiroComponente,
@@ -337,6 +353,10 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
 
     if (this._fabricaConexao === undefined) {
       throw new CommandBuilderException("A fábrica de conexões não foi definida");
+    }
+
+    if (this._geradorID === undefined) {
+      throw new CommandBuilderException("O gerador de IDs de componentes não foi definido");
     }
 
     if (this._registradorEventosElemento === undefined) {
@@ -371,6 +391,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
       this._diagrama,
       this._fabricaComponente,
       this._fabricaConexao,
+      this._geradorID,
       this._registradorEventosElemento,
       this._repositorioComponentes,
       this._primeiroComponente,
