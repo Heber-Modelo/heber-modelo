@@ -17,6 +17,7 @@ import CarregarCSSCommand, {
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
+import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import TiposConexao from "model/conexao/tiposConexao";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
@@ -33,7 +34,7 @@ export default class ConectarComponentesCommand implements ICommand {
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
   private readonly _geradorID: GeradorIDComponente;
-  private readonly _registradorEventosElemento: (elemento: HTMLDivElement) => void;
+  private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponentes: IRepositorioComponente;
   private readonly _primeiroComponente: ComponenteDiagrama;
   private readonly _segundoComponente: ComponenteDiagrama;
@@ -47,7 +48,7 @@ export default class ConectarComponentesCommand implements ICommand {
     fabricaComponente: ComponenteFactory,
     fabricaConexao: ComponenteConexaoFactory,
     geradorID: GeradorIDComponente,
-    registradorEventosElemento: (elemento: HTMLDivElement) => void,
+    registradorEventosElemento: RegistradorEventosElemento,
     repositorioComponentes: IRepositorioComponente,
     primeiroComponente: ComponenteDiagrama,
     segundoComponente: ComponenteDiagrama,
@@ -118,7 +119,7 @@ export default class ConectarComponentesCommand implements ICommand {
         .criarComponente(ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO)
         .then(async (componente: ComponenteDiagrama): Promise<void> => {
           this._diagrama.append(componente.htmlComponente);
-          this._registradorEventosElemento(componente.htmlComponente);
+          this._registradorEventosElemento.registrarEventos(componente.htmlComponente);
           this._repositorioComponentes.adicionar(componente);
 
           let componenteBoundingRectangle: DOMRect =
@@ -248,7 +249,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
   private _fabricaComponente: ComponenteFactory | undefined;
   private _fabricaConexao: ComponenteConexaoFactory | undefined;
   private _geradorID: GeradorIDComponente | undefined;
-  private _registradorEventosElemento: ((elemento: HTMLDivElement) => void) | undefined;
+  private _registradorEventosElemento: RegistradorEventosElemento | undefined;
   private _repositorioComponentes: IRepositorioComponente | undefined;
   private _primeiroComponente: ComponenteDiagrama | undefined;
   private _segundoComponente: ComponenteDiagrama | undefined;
@@ -281,7 +282,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
   }
 
   definirRegistradorEventosElemento(
-    registradorEventosElemento: ((elemento: HTMLDivElement) => void) | undefined,
+    registradorEventosElemento: RegistradorEventosElemento | undefined,
   ): this {
     this._registradorEventosElemento = registradorEventosElemento;
 
