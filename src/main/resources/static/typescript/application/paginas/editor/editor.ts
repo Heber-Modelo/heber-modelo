@@ -234,6 +234,7 @@ function callbackInicialSetaConectora(event: MouseEvent): void {
     .definirDiagrama(diagrama)
     .definirFabricaComponente(fabricaComponente)
     .definirFabricaConexao(fabricaConexao)
+    .definirGeradorID(geradorIDComponente)
     .definirRegistradorEventosElemento(registrarEventosComponente)
     .definirRepositorioComponentes(repositorioComponentes);
   let targetEvent: HTMLElement = event.target as HTMLElement;
