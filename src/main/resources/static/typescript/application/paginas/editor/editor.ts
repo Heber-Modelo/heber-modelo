@@ -361,6 +361,69 @@ selecionadorComponente.setasConectoras.forEach((setaConectora: SetaConectora): v
   setaConectora.callback = callbackInicialSetaConectora;
 });
 
+/***********/
+/* TOOLBAR */
+/***********/
+
+let buttonArquivo: HTMLDivElement | null = document.querySelector("button#arquivo");
+let buttonCopiar: HTMLDivElement | null = document.querySelector("button#copiar");
+let buttonColar: HTMLDivElement | null = document.querySelector("button#colar");
+let buttonCortar: HTMLDivElement | null = document.querySelector("button#cortar");
+let buttonRefazer: HTMLDivElement | null = document.querySelector("button#refazer");
+let buttonDesfazer: HTMLDivElement | null = document.querySelector("button#desfazer");
+let buttonApagar: HTMLDivElement | null = document.querySelector("button#apagar");
+let buttonDeletar: HTMLDivElement | null = document.querySelector("button#deletar");
+
+buttonDeletar?.addEventListener("click", (): void => {});
+
+buttonApagar?.addEventListener("click", (): void => {
+  let command: ApagarComponenteCommand = new ApagarComponenteCommandBuilder()
+    .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
+    .definirDiagrama(diagrama)
+    .definirRepositorioComponente(repositorioComponentes)
+    .build();
+  commandHistory.saveAndExecuteCommand(command);
+
+  selecionadorComponente.removerSelecao();
+  limparPropriedades(abaPropriedades);
+  atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
+});
+
+buttonDesfazer?.addEventListener("click", (): void => {
+  commandHistory.undoLastCommand();
+});
+
+buttonRefazer?.addEventListener("click", (): void => {
+  commandHistory.redoLastCommand();
+});
+
+buttonCopiar?.addEventListener("click", (): void => {
+  let command: CopiarComponenteCommand = new CopiarComponenteCommandBuilder()
+    .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
+    .build();
+  commandHistory.saveAndExecuteCommand(command);
+});
+
+buttonColar?.addEventListener("click", (): void => {
+  let command: ColarComponenteCommand = new ColarComponenteCommandBuilder()
+    .definirDiagrama(diagrama)
+    .definirFabricaComponente(fabricaComponente)
+    .definirGeradorID(geradorIDComponente)
+    .definirRegistradorEventos(registradorEventosElemento)
+    .definirRepositorioComponente(repositorioComponentes)
+    .build();
+  commandHistory.saveAndExecuteCommand(command);
+});
+
+buttonCortar?.addEventListener("click", (): void => {
+  let command: CortarComponenteCommand = new CortarComponenteCommandBuilder()
+    .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
+    .definirRepositorioComponente(repositorioComponentes)
+    .definirSelecionadorComponente(selecionadorComponente)
+    .build();
+  commandHistory.saveAndExecuteCommand(command);
+});
+
 /***********************/
 /* BINDINGS DO USUÁRIO */
 /***********************/
