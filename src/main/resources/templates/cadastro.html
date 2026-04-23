@@ -24,11 +24,11 @@
       <form action="cadastro.html" method="post" th:object="${usuario}">
         <div class="aviso" th:if="${param.exists}" th:text="#{web.page.register.use-exists}"></div>
         <label>
-          <th:block th:text="#{web.page.register.label.full-name}"></th:block>
+          <span class="campos-texto" th:text="#{web.page.register.label.full-name}"></span>
           <input type="text" name="nome" required />
         </label>
         <label>
-          <th:block th:text="#{web.page.register.label.student-id}"></th:block>
+          <span class="campos-texto" th:text="#{web.page.register.label.student-id}"></span>
           <input type="number" name="matricula" required />
         </label>
         <div
@@ -37,7 +37,7 @@
           th:text="#{web.page.register.invalid-email}"
         ></div>
         <label>
-          <th:block th:text="#{web.page.register.label.email}"></th:block>
+          <span class="campos-texto" th:text="#{web.page.register.label.email}"></span>
           <input type="email" name="email" required />
         </label>
         <div
@@ -46,11 +46,11 @@
           th:text="#{web.page.register.passwords-differ}"
         ></div>
         <label>
-          <th:block th:text="#{web.page.register.label.password}"></th:block>
+          <span class="campos-texto" th:text="#{web.page.register.label.password}"></span>
           <input type="password" name="senha" required />
         </label>
         <label>
-          <th:block th:text="#{web.page.register.label.confirm-password}"></th:block>
+          <span class="campos-texto" th:text="#{web.page.register.label.confirm-password}"></span>
           <input type="password" name="confirmarSenha" required />
         </label>
         <button th:text="#{web.page.register.label.submit}" type="button" id="btn-enviar"></button>

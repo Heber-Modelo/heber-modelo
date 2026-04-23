@@ -5,6 +5,7 @@
     <th:block th:insert="~{fragments/bindings :: script}"></th:block>
     <link rel="stylesheet" th:href="@{/css/editor.css}" />
     <script th:src="@{/javascript/editor.js}" type="module" defer></script>
+    <script th:src="@{/javascript/toolbar.js}" type="module" defer></script>
     <script th:src="@{/javascript/application/paginas/editor/callbacksElementos.js}"></script>
     <script th:src="@{/javascript/application/paginas/editor/grade.js}"></script>
     <script th:src="@{/javascript/application/paginas/editor/salvar.js}" defer></script>
@@ -30,7 +31,7 @@ Licensed works, modifications, and larger works may be distributed under differe
     <header th:replace="~{fragments/header :: header}"></header>
 
     <div class="barra-de-tarefas">
-      <button>
+      <button th:title="#{web.editor.toolbar.file}" id="arquivo">
         <svg
           width="358"
           height="408"
@@ -80,7 +81,7 @@ Licensed works, modifications, and larger works may be distributed under differe
         </svg>
       </button>
 
-      <button>
+      <button th:title="#{web.editor.toolbar.copy}" id="copiar">
         <svg
           width="292"
           height="395"
@@ -120,7 +121,7 @@ Licensed works, modifications, and larger works may be distributed under differe
         </svg>
       </button>
 
-      <button>
+      <button th:title="#{web.editor.toolbar.paste}" id="colar">
         <svg
           width="285"
           height="390"
@@ -213,7 +214,7 @@ Licensed works, modifications, and larger works may be distributed under differe
         </svg>
       </button>
 
-      <button>
+      <button th:title="#{web.editor.toolbar.cut}" id="cortar">
         <svg
           width="275"
           height="349"
@@ -288,7 +289,7 @@ Licensed works, modifications, and larger works may be distributed under differe
         </svg>
       </button>
 
-      <button>
+      <button th:title="#{web.editor.toolbar.undo}" id="desfazer">
         <svg
           width="454"
           height="400"
@@ -345,7 +346,7 @@ Licensed works, modifications, and larger works may be distributed under differe
         </svg>
       </button>
 
-      <button>
+      <button th:title="#{web.editor.toolbar.redo}" id="refazer">
         <svg
           width="454"
           height="400"
@@ -405,7 +406,7 @@ Licensed works, modifications, and larger works may be distributed under differe
         </svg>
       </button>
 
-      <button>
+      <button th:title="#{web.editor.toolbar.erase}" id="apagar">
         <svg
           width="425"
           height="425"
@@ -447,7 +448,7 @@ Licensed works, modifications, and larger works may be distributed under differe
         </svg>
       </button>
 
-      <button>
+      <button th:title="#{web.editor.toolbar.delete}" id="deletar">
         <svg
           width="350"
           height="401"

@@ -29,17 +29,17 @@ Licensed works, modifications, and larger works may be distributed under differe
       <div class="aviso" th:text="#{web.page.login.error}" th:if="${param.error}"></div>
       <form action="login" method="post">
         <label>
-          <th:block th:text="#{web.page.login.label.username}"></th:block>
+          <span class="campos-texto" th:text="#{web.page.login.label.username}"></span>
           <input type="text" name="username" required />
         </label>
         <label>
-          <th:block th:text="#{web.page.login.label.password}"></th:block>
+          <span class="campos-texto" th:text="#{web.page.login.label.password}"></span>
           <input type="password" name="password" required />
-          <a href="solicitar.html" th:text="#{web.page.login.request-new-password}"></a>
+          <a href="solicitar.html" th:text="#{web.page.login.request-new-password}" class="texto-ajuda"></a>
         </label>
         <button th:text="#{web.page.login.continue}" id="continuar"></button>
         <small>
-          <span>
+          <span class="texto-ajuda">
             <th:block th:text="#{web.page.login.register.1}"></th:block>&nbsp;<a
               href="cadastro.html"
               th:text="#{web.page.login.register.2}"
@@ -48,7 +48,7 @@ Licensed works, modifications, and larger works may be distributed under differe
             </a>
             .
           </span>
-          <span id="privacidade">
+          <span id="privacidade" class="texto-ajuda">
             <th:block th:text="#{web.page.login.privacy-notice.1}"></th:block>
             <a
               href="privacidade.html"

@@ -240,6 +240,20 @@ public class ControladorWeb {
         return "redirect:/";
     }
 
+    @RequestMapping({"/criarSessao", "/criarSessao.html"})
+    public String criarSessao(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "session-create");
+        InjetorAtributos.injetarPaleta(modelMap);
+        return "criarSessao";
+    }
+
+    @RequestMapping({"/entrarSessao", "/entrarSessao.html"})
+    public String entrarSessao(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "session-enter");
+        InjetorAtributos.injetarPaleta(modelMap);
+        return "entrarSessao";
+    }
+
     @RequestMapping({"/redefinir", "/redefinir.html"})
     public String redefinirSenha(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "reset-password");

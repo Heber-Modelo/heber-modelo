@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <th:block th:replace="~{fragments/head :: head}"></th:block>
+  <link rel="stylesheet" th:href="@{/css/sessao.css}" />
+  <title th:text="#{web.page.session-enter.title}"></title>
+</head>
+<body>
+<!--
+Copyright (C) 2025 Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+
+Licensed under the Massachusetts Institute of Technology (MIT) License.
+You may obtain a copy of the license at:
+
+https://choosealicense.com/licenses/mit/
+
+A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+-->
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main>
+  <form method="post">
+
+    <h1 th:text="#{web.page.session-enter.title}"></h1>
+
+    <label>
+      <span class="campos-texto" th:text="#{web.page.session.label.name}"></span>
+      <input type="text" name="username" required />
+    </label>
+
+    <label>
+      <span class="campos-texto" th:text="#{web.page.session.label.password}"></span>
+      <input type="password" name="password" required />
+    </label>
+
+    <div id="botoes">
+      <button th:text="#{web.page.session.button.cancel}" id="cancelar  "></button>
+      <button th:text="#{web.page.session.button.confirm}" id="confirmar"></button>
+    </div>
+  </form>
+</main>
+
+<footer th:replace="~{fragments/licenseFooter :: footer}"></footer>
+</body>
+</html>
