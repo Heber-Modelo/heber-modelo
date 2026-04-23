@@ -52,7 +52,9 @@ import ConectarComponentesCommand, {
 } from "infrastructure/command/conectarComponentesCommand";
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
+import GeradorIDComponenteFactory from "infrastructure/factory/geradorIDComponenteFactory";
 import CommandHistory from "infrastructure/history/commandHistory";
+import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import "infrastructure/variaveisConfiguracao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import TiposConexao from "model/conexao/tiposConexao";
@@ -68,7 +70,7 @@ let abaPropriedades: HTMLDivElement | null = document.querySelector("section#pro
 let commandHistory: CommandHistory = CommandHistoryFactory.build();
 let diagrama: HTMLElement | null = document.querySelector("main");
 let fabricaComponente: ComponenteFactory = new ComponenteFactory();
-let geradorIDComponente: GeradorIDComponente = GeradorIDComponente.pegarInstance();
+let geradorIDComponente: GeradorIDComponente = GeradorIDComponenteFactory.build();
 let repositorioComponentes: RepositorioComponente = RepositorioComponenteFactory.build();
 let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
 let selecionadorComponente: SelecionadorComponente = SelecionadorComponenteFactory.build();

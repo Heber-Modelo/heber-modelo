@@ -12,20 +12,7 @@
  */
 
 export default class GeradorIDComponente {
-  private constructor() {
-    this._id = 0;
-  }
-
-  private static _instance: GeradorIDComponente;
-  private _id: number;
-
-  public static pegarInstance(): GeradorIDComponente {
-    if (this._instance === undefined) {
-      this._instance = new GeradorIDComponente();
-    }
-
-    return this._instance;
-  }
+  private _id: number = 0;
 
   public pegarProximoID(): number {
     this._id++;
