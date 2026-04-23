@@ -22,4 +22,4 @@ setup:
 compile-sources:
     pnpm run compile-scss
     pnpm run compile-ts
-    uv run mkdocs build --clean --no-directory-ulrs --site-dir ./src/main/resources/static/docs
+    uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/static/docs
