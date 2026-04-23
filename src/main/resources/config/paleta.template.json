@@ -88,6 +88,14 @@
     {
       "nomeVariavel": "cor_botao_desativado",
       "valorPadraoVariavel": "#241A3B"
+    },
+    {
+      "nomeVariavel": "cor_fundo_input",
+      "valorPadraoVariavel": "#D8D8D8"
+    },
+    {
+      "nomeVariavel": "cor_fundo_input_focus",
+      "valorPadraoVariavel": "#E8E8E8"
     }
   ]
 }
