@@ -226,6 +226,16 @@ section#diagramas > section {
   }
 }
 
+section#seletor-tipos-conexao {
+  gap: 0.5rem;
+
+  label {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    width: 100%;
+  }
+}
+
 main {
   grid-column: 2;
   grid-row: 2 / 4;
