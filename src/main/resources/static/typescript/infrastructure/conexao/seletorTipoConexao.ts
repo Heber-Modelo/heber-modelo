@@ -15,6 +15,7 @@ import TiposConexao from "model/conexao/tiposConexao";
 
 export default class SeletorTipoConexao {
   static readonly ID_SELETOR: string = "#seletor-tipos-conexao";
+  static readonly NOME_SELETOR: string = "tipo-conexao";
   private readonly _elemento: HTMLDivElement;
   private readonly _inputs: NodeListOf<HTMLInputElement>;
 
@@ -25,11 +26,11 @@ export default class SeletorTipoConexao {
       let inputSeletorTipoConexao: HTMLInputElement = document.createElement("input");
 
       inputSeletorTipoConexao.type = "radio";
-      inputSeletorTipoConexao.name = "tipo-conexao";
+      inputSeletorTipoConexao.name = SeletorTipoConexao.NOME_SELETOR;
       inputSeletorTipoConexao.value = tipoConexao;
 
       let labelSeletorTipoConexao: HTMLLabelElement = document.createElement("label");
-      labelSeletorTipoConexao.innerText = tipoConexao.replaceAll("_", " ").toUpperCase();
+      labelSeletorTipoConexao.innerHTML = `<span>${tipoConexao.replaceAll("_", " ").toUpperCase()}</span>`;
       labelSeletorTipoConexao.prepend(inputSeletorTipoConexao);
       this._elemento.appendChild(labelSeletorTipoConexao);
     }
