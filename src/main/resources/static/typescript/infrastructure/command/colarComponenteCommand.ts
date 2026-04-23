@@ -16,14 +16,15 @@ import ICommandBuilder from "model/command/iCommandBuilder";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
 
 export default class ColarComponenteCommand implements ICommand {
   private readonly _diagrama: HTMLElement;
   private _geradorID: GeradorIDComponente;
   private _fabricaComponente: ComponenteFactory;
-  private _registradorEventos: Function;
+  private _registradorEventos: RegistradorEventosElemento;
   private _repositorioComponentes: RepositorioComponente;
 
   private _componenteColado: ComponenteDiagrama | null = null;
@@ -32,7 +33,7 @@ export default class ColarComponenteCommand implements ICommand {
     paiComponente: HTMLElement,
     geradorID: GeradorIDComponente,
     fabricaComponente: ComponenteFactory,
-    registradorEventos: Function,
+    registradorEventos: RegistradorEventosElemento,
     repositorioComponente: RepositorioComponente,
   ) {
     this._diagrama = paiComponente;
@@ -52,7 +53,7 @@ export default class ColarComponenteCommand implements ICommand {
           ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
         );
         if (nomeNovoComponente !== null) {
-          this._registradorEventos.call(this, ultimoElemento);
+          this._registradorEventos.registrarEventos(ultimoElemento);
           this._fabricaComponente
             .criarComponente(nomeNovoComponente)
             .then((componente: ComponenteDiagrama): void => {
@@ -103,11 +104,11 @@ export default class ColarComponenteCommand implements ICommand {
   }
 }
 
-export class ColarComponenteDiagramaBuilder implements ICommandBuilder<ColarComponenteCommand> {
+export class ColarComponenteCommandBuilder implements ICommandBuilder<ColarComponenteCommand> {
   private _diagrama: HTMLElement | undefined | null = null;
   private _geradorID: GeradorIDComponente | null = null;
   private _fabricaComponente: ComponenteFactory | null = null;
-  private _registradorEventos: Function | null = null;
+  private _registradorEventos: RegistradorEventosElemento | null = null;
   private _repositorioComponente: RepositorioComponente | null = null;
 
   definirDiagrama(diagrama: HTMLElement | undefined | null): this {
@@ -125,7 +126,7 @@ export class ColarComponenteDiagramaBuilder implements ICommandBuilder<ColarComp
     return this;
   }
 
-  definirRegistradorEventos(registradorEventos: Function | null): this {
+  definirRegistradorEventos(registradorEventos: RegistradorEventosElemento | null): this {
     this._registradorEventos = registradorEventos;
     return this;
   }

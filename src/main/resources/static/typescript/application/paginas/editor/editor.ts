@@ -29,7 +29,7 @@ import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorCo
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import ColarComponenteCommand, {
-  ColarComponenteDiagramaBuilder,
+  ColarComponenteCommandBuilder,
 } from "infrastructure/command/colarComponenteCommand";
 import CopiarComponenteCommand, {
   CopiarComponenteCommandBuilder,
@@ -53,6 +53,7 @@ import ConectarComponentesCommand, {
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import GeradorIDComponenteFactory from "infrastructure/factory/geradorIDComponenteFactory";
+import RegistradorEventosElementoFactory from "infrastructure/factory/registradorEventosElementoFactory";
 import CommandHistory from "infrastructure/history/commandHistory";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import "infrastructure/variaveisConfiguracao";
@@ -71,6 +72,8 @@ let commandHistory: CommandHistory = CommandHistoryFactory.build();
 let diagrama: HTMLElement | null = document.querySelector("main");
 let fabricaComponente: ComponenteFactory = new ComponenteFactory();
 let geradorIDComponente: GeradorIDComponente = GeradorIDComponenteFactory.build();
+let registradorEventosElemento: RegistradorEventosElemento =
+  RegistradorEventosElementoFactory.build();
 let repositorioComponentes: RepositorioComponente = RepositorioComponenteFactory.build();
 let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
 let selecionadorComponente: SelecionadorComponente = SelecionadorComponenteFactory.build();
@@ -136,15 +139,13 @@ function dragElement(event: MouseEvent): void {
 /* EVENTOS COMPONENTES */
 /***********************/
 
-function registrarEventosComponente(componente: HTMLDivElement): void {
-  componente.addEventListener("mousedown", mouseDownSelecionarElemento);
-  componente.addEventListener("mousedown", mouseDownComecarMoverElemento);
-  componente.addEventListener("mouseup", mouseUpPararMoverElemento);
-  componente.addEventListener("mouseup", conectarElementos);
-}
+registradorEventosElemento.adicionarCallback("mousedown", mouseDownSelecionarElemento);
+registradorEventosElemento.adicionarCallback("mousedown", mouseDownComecarMoverElemento);
+registradorEventosElemento.adicionarCallback("mouseup", mouseUpPararMoverElemento);
+registradorEventosElemento.adicionarCallback("mouseup", conectarElementos);
 
 componentes.forEach((componente: HTMLDivElement): void => {
-  registrarEventosComponente(componente);
+  registradorEventosElemento.registrarEventos(componente);
 });
 
 /**************************/
@@ -169,7 +170,7 @@ function callbackCriarComponente(event: Event): void {
       .definirNomeArquivo(nomeElemento)
       .build();
     command.execute();
-    registrarEventosComponente(componente.htmlComponente);
+    registradorEventosElemento.registrarEventos(componente.htmlComponente);
     componente.htmlComponente.setAttribute(
       ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
       String(geradorIDComponente.pegarProximoID()),
@@ -237,7 +238,7 @@ function callbackInicialSetaConectora(event: MouseEvent): void {
     .definirFabricaComponente(fabricaComponente)
     .definirFabricaConexao(fabricaConexao)
     .definirGeradorID(geradorIDComponente)
-    .definirRegistradorEventosElemento(registrarEventosComponente)
+    .definirRegistradorEventosElemento(registradorEventosElemento)
     .definirRepositorioComponentes(repositorioComponentes);
   let targetEvent: HTMLElement = event.target as HTMLElement;
   let lateralComponente: LateraisComponente =
@@ -395,12 +396,12 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
   }
 
   if (teclaAnterior === bindings.get("leaderKey") && event.key === bindings.get("colarElemento")) {
-    let command: ColarComponenteCommand = new ColarComponenteDiagramaBuilder()
+    let command: ColarComponenteCommand = new ColarComponenteCommandBuilder()
+      .definirDiagrama(diagrama)
       .definirFabricaComponente(fabricaComponente)
       .definirGeradorID(geradorIDComponente)
-      .definirRegistradorEventos(registrarEventosComponente)
+      .definirRegistradorEventos(registradorEventosElemento)
       .definirRepositorioComponente(repositorioComponentes)
-      .definirDiagrama(diagrama)
       .build();
     commandHistory.saveAndExecuteCommand(command);
 
@@ -433,10 +434,8 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
 
     // Apagar elemento
     case bindings.get("apagarElemento"):
-      let componenteAlvo: ComponenteDiagrama | null = selecionadorComponente.componenteSelecionado;
-
       let command: ApagarComponenteCommand = new ApagarComponenteCommandBuilder()
-        .definirComponenteAlvo(componenteAlvo)
+        .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
         .definirDiagrama(diagrama)
         .definirRepositorioComponente(repositorioComponentes)
         .build();

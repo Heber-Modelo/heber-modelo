@@ -14,13 +14,13 @@
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 
 export default class RepositorioComponenteFactory {
-  private static _repositorio: RepositorioComponente | null = null;
+  private static _instance: RepositorioComponente | null = null;
 
   public static build(): RepositorioComponente {
-    if (this._repositorio === null) {
-      this._repositorio = new RepositorioComponente();
+    if (this._instance === null) {
+      this._instance = new RepositorioComponente();
     }
 
-    return this._repositorio;
+    return this._instance;
   }
 }
