@@ -44,7 +44,7 @@ export default class SelecionadorComponenteFactory {
 
       let setaConectoraFactory: SetaConectoraFactory = new SetaConectoraFactory();
       let zippedEnums: string[][] = Object.keys(PosicoesRelativasSetasConectoras).map(
-        (posicao: string, index: number): string[] => [posicao, LateraisComponente[index]],
+        (posicao: string, index: number): string[] => [posicao, LateraisComponente[index + 1]],
       );
 
       let setasConectoras: SetaConectora[] = zippedEnums.map(

@@ -246,8 +246,9 @@ function callbackInicialSetaConectora(event: MouseEvent): void {
 
   let componenteSelecionado: ComponenteDiagrama | undefined =
     selecionadorComponente.componenteSelecionado || undefined;
-  conectarComponentesCommandBuilder.definirPrimeiroComponente(componenteSelecionado);
-  conectarComponentesCommandBuilder.definirLateralPrimeiroComponente(lateralComponente);
+  conectarComponentesCommandBuilder
+    .definirPrimeiroComponente(componenteSelecionado)
+    .definirLateralPrimeiroComponente(lateralComponente);
 }
 
 function conectarElementos(event: MouseEvent): void {
@@ -300,9 +301,9 @@ function conectarElementos(event: MouseEvent): void {
   ) {
     centroY = true;
   } else if (positionY <= alturaElemento * HEIGHT_MINIMAL_THRESHOLD) {
-    baixo = true;
-  } else {
     cima = true;
+  } else {
+    baixo = true;
   }
 
   let lateralSegundoComponente: LateraisComponente;
@@ -317,9 +318,10 @@ function conectarElementos(event: MouseEvent): void {
     lateralSegundoComponente = LateraisComponente.SUL;
   }
 
-  conectarComponentesCommandBuilder.definirSegundoComponente(componenteAlvo);
-  conectarComponentesCommandBuilder.definirLateralSegundoComponente(lateralSegundoComponente);
-  conectarComponentesCommandBuilder.definirTipoConexao(seletorTipoConexao.tipoConexaoAtual);
+  conectarComponentesCommandBuilder
+    .definirSegundoComponente(componenteAlvo)
+    .definirLateralSegundoComponente(lateralSegundoComponente)
+    .definirTipoConexao(seletorTipoConexao.tipoConexaoAtual);
 
   if (conectarComponentesCommandBuilder.validate()) {
     let command: ConectarComponentesCommand = conectarComponentesCommandBuilder.build();

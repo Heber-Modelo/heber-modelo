@@ -12,10 +12,10 @@
  */
 
 enum LateraisComponente {
-  NORTE,
-  SUL,
-  LESTE,
-  OESTE,
+  NORTE = 1,
+  SUL = 2,
+  LESTE = 3,
+  OESTE = 4,
 }
 
 export default LateraisComponente;
