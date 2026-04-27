@@ -374,6 +374,10 @@ let buttonDesfazer: HTMLDivElement | null = document.querySelector("button#desfa
 let buttonApagar: HTMLDivElement | null = document.querySelector("button#apagar");
 let buttonDeletar: HTMLDivElement | null = document.querySelector("button#deletar");
 
+buttonArquivo?.addEventListener("click", (): void => {
+  let divOpcoesArquivo: HTMLElement | null = document.querySelector("#opcoes-arquivo");
+});
+
 buttonDeletar?.addEventListener("click", (): void => {});
 
 buttonApagar?.addEventListener("click", (): void => {
