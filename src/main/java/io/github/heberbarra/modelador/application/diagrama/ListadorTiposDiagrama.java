@@ -55,10 +55,10 @@ public class ListadorTiposDiagrama {
 
     public static List<TipoDiagramaDTO> pegarDiagramasBancoDados() {
         return List.of(
-                new TipoDiagramaDTO("diagram.dictionary.label", "DDD", "diagram.dictionary.title"),
                 new TipoDiagramaDTO("diagram.entity.label", "DER", "diagram.entity.title"),
+                new TipoDiagramaDTO("diagram.relational-model.label", "MLR", "diagram.relational-model.title"),
                 new TipoDiagramaDTO("diagram.relational.label", "DRL", "diagram.relational.title"),
-                new TipoDiagramaDTO("diagram.relational-model.label", "MLR", "diagram.relational-model.title"));
+                new TipoDiagramaDTO("diagram.dictionary.label", "DDD", "diagram.dictionary.title"));
     }
 
     public static List<TipoDiagramaDTO> pegarDiagramasOutros() {
