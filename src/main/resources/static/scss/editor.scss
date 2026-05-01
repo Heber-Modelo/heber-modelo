@@ -57,6 +57,7 @@ header {
   column-gap: 2rem;
   grid-column: 1 / 4;
   border-bottom: 0.1rem solid var(--cor-borda);
+  position: relative;
 
   button{
     background-color: unset;
