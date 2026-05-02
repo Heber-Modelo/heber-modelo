@@ -35,7 +35,7 @@ Os plugins por enquanto são somente uma funcionalidade que está em fase de pla
 
 Porém, uma API do programa para permitir essa funcionalidade já se encontra disponível em:
 
-&lt; https://github.com/HeberBarra/heber-modelo-api &gt;
+&lt;[https://github.com/HeberBarra/heber-modelo-api](https://github.com/HeberBarra/heber-modelo-api)&gt;
 
 # Ajuda Básica
 
@@ -56,7 +56,7 @@ para descobrir a causa do problema.
 
 O programa disponibiliza algumas opções de configuração, que são feitas
 usando [TOML(Tom's Obvious Minimal Language)](https://toml.io/en/). Os arquivos são criados automaticamente pelo
-programa caso não existam.
+programa, caso não existam.
 
 ### Arquivos de configurações:
 
@@ -71,9 +71,48 @@ clonando o repositório e compilando o programa usando gradle bootJar.
 Para rodar o programa, basta dar dois cliques dependendo da configuração do sistema, ou utilizar o seguinte comando
 num terminal(na mesma pasta na qual o programa foi posto):
 
-```java -jar heber-modelo.jar```
+```shell
+java -jar heber-modelo.jar
+```
 
 *É necessário utilizar a versão 24 do Java.
+
+## Compilação Manual
+
+### Dependências:
+
+- [Gradle](https://gradle.org/) 9.4.1
+- [Java](https://www.oracle.com/java/technologies/downloads/) 24
+- [PNPM](https://pnpm.io/pt/) ^10.33.0
+- [NodeJS](https://nodejs.org/pt) 25.2.1
+
+Para compilação da documentação:
+
+- [UV](https://docs.astral.sh/uv/) ^0.10.7
+- [Python](https://www.python.org/) 3.13
+
+Para auxiliar na execução do passo a passo:
+
+- [Just](https://just.systems/man/en/) ^1.50.0
+
+### Passo a passo
+
+```shell
+git clone https://github.com/Heber-Modelo/heber-modelo
+cd heber-modelo
+
+pnpm install
+pnpm run compile-scss
+pnpm run compilte-ts
+
+
+# Opcional, a fim de gerar a documentação integrada ao programa
+uv sync
+uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/static/docs
+
+./gradlew bootRun # Para rodar o programa diretamente, ou
+./gradlew bootJar # para gerar um jar executável do programa em ./build/libs
+```
 
 # Funcionalidades Planejadas/Propostas
 
@@ -81,14 +120,14 @@ num terminal(na mesma pasta na qual o programa foi posto):
 - [ ] Formatação automática
 - [x] Suporte para temas
 - [ ] Suporte para plugins
-- [ ] Suporte para keymaps customizados
+- [x] Suporte para keymaps customizados
 - [ ] Formatação automática de atributos
 - [ ] Estilos diferentes de fundo/grade
 - [ ] Exportação para PDF, SVG, PNG e XML
 - [ ] Alinhar elementos com a grade
 - [x] Auto atualização*
 
-\*Devido à mudança de nome do programa, versões anteriores a v0.0.5 não conseguem atualizar.
+\*Devido à mudança de nome do programa, versões anteriores a v0.0.5-SNAPSHOT não conseguem atualizar.
 
 # Autores
 
