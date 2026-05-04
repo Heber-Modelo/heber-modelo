@@ -62,6 +62,10 @@ import TiposConexao from "model/conexao/tiposConexao";
 import SeletorTipoConexao from "infrastructure/conexao/seletorTipoConexao";
 import SetaConectora from "infrastructure/conexao/setaConectora";
 import LateraisComponente from "model/componente/lateraisComponente";
+import ApagarTodosComponentesCommand, {
+  ApagarTodosComponentesCommandBuilder,
+} from "infrastructure/command/apagarTodosComponentesCommand";
+import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -374,8 +378,6 @@ let buttonDesfazer: HTMLDivElement | null = document.querySelector("button#desfa
 let buttonApagar: HTMLDivElement | null = document.querySelector("button#apagar");
 let buttonDeletar: HTMLDivElement | null = document.querySelector("button#deletar");
 
-buttonDeletar?.addEventListener("click", (): void => {});
-
 buttonApagar?.addEventListener("click", (): void => {
   let command: ApagarComponenteCommand = new ApagarComponenteCommandBuilder()
     .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
@@ -387,6 +389,23 @@ buttonApagar?.addEventListener("click", (): void => {
   selecionadorComponente.removerSelecao();
   limparPropriedades(abaPropriedades);
   atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
+});
+
+buttonDeletar?.addEventListener("click", async (): Promise<void> => {
+  let traducao: ResponseTraducaoJSON = await (
+    await fetch("/traducao/web.page.editor.confirm.delete-all")
+  ).json();
+  if (window.confirm(traducao.mensagem)) {
+    let command: ApagarTodosComponentesCommand = new ApagarTodosComponentesCommandBuilder()
+      .definirDiagrama(diagrama)
+      .definirRepositorioComponente(repositorioComponentes)
+      .build();
+    commandHistory.saveAndExecuteCommand(command);
+
+    selecionadorComponente.removerSelecao();
+    limparPropriedades(abaPropriedades);
+    atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
+  }
 });
 
 buttonDesfazer?.addEventListener("click", (): void => {

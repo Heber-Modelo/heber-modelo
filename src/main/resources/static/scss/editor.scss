@@ -55,9 +55,11 @@ header {
   grid-row: 2;
   height: 5rem;
   column-gap: 2rem;
+  top: 5rem;
+  width: 100%;
   grid-column: 1 / 4;
   border-bottom: 0.1rem solid var(--cor-borda);
-  position: relative;
+  position: fixed;
 
   button{
     background-color: unset;
