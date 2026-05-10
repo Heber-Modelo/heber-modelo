@@ -61,12 +61,12 @@ header {
   border-bottom: 0.1rem solid var(--cor-borda);
   position: fixed;
 
-  button{
+  button, summary{
     background-color: unset;
     z-index: 2;
   }
 
-  button:hover {
+  button:hover, summary:hover {
     svg {
       transform: scale(1.2);
       transition: 0.5s;
@@ -75,6 +75,73 @@ header {
         color: var(--cor-botao-hover);
       }
     }
+  }
+
+  .menu-arquivo{
+    position: relative;
+    display: inline-block;
+  }
+
+  summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    outline: none;
+  }
+
+  .mostrar-conteudo{
+    position: absolute;
+    z-index: 10;
+    top: 100%;
+    background-color: var(--cor-letra);
+    border: 0.01rem solid var(--cor-borda);
+    border-radius: 0.2rem;
+    min-width: 20rem;
+    height: auto;
+    padding: 0.5rem 2.5rem;
+  }
+
+  .mostrar-conteudo span {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    .itens-menu {
+      color: var(--cor-letra-alternativa);
+    }
+
+    .atalho {
+      color: var(--cor-fonte-clara);
+    }
+  }
+
+  details[open] > svg {
+    color: var(--cor-botao-hover);
+  }
+
+  hr {
+    border: 0;
+    border-top: 0.15rem solid var(--cor-fundo-input-focus);
+    margin: 0.2rem 0;
+  }
+
+  .mostrar-conteudo span:hover{
+    background-color: var(--cor-fundo-input);
+  }
+
+  details[open] > summary::before{
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
   svg {

@@ -30,55 +30,67 @@ Licensed works, modifications, and larger works may be distributed under differe
     <header th:replace="~{fragments/header :: header}"></header>
 
     <div class="barra-de-tarefas">
-      <button th:title="#{web.editor.toolbar.file}" id="arquivo">
-        <svg
-          width="358"
-          height="408"
-          viewBox="0 0 358 408"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g filter="url(#filter0_d_338_187)">
+      <details class="menu-arquivo">
+        <summary th:title="#{web.editor.toolbar.file}" id="arquivo">
+          <svg
+            width="358"
+            height="408"
+            viewBox="0 0 358 408"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g filter="url(#filter0_d_338_187)">
+              <rect
+                x="4"
+                width="350"
+                height="400"
+                rx="30"
+                fill="currentColor"
+                class="svg-cor-contorno"
+              />
+            </g>
+            <rect x="79" y="180" width="200" height="160" fill="currentColor" />
+            <rect x="79" width="200" height="120" fill="currentColor" />
+            <rect x="214" width="40" height="80" fill="currentColor" class="svg-cor-contorno" />
             <rect
-              x="4"
-              width="350"
-              height="400"
-              rx="30"
+              x="104"
+              y="210"
+              width="150"
+              height="20"
               fill="currentColor"
               class="svg-cor-contorno"
             />
-          </g>
-          <rect x="79" y="180" width="200" height="160" fill="currentColor" />
-          <rect x="79" width="200" height="120" fill="currentColor" />
-          <rect x="214" width="40" height="80" fill="currentColor" class="svg-cor-contorno" />
-          <rect
-            x="104"
-            y="210"
-            width="150"
-            height="20"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="104"
-            y="290"
-            width="150"
-            height="20"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="104"
-            y="250"
-            width="150"
-            height="20"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <circle cx="41" cy="370" r="10" fill="currentColor" />
-          <circle cx="316" cy="370" r="10" fill="currentColor" />
-        </svg>
-      </button>
+            <rect
+              x="104"
+              y="290"
+              width="150"
+              height="20"
+              fill="currentColor"
+              class="svg-cor-contorno"
+            />
+            <rect
+              x="104"
+              y="250"
+              width="150"
+              height="20"
+              fill="currentColor"
+              class="svg-cor-contorno"
+            />
+            <circle cx="41" cy="370" r="10" fill="currentColor" />
+            <circle cx="316" cy="370" r="10" fill="currentColor" />
+          </svg>
+        </summary>
+
+        <div class="mostrar-conteudo">
+          <span class="itens-menu">Novo <span class="atalho">Ctrl+N</span></span>
+          <span class="itens-menu">Abrir <span class="atalho">Ctrl+O</span></span>
+          <hr />
+          <span class="itens-menu">Salvar <span class="atalho">Ctrl+S</span></span>
+          <span class="itens-menu">Exportar <span class="atalho">Ctrl+E</span></span>
+          <hr />
+          <span class="itens-menu">Imprimir <span class="atalho">Ctrl+P</span></span>
+        </div>
+      </details>
 
       <button th:title="#{web.editor.toolbar.copy}" id="copiar">
         <svg

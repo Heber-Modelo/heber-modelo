@@ -96,6 +96,10 @@
     {
       "nomeVariavel": "cor_fundo_input_focus",
       "valorPadraoVariavel": "#E8E8E8"
+    },
+    {
+      "nomeVariavel": "cor_fonte_clara",
+      "valorPadraoVariavel": "#A2A2A2"
     }
   ]
 }
