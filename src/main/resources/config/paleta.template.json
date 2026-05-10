@@ -43,11 +43,11 @@
     },
     {
       "nomeVariavel": "cor_grade_horizontal",
-      "valorPadraoVariavel": "#000000"
+      "valorPadraoVariavel": "#AAAAAA"
     },
     {
       "nomeVariavel": "cor_grade_vertical",
-      "valorPadraoVariavel": "#000000"
+      "valorPadraoVariavel": "#AAAAAA"
     },
     {
       "nomeVariavel": "cor_componente_hover",
