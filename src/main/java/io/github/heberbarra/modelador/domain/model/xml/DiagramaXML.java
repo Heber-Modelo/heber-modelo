@@ -33,7 +33,7 @@ public class DiagramaXML {
     private List<AutorXML> authors;
 
     @XmlElement(name = "types", required = true)
-    private TiposDiagramaXML types;
+    private List<TiposDiagramaXML> types;
 
     @XmlElement(name = "links", required = true)
     private List<LinkXML> links;
@@ -47,7 +47,7 @@ public class DiagramaXML {
             LocalDate creationDate,
             LocalDate lastModification,
             List<AutorXML> authors,
-            TiposDiagramaXML types,
+            List<TiposDiagramaXML> types,
             List<LinkXML> links,
             List<PaginaXML> paginas) {
         this.creationDate = creationDate;
@@ -82,11 +82,11 @@ public class DiagramaXML {
         this.authors = authors;
     }
 
-    public TiposDiagramaXML getTypes() {
+    public List<TiposDiagramaXML> getTypes() {
         return types;
     }
 
-    public void setTypes(TiposDiagramaXML types) {
+    public void setTypes(List<TiposDiagramaXML> types) {
         this.types = types;
     }
 
