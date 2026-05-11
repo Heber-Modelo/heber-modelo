@@ -104,6 +104,10 @@
     {
       "nomeVariavel": "cor_fundo_menu",
       "valorPadraoVariavel": "#F1F1F1"
+    },
+    {
+      "nomeVariavel": "cor_fundo_area_de_edicao",
+      "valorPadraoVariavel": "#E8E8E8"
     }
   ]
 }

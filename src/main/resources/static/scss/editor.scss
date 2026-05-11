@@ -24,6 +24,47 @@ body {
   grid-template-rows: 5rem 5rem calc(100% - 10rem);
   max-width: 100vw;
   overflow: auto;
+
+  &:has(#painel-direito.hidden) {
+    grid-template-columns: 20% 80%;
+  }
+
+  &:has(#painel-esquerdo.hidden) {
+    grid-template-columns: 80% 20%;
+    main{
+      grid-column: 1;
+    }
+  }
+
+  &:has(#painel-direito.hidden):has(#painel-esquerdo.hidden) {
+    grid-template-columns: 100%;
+    main{
+      grid-column: 1;
+    }
+  }
+
+}
+
+header {
+  grid-column: 1 / 4;
+  grid-row: 1;
+  height: 5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+main {
+  grid-column: 2;
+  grid-row: 3 / 4;
+  background-color: var(--cor-fundo-area-de-edicao);
+  width: 95%;
+  height: 95%;
+  justify-self: center;
+  align-self: center;
+  border: 0.2rem solid var(--cor-borda);
+  overflow: scroll;
+
   background-image:
     repeating-linear-gradient(
       var(--cor-grade-horizontal) 0 var(--espessura-grade),
@@ -35,15 +76,6 @@ body {
       transparent 1px 100%
     );
   background-size: var(--tamanho-quadrado-grade) var(--tamanho-quadrado-grade);
-}
-
-header {
-  grid-column: 1 / 4;
-  grid-row: 1;
-  height: 5rem;
-  position: fixed;
-  top: 0;
-  left: 0;
 }
 
 .barra-de-tarefas {
@@ -314,16 +346,6 @@ section#seletor-tipos-conexao {
     grid-template-columns: 20% 80%;
     width: 100%;
   }
-}
-
-main {
-  grid-column: 2;
-  grid-row: 2 / 4;
-  background-color: transparent;
-  //position: relative;
-  //top: 0;
-  //left: 0;
-  //margin: 0 auto;
 }
 
 fieldset.componentes-diagrama {
