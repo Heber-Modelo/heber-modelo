@@ -68,6 +68,9 @@ import ApagarTodosComponentesCommand, {
   ApagarTodosComponentesCommandBuilder,
 } from "infrastructure/command/apagarTodosComponentesCommand";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
+import CriarComponenteCommand, {
+  CriarComponenteCommandBuilder,
+} from "infrastructure/command/criarComponenteCommand";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -184,23 +187,15 @@ function callbackCriarComponente(event: Event): void {
   let btn: HTMLButtonElement = event.target as HTMLButtonElement;
   let nomeElemento: string | null = btn.getAttribute(ATRIBUTO_NOME_ELEMENTO);
 
-  if (nomeElemento === null) {
-    return;
-  }
-
-  fabricaComponente.criarComponente(nomeElemento).then((componente: ComponenteDiagrama): void => {
-    let command: CarregarCSSCommand = new CarregarCSSCommandBuilder()
-      .definirNomeArquivo(nomeElemento)
-      .build();
-    command.execute();
-    registradorEventosElemento.registrarEventos(componente.htmlComponente);
-    componente.htmlComponente.setAttribute(
-      ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
-      String(geradorIDComponente.pegarProximoID()),
-    );
-    repositorioComponentes.adicionar(componente);
-    diagrama?.appendChild(componente.htmlComponente);
-  });
+  let command: CriarComponenteCommand = new CriarComponenteCommandBuilder()
+    .definirDiagrama(diagrama)
+    .definirFabricaComponente(fabricaComponente)
+    .definirGeradorIDComponente(geradorIDComponente)
+    .definirNomeElemento(nomeElemento)
+    .definirRegistradorEventosElemento(registradorEventosElemento)
+    .definirRepositorioComponentes(repositorioComponentes)
+    .build();
+  commandHistory.saveAndExecuteCommand(command);
 }
 
 let inputsPorTipo: { [tipoDiagrama: string]: HTMLInputElement } = {};
