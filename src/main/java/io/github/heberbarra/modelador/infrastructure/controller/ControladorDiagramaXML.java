@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@RestController
 public class ControladorDiagramaXML {
     private final ConversorDiagramaXML conversor = new ConversorDiagramaXML();
     private File ultimoArquivo;

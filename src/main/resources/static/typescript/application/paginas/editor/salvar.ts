@@ -11,11 +11,9 @@
  *
  */
 
-const divNomeDiagrama: HTMLDivElement | null = document.querySelector("#nome-diagrama");
 const divAutoresDiagrama: HTMLDivElement | null = document.querySelector("#autor-diagrama");
 const divEmailsDiagrama: HTMLDivElement | null = document.querySelector("#email-diagrama");
 const divTiposDiagrama: HTMLDivElement | null = document.querySelector("#tipos-diagrama");
-const mainDiagrama: HTMLElement | null = document.querySelector("main");
 
 function separarStringLista(texto: string | undefined): string[] {
   if (texto === undefined) {
@@ -28,12 +26,31 @@ function separarStringLista(texto: string | undefined): string[] {
     .map((s: string): string => s.trim());
 }
 
+type AuthorXML = {
+  "author-name": string;
+  "author-email": string;
+};
+
+type DiagramaTypeXML = {
+  "diagram-type": string;
+};
+
 async function salvar(): Promise<void> {
-  let nomeDiagrama: string = divNomeDiagrama?.innerText ?? "";
   let autoresDiagrama: string[] = separarStringLista(divAutoresDiagrama?.innerText);
   let emailsDiagrama: string[] = separarStringLista(divEmailsDiagrama?.innerText);
   let tiposDiagrama: string[] = separarStringLista(divTiposDiagrama?.innerText);
-  let dadosDiagrama: string | undefined = mainDiagrama?.innerText;
+
+  let authors: AuthorXML[] = [];
+  for (let i: number = 0; i < autoresDiagrama.length; i++) {
+    authors.push({
+      "author-name": autoresDiagrama[i],
+      "author-email": emailsDiagrama[i] || "",
+    });
+  }
+
+  let diagramTypes: DiagramaTypeXML[] = tiposDiagrama.map(
+    (tipo: string): DiagramaTypeXML => ({ "diagram-type": tipo }),
+  );
 
   await fetch("/salvar", {
     method: "POST",
@@ -41,11 +58,12 @@ async function salvar(): Promise<void> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      nome: nomeDiagrama,
-      autores: autoresDiagrama,
-      emails: emailsDiagrama,
-      tipos: tiposDiagrama,
-      dados: dadosDiagrama,
+      authors: authors,
+      types: diagramTypes,
+      "creation-date": Date.now(),
+      "last-modification": Date.now(),
+      links: [],
+      pages: [],
     }),
   });
 }
