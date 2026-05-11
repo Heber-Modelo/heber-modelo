@@ -86,6 +86,20 @@ componentes.forEach((componente: HTMLDivElement): void => {
   repositorioComponentes.adicionar(new ComponenteDiagrama(componente, []));
 });
 
+/***************************/
+/* DESELECIONAR COMPONENTE */
+/***************************/
+
+diagrama?.addEventListener("click", (event: MouseEvent): void => {
+  let target: HTMLElement = event.target as HTMLElement;
+
+  if (target.tagName === "MAIN") {
+    selecionadorComponente.removerSelecao();
+    limparPropriedades(abaPropriedades);
+    atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
+  }
+});
+
 /*********************************/
 /* MOVIMENTAÇÃO DE UM COMPONENTE */
 /*********************************/
