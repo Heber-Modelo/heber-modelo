@@ -41,10 +41,6 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
     return this._propriedades;
   }
 
-  get recebeSetas(): boolean {
-    return this._recebeSetas;
-  }
-
   public definirValorPropriedade(nomePropriedade: string, valorPropriedade: string): void {
     this._propriedades.forEach((propriedade: PropriedadeComponente): void => {
       if (propriedade.nome === nomePropriedade) {

@@ -3,6 +3,7 @@
   "valorHtmlInterno": "<div class=\"marcador-atributo\" onclick=\"callbackMarcador(event)\"></div><div  onmouseup=\"callbackInverterAtributo(event)\" contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">atributo</div>",
   "classesElemento": ["elemento-atributo"],
   "recebePontoExtensor": false,
+  "recebeSetaConectora": true,
   "propriedades": [
     {
       "classeElemento": "nome",

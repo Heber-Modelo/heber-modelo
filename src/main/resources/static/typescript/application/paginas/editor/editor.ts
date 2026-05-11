@@ -53,9 +53,11 @@ import ConectarComponentesCommand, {
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import GeradorIDComponenteFactory from "infrastructure/factory/geradorIDComponenteFactory";
+import RegistradorEventosConexaoFactory from "infrastructure/factory/registradorEventosConexaoFactory";
 import RegistradorEventosElementoFactory from "infrastructure/factory/registradorEventosElementoFactory";
 import CommandHistory from "infrastructure/history/commandHistory";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
+import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import "infrastructure/variaveisConfiguracao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import TiposConexao from "model/conexao/tiposConexao";
@@ -76,6 +78,7 @@ let commandHistory: CommandHistory = CommandHistoryFactory.build();
 let diagrama: HTMLElement | null = document.querySelector("main");
 let fabricaComponente: ComponenteFactory = new ComponenteFactory();
 let geradorIDComponente: GeradorIDComponente = GeradorIDComponenteFactory.build();
+let registradorEventosConexao: RegistradorEventosConexao = RegistradorEventosConexaoFactory.build();
 let registradorEventosElemento: RegistradorEventosElemento =
   RegistradorEventosElementoFactory.build();
 let repositorioComponentes: RepositorioComponente = RepositorioComponenteFactory.build();
@@ -87,7 +90,7 @@ componentes.forEach((componente: HTMLDivElement): void => {
 });
 
 /***************************/
-/* DESELECIONAR COMPONENTE */
+/* DESSELECIONAR COMPONENTE */
 /***************************/
 
 diagrama?.addEventListener("click", (event: MouseEvent): void => {
@@ -149,13 +152,15 @@ function dragElement(event: MouseEvent): void {
   );
 
   if (componente === null) return;
-  selecionadorComponente.moverSetas(componente);
+  selecionadorComponente.reposicionarSetasConectoras(componente);
   componente.atualizarOuvintes();
 }
 
 /***********************/
 /* EVENTOS COMPONENTES */
 /***********************/
+
+registradorEventosConexao.adicionarCallback("mousedown", mouseDownSelecionarElemento);
 
 registradorEventosElemento.adicionarCallback("mousedown", mouseDownSelecionarElemento);
 registradorEventosElemento.adicionarCallback("mousedown", mouseDownComecarMoverElemento);
@@ -241,6 +246,7 @@ let seletorTipoConexao: SeletorTipoConexao = new SeletorTipoConexao();
 let setaPlaceholder: HTMLElement = document.querySelector("#seta-placeholder") as HTMLElement;
 let conectarComponentesCommandBuilder: ConectarComponentesCommandBuilder =
   new ConectarComponentesCommandBuilder();
+selecionadorComponente.esconderSetasConectoras();
 
 function callbackInicialSetaConectora(event: MouseEvent): void {
   document.addEventListener("mousemove", callbackMoverSeta);
@@ -256,6 +262,7 @@ function callbackInicialSetaConectora(event: MouseEvent): void {
     .definirFabricaComponente(fabricaComponente)
     .definirFabricaConexao(fabricaConexao)
     .definirGeradorID(geradorIDComponente)
+    .definirRegistradorEventosConexao(registradorEventosConexao)
     .definirRegistradorEventosElemento(registradorEventosElemento)
     .definirRepositorioComponentes(repositorioComponentes);
   let targetEvent: HTMLElement = event.target as HTMLElement;

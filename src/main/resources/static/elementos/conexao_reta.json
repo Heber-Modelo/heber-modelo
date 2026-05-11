@@ -1,9 +1,8 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "<div class=\"parte-vertical\"></div><div class=\"parte-horizontal\"></div>",
-  "classesElemento": [
-    "elemento-conexao-reta"
-  ],
+  "classesElemento": ["elemento-conexao-reta"],
   "recebePontoExtensor": false,
+  "recebeSetaConectora": false,
   "propriedades": []
 }

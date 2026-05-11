@@ -3,5 +3,6 @@
   "valorHtmlInterno": "<div></div>",
   "classesElemento": ["elemento-especializacao"],
   "recebePontoExtensor": true,
+  "recebeSetaConectora": true,
   "propriedades": []
 }

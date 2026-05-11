@@ -3,5 +3,6 @@
   "valorHtmlInterno": "",
   "classesElemento": ["elemento-conexao-angulada", "elemento-conexao-entidade-fraca"],
   "recebePontoExtensor": false,
+  "recebeSetaConectora": false,
   "propriedades": []
 }

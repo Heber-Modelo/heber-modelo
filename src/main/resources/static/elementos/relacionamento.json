@@ -3,6 +3,7 @@
   "valorHtmlInterno": "<div><div contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">RELACIONAMENTO</div></div>",
   "classesElemento": ["elemento-relacionamento"],
   "recebePontoExtensor": true,
+  "recebeSetaConectora": true,
   "propriedades": [
     {
       "classeElemento": "nome",

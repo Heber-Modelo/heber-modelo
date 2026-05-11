@@ -1,10 +1,8 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "<div class=\"ponta-seta\"></div>",
-  "classesElemento": [
-    "elemento-conexao-angulada",
-    "elemento-conexao-seta"
-  ],
+  "classesElemento": ["elemento-conexao-angulada", "elemento-conexao-seta"],
   "recebePontoExtensor": false,
+  "recebeSetaConectora": false,
   "propriedades": []
 }

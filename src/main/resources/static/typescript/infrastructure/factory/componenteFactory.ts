@@ -20,6 +20,7 @@ export default class ComponenteFactory {
   public static PROPRIEDADE_ID_COMPONENTE: string = "data-id";
   public static PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
   public static PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string = "data-recebe-pontos-extensores";
+  public static PROPRIEDADE_RECEBE_SETAS_CONECTORAS: string = "data-recebe-setas-conectoras";
   private static _CLASSE_COMUM_ELEMENTOS: string = "componente";
 
   static get CLASSE_COMUM_ELEMENTOS(): string {
@@ -42,6 +43,10 @@ export default class ComponenteFactory {
         elementoHTML.setAttribute(
           ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
           valores.recebePontoExtensor,
+        );
+        elementoHTML.setAttribute(
+          ComponenteFactory.PROPRIEDADE_RECEBE_SETAS_CONECTORAS,
+          valores.recebeSetaConectora,
         );
         elementoHTML.classList.add(ComponenteFactory.CLASSE_COMUM_ELEMENTOS);
         elementoHTML.classList.add(...valores.classesElemento);

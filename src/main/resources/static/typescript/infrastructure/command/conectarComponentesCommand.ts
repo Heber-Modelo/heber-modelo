@@ -26,6 +26,7 @@ import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
 import Ponto from "model/ponto";
+import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 
 export default class ConectarComponentesCommand implements ICommand {
   public static readonly NOME_ELEMENTO_ENTIDADE: string = "entidade";
@@ -34,6 +35,7 @@ export default class ConectarComponentesCommand implements ICommand {
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
   private readonly _geradorID: GeradorIDComponente;
+  private readonly _registradorEventosConexao: RegistradorEventosConexao;
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponentes: IRepositorioComponente;
   private readonly _primeiroComponente: ComponenteDiagrama;
@@ -48,6 +50,7 @@ export default class ConectarComponentesCommand implements ICommand {
     fabricaComponente: ComponenteFactory,
     fabricaConexao: ComponenteConexaoFactory,
     geradorID: GeradorIDComponente,
+    registradorEventosConexao: RegistradorEventosConexao,
     registradorEventosElemento: RegistradorEventosElemento,
     repositorioComponentes: IRepositorioComponente,
     primeiroComponente: ComponenteDiagrama,
@@ -60,6 +63,7 @@ export default class ConectarComponentesCommand implements ICommand {
     this._fabricaComponente = fabricaComponente;
     this._fabricaConexao = fabricaConexao;
     this._geradorID = geradorID;
+    this._registradorEventosConexao = registradorEventosConexao;
     this._registradorEventosElemento = registradorEventosElemento;
     this._repositorioComponentes = repositorioComponentes;
     this._primeiroComponente = primeiroComponente;
@@ -160,6 +164,13 @@ export default class ConectarComponentesCommand implements ICommand {
             componenteRelacionamento,
           );
 
+          this._registradorEventosConexao.registrarEventos(primeiraConexao.htmlComponente);
+          primeiraConexao.htmlComponente.setAttribute(
+            ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+            String(this._geradorID.pegarProximoID()),
+          );
+
+          this._repositorioComponentes.adicionar(primeiraConexao);
           this._repositorioComponentes.adicionar(primeiroComponenteConexao);
           this._diagrama.append(primeiroComponenteConexao.htmlComponente);
 
@@ -185,6 +196,13 @@ export default class ConectarComponentesCommand implements ICommand {
             this._segundoComponente,
           );
 
+          this._registradorEventosConexao.registrarEventos(segundaConexao.htmlComponente);
+          segundaConexao.htmlComponente.setAttribute(
+            ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+            String(this._geradorID.pegarProximoID()),
+          );
+
+          this._repositorioComponentes.adicionar(segundaConexao);
           this._repositorioComponentes.adicionar(segundoComponenteConexao);
           this._diagrama.append(segundoComponenteConexao.htmlComponente);
         });
@@ -214,6 +232,11 @@ export default class ConectarComponentesCommand implements ICommand {
           this._segundoComponente,
         );
 
+        this._componenteConexao.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+          String(this._geradorID.pegarProximoID()),
+        );
+        this._registradorEventosConexao.registrarEventos(this._componenteConexao.htmlComponente);
         this._repositorioComponentes.adicionar(this._componenteConexao);
         this._diagrama.append(this._componenteConexao.htmlComponente);
       });
@@ -249,6 +272,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
   private _fabricaComponente: ComponenteFactory | undefined;
   private _fabricaConexao: ComponenteConexaoFactory | undefined;
   private _geradorID: GeradorIDComponente | undefined;
+  private _registradorEventosConexao: RegistradorEventosConexao | undefined;
   private _registradorEventosElemento: RegistradorEventosElemento | undefined;
   private _repositorioComponentes: IRepositorioComponente | undefined;
   private _primeiroComponente: ComponenteDiagrama | undefined;
@@ -277,6 +301,14 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
 
   definirGeradorID(geradorID: GeradorIDComponente | undefined): this {
     this._geradorID = geradorID;
+
+    return this;
+  }
+
+  definirRegistradorEventosConexao(
+    registradorEventosConexao: RegistradorEventosConexao | undefined,
+  ): this {
+    this._registradorEventosConexao = registradorEventosConexao;
 
     return this;
   }
@@ -360,6 +392,10 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
       throw new CommandBuilderException("O gerador de IDs de componentes não foi definido");
     }
 
+    if (this._registradorEventosConexao === undefined) {
+      throw new CommandBuilderException("O registrador de eventos de conexão não foi definido");
+    }
+
     if (this._registradorEventosElemento === undefined) {
       throw new CommandBuilderException("O registrador de eventos de elemento não foi definido");
     }
@@ -393,6 +429,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
       this._fabricaComponente,
       this._fabricaConexao,
       this._geradorID,
+      this._registradorEventosConexao,
       this._registradorEventosElemento,
       this._repositorioComponentes,
       this._primeiroComponente,
