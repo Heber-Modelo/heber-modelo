@@ -91,35 +91,42 @@ header {
     outline: none;
   }
 
-  .mostrar-conteudo{
+  .mostrar-conteudo {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     z-index: 10;
     top: 100%;
     background-color: var(--cor-fundo-menu);
     border: 0.01rem solid var(--cor-borda);
     border-radius: 0.2rem;
-    min-width: 20rem;
+    min-width: 22rem;
     height: auto;
-    padding: 0.5rem 2.5rem;
+    padding: 0.8rem 0.8rem;
   }
 
-  .mostrar-conteudo span {
+  .comando {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    font-size: 1.2rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-
-    .itens-menu {
-      color: var(--cor-letra-alternativa);
-    }
-
-    .atalho {
-      color: var(--cor-fonte-clara);
-    }
+    padding: 1rem 1rem;
   }
+
+  .comando:hover{
+    background-color: var(--cor-fundo-input);
+  }
+
+  .itens-menu {
+    color: var(--cor-letra-alternativa);
+    font-size: 1.2rem;
+  }
+
+  .atalho {
+    color: var(--cor-fonte-clara);
+    font-size: 1rem;
+  }
+
 
   details[open] summary {
     svg {
@@ -134,12 +141,8 @@ header {
 
   hr {
     border: 0;
-    border-top: 0.15rem solid var(--cor-fundo-input-focus);
-    margin: 0.2rem 0;
-  }
-
-  .mostrar-conteudo > span:hover{
-    background-color: var(--cor-fundo-input);
+    border-top: 0.3rem solid var(--cor-fundo-input-focus);
+    margin: 0.5rem 0;
   }
 
   details[open] > summary::before{

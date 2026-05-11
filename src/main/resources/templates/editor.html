@@ -82,13 +82,34 @@ Licensed works, modifications, and larger works may be distributed under differe
         </summary>
 
         <div class="mostrar-conteudo">
-          <span class="itens-menu">Novo <span class="atalho">Ctrl+N</span></span>
-          <span class="itens-menu">Abrir <span class="atalho">Ctrl+O</span></span>
+          <div class="comando">
+            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.new-file}"></span>
+            <span class="atalho">Ctrl+N</span>
+          </div>
+
+          <div class="comando">
+            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.open-file}"></span>
+            <span class="atalho">Ctrl+O</span>
+          </div>
+
           <hr />
-          <span class="itens-menu">Salvar <span class="atalho">Ctrl+S</span></span>
-          <span class="itens-menu">Exportar <span class="atalho">Ctrl+E</span></span>
+
+          <div class="comando">
+            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.save-file}"></span>
+            <span class="atalho">Ctrl+S</span>
+          </div>
+
+          <div class="comando">
+            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.export-file}"></span>
+            <span class="atalho">Ctrl+E</span>
+          </div>
+
           <hr />
-          <span class="itens-menu">Imprimir <span class="atalho">Ctrl+P</span></span>
+
+          <div class="comando">
+            <span class="itens-menu">Imprimir</span>
+            <span class="atalho">Ctrl+P</span>
+          </div>
         </div>
       </details>
 
