@@ -100,6 +100,10 @@
     {
       "nomeVariavel": "cor_fonte_clara",
       "valorPadraoVariavel": "#A2A2A2"
+    },
+    {
+      "nomeVariavel": "cor_fundo_menu",
+      "valorPadraoVariavel": "#F1F1F1"
     }
   ]
 }

@@ -95,7 +95,7 @@ header {
     position: absolute;
     z-index: 10;
     top: 100%;
-    background-color: var(--cor-letra);
+    background-color: var(--cor-fundo-menu);
     border: 0.01rem solid var(--cor-borda);
     border-radius: 0.2rem;
     min-width: 20rem;
@@ -121,8 +121,15 @@ header {
     }
   }
 
-  details[open] > svg {
-    color: var(--cor-botao-hover);
+  details[open] summary {
+    svg {
+      transform: scale(1.2);
+      transition: 0.5s;
+
+      .svg-cor-contorno {
+        color: var(--cor-botao-hover);
+      }
+    }
   }
 
   hr {
@@ -131,7 +138,7 @@ header {
     margin: 0.2rem 0;
   }
 
-  .mostrar-conteudo span:hover{
+  .mostrar-conteudo > span:hover{
     background-color: var(--cor-fundo-input);
   }
 
@@ -310,6 +317,10 @@ main {
   grid-column: 2;
   grid-row: 2 / 4;
   background-color: transparent;
+  //position: relative;
+  //top: 0;
+  //left: 0;
+  //margin: 0 auto;
 }
 
 fieldset.componentes-diagrama {
