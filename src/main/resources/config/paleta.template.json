@@ -43,11 +43,11 @@
     },
     {
       "nomeVariavel": "cor_grade_horizontal",
-      "valorPadraoVariavel": "#000000"
+      "valorPadraoVariavel": "#AAAAAA"
     },
     {
       "nomeVariavel": "cor_grade_vertical",
-      "valorPadraoVariavel": "#000000"
+      "valorPadraoVariavel": "#AAAAAA"
     },
     {
       "nomeVariavel": "cor_componente_hover",
@@ -95,6 +95,18 @@
     },
     {
       "nomeVariavel": "cor_fundo_input_focus",
+      "valorPadraoVariavel": "#E8E8E8"
+    },
+    {
+      "nomeVariavel": "cor_fonte_clara",
+      "valorPadraoVariavel": "#A2A2A2"
+    },
+    {
+      "nomeVariavel": "cor_fundo_menu",
+      "valorPadraoVariavel": "#F1F1F1"
+    },
+    {
+      "nomeVariavel": "cor_fundo_area_de_edicao",
       "valorPadraoVariavel": "#E8E8E8"
     }
   ]

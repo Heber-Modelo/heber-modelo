@@ -31,55 +31,88 @@ Licensed works, modifications, and larger works may be distributed under differe
     <header th:replace="~{fragments/header :: header}"></header>
 
     <div class="barra-de-tarefas">
-      <button th:title="#{web.editor.toolbar.file}" id="arquivo">
-        <svg
-          width="358"
-          height="408"
-          viewBox="0 0 358 408"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g filter="url(#filter0_d_338_187)">
+      <details class="menu-arquivo">
+        <summary th:title="#{web.editor.toolbar.file}" id="arquivo">
+          <svg
+            width="358"
+            height="408"
+            viewBox="0 0 358 408"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g filter="url(#filter0_d_338_187)">
+              <rect
+                x="4"
+                width="350"
+                height="400"
+                rx="30"
+                fill="currentColor"
+                class="svg-cor-contorno"
+              />
+            </g>
+            <rect x="79" y="180" width="200" height="160" fill="currentColor" />
+            <rect x="79" width="200" height="120" fill="currentColor" />
+            <rect x="214" width="40" height="80" fill="currentColor" class="svg-cor-contorno" />
             <rect
-              x="4"
-              width="350"
-              height="400"
-              rx="30"
+              x="104"
+              y="210"
+              width="150"
+              height="20"
               fill="currentColor"
               class="svg-cor-contorno"
             />
-          </g>
-          <rect x="79" y="180" width="200" height="160" fill="currentColor" />
-          <rect x="79" width="200" height="120" fill="currentColor" />
-          <rect x="214" width="40" height="80" fill="currentColor" class="svg-cor-contorno" />
-          <rect
-            x="104"
-            y="210"
-            width="150"
-            height="20"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="104"
-            y="290"
-            width="150"
-            height="20"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="104"
-            y="250"
-            width="150"
-            height="20"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <circle cx="41" cy="370" r="10" fill="currentColor" />
-          <circle cx="316" cy="370" r="10" fill="currentColor" />
-        </svg>
-      </button>
+            <rect
+              x="104"
+              y="290"
+              width="150"
+              height="20"
+              fill="currentColor"
+              class="svg-cor-contorno"
+            />
+            <rect
+              x="104"
+              y="250"
+              width="150"
+              height="20"
+              fill="currentColor"
+              class="svg-cor-contorno"
+            />
+            <circle cx="41" cy="370" r="10" fill="currentColor" />
+            <circle cx="316" cy="370" r="10" fill="currentColor" />
+          </svg>
+        </summary>
+
+        <div class="mostrar-conteudo">
+          <div class="comando">
+            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.new-file}"></span>
+            <span class="atalho">Ctrl+N</span>
+          </div>
+
+          <div class="comando">
+            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.open-file}"></span>
+            <span class="atalho">Ctrl+O</span>
+          </div>
+
+          <hr />
+
+          <div class="comando">
+            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.save-file}"></span>
+            <span class="atalho">Ctrl+S</span>
+          </div>
+
+          <div class="comando">
+            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.export-file}"></span>
+            <span class="atalho">Ctrl+E</span>
+          </div>
+
+          <hr />
+
+          <div class="comando">
+            <span class="itens-menu">Imprimir</span>
+            <span class="atalho">Ctrl+P</span>
+          </div>
+        </div>
+      </details>
 
       <button th:title="#{web.editor.toolbar.copy}" id="copiar">
         <svg
@@ -618,7 +651,7 @@ Licensed works, modifications, and larger works may be distributed under differe
         </label>
       </section>
       <section id="seletor-tipos-conexao" class="pagina">
-        <h2>SELETOR TIPO CONEXÃO</h2>
+        <h2 th:text="#{web.page.editor.section.type-selector}"></h2>
       </section>
       <section id="paginas" class="pagina">
         <h2 th:text="#{web.page.editor.section.pages}"></h2>
@@ -631,10 +664,10 @@ Licensed works, modifications, and larger works may be distributed under differe
         style="display: none"
         th:text="${novoDiagramaDTO.getTiposDiagrama()}"
       ></div>
-      <div class="seta seta-superior" style="display: none; rotate: 270deg"></div>
-      <div class="seta seta-inferior" style="display: none; rotate: -270deg"></div>
-      <div class="seta seta-direita" style="display: none"></div>
-      <div class="seta seta-esquerda" style="display: none; rotate: 180deg"></div>
+      <div class="seta seta-superior" style="rotate: 270deg"></div>
+      <div class="seta seta-inferior" style="rotate: -270deg"></div>
+      <div class="seta seta-direita"></div>
+      <div class="seta seta-esquerda" style="rotate: 180deg"></div>
       <div id="seta-placeholder" style="display: none; position: absolute">X</div>
     </main>
     <div th:replace="~{fragments/cookiesBanner :: #cookies-banner}"></div>

@@ -11,17 +11,16 @@
  *
  */
 
+import helperTraducaoConexao from "infrastructure/helper/helperTraducaoConexao";
 import TiposConexao from "model/conexao/tiposConexao";
 
 export default class SeletorTipoConexao {
   static readonly ID_SELETOR: string = "#seletor-tipos-conexao";
   static readonly NOME_SELETOR: string = "tipo-conexao";
   private readonly _elemento: HTMLDivElement;
-  private readonly _inputs: NodeListOf<HTMLInputElement>;
+  private _inputs: NodeListOf<HTMLInputElement> | undefined;
 
-  constructor() {
-    this._elemento = document.querySelector(SeletorTipoConexao.ID_SELETOR) as HTMLDivElement;
-
+  private async criarSeletores(): Promise<void> {
     for (let tipoConexao in TiposConexao) {
       let inputSeletorTipoConexao: HTMLInputElement = document.createElement("input");
 
@@ -30,13 +29,21 @@ export default class SeletorTipoConexao {
       inputSeletorTipoConexao.value = tipoConexao;
 
       let labelSeletorTipoConexao: HTMLLabelElement = document.createElement("label");
-      labelSeletorTipoConexao.innerHTML = `<span>${tipoConexao.replaceAll("_", " ").toUpperCase()}</span>`;
-      labelSeletorTipoConexao.prepend(inputSeletorTipoConexao);
       this._elemento.appendChild(labelSeletorTipoConexao);
+      let nomeConexao: string = await helperTraducaoConexao(
+        TiposConexao[tipoConexao as keyof typeof TiposConexao],
+      );
+      labelSeletorTipoConexao.innerHTML = `<span>${nomeConexao}</span>`;
+      labelSeletorTipoConexao.prepend(inputSeletorTipoConexao);
     }
+  }
 
-    this._inputs = this._elemento.querySelectorAll("label input");
-    this._inputs.item(0).defaultChecked = true;
+  constructor() {
+    this._elemento = document.querySelector(SeletorTipoConexao.ID_SELETOR) as HTMLDivElement;
+    this.criarSeletores().then((): void => {
+      this._inputs = this._elemento.querySelectorAll("label input");
+      this._inputs.item(0).defaultChecked = true;
+    });
   }
 
   public esconderSeletor(): void {
@@ -48,6 +55,10 @@ export default class SeletorTipoConexao {
   }
 
   get tipoConexaoAtual(): TiposConexao {
+    if (!this._inputs) {
+      return TiposConexao.CONEXAO_ANGULADA;
+    }
+
     for (const input of this._inputs) {
       if (input.checked) {
         return TiposConexao[input.value as keyof typeof TiposConexao];

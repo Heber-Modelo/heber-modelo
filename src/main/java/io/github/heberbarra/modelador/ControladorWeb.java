@@ -254,6 +254,13 @@ public class ControladorWeb {
         return "entrarSessao";
     }
 
+    @RequestMapping({"/anexarAtividade", "/anexarAtividade.html"})
+    public String anexarAtividade(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "exercise");
+        InjetorAtributos.injetarPaleta(modelMap);
+        return "anexarAtividade";
+    }
+
     @RequestMapping({"/redefinir", "/redefinir.html"})
     public String redefinirSenha(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "reset-password");

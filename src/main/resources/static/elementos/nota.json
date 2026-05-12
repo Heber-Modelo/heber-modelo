@@ -3,6 +3,7 @@
   "valorHtmlInterno": "<div contenteditable=\"true\" spellcheck=\"true\" class=\"texto\">NOTA</div>",
   "classesElemento": ["elemento-nota"],
   "recebePontoExtensor": true,
+  "recebeSetaConectora": true,
   "propriedades": [
     {
       "classeElemento": "texto",

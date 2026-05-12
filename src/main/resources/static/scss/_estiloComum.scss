@@ -43,7 +43,7 @@ aside {
   font-family: Arial, serif;
 }
 
-button {
+button, summary {
   background-color: var(--cor-botao);
   border-radius: variaveis.$borderRadiusBotao;
   cursor: pointer;

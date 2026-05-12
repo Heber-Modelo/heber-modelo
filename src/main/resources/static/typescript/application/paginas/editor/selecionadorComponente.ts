@@ -41,20 +41,8 @@ export default class SelecionadorComponente {
     }
     this._componenteSelecionado = componente;
     this._componenteSelecionado.htmlComponente.classList.add(CLASSE_ELEMENTO_SELECIONADO);
-    this.moverSetas(componente);
-
-    let recebePontosExtensores: string | null | undefined =
-      this._componenteSelecionado?.htmlComponente.getAttribute(
-        ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
-      );
-
-    if (recebePontosExtensores === "false") {
-      this.esconderPontosExtensores();
-    }
-
-    this._pontosExtensores.forEach((ponto: PontoExtensor): void =>
-      ponto.trocarElementoAtual(componente.htmlComponente),
-    );
+    this.reposicionarPontosExtensores();
+    this.reposicionarSetasConectoras(componente);
   }
 
   public esconderPontosExtensores(): void {
@@ -63,6 +51,14 @@ export default class SelecionadorComponente {
 
   public mostrarPontosExtensores(): void {
     this._pontosExtensores.forEach((ponto: PontoExtensor): void => ponto.mostrarPonto());
+  }
+
+  public esconderSetasConectoras(): void {
+    this._setasConectoras.forEach((seta: SetaConectora): void => seta.esconderSeta());
+  }
+
+  public mostrarSetasConectoras(): void {
+    this._setasConectoras.forEach((seta: SetaConectora): void => seta.mostrarSeta());
   }
 
   public reposicionarPontosExtensores(): void {
@@ -85,6 +81,23 @@ export default class SelecionadorComponente {
     }
   }
 
+  public reposicionarSetasConectoras(componente: ComponenteDiagrama): void {
+    let recebeSetasConectoras: string | null | undefined =
+      this._componenteSelecionado?.htmlComponente.getAttribute(
+        ComponenteFactory.PROPRIEDADE_RECEBE_SETAS_CONECTORAS,
+      );
+
+    if (recebeSetasConectoras === "false") {
+      this.esconderSetasConectoras();
+      return;
+    }
+
+    this._setasConectoras.forEach((seta: SetaConectora): void => {
+      seta.reposicionarSeta(componente.htmlComponente);
+      seta.mostrarSeta();
+    });
+  }
+
   public removerSelecao(): void {
     if (this._componenteSelecionado !== null) {
       this._componenteSelecionado.htmlComponente.classList.remove(CLASSE_ELEMENTO_SELECIONADO);
@@ -95,20 +108,9 @@ export default class SelecionadorComponente {
     this.esconderPontosExtensores();
   }
 
-  public moverSetas(componente: ComponenteDiagrama): void {
-    if (!componente.recebeSetas) {
-      return;
-    }
-
-    this._setasConectoras.forEach((seta: SetaConectora): void => {
-      seta.reposicionarSeta(componente.htmlComponente);
-      seta.mostrarSeta();
-    });
-  }
-
   public moverSetasParaComponenteSelecionado(): void {
     if (this._componenteSelecionado !== null) {
-      this.moverSetas(this._componenteSelecionado);
+      this.reposicionarSetasConectoras(this._componenteSelecionado);
     }
   }
 

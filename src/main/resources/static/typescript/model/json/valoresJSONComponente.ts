@@ -14,6 +14,7 @@
 export default interface ValoresJSONComponente {
   classesElemento: string[];
   recebePontoExtensor: string;
+  recebeSetaConectora: string;
   valorHtmlInterno: string;
   propriedades: JSONPropriedade[];
 }

@@ -3,5 +3,6 @@
   "valorHtmlInterno": "",
   "classesElemento": ["elemento-conexao-angulada"],
   "recebePontoExtensor": false,
+  "recebeSetaConectora": false,
   "propriedades": []
 }

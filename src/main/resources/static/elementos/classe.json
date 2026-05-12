@@ -3,6 +3,7 @@
   "valorHtmlInterno": "<div class='nome-classe'>CLASSE</div><div class='atributos-classe'></div><div class='metodos-classe'></div>",
   "classesElemento": ["elemento-classe"],
   "recebePontoExtensor": true,
+  "recebeSetaConectora": true,
   "propriedades": [
     {
       "classeElemento": "nome",
