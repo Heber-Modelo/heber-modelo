@@ -34,10 +34,10 @@ export default class ConectarComponentesCommand implements ICommand {
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
-  private readonly _geradorID: GeradorIDComponente;
+  private readonly _geradorIDComponente: GeradorIDComponente;
   private readonly _registradorEventosConexao: RegistradorEventosConexao;
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
-  private readonly _repositorioComponentes: IRepositorioComponente;
+  private readonly _repositorioComponente: IRepositorioComponente;
   private readonly _primeiroComponente: ComponenteDiagrama;
   private readonly _segundoComponente: ComponenteDiagrama;
   private readonly _lateralPrimeiroComponente: LateraisComponente;
@@ -49,10 +49,10 @@ export default class ConectarComponentesCommand implements ICommand {
     diagrama: HTMLElement,
     fabricaComponente: ComponenteFactory,
     fabricaConexao: ComponenteConexaoFactory,
-    geradorID: GeradorIDComponente,
+    geradorIDComponente: GeradorIDComponente,
     registradorEventosConexao: RegistradorEventosConexao,
     registradorEventosElemento: RegistradorEventosElemento,
-    repositorioComponentes: IRepositorioComponente,
+    repositorioComponente: IRepositorioComponente,
     primeiroComponente: ComponenteDiagrama,
     segundoComponente: ComponenteDiagrama,
     lateralPrimeiroComponente: LateraisComponente,
@@ -62,31 +62,15 @@ export default class ConectarComponentesCommand implements ICommand {
     this._diagrama = diagrama;
     this._fabricaComponente = fabricaComponente;
     this._fabricaConexao = fabricaConexao;
-    this._geradorID = geradorID;
+    this._geradorIDComponente = geradorIDComponente;
     this._registradorEventosConexao = registradorEventosConexao;
     this._registradorEventosElemento = registradorEventosElemento;
-    this._repositorioComponentes = repositorioComponentes;
+    this._repositorioComponente = repositorioComponente;
     this._primeiroComponente = primeiroComponente;
     this._segundoComponente = segundoComponente;
     this._lateralPrimeiroComponente = lateralPrimeiroComponente;
     this._lateralSegundoComponente = lateralSegundoComponente;
     this._tipoConexao = tipoConexao;
-  }
-
-  private pegarLateralOposta(lateralComponente: LateraisComponente): LateraisComponente {
-    switch (lateralComponente) {
-      case LateraisComponente.NORTE:
-        return LateraisComponente.SUL;
-
-      case LateraisComponente.SUL:
-        return LateraisComponente.NORTE;
-
-      case LateraisComponente.LESTE:
-        return LateraisComponente.OESTE;
-
-      case LateraisComponente.OESTE:
-        return LateraisComponente.LESTE;
-    }
   }
 
   execute(): CommandResult {
@@ -96,121 +80,6 @@ export default class ConectarComponentesCommand implements ICommand {
     let segundoPonto: Ponto = this._segundoComponente.calcularPontoLateralComponente(
       this._lateralSegundoComponente,
     );
-
-    let tipoPrimeiroComponente: string | null =
-      this._primeiroComponente.htmlComponente.getAttribute(
-        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-      );
-    let tipoSegundoComponente: string | null = this._segundoComponente.htmlComponente.getAttribute(
-      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-    );
-
-    if (
-      tipoPrimeiroComponente === ConectarComponentesCommand.NOME_ELEMENTO_ENTIDADE &&
-      tipoSegundoComponente === ConectarComponentesCommand.NOME_ELEMENTO_ENTIDADE
-    ) {
-      let commandCarregarCSSConexao: CarregarCSSCommand = new CarregarCSSCommandBuilder()
-        .definirNomeArquivo(this._tipoConexao)
-        .build();
-      commandCarregarCSSConexao.execute();
-      let commandCarregarCSSRelacionamento: CarregarCSSCommand = new CarregarCSSCommandBuilder()
-        .definirNomeArquivo(ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO)
-        .build();
-      commandCarregarCSSRelacionamento.execute();
-
-      let componenteRelacionamento: ComponenteDiagrama;
-      this._fabricaComponente
-        .criarComponente(ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO)
-        .then(async (componente: ComponenteDiagrama): Promise<void> => {
-          this._diagrama.append(componente.htmlComponente);
-          this._registradorEventosElemento.registrarEventos(componente.htmlComponente);
-          this._repositorioComponentes.adicionar(componente);
-
-          let componenteBoundingRectangle: DOMRect =
-            componente.htmlComponente.getBoundingClientRect();
-          componente.htmlComponente.style.setProperty(
-            "left",
-            `${(primeiroPonto.x + segundoPonto.x) / 2 - componenteBoundingRectangle.width / 2}px`,
-          );
-          componente.htmlComponente.style.setProperty(
-            "top",
-            `${(primeiroPonto.y + segundoPonto.y) / 2 - componenteBoundingRectangle.height / 2}px`,
-          );
-          componente.htmlComponente.setAttribute(
-            ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
-            String(this._geradorID.pegarProximoID()),
-          );
-
-          componenteRelacionamento = componente;
-
-          let primeiraLateralRelacionamento: LateraisComponente = this.pegarLateralOposta(
-            this._lateralPrimeiroComponente,
-          );
-          let primeiroPontoAuxiliar: Ponto =
-            componenteRelacionamento.calcularPontoLateralComponente(primeiraLateralRelacionamento);
-
-          let primeiraConexao: ComponenteDiagrama = await this._fabricaComponente.criarComponente(
-            this._tipoConexao,
-          );
-          let primeiroComponenteConexao: ComponenteDiagrama = this._fabricaConexao.criarConexao(
-            this._tipoConexao,
-            primeiraConexao.htmlComponente,
-            primeiraConexao.propriedades,
-            primeiroPonto,
-            primeiroPontoAuxiliar,
-            this._lateralPrimeiroComponente,
-            primeiraLateralRelacionamento,
-            this._primeiroComponente,
-            componenteRelacionamento,
-          );
-
-          this._registradorEventosConexao.registrarEventos(primeiraConexao.htmlComponente);
-          primeiraConexao.htmlComponente.setAttribute(
-            ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
-            String(this._geradorID.pegarProximoID()),
-          );
-
-          this._repositorioComponentes.adicionar(primeiraConexao);
-          this._repositorioComponentes.adicionar(primeiroComponenteConexao);
-          this._diagrama.append(primeiroComponenteConexao.htmlComponente);
-
-          let segundaLateralRelacionamento: LateraisComponente = this.pegarLateralOposta(
-            this._lateralSegundoComponente,
-          );
-          let segundoPontoAuxiliar: Ponto = componenteRelacionamento.calcularPontoLateralComponente(
-            segundaLateralRelacionamento,
-          );
-
-          let segundaConexao: ComponenteDiagrama = await this._fabricaComponente.criarComponente(
-            this._tipoConexao,
-          );
-          let segundoComponenteConexao: ComponenteDiagrama = this._fabricaConexao.criarConexao(
-            this._tipoConexao,
-            segundaConexao.htmlComponente,
-            segundaConexao.propriedades,
-            segundoPontoAuxiliar,
-            segundoPonto,
-            segundaLateralRelacionamento,
-            this._lateralSegundoComponente,
-            componenteRelacionamento,
-            this._segundoComponente,
-          );
-
-          this._registradorEventosConexao.registrarEventos(segundaConexao.htmlComponente);
-          segundaConexao.htmlComponente.setAttribute(
-            ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
-            String(this._geradorID.pegarProximoID()),
-          );
-
-          this._repositorioComponentes.adicionar(segundaConexao);
-          this._repositorioComponentes.adicionar(segundoComponenteConexao);
-          this._diagrama.append(segundoComponenteConexao.htmlComponente);
-        });
-      return {
-        ok: true,
-        error: undefined,
-      };
-    }
 
     this._fabricaComponente
       .criarComponente(this._tipoConexao)
@@ -234,10 +103,10 @@ export default class ConectarComponentesCommand implements ICommand {
 
         this._componenteConexao.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorID.pegarProximoID()),
+          String(this._geradorIDComponente.pegarProximoID()),
         );
         this._registradorEventosConexao.registrarEventos(this._componenteConexao.htmlComponente);
-        this._repositorioComponentes.adicionar(this._componenteConexao);
+        this._repositorioComponente.adicionar(this._componenteConexao);
         this._diagrama.append(this._componenteConexao.htmlComponente);
       });
 
@@ -248,16 +117,13 @@ export default class ConectarComponentesCommand implements ICommand {
   }
 
   redo(): CommandResult {
-    return {
-      ok: true,
-      error: undefined,
-    };
+    return this.execute();
   }
 
   undo(): CommandResult {
     if (this._componenteConexao) {
       this._componenteConexao?.htmlComponente.remove();
-      this._repositorioComponentes.remover(this._componenteConexao);
+      this._repositorioComponente.remover(this._componenteConexao);
     }
 
     return {
@@ -438,5 +304,53 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
       this._lateralSegundoComponente,
       this._tipoConexao,
     );
+  }
+
+  get diagrama(): HTMLElement | undefined | null {
+    return this._diagrama;
+  }
+
+  get fabricaComponente(): ComponenteFactory | undefined {
+    return this._fabricaComponente;
+  }
+
+  get fabricaConexao(): ComponenteConexaoFactory | undefined {
+    return this._fabricaConexao;
+  }
+
+  get geradorID(): GeradorIDComponente | undefined {
+    return this._geradorID;
+  }
+
+  get registradorEventosConexao(): RegistradorEventosConexao | undefined {
+    return this._registradorEventosConexao;
+  }
+
+  get registradorEventosElemento(): RegistradorEventosElemento | undefined {
+    return this._registradorEventosElemento;
+  }
+
+  get repositorioComponentes(): IRepositorioComponente | undefined {
+    return this._repositorioComponentes;
+  }
+
+  get primeiroComponente(): ComponenteDiagrama | undefined {
+    return this._primeiroComponente;
+  }
+
+  get segundoComponente(): ComponenteDiagrama | undefined {
+    return this._segundoComponente;
+  }
+
+  get lateralPrimeiroComponente(): LateraisComponente | undefined {
+    return this._lateralPrimeiroComponente;
+  }
+
+  get lateralSegundoComponente(): LateraisComponente | undefined {
+    return this._lateralSegundoComponente;
+  }
+
+  get tipoConexao(): TiposConexao | undefined {
+    return this._tipoConexao;
   }
 }
