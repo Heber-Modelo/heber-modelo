@@ -17,20 +17,22 @@ import CarregarCSSCommand, {
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
+import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import TiposConexao from "model/conexao/tiposConexao";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
-import LateraisComponente from "model/componente/lateraisComponente";
+import ComponenteCardinalidadeRelacionamento from "model/componente/componenteCardinalidadeRelacionamento";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import LateraisComponente from "model/componente/lateraisComponente";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
 import Ponto from "model/ponto";
-import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 
 export default class ConectarComponentesCommand implements ICommand {
   public static readonly NOME_ELEMENTO_ENTIDADE: string = "entidade";
   public static readonly NOME_ELEMENTO_RELACIONAMENTO: string = "relacionamento";
+  public static readonly NOME_ELEMENTO_TEXTO: string = "texto";
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
@@ -43,6 +45,9 @@ export default class ConectarComponentesCommand implements ICommand {
   private readonly _lateralPrimeiroComponente: LateraisComponente;
   private readonly _lateralSegundoComponente: LateraisComponente;
   private readonly _tipoConexao: TiposConexao;
+  private _commandCarregarCSSTexto: CarregarCSSCommand | undefined;
+  private _commandCarregarCSSTipoConexao: CarregarCSSCommand | undefined;
+  private _componenteCardinalidade: ComponenteDiagrama | undefined;
   private _componenteConexao: ComponenteDiagrama | undefined;
 
   constructor(
@@ -84,10 +89,10 @@ export default class ConectarComponentesCommand implements ICommand {
     this._fabricaComponente
       .criarComponente(this._tipoConexao)
       .then((componente: ComponenteDiagrama): void => {
-        let commandCarregarCSS: CarregarCSSCommand = new CarregarCSSCommandBuilder()
+        this._commandCarregarCSSTipoConexao = new CarregarCSSCommandBuilder()
           .definirNomeArquivo(this._tipoConexao)
           .build();
-        commandCarregarCSS.execute();
+        this._commandCarregarCSSTipoConexao.execute();
 
         this._componenteConexao = this._fabricaConexao.criarConexao(
           this._tipoConexao,
@@ -110,6 +115,62 @@ export default class ConectarComponentesCommand implements ICommand {
         this._diagrama.append(this._componenteConexao.htmlComponente);
       });
 
+    if (
+      this._primeiroComponente.htmlComponente.getAttribute(
+        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+      ) !== ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO &&
+      this._segundoComponente.htmlComponente.getAttribute(
+        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+      ) !== ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO
+    ) {
+      return {
+        ok: true,
+        error: undefined,
+      };
+    }
+
+    this._fabricaComponente
+      .criarComponente(ConectarComponentesCommand.NOME_ELEMENTO_TEXTO)
+      .then((componente: ComponenteDiagrama): void => {
+        this._commandCarregarCSSTexto = new CarregarCSSCommandBuilder()
+          .definirNomeArquivo(ConectarComponentesCommand.NOME_ELEMENTO_TEXTO)
+          .build();
+        this._commandCarregarCSSTexto.execute();
+
+        this._diagrama.append(componente.htmlComponente);
+        this._registradorEventosElemento.registrarEventos(componente.htmlComponente);
+        this._repositorioComponente.adicionar(componente);
+        componente.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+          String(this._geradorIDComponente.pegarProximoID()),
+        );
+
+        if (this._componenteConexao === undefined) {
+          return;
+        }
+
+        if (
+          this._primeiroComponente.htmlComponente.getAttribute(
+            ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+          ) === ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO
+        ) {
+          this._componenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
+            componente.htmlComponente,
+            componente.propriedades,
+            this._segundoComponente,
+            this._componenteConexao,
+            this._lateralSegundoComponente,
+          );
+        } else {
+          this._componenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
+            componente.htmlComponente,
+            componente.propriedades,
+            this._primeiroComponente,
+            this._componenteConexao,
+            this._lateralPrimeiroComponente,
+          );
+        }
+      });
     return {
       ok: true,
       error: undefined,
@@ -117,12 +178,36 @@ export default class ConectarComponentesCommand implements ICommand {
   }
 
   redo(): CommandResult {
-    return this.execute();
+    this._commandCarregarCSSTexto?.redo();
+    this._commandCarregarCSSTipoConexao?.redo();
+
+    if (this._componenteConexao) {
+      this._diagrama.append(this._componenteConexao.htmlComponente);
+      this._repositorioComponente.adicionar(this._componenteConexao);
+    }
+
+    if (this._componenteCardinalidade) {
+      this._diagrama.append(this._componenteCardinalidade.htmlComponente);
+      this._repositorioComponente.adicionar(this._componenteCardinalidade);
+    }
+
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 
   undo(): CommandResult {
+    this._commandCarregarCSSTexto?.undo();
+    this._commandCarregarCSSTipoConexao?.undo();
+
+    if (this._componenteCardinalidade) {
+      this._componenteCardinalidade.htmlComponente.remove();
+      this._repositorioComponente.remover(this._componenteCardinalidade);
+    }
+
     if (this._componenteConexao) {
-      this._componenteConexao?.htmlComponente.remove();
+      this._componenteConexao.htmlComponente.remove();
       this._repositorioComponente.remover(this._componenteConexao);
     }
 

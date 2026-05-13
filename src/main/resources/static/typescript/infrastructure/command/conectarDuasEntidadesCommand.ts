@@ -22,6 +22,7 @@ import RegistradorEventosConexao from "infrastructure/registrador/registradorEve
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
+import ComponenteCardinalidadeRelacionamento from "model/componente/componenteCardinalidadeRelacionamento";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
 import TiposConexao from "model/conexao/tiposConexao";
@@ -31,6 +32,7 @@ import CommandBuilderException from "model/exception/commandBuilderException";
 
 export default class ConectarDuasEntidadesCommand implements ICommand {
   public static readonly NOME_ELEMENTO_RELACIONAMENTO: string = "relacionamento";
+  public static readonly NOME_ELEMENTO_TEXTO: string = "texto";
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
@@ -43,9 +45,14 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponente: IRepositorioComponente;
   private readonly _tipoConexao: TiposConexao;
+  private _commandCarregarCSSConexao: CarregarCSSCommand | undefined;
+  private _commandCarregarCSSRelacionamento: CarregarCSSCommand | undefined;
+  private _commandCarregarCSSTexto: CarregarCSSCommand | undefined;
   private _componenteRelacionamento: ComponenteDiagrama | undefined;
   private _primeiroComponenteConexao: ComponenteDiagrama | undefined;
   private _segundoComponenteConexao: ComponenteDiagrama | undefined;
+  private _primeiroComponenteCardinalidade: ComponenteDiagrama | undefined;
+  private _segundoComponenteCardinalidade: ComponenteDiagrama | undefined;
 
   constructor(
     diagrama: HTMLElement,
@@ -99,15 +106,19 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
       this._lateralSegundoComponente,
     );
 
-    let commandCarregarCSSConexao: CarregarCSSCommand = new CarregarCSSCommandBuilder()
+    this._commandCarregarCSSConexao = new CarregarCSSCommandBuilder()
       .definirNomeArquivo(this._tipoConexao)
       .build();
-    let commandCarregarCSSRelacionamento: CarregarCSSCommand = new CarregarCSSCommandBuilder()
+    this._commandCarregarCSSRelacionamento = new CarregarCSSCommandBuilder()
       .definirNomeArquivo(ConectarDuasEntidadesCommand.NOME_ELEMENTO_RELACIONAMENTO)
       .build();
+    this._commandCarregarCSSTexto = new CarregarCSSCommandBuilder()
+      .definirNomeArquivo(ConectarDuasEntidadesCommand.NOME_ELEMENTO_TEXTO)
+      .build();
 
-    commandCarregarCSSConexao.execute();
-    commandCarregarCSSRelacionamento.execute();
+    this._commandCarregarCSSConexao.execute();
+    this._commandCarregarCSSRelacionamento.execute();
+    this._commandCarregarCSSTexto.execute();
 
     this._fabricaComponente
       .criarComponente(ConectarDuasEntidadesCommand.NOME_ELEMENTO_RELACIONAMENTO)
@@ -158,8 +169,31 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
         );
+
         this._repositorioComponente.adicionar(this._primeiroComponenteConexao);
         this._diagrama.append(this._primeiroComponenteConexao.htmlComponente);
+
+        let primeiraCardinalidade: ComponenteDiagrama =
+          await this._fabricaComponente.criarComponente(
+            ConectarDuasEntidadesCommand.NOME_ELEMENTO_TEXTO,
+          );
+        this._primeiroComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
+          primeiraCardinalidade.htmlComponente,
+          primeiraCardinalidade.propriedades,
+          this._primeiroComponente,
+          this._primeiroComponenteConexao,
+          this._lateralPrimeiroComponente,
+        );
+        this._primeiroComponenteCardinalidade.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+          String(this._geradorIDComponente.pegarProximoID()),
+        );
+
+        this._registradorEventosElemento.registrarEventos(
+          this._primeiroComponenteCardinalidade.htmlComponente,
+        );
+        this._repositorioComponente.adicionar(this._primeiroComponenteCardinalidade);
+        this._diagrama.append(this._primeiroComponenteCardinalidade.htmlComponente);
 
         let segundaLateralRelacionamento: LateraisComponente = this.pegarLateralOposta(
           this._lateralSegundoComponente,
@@ -192,6 +226,28 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
 
         this._repositorioComponente.adicionar(this._segundoComponenteConexao);
         this._diagrama.append(this._segundoComponenteConexao.htmlComponente);
+
+        let segundaCardinalidade: ComponenteDiagrama =
+          await this._fabricaComponente.criarComponente(
+            ConectarDuasEntidadesCommand.NOME_ELEMENTO_TEXTO,
+          );
+        this._segundoComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
+          segundaCardinalidade.htmlComponente,
+          segundaCardinalidade.propriedades,
+          this._segundoComponente,
+          this._segundoComponenteConexao,
+          this._lateralSegundoComponente,
+        );
+        this._segundoComponenteCardinalidade.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+          String(this._geradorIDComponente.pegarProximoID()),
+        );
+
+        this._registradorEventosElemento.registrarEventos(
+          this._segundoComponenteCardinalidade.htmlComponente,
+        );
+        this._repositorioComponente.adicionar(this._segundoComponenteCardinalidade);
+        this._diagrama.append(this._segundoComponenteCardinalidade.htmlComponente);
       });
 
     return {
@@ -201,6 +257,10 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
   }
 
   redo(): CommandResult {
+    this._commandCarregarCSSConexao?.redo();
+    this._commandCarregarCSSRelacionamento?.redo();
+    this._commandCarregarCSSTexto?.redo();
+
     if (this._componenteRelacionamento) {
       this._diagrama.append(this._componenteRelacionamento.htmlComponente);
       this._repositorioComponente.adicionar(this._componenteRelacionamento);
@@ -216,6 +276,16 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
       this._repositorioComponente.adicionar(this._segundoComponenteConexao);
     }
 
+    if (this._primeiroComponenteCardinalidade) {
+      this._diagrama.append(this._primeiroComponenteCardinalidade.htmlComponente);
+      this._repositorioComponente.adicionar(this._primeiroComponenteCardinalidade);
+    }
+
+    if (this._segundoComponenteCardinalidade) {
+      this._diagrama.append(this._segundoComponenteCardinalidade.htmlComponente);
+      this._repositorioComponente.adicionar(this._segundoComponenteCardinalidade);
+    }
+
     return {
       ok: true,
       error: undefined,
@@ -223,6 +293,10 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
   }
 
   undo(): CommandResult {
+    this._commandCarregarCSSConexao?.undo();
+    this._commandCarregarCSSRelacionamento?.undo();
+    this._commandCarregarCSSTexto?.undo();
+
     if (this._componenteRelacionamento) {
       this._componenteRelacionamento.htmlComponente.remove();
       this._repositorioComponente.remover(this._componenteRelacionamento);
@@ -236,6 +310,16 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
     if (this._segundoComponenteConexao) {
       this._segundoComponenteConexao.htmlComponente.remove();
       this._repositorioComponente.remover(this._segundoComponenteConexao);
+    }
+
+    if (this._primeiroComponenteCardinalidade) {
+      this._primeiroComponenteCardinalidade.htmlComponente.remove();
+      this._repositorioComponente.remover(this._primeiroComponenteCardinalidade);
+    }
+
+    if (this._segundoComponenteCardinalidade) {
+      this._segundoComponenteCardinalidade.htmlComponente.remove();
+      this._repositorioComponente.remover(this._segundoComponenteCardinalidade);
     }
 
     return {

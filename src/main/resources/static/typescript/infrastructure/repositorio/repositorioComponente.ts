@@ -11,7 +11,7 @@
  *
  */
 
-import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao";
+import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
