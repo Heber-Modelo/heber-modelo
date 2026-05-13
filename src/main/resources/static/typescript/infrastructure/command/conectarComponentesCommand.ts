@@ -186,9 +186,20 @@ export default class ConectarComponentesCommand implements ICommand {
       this._repositorioComponente.adicionar(this._componenteConexao);
     }
 
-    if (this._componenteCardinalidade) {
+    if (this._componenteCardinalidade instanceof ComponenteCardinalidadeRelacionamento) {
+      this._componenteConexao?.adicionarOuvinte(this._componenteCardinalidade);
       this._diagrama.append(this._componenteCardinalidade.htmlComponente);
       this._repositorioComponente.adicionar(this._componenteCardinalidade);
+
+      if (
+        this._primeiroComponente.htmlComponente.getAttribute(
+          ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+        ) === ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO
+      ) {
+        this._segundoComponente.adicionarOuvinte(this._componenteCardinalidade);
+      } else {
+        this._primeiroComponente.adicionarOuvinte(this._componenteCardinalidade);
+      }
     }
 
     return {
