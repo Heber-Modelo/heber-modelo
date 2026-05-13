@@ -30,8 +30,8 @@ export default class CriarComponenteCommand implements ICommand {
   private readonly _nomeElemento: string;
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponentes: IRepositorioComponente;
-  private carregarCSSCommand: CarregarCSSCommand | undefined;
-  private componenteCriado: ComponenteDiagrama | undefined;
+  private _carregarCSSCommand: CarregarCSSCommand | undefined;
+  private _componenteCriado: ComponenteDiagrama | undefined;
 
   constructor(
     diagrama: HTMLElement,
@@ -53,10 +53,10 @@ export default class CriarComponenteCommand implements ICommand {
     this._fabricaComponente
       .criarComponente(this._nomeElemento)
       .then((componente: ComponenteDiagrama): void => {
-        this.carregarCSSCommand = new CarregarCSSCommandBuilder()
+        this._carregarCSSCommand = new CarregarCSSCommandBuilder()
           .definirNomeArquivo(this._nomeElemento)
           .build();
-        this.carregarCSSCommand.execute();
+        this._carregarCSSCommand.execute();
         this._registradorEventosElemento.registrarEventos(componente.htmlComponente);
         componente.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
@@ -64,7 +64,7 @@ export default class CriarComponenteCommand implements ICommand {
         );
         this._repositorioComponentes.adicionar(componente);
         this._diagrama.appendChild(componente.htmlComponente);
-        this.componenteCriado = componente;
+        this._componenteCriado = componente;
       });
 
     return {
@@ -74,14 +74,25 @@ export default class CriarComponenteCommand implements ICommand {
   }
 
   redo(): CommandResult {
-    return this.execute();
+    this._carregarCSSCommand?.redo();
+
+    if (this._componenteCriado) {
+      this._diagrama.append(this._componenteCriado.htmlComponente);
+      this._repositorioComponentes.adicionar(this._componenteCriado);
+    }
+
+    return {
+      ok: true,
+      error: undefined,
+    };
   }
 
   undo(): CommandResult {
-    if (this.componenteCriado) {
-      this.componenteCriado.htmlComponente.remove();
-      this._repositorioComponentes.remover(this.componenteCriado);
-      this.carregarCSSCommand?.undo();
+    this._carregarCSSCommand?.undo();
+
+    if (this._componenteCriado) {
+      this._componenteCriado.htmlComponente.remove();
+      this._repositorioComponentes.remover(this._componenteCriado);
     }
 
     return {
