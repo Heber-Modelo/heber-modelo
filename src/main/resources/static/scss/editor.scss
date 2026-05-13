@@ -204,49 +204,6 @@ aside#painel-esquerdo {
   flex-direction: column;
 }
 
-.barra-de-tarefas {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--cor-painel-lateral);
-  grid-row: 2;
-  height: 5rem;
-  column-gap: 2rem;
-  grid-column: 1 / 4;
-  border-bottom: 0.1rem solid var(--cor-borda);
-
-  button{
-    background-color: unset;
-    z-index: 2;
-  }
-
-  button:hover {
-    svg {
-      transform: scale(1.2);
-      transition: 0.5s;
-
-      .svg-cor-contorno {
-        color: var(--cor-botao-hover);
-      }
-    }
-  }
-
-  svg {
-    height: 3rem;
-    width: 3rem;
-    pointer-events: none;
-  }
-
-  .svg-cor-contorno {
-    color: var(--cor-botao);
-  }
-
-  .svg-cor-completar {
-    color: var(--cor-painel-lateral);
-  }
-}
-
 aside#painel-esquerdo {
     display: flex;
   flex-direction: column;
