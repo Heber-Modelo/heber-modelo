@@ -91,6 +91,11 @@ export default class CarregarCSSCommand implements ICommand {
   }
 
   redo(): CommandResult {
+    if (this._linkElement) {
+      document.head.append(this._linkElement);
+    }
+    CacheCSSElementos.includes(this._nomeArquivo);
+
     return {
       ok: true,
       error: undefined,
