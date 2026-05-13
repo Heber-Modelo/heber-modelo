@@ -29,6 +29,7 @@ import TiposConexao from "model/conexao/tiposConexao";
 import Ponto from "model/ponto";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
 import CommandBuilderException from "model/exception/commandBuilderException";
+import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
 
 export default class ConectarDuasEntidadesCommand implements ICommand {
   public static readonly NOME_ELEMENTO_RELACIONAMENTO: string = "relacionamento";
@@ -266,22 +267,30 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
       this._repositorioComponente.adicionar(this._componenteRelacionamento);
     }
 
-    if (this._primeiroComponenteConexao) {
+    if (this._primeiroComponenteConexao instanceof AbstractComponenteConexao) {
+      this._primeiroComponente.adicionarOuvinte(this._primeiroComponenteConexao);
+      this._componenteRelacionamento?.adicionarOuvinte(this._primeiroComponenteConexao);
       this._diagrama.append(this._primeiroComponenteConexao.htmlComponente);
       this._repositorioComponente.adicionar(this._primeiroComponenteConexao);
     }
 
-    if (this._segundoComponenteConexao) {
+    if (this._segundoComponenteConexao instanceof AbstractComponenteConexao) {
+      this._segundoComponente.adicionarOuvinte(this._segundoComponenteConexao);
+      this._componenteRelacionamento?.adicionarOuvinte(this._segundoComponenteConexao);
       this._diagrama.append(this._segundoComponenteConexao.htmlComponente);
       this._repositorioComponente.adicionar(this._segundoComponenteConexao);
     }
 
-    if (this._primeiroComponenteCardinalidade) {
+    if (this._primeiroComponenteCardinalidade instanceof ComponenteCardinalidadeRelacionamento) {
+      this._primeiroComponente.adicionarOuvinte(this._primeiroComponenteCardinalidade);
+      this._primeiroComponenteConexao?.adicionarOuvinte(this._primeiroComponenteCardinalidade);
       this._diagrama.append(this._primeiroComponenteCardinalidade.htmlComponente);
       this._repositorioComponente.adicionar(this._primeiroComponenteCardinalidade);
     }
 
-    if (this._segundoComponenteCardinalidade) {
+    if (this._segundoComponenteCardinalidade instanceof ComponenteCardinalidadeRelacionamento) {
+      this._segundoComponente.adicionarOuvinte(this._segundoComponenteCardinalidade);
+      this._segundoComponenteConexao?.adicionarOuvinte(this._segundoComponenteCardinalidade);
       this._diagrama.append(this._segundoComponenteCardinalidade.htmlComponente);
       this._repositorioComponente.adicionar(this._segundoComponenteCardinalidade);
     }

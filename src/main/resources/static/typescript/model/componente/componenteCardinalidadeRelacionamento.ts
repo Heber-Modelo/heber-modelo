@@ -37,6 +37,7 @@ export default class ComponenteCardinalidadeRelacionamento
     this._componenteConexao = componenteConexao;
     this._lateralComponente = lateralComponente;
     this._componente.adicionarOuvinte(this);
+    this._componenteConexao.adicionarOuvinte(this);
 
     htmlComponente.innerText = "(1, N)";
     this.ajustarPosicao();
