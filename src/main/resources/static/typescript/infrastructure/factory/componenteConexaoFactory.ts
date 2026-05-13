@@ -11,11 +11,11 @@
  *
  */
 
-import AbstractComponenteConexao from "model/conexao/abstractComponenteConexao";
-import ComponenteConexaoAngulada from "model/conexao/componenteConexaoAngulada";
+import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
+import ComponenteConexaoAngulada from "model/componente/componenteConexaoAngulada";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
-import ComponenteConexaoReta from "model/conexao/componenteConexaoReta";
+import ComponenteConexaoReta from "model/componente/componenteConexaoReta";
 import TiposConexao from "model/conexao/tiposConexao";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 import Ponto from "model/ponto";
