@@ -16,28 +16,34 @@ import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvint
 import LateraisComponente from "model/componente/lateraisComponente";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 import Ponto from "model/ponto";
+import calcularAnguloDoisPontos from "model/services/calcularAnguloDoisPontos";
+import converterRadianosParaGraus from "model/services/converterRadianosParaGraus";
 
 export default class ComponenteCardinalidadeRelacionamento
   extends ComponenteDiagrama
   implements ComponenteDiagramaOuvinte
 {
-  protected readonly _componente: ComponenteDiagrama;
-  protected readonly _componenteConexao: ComponenteDiagrama;
-  protected readonly _lateralComponente: LateraisComponente;
+  private readonly _componente: ComponenteDiagrama;
+  private readonly _componenteConexao: ComponenteDiagrama;
+  private readonly _componenteRelacionamento: ComponenteDiagrama;
+  private readonly _lateralComponente: LateraisComponente;
 
   constructor(
     htmlComponente: HTMLDivElement,
     propriedades: PropriedadeComponente[],
     componente: ComponenteDiagrama,
     componenteConexao: ComponenteDiagrama,
+    componenteRelacionamento: ComponenteDiagrama,
     lateralComponente: LateraisComponente,
   ) {
     super(htmlComponente, propriedades);
     this._componente = componente;
     this._componenteConexao = componenteConexao;
+    this._componenteRelacionamento = componenteRelacionamento;
     this._lateralComponente = lateralComponente;
     this._componente.adicionarOuvinte(this);
     this._componenteConexao.adicionarOuvinte(this);
+    this._componenteRelacionamento.adicionarOuvinte(this);
 
     htmlComponente.innerText = "(1, N)";
     this.ajustarPosicao();
@@ -47,6 +53,41 @@ export default class ComponenteCardinalidadeRelacionamento
     let novaPosicao: Ponto = this._componente.calcularPontoLateralComponente(
       this._lateralComponente,
     );
+
+    let componenteBoundingClientRect: DOMRect =
+      this._componente.htmlComponente.getBoundingClientRect();
+    let posicaoComponente: Ponto = new Ponto(
+      componenteBoundingClientRect.left,
+      componenteBoundingClientRect.top,
+    );
+
+    let relacionamentoBoundingClientRect: DOMRect =
+      this._componenteRelacionamento.htmlComponente.getBoundingClientRect();
+    let posicaoRelacionamento: Ponto = new Ponto(
+      relacionamentoBoundingClientRect.left,
+      relacionamentoBoundingClientRect.top,
+    );
+
+    let anguloEntreComponentes: number = converterRadianosParaGraus(
+      calcularAnguloDoisPontos(posicaoComponente, posicaoRelacionamento),
+    );
+
+    if (anguloEntreComponentes > 165 || anguloEntreComponentes < -165) {
+      novaPosicao.x -= this._htmlComponente.getBoundingClientRect().width;
+    }
+
+    if (anguloEntreComponentes > 75 && anguloEntreComponentes < 105) {
+      novaPosicao.y += this._htmlComponente.getBoundingClientRect().height;
+    }
+
+    if (
+      anguloEntreComponentes < -75 ||
+      anguloEntreComponentes > -105 ||
+      (anguloEntreComponentes < 15 && anguloEntreComponentes > -15)
+    ) {
+      novaPosicao.y -= this._htmlComponente.getBoundingClientRect().height;
+    }
+
     this._htmlComponente.style.setProperty("top", `${novaPosicao.y}px`);
     this._htmlComponente.style.setProperty("left", `${novaPosicao.x}px`);
   }
@@ -56,7 +97,7 @@ export default class ComponenteCardinalidadeRelacionamento
     this._componente.removerOuvinte(this, false);
   }
 
-  atualizar(htmlElemento: HTMLDivElement): void {
+  atualizar(_: HTMLDivElement): void {
     this.ajustarPosicao();
   }
 

@@ -22,14 +22,14 @@ import RegistradorEventosConexao from "infrastructure/registrador/registradorEve
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
+import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
 import ComponenteCardinalidadeRelacionamento from "model/componente/componenteCardinalidadeRelacionamento";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
 import TiposConexao from "model/conexao/tiposConexao";
+import CommandBuilderException from "model/exception/commandBuilderException";
 import Ponto from "model/ponto";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
-import CommandBuilderException from "model/exception/commandBuilderException";
-import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
 
 export default class ConectarDuasEntidadesCommand implements ICommand {
   public static readonly NOME_ELEMENTO_RELACIONAMENTO: string = "relacionamento";
@@ -178,11 +178,13 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
           await this._fabricaComponente.criarComponente(
             ConectarDuasEntidadesCommand.NOME_ELEMENTO_TEXTO,
           );
+        this._diagrama.append(primeiraCardinalidade.htmlComponente);
         this._primeiroComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
           primeiraCardinalidade.htmlComponente,
           primeiraCardinalidade.propriedades,
           this._primeiroComponente,
           this._primeiroComponenteConexao,
+          this._componenteRelacionamento,
           this._lateralPrimeiroComponente,
         );
         this._primeiroComponenteCardinalidade.htmlComponente.setAttribute(
@@ -194,7 +196,6 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
           this._primeiroComponenteCardinalidade.htmlComponente,
         );
         this._repositorioComponente.adicionar(this._primeiroComponenteCardinalidade);
-        this._diagrama.append(this._primeiroComponenteCardinalidade.htmlComponente);
 
         let segundaLateralRelacionamento: LateraisComponente = this.pegarLateralOposta(
           this._lateralSegundoComponente,
@@ -232,11 +233,13 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
           await this._fabricaComponente.criarComponente(
             ConectarDuasEntidadesCommand.NOME_ELEMENTO_TEXTO,
           );
+        this._diagrama.append(segundaCardinalidade.htmlComponente);
         this._segundoComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
           segundaCardinalidade.htmlComponente,
           segundaCardinalidade.propriedades,
           this._segundoComponente,
           this._segundoComponenteConexao,
+          this._componenteRelacionamento,
           this._lateralSegundoComponente,
         );
         this._segundoComponenteCardinalidade.htmlComponente.setAttribute(
@@ -248,7 +251,6 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
           this._segundoComponenteCardinalidade.htmlComponente,
         );
         this._repositorioComponente.adicionar(this._segundoComponenteCardinalidade);
-        this._diagrama.append(this._segundoComponenteCardinalidade.htmlComponente);
       });
 
     return {
@@ -351,22 +353,6 @@ export class ConectarDuasEntidadesCommandBuilder implements ICommandBuilder<Cone
   private _lateralPrimeiroComponente: LateraisComponente | undefined;
   private _lateralSegundoComponente: LateraisComponente | undefined;
   private _tipoConexao: TiposConexao | undefined;
-
-  validate(): boolean {
-    return [
-      this._diagrama,
-      this._fabricaComponente,
-      this._fabricaConexao,
-      this._geradorID,
-      this._registradorEventosElemento,
-      this._repositorioComponentes,
-      this._primeiroComponente,
-      this._segundoComponente,
-      this._lateralPrimeiroComponente,
-      this._lateralSegundoComponente,
-      this._tipoConexao,
-    ].every((item: any): boolean => !!item);
-  }
 
   copyAttributes(source: ConectarComponentesCommandBuilder): this {
     this._diagrama = source.diagrama;

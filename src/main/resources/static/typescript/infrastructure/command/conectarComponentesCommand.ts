@@ -159,6 +159,7 @@ export default class ConectarComponentesCommand implements ICommand {
             componente.propriedades,
             this._segundoComponente,
             this._componenteConexao,
+            this._primeiroComponente,
             this._lateralSegundoComponente,
           );
         } else {
@@ -167,6 +168,7 @@ export default class ConectarComponentesCommand implements ICommand {
             componente.propriedades,
             this._primeiroComponente,
             this._componenteConexao,
+            this._segundoComponente,
             this._lateralPrimeiroComponente,
           );
         }
