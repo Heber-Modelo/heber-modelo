@@ -12,7 +12,7 @@
  */
 
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import converterPixeisParaNumero from "infrastructure/conversor/conversor";
+import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 
 export enum DirecoesMovimento {
   CIMA,

@@ -11,12 +11,12 @@
  *
  */
 
-import converterPixeisParaNumero from "infrastructure/conversor/conversor";
 import ComponenteDiagramaOuvido from "model/componente/componenteDiagramaOuvido";
-import LateraisComponente from "model/componente/lateraisComponente";
 import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
+import LateraisComponente from "model/componente/lateraisComponente";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 import Ponto from "model/ponto";
+import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 
 export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
   constructor(htmlComponente: HTMLDivElement, propriedades: PropriedadeComponente[] | null) {
