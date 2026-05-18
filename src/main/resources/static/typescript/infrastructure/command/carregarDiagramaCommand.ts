@@ -14,6 +14,7 @@
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
 import CommandBuilderException from "model/exception/commandBuilderException";
+import IRepositorioTiposDiagrama from "model/repositorio/iRepositorioTiposDiagrama";
 import ResponseDiagramaJSON from "model/response/responseDiagramaJSON";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 
@@ -22,6 +23,7 @@ export const ATRIBUTO_NOME_ELEMENTO = "data-nome-elemento";
 export default class CarregarDiagramaCommand implements ICommand {
   private readonly _callbackCriarComponente: (event: Event) => void;
   private readonly _nomeDiagrama: string;
+  private readonly _repositorioTiposDiagrama: IRepositorioTiposDiagrama;
   private readonly _sectionComponentes: HTMLElement | null;
 
   private _fieldSetElementos: HTMLFieldSetElement | null = null;
@@ -29,10 +31,12 @@ export default class CarregarDiagramaCommand implements ICommand {
   public constructor(
     callbackCriarComponente: (event: Event) => void,
     nomeDiagrama: string,
+    repositorioTiposDiagrama: IRepositorioTiposDiagrama,
     sectionComponentes: HTMLElement | null,
   ) {
     this._callbackCriarComponente = callbackCriarComponente;
     this._nomeDiagrama = nomeDiagrama;
+    this._repositorioTiposDiagrama = repositorioTiposDiagrama;
     this._sectionComponentes = sectionComponentes;
   }
 
@@ -94,6 +98,8 @@ export default class CarregarDiagramaCommand implements ICommand {
       },
     );
 
+    this._repositorioTiposDiagrama.adicionar(this._nomeDiagrama)
+
     return {
       ok: true,
       error: undefined,
@@ -109,6 +115,7 @@ export default class CarregarDiagramaCommand implements ICommand {
 
   undo(): CommandResult {
     this._fieldSetElementos?.remove();
+    this._repositorioTiposDiagrama.remover(this._nomeDiagrama)
 
     return {
       ok: true,
@@ -120,21 +127,28 @@ export default class CarregarDiagramaCommand implements ICommand {
 export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarDiagramaCommand> {
   private _callbackCriarComponente: null | ((event: Event) => void) = null;
   private _nomeDiagrama: string | null = null;
+  private _repositorioTiposDiagrama: IRepositorioTiposDiagrama | null = null;
   private _sectionComponentes: HTMLElement | null = null;
 
-  definirCallCriarComponente(callbackCriarComponente: (event: Event) => void): this {
+  definirCallCriarComponente(callbackCriarComponente: null | ((event: Event) => void)): this {
     this._callbackCriarComponente = callbackCriarComponente;
 
     return this;
   }
 
-  definirNomeDiagrama(nomeDiagrama: string): this {
+  definirNomeDiagrama(nomeDiagrama: string | null): this {
     this._nomeDiagrama = nomeDiagrama;
 
     return this;
   }
 
-  definirSectionComponentes(sectionComponentes: HTMLElement): this {
+  definirRepositorioTiposDiagrama(repositorioTiposDiagrama: IRepositorioTiposDiagrama | null): this {
+    this._repositorioTiposDiagrama = repositorioTiposDiagrama;
+
+    return this;
+  }
+
+  definirSectionComponentes(sectionComponentes: HTMLElement | null): this {
     this._sectionComponentes = sectionComponentes;
 
     return this;
@@ -142,20 +156,25 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
 
   build(): CarregarDiagramaCommand {
     if (this._callbackCriarComponente === null) {
-      throw new CommandBuilderException("CallbackCriarComponente não foi definido");
+      throw new CommandBuilderException("O CallbackCriarComponente não foi definido");
     }
 
     if (this._nomeDiagrama === null) {
-      throw new CommandBuilderException("Nome do diagrama não foi definido");
+      throw new CommandBuilderException("O Nome do Diagrama não foi definido");
+    }
+
+    if (this._repositorioTiposDiagrama === null) {
+      throw new CommandBuilderException(("O Repositório de Tipos de Diagrama não foi definido"))
     }
 
     if (this._sectionComponentes === null) {
-      throw new CommandBuilderException("SectionComponentes não foi definida");
+      throw new CommandBuilderException("O SectionComponentes não foi definida");
     }
 
     return new CarregarDiagramaCommand(
       this._callbackCriarComponente,
       this._nomeDiagrama,
+      this._repositorioTiposDiagrama,
       this._sectionComponentes,
     );
   }

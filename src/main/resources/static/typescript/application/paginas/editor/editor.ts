@@ -45,10 +45,20 @@ import { CarregarCSSCommandBuilder } from "infrastructure/command/carregarCSSCom
 import ApagarComponenteCommand, {
   ApagarComponenteCommandBuilder,
 } from "infrastructure/command/apagarComponenteCommand";
+import ApagarTodosComponentesCommand, {
+  ApagarTodosComponentesCommandBuilder,
+} from "infrastructure/command/apagarTodosComponentesCommand";
 import ConectarAtributoCommand, {ConectarAtributoCommandBuilder} from "infrastructure/command/conectarAtributoCommand";
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
+import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
+import CriarComponenteCommand, {
+  CriarComponenteCommandBuilder,
+} from "infrastructure/command/criarComponenteCommand";
+import ConectarDuasEntidadesCommand, {
+  ConectarDuasEntidadesCommandBuilder,
+} from "infrastructure/command/conectarDuasEntidadesCommand";
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import GeradorIDComponenteFactory from "infrastructure/factory/geradorIDComponenteFactory";
@@ -63,16 +73,8 @@ import TiposConexao from "model/conexao/tiposConexao";
 import SeletorTipoConexao from "infrastructure/conexao/seletorTipoConexao";
 import SetaConectora from "infrastructure/conexao/setaConectora";
 import LateraisComponente from "model/componente/lateraisComponente";
-import ApagarTodosComponentesCommand, {
-  ApagarTodosComponentesCommandBuilder,
-} from "infrastructure/command/apagarTodosComponentesCommand";
-import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
-import CriarComponenteCommand, {
-  CriarComponenteCommandBuilder,
-} from "infrastructure/command/criarComponenteCommand";
-import ConectarDuasEntidadesCommand, {
-  ConectarDuasEntidadesCommandBuilder,
-} from "infrastructure/command/conectarDuasEntidadesCommand";
+import RepositorioTiposDiagrama from "infrastructure/repositorio/repositorioTiposDiagrama";
+import RepositorioTiposDiagramaFactory from "infrastructure/factory/repositorioTiposDiagramaFactory";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -87,6 +89,7 @@ let registradorEventosConexao: RegistradorEventosConexao = RegistradorEventosCon
 let registradorEventosElemento: RegistradorEventosElemento =
   RegistradorEventosElementoFactory.build();
 let repositorioComponentes: RepositorioComponente = RepositorioComponenteFactory.build();
+let repositorioTiposDiagrama: RepositorioTiposDiagrama = RepositorioTiposDiagramaFactory.build();
 let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
 let selecionadorComponente: SelecionadorComponente = SelecionadorComponenteFactory.build();
 
@@ -208,6 +211,7 @@ inputsCarregarDiagrama.forEach((input: HTMLInputElement): void => {
   const command: CarregarDiagramaCommand = new CarregarDiagramaCommandBuilder()
     .definirSectionComponentes(sectionComponentes as HTMLElement)
     .definirCallCriarComponente(callbackCriarComponente)
+    .definirRepositorioTiposDiagrama(repositorioTiposDiagrama)
     .definirNomeDiagrama(input.value.toLowerCase())
     .build();
 
@@ -410,7 +414,7 @@ divComponentes?.addEventListener("click", (event: MouseEvent): void => {
   let target: HTMLElement = event.target as HTMLElement;
 
   if (
-    target.getAttribute("data-nome-elemento") !== ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO
+    target.getAttribute(ATRIBUTO_NOME_ELEMENTO) !== ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO
     || !selecionadorComponente.componenteSelecionado
   ) {
     return;
@@ -419,7 +423,7 @@ divComponentes?.addEventListener("click", (event: MouseEvent): void => {
   let nomeComponenteSelecionado: string | null = selecionadorComponente.componenteSelecionado.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE);
   let nomesComponentesValidos: string[] = ["atributo_der", "entidade", "relacionamento"]
 
-  if (nomesComponentesValidos.map((nomeValido: string): boolean => nomeValido === nomeComponenteSelecionado).some((value: boolean): boolean => value)) {
+  if (nomeComponenteSelecionado && nomesComponentesValidos.includes(nomeComponenteSelecionado)) {
     let commandConectarAtributo: ConectarAtributoCommand = new ConectarAtributoCommandBuilder()
       .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
       .definirDiagrama(diagrama)
