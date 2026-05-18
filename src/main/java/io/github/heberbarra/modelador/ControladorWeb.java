@@ -256,9 +256,16 @@ public class ControladorWeb {
 
     @RequestMapping({"/anexarAtividade", "/anexarAtividade.html"})
     public String anexarAtividade(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "exercise");
+        InjetorAtributos.injetarTituloPagina(modelMap, "assignment");
         InjetorAtributos.injetarPaleta(modelMap);
         return "anexarAtividade";
+    }
+
+    @RequestMapping({"/listagemEstudantes", "/listagemEstudantes.html"})
+    public String listagemEstudantes(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "students-list");
+        InjetorAtributos.injetarPaleta(modelMap);
+        return "ListagemEstudantes";
     }
 
     @RequestMapping({"/redefinir", "/redefinir.html"})
