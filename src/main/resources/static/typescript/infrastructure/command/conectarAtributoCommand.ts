@@ -11,9 +11,7 @@
  *
  */
 
-import CarregarCSSCommand, {
-  CarregarCSSCommandBuilder,
-} from "infrastructure/command/carregarCSSCommand";
+import CarregarCSSCommand, { CarregarCSSCommandBuilder } from "infrastructure/command/carregarCSSCommand";
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
@@ -28,10 +26,11 @@ import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
 import TiposConexao from "model/conexao/tiposConexao";
 import CommandBuilderException from "model/exception/commandBuilderException";
+import Ponto from "model/ponto";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
 
 export default class ConectarAtributoCommand implements ICommand {
-  public static readonly NOME_ELEMENTO_ATRIBUTO: string = "atributo";
+  public static readonly NOME_ELEMENTO_ATRIBUTO: string = "atributo_der";
   private readonly _componenteAlvo: ComponenteDiagrama;
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
@@ -72,29 +71,31 @@ export default class ConectarAtributoCommand implements ICommand {
       .definirNomeArquivo(ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO)
       .build();
 
-    this._fabricaComponente
-      .criarComponente(ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO)
-      .then((componente: ComponenteDiagrama): void => {
-        this._componenteAtributo = componente;
-        this._diagrama.append(componente.htmlComponente);
-      });
+    setTimeout((): void => {
+      let componentes: ComponenteDiagrama[] = this._repositorioComponentes.listar();
+      this._componenteAtributo = componentes.at(componentes.length - 1);
 
-    this._commandConectarComponentes = new ConectarComponentesCommandBuilder()
-      .definirDiagrama(this._diagrama)
-      .definirFabricaConexao(this._fabricaConexao)
-      .definirFabricaComponente(this._fabricaComponente)
-      .definirGeradorID(this._geradorID)
-      .definirPrimeiroComponente(this._componenteAlvo)
-      .definirLateralPrimeiroComponente(LateraisComponente.NORTE)
-      .definirSegundoComponente(this._componenteAtributo)
-      .definirLateralSegundoComponente(LateraisComponente.SUL)
-      .definirRegistradorEventosConexao(this._registradorEventosConexao)
-      .definirRegistradorEventosElemento(this._registradorEventosElemento)
-      .definirRepositorioComponentes(this._repositorioComponentes)
-      .definirTipoConexao(this._tipoConexao)
-      .build();
+      let posicaoAtributo: Ponto = this._componenteAlvo.calcularPontoLateralComponente(LateraisComponente.LESTE);
+      this._componenteAtributo?.htmlComponente.style.setProperty("top", `${posicaoAtributo.y}px`);
+      this._componenteAtributo?.htmlComponente.style.setProperty("left", `${posicaoAtributo.x + 50}px`);
 
-    this._commandConectarComponentes.execute();
+      this._commandConectarComponentes = new ConectarComponentesCommandBuilder()
+        .definirDiagrama(this._diagrama)
+        .definirFabricaConexao(this._fabricaConexao)
+        .definirFabricaComponente(this._fabricaComponente)
+        .definirGeradorID(this._geradorID)
+        .definirPrimeiroComponente(this._componenteAlvo)
+        .definirLateralPrimeiroComponente(LateraisComponente.LESTE)
+        .definirSegundoComponente(this._componenteAtributo)
+        .definirLateralSegundoComponente(LateraisComponente.OESTE)
+        .definirRegistradorEventosConexao(this._registradorEventosConexao)
+        .definirRegistradorEventosElemento(this._registradorEventosElemento)
+        .definirRepositorioComponentes(this._repositorioComponentes)
+        .definirTipoConexao(this._tipoConexao)
+        .build();
+
+      this._commandConectarComponentes.execute();
+    }, 200)
 
     return {
       ok: true,
