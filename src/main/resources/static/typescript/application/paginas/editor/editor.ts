@@ -45,6 +45,7 @@ import { CarregarCSSCommandBuilder } from "infrastructure/command/carregarCSSCom
 import ApagarComponenteCommand, {
   ApagarComponenteCommandBuilder,
 } from "infrastructure/command/apagarComponenteCommand";
+import ConectarAtributoCommand, {ConectarAtributoCommandBuilder} from "infrastructure/command/conectarAtributoCommand";
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
@@ -399,6 +400,41 @@ document.addEventListener("mouseup", callbackFinalSetaConectora);
 selecionadorComponente.setasConectoras.forEach((setaConectora: SetaConectora): void => {
   setaConectora.callback = callbackInicialSetaConectora;
 });
+
+/*********************/
+/* CONECTAR ATRIBUTO */
+/*********************/
+
+let divComponentes: HTMLDivElement | null = document.querySelector("#painel-esquerdo");
+divComponentes?.addEventListener("click", (event: MouseEvent): void => {
+  let target: HTMLElement = event.target as HTMLElement;
+
+  if (
+    target.getAttribute("data-nome-elemento") !== ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO
+    || !selecionadorComponente.componenteSelecionado
+  ) {
+    return;
+  }
+
+  let nomeComponenteSelecionado: string | null = selecionadorComponente.componenteSelecionado.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE);
+  let nomesComponentesValidos: string[] = ["atributo_der", "entidade", "relacionamento"]
+
+  if (nomesComponentesValidos.map((nomeValido: string): boolean => nomeValido === nomeComponenteSelecionado).some((value: boolean): boolean => value)) {
+    let commandConectarAtributo: ConectarAtributoCommand = new ConectarAtributoCommandBuilder()
+      .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
+      .definirDiagrama(diagrama)
+      .definirFabricaComponente(fabricaComponente)
+      .definirFabricaConexao(fabricaConexao)
+      .definirGeradorID(geradorIDComponente)
+      .definirRepositorioComponentes(repositorioComponentes)
+      .definirRegistradorEventosConexao(registradorEventosConexao)
+      .definirRegistradorEventosElemento(registradorEventosElemento)
+      .definirTipoConexao(seletorTipoConexao.tipoConexaoAtual)
+      .build();
+
+    commandHistory.saveAndExecuteCommand(commandConectarAtributo);
+  }
+})
 
 /***********/
 /* TOOLBAR */
