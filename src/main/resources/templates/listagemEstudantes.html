@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <th:block th:replace="~{fragments/head :: head}"></th:block>
+  <th:block th:insert="~{fragments/bindings :: script}"></th:block>
+  <link rel="stylesheet" th:href="@{/css/listagemEstudantes.css}" />
+  <title th:text="#{web.page.students-list.title}"></title>
+</head>
+<body>
+  <header>
+    <div id="opcoes-botoes">
+      <button class="botao-header">
+        <svg width="135" height="135" viewBox="0 0 135 135" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="135" height="135" rx="25" fill="#5E01AF"/>
+          <mask id="path-2-inside-1_412_146" fill="white">
+            <ellipse cx="67.5" cy="98" rx="10.5" ry="11"/>
+          </mask>
+          <ellipse cx="67.5" cy="98" rx="10.5" ry="11" fill="white"/>
+          <path d="M78 98H63C63 96.4561 64.3648 94 67.5 94V109V124C82.2332 124 93 111.694 93 98H78ZM67.5 109V94C70.6352 94 72 96.4561 72 98H57H42C42 111.694 52.7668 124 67.5 124V109ZM57 98H72C72 99.5439 70.6352 102 67.5 102V87V72C52.7668 72 42 84.3058 42 98H57ZM67.5 87V102C64.3648 102 63 99.5439 63 98H78H93C93 84.3058 82.2332 72 67.5 72V87Z" fill="black" mask="url(#path-2-inside-1_412_146)"/>
+          <rect x="48" y="49" width="39" height="29" fill="#D9D9D9"/>
+          <mask id="path-5-inside-2_412_146" fill="white">
+            <ellipse cx="67.5" cy="28" rx="7.5" ry="8"/>
+          </mask>
+          <ellipse cx="67.5" cy="28" rx="7.5" ry="8" fill="white"/>
+          <path d="M75 28H60C60 25.0606 62.4606 21 67.5 21V36V51C80.8236 51 90 39.7759 90 28H75ZM67.5 36V21C72.5394 21 75 25.0606 75 28H60H45C45 39.7759 54.1764 51 67.5 51V36ZM60 28H75C75 30.9394 72.5394 35 67.5 35V20V5C54.1764 5 45 16.2241 45 28H60ZM67.5 20V35C62.4606 35 60 30.9394 60 28H75H90C90 16.2241 80.8236 5 67.5 5V20Z" fill="black" mask="url(#path-5-inside-2_412_146)"/>
+          <rect x="51.5" y="37.5" width="33" height="52" rx="16.5" fill="white" stroke="black" stroke-width="15"/>
+          <path d="M65.46 52.8623C66.4563 51.4553 68.5437 51.4553 69.54 52.8623L94.8086 88.5557C95.9807 90.2114 94.7972 92.5 92.7686 92.5H42.2314C40.2028 92.5 39.0193 90.2114 40.1914 88.5557L65.46 52.8623Z" fill="white" stroke="black" stroke-width="15"/>
+          <rect x="54" y="49" width="29" height="22" fill="white"/>
+          <rect x="59" y="39" width="18" height="25" fill="white"/>
+          <rect x="48" y="56" width="39" height="22" fill="white"/>
+          <mask id="path-12-inside-3_412_146" fill="white">
+            <ellipse cx="67.5" cy="98" rx="10.5" ry="11"/>
+          </mask>
+          <ellipse cx="67.5" cy="98" rx="10.5" ry="11" fill="white"/>
+          <path d="M78 98H63C63 96.4561 64.3648 94 67.5 94V109V124C82.2332 124 93 111.694 93 98H78ZM67.5 109V94C70.6352 94 72 96.4561 72 98H57H42C42 111.694 52.7668 124 67.5 124V109ZM57 98H72C72 99.5439 70.6352 102 67.5 102V87V72C52.7668 72 42 84.3058 42 98H57ZM67.5 87V102C64.3648 102 63 99.5439 63 98H78H93C93 84.3058 82.2332 72 67.5 72V87Z" fill="white" mask="url(#path-12-inside-3_412_146)"/>
+          <rect x="48" y="49" width="39" height="29" fill="white"/>
+          <mask id="path-15-inside-4_412_146" fill="white">
+            <ellipse cx="67.5" cy="28" rx="7.5" ry="8"/>
+          </mask>
+          <ellipse cx="67.5" cy="28" rx="7.5" ry="8" fill="white"/>
+          <path d="M75 28H60C60 25.0606 62.4606 21 67.5 21V36V51C80.8236 51 90 39.7759 90 28H75ZM67.5 36V21C72.5394 21 75 25.0606 75 28H60H45C45 39.7759 54.1764 51 67.5 51V36ZM60 28H75C75 30.9394 72.5394 35 67.5 35V20V5C54.1764 5 45 16.2241 45 28H60ZM67.5 20V35C62.4606 35 60 30.9394 60 28H75H90C90 16.2241 80.8236 5 67.5 5V20Z" fill="white" mask="url(#path-15-inside-4_412_146)"/>
+          <rect x="51.5" y="37.5" width="33" height="52" rx="16.5" fill="white" stroke="white" stroke-width="15"/>
+          <path d="M65.46 52.8623C66.4563 51.4553 68.5437 51.4553 69.54 52.8623L94.8086 88.5557C95.9807 90.2114 94.7972 92.5 92.7686 92.5H42.2314C40.2028 92.5 39.0193 90.2114 40.1914 88.5557L65.46 52.8623Z" fill="white" stroke="white" stroke-width="15"/>
+          <rect x="54" y="49" width="29" height="22" fill="white"/>
+          <rect x="59" y="39" width="18" height="25" fill="white"/>
+          <rect x="48" y="56" width="39" height="22" fill="white"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+
+</body>
+</html>

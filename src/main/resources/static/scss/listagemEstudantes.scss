@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+/**
+ * Copyright (C) 2025 Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
+ *
+ * Licensed under the Massachusetts Institute of Technology (MIT) License.
+ * You may obtain a copy of the license at:
+ *
+ *     https://choosealicense.com/licenses/mit/
+ *
+ * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+ * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+ */
+
+@use "estiloComum";
+@use "estiloHeader";
+@use "estiloTracinho";
+
+.svg-cor-fundo {
+  color: var(--cor-botao);
+}
+
+#opcoes-botoes {
+  display: flex;
+  flex-direction: row;
+  grid-column: 3;
+
+  .botao-header{
+    background-color: unset;
+    z-index: 2;
+
+    svg{
+      height: 5rem;
+      width: 5rem;
+    }
+
+
+  }
+}
