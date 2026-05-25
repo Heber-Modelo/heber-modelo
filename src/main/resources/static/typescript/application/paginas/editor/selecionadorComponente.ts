@@ -11,10 +11,10 @@
  *
  */
 
-import SetaConectora from "infrastructure/conexao/setaConectora";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
-import PontoExtensor from "infrastructure/pontoExtensor";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import PontoExtensor from "model/pontoExtensor";
+import SetaConectora from "model/setaConectora";
 
 export const CLASSE_ELEMENTO_SELECIONADO: string = "selected";
 

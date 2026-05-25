@@ -12,13 +12,13 @@
  */
 
 import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
-import PontoExtensor from "infrastructure/pontoExtensor";
 import PontoExtensorFactory from "infrastructure/factory/pontoExtensorFactory";
 import SetaConectoraFactory from "infrastructure/factory/setaConectoraFactory";
-import SetaConectora from "infrastructure/conexao/setaConectora";
 import LateraisComponente from "model/componente/lateraisComponente";
+import PontoExtensor from "model/pontoExtensor";
 import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
 import PosicoesRelativasSetasConectoras from "model/posicoes/posicoesRelativasSetasConectoras";
+import SetaConectora from "model/setaConectora";
 
 export default class SelecionadorComponenteFactory {
   private static _selecionador: SelecionadorComponente | null = null;

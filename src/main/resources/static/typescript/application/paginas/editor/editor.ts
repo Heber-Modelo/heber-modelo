@@ -54,8 +54,7 @@ import ConectarDuasEntidadesCommand, {
 import CriarComponenteCommand, {
   CriarComponenteCommandBuilder,
 } from "infrastructure/command/criarComponenteCommand";
-import SeletorTipoConexao from "infrastructure/conexao/seletorTipoConexao";
-import SetaConectora from "infrastructure/conexao/setaConectora";
+import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
@@ -78,6 +77,7 @@ import LateraisComponente from "model/componente/lateraisComponente";
 import TiposConexao from "model/conexao/tiposConexao";
 import DirecoesMovimento from "model/direcoesMovimento";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
+import SetaConectora from "model/setaConectora";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */

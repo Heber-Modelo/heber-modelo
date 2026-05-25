@@ -11,12 +11,12 @@
  *
  */
 
-import SetaConectora from "infrastructure/conexao/setaConectora";
 import LateraisComponente from "model/componente/lateraisComponente";
 import FormulaPosicaoSeta from "model/formula/formulaPosicaoSeta";
 import PosicoesRelativasSetasConectoras from "model/posicoes/posicoesRelativasSetasConectoras";
 import Ponto from "model/ponto";
 import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
+import SetaConectora from "model/setaConectora";
 
 export default class SetaConectoraFactory {
   private decidirFormulaPosicaoSeta(
