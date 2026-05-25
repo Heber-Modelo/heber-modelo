@@ -48,7 +48,9 @@ import ApagarComponenteCommand, {
 import ApagarTodosComponentesCommand, {
   ApagarTodosComponentesCommandBuilder,
 } from "infrastructure/command/apagarTodosComponentesCommand";
-import ConectarAtributoCommand, {ConectarAtributoCommandBuilder} from "infrastructure/command/conectarAtributoCommand";
+import ConectarAtributoCommand, {
+  ConectarAtributoCommandBuilder,
+} from "infrastructure/command/conectarAtributoCommand";
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
@@ -414,14 +416,18 @@ divComponentes?.addEventListener("click", (event: MouseEvent): void => {
   let target: HTMLElement = event.target as HTMLElement;
 
   if (
-    target.getAttribute(ATRIBUTO_NOME_ELEMENTO) !== ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO
-    || !selecionadorComponente.componenteSelecionado
+    target.getAttribute(ATRIBUTO_NOME_ELEMENTO) !==
+      ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO ||
+    !selecionadorComponente.componenteSelecionado
   ) {
     return;
   }
 
-  let nomeComponenteSelecionado: string | null = selecionadorComponente.componenteSelecionado.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE);
-  let nomesComponentesValidos: string[] = ["atributo_der", "entidade", "relacionamento"]
+  let nomeComponenteSelecionado: string | null =
+    selecionadorComponente.componenteSelecionado.htmlComponente.getAttribute(
+      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+    );
+  let nomesComponentesValidos: string[] = ["atributo_der", "entidade", "relacionamento"];
 
   if (nomeComponenteSelecionado && nomesComponentesValidos.includes(nomeComponenteSelecionado)) {
     let commandConectarAtributo: ConectarAtributoCommand = new ConectarAtributoCommandBuilder()
@@ -438,7 +444,11 @@ divComponentes?.addEventListener("click", (event: MouseEvent): void => {
 
     commandHistory.saveAndExecuteCommand(commandConectarAtributo);
   }
-})
+});
+
+/*****************/
+/* TROCAR PÁGINA */
+/*****************/
 
 /***********/
 /* TOOLBAR */
