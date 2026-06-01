@@ -20,14 +20,8 @@ import {
   limparPropriedades,
   mouseDownSelecionarElemento,
 } from "application/paginas/editor/editorPropriedades";
-import { DirecoesMovimento, moverComponente } from "application/paginas/editor/manipularComponente";
 import "application/paginas/editor/painelLateral";
 import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
-import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
-import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
-import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
-import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
-import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import ColarComponenteCommand, {
   ColarComponenteCommandBuilder,
 } from "infrastructure/command/colarComponenteCommand";
@@ -54,29 +48,36 @@ import ConectarAtributoCommand, {
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
-import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
-import CriarComponenteCommand, {
-  CriarComponenteCommandBuilder,
-} from "infrastructure/command/criarComponenteCommand";
 import ConectarDuasEntidadesCommand, {
   ConectarDuasEntidadesCommandBuilder,
 } from "infrastructure/command/conectarDuasEntidadesCommand";
+import CriarComponenteCommand, {
+  CriarComponenteCommandBuilder,
+} from "infrastructure/command/criarComponenteCommand";
+import SeletorTipoConexao from "infrastructure/conexao/seletorTipoConexao";
+import SetaConectora from "infrastructure/conexao/setaConectora";
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
+import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import GeradorIDComponenteFactory from "infrastructure/factory/geradorIDComponenteFactory";
 import RegistradorEventosConexaoFactory from "infrastructure/factory/registradorEventosConexaoFactory";
 import RegistradorEventosElementoFactory from "infrastructure/factory/registradorEventosElementoFactory";
+import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
+import RepositorioTiposDiagramaFactory from "infrastructure/factory/repositorioTiposDiagramaFactory";
+import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
+import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import CommandHistory from "infrastructure/history/commandHistory";
+import moverComponente from "infrastructure/moverComponente";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
+import RepositorioTiposDiagrama from "infrastructure/repositorio/repositorioTiposDiagrama";
 import "infrastructure/variaveisConfiguracao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import TiposConexao from "model/conexao/tiposConexao";
-import SeletorTipoConexao from "infrastructure/conexao/seletorTipoConexao";
-import SetaConectora from "infrastructure/conexao/setaConectora";
 import LateraisComponente from "model/componente/lateraisComponente";
-import RepositorioTiposDiagrama from "infrastructure/repositorio/repositorioTiposDiagrama";
-import RepositorioTiposDiagramaFactory from "infrastructure/factory/repositorioTiposDiagramaFactory";
+import TiposConexao from "model/conexao/tiposConexao";
+import DirecoesMovimento from "model/direcoesMovimento";
+import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -445,10 +446,6 @@ divComponentes?.addEventListener("click", (event: MouseEvent): void => {
     commandHistory.saveAndExecuteCommand(commandConectarAtributo);
   }
 });
-
-/*****************/
-/* TROCAR PÁGINA */
-/*****************/
 
 /***********/
 /* TOOLBAR */
