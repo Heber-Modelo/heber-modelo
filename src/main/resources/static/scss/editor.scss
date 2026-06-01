@@ -23,7 +23,7 @@ body {
   grid-template-columns: 20% 60% 20%;
   grid-template-rows: 5rem 5rem calc(100% - 10rem);
   max-width: 100vw;
-  overflow: auto;
+  overflow: hidden;
   &:has(#painel-direito.hidden) {
     grid-template-columns: 20% 80%;
   }
