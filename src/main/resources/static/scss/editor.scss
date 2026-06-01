@@ -107,7 +107,7 @@ main {
     }
   }
 
-  .menu-arquivo{
+  .menu-opcoes{
     position: relative;
     display: inline-block;
   }
@@ -133,6 +133,35 @@ main {
     min-width: 22rem;
     height: auto;
     padding: 0.8rem 0.8rem;
+  }
+
+  #menu-pagina{
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    z-index: 30;
+    top: 100%;
+    background-color: var(--cor-fundo-menu);
+    border: 0.01rem solid var(--cor-borda);
+    height: auto;
+    max-width: 40rem;
+    overflow-x: scroll;
+    padding: 1.5rem 2rem;
+    column-gap: 0.5rem;
+
+    .pagina-selecao {
+      min-height: 9rem;
+      min-width: 12rem;
+      border: 0.2rem solid var(--cor-borda);
+      border-radius: unset;
+      justify-content: center;
+      align-content: center;
+
+      & > span{
+        font-size: 4rem;
+        color: var(--cor-fonte-alternativa);
+      }
+    }
   }
 
   .comando {
@@ -178,6 +207,7 @@ main {
   details[open] > summary::before{
     content: "";
     position: fixed;
+    z-index: 11;
     top: 0;
     left: 0;
     width: 100%;
