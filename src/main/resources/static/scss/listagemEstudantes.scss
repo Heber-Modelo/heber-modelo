@@ -13,19 +13,44 @@
  */
 
 @use "estiloComum";
-@use "estiloHeader";
 @use "estiloTracinho";
+@use "estiloFooter";
+@use "variaveis";
+
 
 .svg-cor-fundo {
   color: var(--cor-botao);
 }
 
+header{
+  align-items: center;
+  display: grid;
+  grid-template-columns: 10% 60% 30%;
+  width: 100%;
+  height: fit-content;
+  background-color: var(--cor-cabecalho);
+  color: var(--cor-letra);
+  padding: variaveis.$paddingPadrao;
+  font-family: "Cookie", Roboto, Arial, serif;
+  font-size: variaveis.$fontsizeHeader;
+}
+
+#home{
+  grid-column: 1;
+}
+
+#home svg {
+  height: 4rem;
+  width: 4rem;
+}
+
 #opcoes-botoes {
+  padding: 0 10rem;
   display: flex;
   flex-direction: row;
-  grid-column: 3;
+  column-gap: 2rem;
 
-  .botao-header{
+  button{
     background-color: unset;
     z-index: 2;
 
@@ -34,6 +59,10 @@
       width: 5rem;
     }
 
-
+    &:hover {
+      color: var(--cor-botao-hover);
+    }
   }
+
+
 }

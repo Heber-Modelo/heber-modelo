@@ -1,54 +1,169 @@
 <!doctype html>
 <html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <th:block th:replace="~{fragments/head :: head}"></th:block>
-  <th:block th:insert="~{fragments/bindings :: script}"></th:block>
-  <link rel="stylesheet" th:href="@{/css/listagemEstudantes.css}" />
-  <title th:text="#{web.page.students-list.title}"></title>
-</head>
-<body>
-  <header>
-    <div id="opcoes-botoes">
-      <button class="botao-header">
-        <svg width="135" height="135" viewBox="0 0 135 135" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="135" height="135" rx="25" fill="#5E01AF"/>
-          <mask id="path-2-inside-1_412_146" fill="white">
-            <ellipse cx="67.5" cy="98" rx="10.5" ry="11"/>
-          </mask>
-          <ellipse cx="67.5" cy="98" rx="10.5" ry="11" fill="white"/>
-          <path d="M78 98H63C63 96.4561 64.3648 94 67.5 94V109V124C82.2332 124 93 111.694 93 98H78ZM67.5 109V94C70.6352 94 72 96.4561 72 98H57H42C42 111.694 52.7668 124 67.5 124V109ZM57 98H72C72 99.5439 70.6352 102 67.5 102V87V72C52.7668 72 42 84.3058 42 98H57ZM67.5 87V102C64.3648 102 63 99.5439 63 98H78H93C93 84.3058 82.2332 72 67.5 72V87Z" fill="black" mask="url(#path-2-inside-1_412_146)"/>
-          <rect x="48" y="49" width="39" height="29" fill="#D9D9D9"/>
-          <mask id="path-5-inside-2_412_146" fill="white">
-            <ellipse cx="67.5" cy="28" rx="7.5" ry="8"/>
-          </mask>
-          <ellipse cx="67.5" cy="28" rx="7.5" ry="8" fill="white"/>
-          <path d="M75 28H60C60 25.0606 62.4606 21 67.5 21V36V51C80.8236 51 90 39.7759 90 28H75ZM67.5 36V21C72.5394 21 75 25.0606 75 28H60H45C45 39.7759 54.1764 51 67.5 51V36ZM60 28H75C75 30.9394 72.5394 35 67.5 35V20V5C54.1764 5 45 16.2241 45 28H60ZM67.5 20V35C62.4606 35 60 30.9394 60 28H75H90C90 16.2241 80.8236 5 67.5 5V20Z" fill="black" mask="url(#path-5-inside-2_412_146)"/>
-          <rect x="51.5" y="37.5" width="33" height="52" rx="16.5" fill="white" stroke="black" stroke-width="15"/>
-          <path d="M65.46 52.8623C66.4563 51.4553 68.5437 51.4553 69.54 52.8623L94.8086 88.5557C95.9807 90.2114 94.7972 92.5 92.7686 92.5H42.2314C40.2028 92.5 39.0193 90.2114 40.1914 88.5557L65.46 52.8623Z" fill="white" stroke="black" stroke-width="15"/>
-          <rect x="54" y="49" width="29" height="22" fill="white"/>
-          <rect x="59" y="39" width="18" height="25" fill="white"/>
-          <rect x="48" y="56" width="39" height="22" fill="white"/>
-          <mask id="path-12-inside-3_412_146" fill="white">
-            <ellipse cx="67.5" cy="98" rx="10.5" ry="11"/>
-          </mask>
-          <ellipse cx="67.5" cy="98" rx="10.5" ry="11" fill="white"/>
-          <path d="M78 98H63C63 96.4561 64.3648 94 67.5 94V109V124C82.2332 124 93 111.694 93 98H78ZM67.5 109V94C70.6352 94 72 96.4561 72 98H57H42C42 111.694 52.7668 124 67.5 124V109ZM57 98H72C72 99.5439 70.6352 102 67.5 102V87V72C52.7668 72 42 84.3058 42 98H57ZM67.5 87V102C64.3648 102 63 99.5439 63 98H78H93C93 84.3058 82.2332 72 67.5 72V87Z" fill="white" mask="url(#path-12-inside-3_412_146)"/>
-          <rect x="48" y="49" width="39" height="29" fill="white"/>
-          <mask id="path-15-inside-4_412_146" fill="white">
-            <ellipse cx="67.5" cy="28" rx="7.5" ry="8"/>
-          </mask>
-          <ellipse cx="67.5" cy="28" rx="7.5" ry="8" fill="white"/>
-          <path d="M75 28H60C60 25.0606 62.4606 21 67.5 21V36V51C80.8236 51 90 39.7759 90 28H75ZM67.5 36V21C72.5394 21 75 25.0606 75 28H60H45C45 39.7759 54.1764 51 67.5 51V36ZM60 28H75C75 30.9394 72.5394 35 67.5 35V20V5C54.1764 5 45 16.2241 45 28H60ZM67.5 20V35C62.4606 35 60 30.9394 60 28H75H90C90 16.2241 80.8236 5 67.5 5V20Z" fill="white" mask="url(#path-15-inside-4_412_146)"/>
-          <rect x="51.5" y="37.5" width="33" height="52" rx="16.5" fill="white" stroke="white" stroke-width="15"/>
-          <path d="M65.46 52.8623C66.4563 51.4553 68.5437 51.4553 69.54 52.8623L94.8086 88.5557C95.9807 90.2114 94.7972 92.5 92.7686 92.5H42.2314C40.2028 92.5 39.0193 90.2114 40.1914 88.5557L65.46 52.8623Z" fill="white" stroke="white" stroke-width="15"/>
-          <rect x="54" y="49" width="29" height="22" fill="white"/>
-          <rect x="59" y="39" width="18" height="25" fill="white"/>
-          <rect x="48" y="56" width="39" height="22" fill="white"/>
-        </svg>
+  <head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <th:block th:insert="~{fragments/bindings :: script}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/listagemEstudantes.css}" />
+    <title th:text="#{web.page.students-list.title}"></title>
+  </head>
+  <body>
+    <header>
+      <button id="home">
+        <a th:href="@{index.html}" title="Home">
+          <svg
+            width="256"
+            height="256"
+            viewBox="0 0 256 256"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="256" height="256" rx="15" fill="currentColor" />
+            <rect
+              x="66"
+              y="189.14"
+              width="45"
+              height="15"
+              rx="5"
+              fill="currentColor"
+              class="svg-cor-fonte"
+            />
+            <rect
+              x="145"
+              y="189.14"
+              width="45"
+              height="15"
+              rx="5"
+              fill="currentColor"
+              class="svg-cor-fonte"
+            />
+            <rect
+              x="61"
+              y="125.14"
+              width="15"
+              height="79"
+              rx="5"
+              fill="currentColor"
+              class="svg-cor-fonte"
+            />
+            <rect
+              x="180"
+              y="125.14"
+              width="15"
+              height="79"
+              rx="5"
+              fill="currentColor"
+              class="svg-cor-fonte"
+            />
+            <rect
+              x="113.853"
+              y="65.1401"
+              width="20"
+              height="120"
+              rx="5"
+              transform="rotate(45 113.853 65.1401)"
+              fill="currentColor"
+              class="svg-cor-fonte"
+            />
+            <rect
+              x="120.527"
+              y="71.8096"
+              width="20"
+              height="130.594"
+              rx="5"
+              transform="rotate(-45 120.527 71.8096)"
+              fill="currentColor"
+              class="svg-cor-fonte"
+            />
+            <rect
+              x="105.831"
+              y="73.1624"
+              width="31.3424"
+              height="19.9887"
+              rx="5"
+              transform="rotate(-45 105.831 73.1624)"
+              fill="currentColor"
+              class="svg-cor-fonte"
+            />
+            <rect
+              x="180"
+              y="79.1401"
+              width="15"
+              height="50"
+              rx="5"
+              fill="currentColor"
+              class="svg-cor-fonte"
+            />
+            <rect
+              x="96"
+              y="141.14"
+              width="15"
+              height="58"
+              rx="5"
+              fill="currentColor"
+              class="svg-cor-fonte"
+            />
+            <rect
+              x="145"
+              y="141.14"
+              width="15"
+              height="58"
+              rx="5"
+              fill="currentColor"
+              class="svg-cor-fonte"
+            />
+            <rect
+              x="96"
+              y="136.14"
+              width="64"
+              height="15"
+              rx="5"
+              fill="currentColor"
+              class="svg-cor-fonte"
+            />
+          </svg>
+        </a>
       </button>
-    </div>
-  </header>
+      <h1 th:text="${programa}"></h1>
 
+      <div id="opcoes-botoes">
+        <button>
+          <svg
+            width="135"
+            height="135"
+            viewBox="0 0 135 135"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="135" height="135" rx="15" fill="currentColor" class="svg-cor-fundo" />
+            <rect x="46" y="31" width="42" height="72" rx="21" fill="currentColor" />
+            <path
+              d="M64.534 46.5593C65.7271 44.8373 68.2729 44.8373 69.466 46.5593L105.307 98.2915C106.686 100.281 105.262 103 102.841 103H31.1589C28.7384 103 27.3145 100.281 28.6929 98.2915L64.534 46.5593Z"
+              fill="currentColor"
+            />
+            <circle cx="67" cy="29" r="7" fill="currentColor" />
+            <circle cx="67" cy="102" r="11" fill="currentColor" />
+          </svg>
+        </button>
 
-</body>
+        <button>
+          <svg
+            width="135"
+            height="135"
+            viewBox="0 0 135 135"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="135" height="135" rx="15" fill="currentColor" class="svg-cor-fundo" />
+            <path
+              d="M77.8205 32.5767C78.4992 35.1218 81.4099 36.3275 83.6895 35.0078L90.5036 31.0631C92.0719 30.1552 94.0547 30.415 95.336 31.6964L102.303 38.6638C103.585 39.9452 103.845 41.9282 102.937 43.4965L98.9917 50.3096C97.6718 52.5891 98.8773 55.5 101.422 56.1788L109.031 58.2081C110.782 58.6751 112 60.2608 112 62.073V71.9268C112 73.7391 110.782 75.3249 109.031 75.7918L101.423 77.8205C98.8775 78.4992 97.6717 81.4101 98.9916 83.6897L102.937 90.5035C103.845 92.0718 103.585 94.0547 102.303 95.3362L95.3361 102.304C94.0547 103.585 92.0719 103.845 90.5035 102.937L83.6889 98.9916C81.4092 97.6717 78.4983 98.8776 77.8198 101.423L75.7917 109.03C75.3248 110.782 73.739 112 71.9267 112H62.0732C60.2609 112 58.6751 110.782 58.2082 109.031L56.1795 101.423C55.5008 98.8775 52.5899 97.6717 50.3103 98.9916L43.4965 102.937C41.9282 103.845 39.9453 103.585 38.6638 102.303L31.6962 95.3359C30.4149 94.0546 30.155 92.072 31.0627 90.5037L35.0073 83.6886C36.3268 81.4089 35.121 78.4984 32.5759 77.8198L24.9695 75.7917C23.2184 75.3249 22 73.739 22 71.9268V62.0729C22 60.2608 23.2182 58.6751 24.9691 58.208L32.577 56.1788C35.122 55.4999 36.3275 52.5892 35.0078 50.3097L31.0632 43.4965C30.1552 41.9281 30.415 39.9453 31.6965 38.6639L38.664 31.6964C39.9454 30.415 41.9281 30.1551 43.4964 31.063L50.3099 35.0072C52.5894 36.3268 55.4999 35.1213 56.1788 32.5764L58.208 24.969C58.6751 23.2182 60.2608 22 62.0729 22H71.9269C73.7391 22 75.3249 23.2183 75.7918 24.9693L77.8205 32.5767Z"
+              fill="currentColor"
+            />
+            <circle cx="67" cy="67" r="20" fill="currentColor" class="svg-cor-fundo" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main></main>
+  </body>
 </html>
