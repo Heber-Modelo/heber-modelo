@@ -17,818 +17,84 @@
   </head>
   <body>
     <!--
-Copyright (C) 2025 Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
-
-Licensed under the Massachusetts Institute of Technology (MIT) License.
-You may obtain a copy of the license at:
-
-https://choosealicense.com/licenses/mit/
-
-A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
-Licensed works, modifications, and larger works may be distributed under different terms and without source code.
--->
+    ~ Copyright (c) 2025-2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+    ~
+    ~ Licensed under the Massachusetts Institute of Technology (MIT) License.
+    ~ You may obtain a copy of the license at:
+    ~
+    ~    https://choosealicense.com/licenses/mit/
+    ~
+    ~ A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+    ~ Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+    ~
+    -->
     <header th:replace="~{fragments/header :: header}"></header>
 
     <div class="barra-de-tarefas">
       <details class="menu-opcoes">
         <summary th:title="#{web.editor.toolbar.file}" id="arquivo">
-          <svg
-            width="358"
-            height="408"
-            viewBox="0 0 358 408"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g filter="url(#filter0_d_338_187)">
-              <rect
-                x="4"
-                width="350"
-                height="400"
-                rx="30"
-                fill="currentColor"
-                class="svg-cor-contorno"
-              />
-            </g>
-            <rect x="79" y="180" width="200" height="160" fill="currentColor" />
-            <rect x="79" width="200" height="120" fill="currentColor" />
-            <rect x="214" width="40" height="80" fill="currentColor" class="svg-cor-contorno" />
-            <rect
-              x="104"
-              y="210"
-              width="150"
-              height="20"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="104"
-              y="290"
-              width="150"
-              height="20"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="104"
-              y="250"
-              width="150"
-              height="20"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <circle cx="41" cy="370" r="10" fill="currentColor" />
-            <circle cx="316" cy="370" r="10" fill="currentColor" />
-          </svg>
+          <th:block th:insert="~{fragments/editor/icons/file :: svg}"></th:block>
         </summary>
-
         <div class="mostrar-conteudo">
           <div class="comando">
             <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.new-file}"></span>
             <span class="atalho">Ctrl+N</span>
           </div>
-
           <div class="comando">
             <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.open-file}"></span>
             <span class="atalho">Ctrl+O</span>
           </div>
-
           <hr />
-
           <div class="comando">
             <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.save-file}"></span>
             <span class="atalho">Ctrl+S</span>
           </div>
-
           <div class="comando">
             <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.export-file}"></span>
             <span class="atalho">Ctrl+E</span>
           </div>
-
           <hr />
-
           <div class="comando">
             <span class="itens-menu">Imprimir</span>
             <span class="atalho">Ctrl+P</span>
           </div>
         </div>
       </details>
-
       <details class="menu-opcoes">
         <summary th:title="#{web.editor.toolbar.pages}" id="paginas">
-          <svg
-            width="351"
-            height="450"
-            viewBox="0 0 351 450"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect
-              x="100"
-              y="90"
-              width="241"
-              height="25"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="101"
-              y="430"
-              width="240"
-              height="25"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="331"
-              y="100"
-              width="25"
-              height="340"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="91"
-              y="100"
-              width="25"
-              height="340"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="331"
-              y="90"
-              width="25"
-              height="25"
-              rx="10"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="91"
-              y="90"
-              width="25"
-              height="25"
-              rx="10"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="54"
-              y="45"
-              width="251"
-              height="25"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="45"
-              y="55"
-              width="25"
-              height="350"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="45"
-              y="45"
-              width="25"
-              height="25"
-              rx="10"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect x="9" width="251" height="25" fill="currentColor" class="svg-cor-contorno" />
-            <rect y="10" width="25" height="350" fill="currentColor" class="svg-cor-contorno" />
-            <rect width="25" height="25" rx="10" fill="currentColor" class="svg-cor-contorno" />
-            <rect
-              x="91"
-              y="430"
-              width="25"
-              height="25"
-              rx="10"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="331"
-              y="430"
-              width="25"
-              height="25"
-              rx="10"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="55"
-              y="395"
-              width="24"
-              height="25"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="45"
-              y="395"
-              width="25"
-              height="25"
-              rx="10"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="315"
-              y="55"
-              width="24"
-              height="25"
-              transform="rotate(90 315 55)"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="270"
-              y="10"
-              width="24"
-              height="25"
-              transform="rotate(90 270 10)"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="270"
-              width="25"
-              height="25"
-              rx="10"
-              transform="rotate(90 270 0)"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="315"
-              y="45"
-              width="25"
-              height="25"
-              rx="10"
-              transform="rotate(90 315 45)"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="10"
-              y="350"
-              width="24"
-              height="25"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              y="350"
-              width="25"
-              height="25"
-              rx="10"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="136"
-              y="171"
-              width="170"
-              height="16"
-              rx="3"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="136"
-              y="233"
-              width="170"
-              height="16"
-              rx="3"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="136"
-              y="357"
-              width="170"
-              height="16"
-              rx="3"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-            <rect
-              x="136"
-              y="295"
-              width="170"
-              height="16"
-              rx="3"
-              fill="currentColor"
-              class="svg-cor-contorno"
-            />
-          </svg>
+          <th:block th:replace="~{fragments/editor/icons/pages :: svg}"></th:block>
         </summary>
-
         <div id="menu-pagina">
           <button class="pagina-selecao">
             <span> + </span>
           </button>
         </div>
       </details>
-
       <button th:title="#{web.editor.toolbar.copy}" id="copiar">
-        <svg
-          width="292"
-          height="395"
-          viewBox="0 0 292 395"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect
-            x="42"
-            y="45"
-            width="250"
-            height="350"
-            rx="20"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect x="9" width="237" height="25" rx="5" fill="currentColor" class="svg-cor-contorno" />
-          <rect
-            y="329"
-            width="320"
-            height="25"
-            rx="5"
-            transform="rotate(-90 0 329)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <circle cx="12.5" cy="12.5" r="12.5" fill="currentColor" class="svg-cor-contorno" />
-          <rect
-            x="67"
-            y="70"
-            width="200"
-            height="300"
-            rx="10"
-            fill="currentColor"
-            class="svg-cor-completar"
-          />
-        </svg>
+        <th:block th:replace="~{fragments/editor/icons/copy :: svg}"></th:block>
       </button>
-
       <button th:title="#{web.editor.toolbar.paste}" id="colar">
-        <svg
-          width="285"
-          height="390"
-          viewBox="0 0 285 390"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect
-            x="10"
-            y="30"
-            width="230"
-            height="330"
-            rx="10"
-            fill="none"
-            stroke="currentColor"
-            class="svg-cor-contorno"
-            stroke-width="20"
-          />
-          <rect
-            x="85"
-            y="110"
-            width="200"
-            height="280"
-            rx="20"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="100"
-            y="125"
-            width="170"
-            height="250"
-            rx="10"
-            fill="currentColor"
-            class="svg-cor-completar"
-          />
-          <rect
-            x="78"
-            width="95"
-            height="60"
-            rx="10"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="125"
-            y="168"
-            width="120"
-            height="15"
-            rx="5"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="125"
-            y="218"
-            width="120"
-            height="15"
-            rx="5"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="125"
-            y="318"
-            width="120"
-            height="15"
-            rx="5"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="125"
-            y="268"
-            width="120"
-            height="15"
-            rx="5"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="93"
-            y="15"
-            width="65"
-            height="30"
-            rx="5"
-            fill="currentColor"
-            class="svg-cor-completar"
-          />
-        </svg>
+        <th:block th:replace="~{fragments/editor/icons/paste :: svg}"></th:block>
       </button>
-
       <button th:title="#{web.editor.toolbar.cut}" id="cortar">
-        <svg
-          width="275"
-          height="349"
-          viewBox="0 0 275 349"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle
-            cx="60"
-            cy="289.003"
-            r="50"
-            fill="none"
-            stroke="currentColor"
-            class="svg-cor-contorno"
-            stroke-width="20"
-          />
-          <circle
-            cx="215"
-            cy="289.003"
-            r="50"
-            fill="none"
-            stroke="currentColor"
-            class="svg-cor-contorno"
-            stroke-width="20"
-          />
-          <rect
-            y="17.2109"
-            width="30"
-            height="300"
-            rx="15"
-            transform="rotate(-35 0 17.2109)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            width="30"
-            height="300"
-            rx="15"
-            transform="matrix(-0.819152 -0.573576 -0.573576 0.819152 274.647 17.2109)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <path
-            d="M125.355 143.932L137.643 135.328L172.057 184.478L159.77 193.081L125.355 143.932Z"
-            fill="currentColor"
-            class="svg-cor-completar"
-          />
-          <path
-            d="M101.822 188.799L114.119 180.189L148.534 229.338L136.237 237.948L101.822 188.799Z"
-            fill="currentColor"
-            class="svg-cor-completar"
-          />
-          <rect
-            x="254.287"
-            y="20.8945"
-            width="15.4362"
-            height="14.6955"
-            transform="rotate(-145 254.287 20.8945)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="12.0918"
-            y="8.73877"
-            width="15.2356"
-            height="14.8393"
-            transform="rotate(-35 12.0918 8.73877)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <circle cx="137" cy="187.003" r="6" fill="currentColor" class="svg-cor-completar" />
-        </svg>
+        <th:block th:replace="~{fragments/editor/icons/cut :: svg}"></th:block>
       </button>
-
       <button th:title="#{web.editor.toolbar.undo}" id="desfazer">
-        <svg
-          width="454"
-          height="400"
-          viewBox="0 0 454 400"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect
-            x="69"
-            y="15"
-            width="370"
-            height="370"
-            rx="105"
-            fill="none"
-            stroke="currentColor"
-            class="svg-cor-contorno"
-            stroke-width="30"
-          />
-          <rect x="46" y="119" width="52" height="161" fill="currentColor" />
-          <rect
-            x="54"
-            y="262"
-            width="30"
-            height="30"
-            rx="10"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            y="119"
-            width="30"
-            height="120"
-            rx="12"
-            transform="rotate(-30 0 119)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            width="30"
-            height="120"
-            rx="12"
-            transform="matrix(-0.866025 -0.5 -0.5 0.866025 136.981 119)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            width="30"
-            height="113"
-            rx="12"
-            transform="matrix(1 0 0 -1 54 220)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-        </svg>
+        <th:block th:replace="~{fragments/editor/icons/undo :: svg}"></th:block>
       </button>
-
       <button th:title="#{web.editor.toolbar.redo}" id="refazer">
-        <svg
-          width="454"
-          height="400"
-          viewBox="0 0 454 400"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect
-            x="-15"
-            y="15"
-            width="370"
-            height="370"
-            rx="105"
-            transform="matrix(-1 0 0 1 370 0)"
-            fill="none"
-            stroke="currentColor"
-            class="svg-cor-contorno"
-            stroke-width="30"
-          />
-          <rect width="52" height="161" transform="matrix(-1 0 0 1 408 119)" fill="currentColor" />
-          <rect
-            width="30"
-            height="30"
-            rx="10"
-            transform="matrix(-1 0 0 1 400 262)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            width="30"
-            height="120"
-            rx="12"
-            transform="matrix(-0.866025 -0.5 -0.5 0.866025 454 119)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="317.019"
-            y="119"
-            width="30"
-            height="120"
-            rx="12"
-            transform="rotate(-30 317.019 119)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="400"
-            y="220"
-            width="30"
-            height="113"
-            rx="12"
-            transform="rotate(-180 400 220)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-        </svg>
+        <th:block th:replace="~{fragments/editor/icons/redo :: svg}"></th:block>
       </button>
-
       <button th:title="#{web.editor.toolbar.erase}" id="apagar">
-        <svg
-          width="425"
-          height="425"
-          viewBox="0 0 425 425"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect
-            x="-14.1421"
-            width="180"
-            height="380"
-            rx="10"
-            transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 400.122 131.421)"
-            fill="none"
-            stroke="currentColor"
-            class="svg-cor-contorno"
-            stroke-width="20"
-            stroke-miterlimit="1"
-          />
-          <rect
-            x="106.83"
-            y="189.13"
-            width="248.45"
-            height="177.475"
-            transform="rotate(-45 106.83 189.13)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="113"
-            y="378"
-            width="295"
-            height="20"
-            rx="5"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect x="99" y="398" width="87" height="20" fill="currentColor" />
-        </svg>
+        <th:block th:replace="~{fragments/editor/icons/delete :: svg}"></th:block>
       </button>
-
       <button th:title="#{web.editor.toolbar.delete}" id="deletar">
-        <svg
-          width="350"
-          height="401"
-          viewBox="0 0 350 401"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect
-            x="169"
-            y="72"
-            width="15"
-            height="288"
-            rx="5"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="221.547"
-            y="71.8047"
-            width="15"
-            height="288"
-            rx="5"
-            transform="rotate(3 221.547 71.8047)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="116.474"
-            y="72.5898"
-            width="15"
-            height="288"
-            rx="5"
-            transform="rotate(-3 116.474 72.5898)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="66.478"
-            y="73.2017"
-            width="15"
-            height="288"
-            rx="5"
-            transform="rotate(-5 66.478 73.2017)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="271.579"
-            y="71.8943"
-            width="15"
-            height="288"
-            rx="5"
-            transform="rotate(5 271.579 71.8943)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="50"
-            y="380"
-            width="250"
-            height="20"
-            rx="10"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="2"
-            y="53.7834"
-            width="20"
-            height="350"
-            rx="10"
-            transform="rotate(-8 2 53.7834)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="327.711"
-            y="51"
-            width="20"
-            height="350"
-            rx="10"
-            transform="rotate(8 327.711 51)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            y="25"
-            width="350"
-            height="20"
-            rx="10"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="106"
-            width="139"
-            height="10"
-            rx="5"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="235"
-            y="35"
-            width="30"
-            height="10"
-            transform="rotate(-90 235 35)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-          <rect
-            x="106"
-            y="35"
-            width="30"
-            height="10"
-            transform="rotate(-90 106 35)"
-            fill="currentColor"
-            class="svg-cor-contorno"
-          />
-        </svg>
+        <th:block th:replace="~{fragments/editor/icons/deleteAll :: svg}"></th:block>
       </button>
     </div>
-
     <aside id="painel-esquerdo">
       <button type="button" class="btn-painel-esquerdo btn-esconder">&lt;</button>
       <button type="button" class="btn-painel-esquerdo btn-mostrar">&gt;</button>
-
       <section id="diagramas" class="pagina">
         <h2 th:text="#{web.page.editor.section.diagrams}"></h2>
         <section id="banco-de-dados">
