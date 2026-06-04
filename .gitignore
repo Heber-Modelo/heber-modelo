@@ -67,3 +67,4 @@ src/main/resources/static/docs
 site
 
 .env
+src/main/resources/**/*.svg
