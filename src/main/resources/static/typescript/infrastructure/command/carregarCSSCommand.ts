@@ -123,7 +123,7 @@ export class CarregarCSSCommandBuilder implements ICommandBuilder<CarregarCSSCom
 
   public build(): CarregarCSSCommand {
     if (this._nomeArquivo === null) {
-      throw new CommandBuilderException("O nome do arquivo não foi definido");
+      throw new CommandBuilderException("nome do arquivo");
     }
 
     return new CarregarCSSCommand(this._nomeArquivo);

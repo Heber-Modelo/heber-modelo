@@ -91,15 +91,15 @@ export class CortarComponenteCommandBuilder implements ICommandBuilder<CortarCom
 
   public build(): CortarComponenteCommand {
     if (this._componente === null) {
-      throw new CommandBuilderException("Componente alvo não foi especificado");
+      throw new CommandBuilderException("componente alvo");
     }
 
     if (this._repositorio === null) {
-      throw new CommandBuilderException("Repositório de componentes não foi especificado");
+      throw new CommandBuilderException("repositório de componentes");
     }
 
     if (this._selecionadorComponente === null) {
-      throw new CommandBuilderException("Selecionador componente não foi especificado");
+      throw new CommandBuilderException("selecionador componente");
     }
 
     return new CortarComponenteCommand(
