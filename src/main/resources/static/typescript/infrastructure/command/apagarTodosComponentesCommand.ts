@@ -85,11 +85,11 @@ export class ApagarTodosComponentesCommandBuilder implements ICommandBuilder<Apa
 
   public build(): ApagarTodosComponentesCommand {
     if (this._diagrama === undefined || this._diagrama === null) {
-      throw new CommandBuilderException("O diagrama não foi definido");
+      throw new CommandBuilderException("diagrama");
     }
 
     if (this._repositorioComponente === null) {
-      throw new CommandBuilderException("O repositório de componentes não foi definido");
+      throw new CommandBuilderException("repositório de componentes");
     }
 
     return new ApagarTodosComponentesCommand(this._repositorioComponente, this._diagrama);

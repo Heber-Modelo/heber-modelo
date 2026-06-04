@@ -44,7 +44,7 @@ export default class ConectarAtributoCommand implements ICommand {
   private readonly _tipoConexao: TiposConexao;
   private _commandCarregarCSSAtributo: CarregarCSSCommand | undefined;
   private _commandConectarComponentes: ConectarComponentesCommand | undefined;
-  private _componenteAtributo: ComponenteDiagrama | undefined;
+  private _componenteAtributo: ComponenteDiagrama | null = null;
 
   constructor(
     componenteAlvo: ComponenteDiagrama,
@@ -75,7 +75,7 @@ export default class ConectarAtributoCommand implements ICommand {
 
     setTimeout((): void => {
       let componentes: ComponenteDiagrama[] = this._repositorioComponentes.listar();
-      this._componenteAtributo = componentes.at(componentes.length - 1);
+      this._componenteAtributo = componentes.at(componentes.length - 1) || null;
 
       let posicaoAtributo: Ponto = this._componenteAlvo.calcularPontoLateralComponente(
         LateraisComponente.LESTE,
@@ -209,39 +209,39 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
 
   public build(): ConectarAtributoCommand {
     if (this._componenteAlvo === null) {
-      throw new CommandBuilderException("O Componente Alvo não foi definido");
+      throw new CommandBuilderException("componente alvo");
     }
 
     if (this._diagrama === undefined || this._diagrama === null) {
-      throw new CommandBuilderException("O diagrama não foi definido");
+      throw new CommandBuilderException("diagrama");
     }
 
     if (this._fabricaComponente === null) {
-      throw new CommandBuilderException("A Fábrica de Componentes não foi definida");
+      throw new CommandBuilderException("fábrica de componentes");
     }
 
     if (this._fabricaConexao === null) {
-      throw new CommandBuilderException("A fábrica de conexões não foi definida");
+      throw new CommandBuilderException("fábrica de conexões");
     }
 
     if (this._geradorID === null) {
-      throw new CommandBuilderException("O gerador de IDs de componentes não foi definido");
+      throw new CommandBuilderException("gerador de ID");
     }
 
     if (this._registradorEventosConexao === null) {
-      throw new CommandBuilderException("O registrador de eventos de conexão não foi definido");
+      throw new CommandBuilderException("registrador de eventos de conexão");
     }
 
     if (this._registradorEventosElemento === null) {
-      throw new CommandBuilderException("O registrador de eventos de elemento não foi definido");
+      throw new CommandBuilderException("registrador de eventos de elemento");
     }
 
     if (this._repositorioComponentes === null) {
-      throw new CommandBuilderException("O repositório de componentes não foi definido");
+      throw new CommandBuilderException("repositório de componentes");
     }
 
     if (this._tipoConexao === null) {
-      throw new CommandBuilderException("O tipo de conexão não foi definido");
+      throw new CommandBuilderException("tipo de conexão");
     }
 
     return new ConectarAtributoCommand(

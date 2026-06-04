@@ -152,27 +152,27 @@ export class CriarComponenteCommandBuilder implements ICommandBuilder<CriarCompo
 
   public build(): CriarComponenteCommand {
     if (this._diagrama === undefined || this._diagrama === null) {
-      throw new CommandBuilderException("O diagrama não foi definido");
+      throw new CommandBuilderException("diagrama");
     }
 
     if (this._fabricaComponente === null) {
-      throw new CommandBuilderException("A fábrica de componentes não foi definida");
+      throw new CommandBuilderException("fábrica de componentes");
     }
 
     if (this._geradorIDComponente === null) {
-      throw new CommandBuilderException("O gerador de id de componente não foi definido");
+      throw new CommandBuilderException("gerador de ID");
     }
 
     if (this._nomeElemento === undefined || this._nomeElemento === null) {
-      throw new CommandBuilderException("O nome do elemento não foi definido");
+      throw new CommandBuilderException("nome do elemento");
     }
 
     if (this._registradorEventosElemento === null) {
-      throw new CommandBuilderException("O registrador de eventos de componente não foi definido");
+      throw new CommandBuilderException("registrador de eventos de componente");
     }
 
     if (this._repositorioComponente === null) {
-      throw new CommandBuilderException("O repositório de componentes não foi definido");
+      throw new CommandBuilderException("repositório de componentes");
     }
 
     return new CriarComponenteCommand(

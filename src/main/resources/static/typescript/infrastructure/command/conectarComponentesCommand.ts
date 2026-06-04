@@ -345,51 +345,51 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
 
   public build(): ConectarComponentesCommand {
     if (this._diagrama === undefined || this._diagrama === null) {
-      throw new CommandBuilderException("O diagrama não foi definido");
+      throw new CommandBuilderException("diagrama");
     }
 
     if (this._fabricaComponente === null) {
-      throw new CommandBuilderException("A fábrica de componentes não foi definida");
+      throw new CommandBuilderException("fábrica de componentes");
     }
 
     if (this._fabricaConexao === null) {
-      throw new CommandBuilderException("A fábrica de conexões não foi definida");
+      throw new CommandBuilderException("fábrica de conexões");
     }
 
     if (this._geradorID === null) {
-      throw new CommandBuilderException("O gerador de IDs de componentes não foi definido");
+      throw new CommandBuilderException("gerador de ID");
     }
 
     if (this._registradorEventosConexao === null) {
-      throw new CommandBuilderException("O registrador de eventos de conexão não foi definido");
+      throw new CommandBuilderException("registrador de eventos de conexão");
     }
 
     if (this._registradorEventosElemento === null) {
-      throw new CommandBuilderException("O registrador de eventos de elemento não foi definido");
+      throw new CommandBuilderException("registrador de eventos de elemento");
     }
 
     if (this._repositorioComponentes === null) {
-      throw new CommandBuilderException("O repositório de componentes não foi definido");
+      throw new CommandBuilderException("repositório de componentes");
     }
 
     if (this._primeiroComponente === null) {
-      throw new CommandBuilderException("O primeiro componente não foi definido");
+      throw new CommandBuilderException("primeiro componente");
     }
 
     if (this._lateralPrimeiroComponente === null) {
-      throw new CommandBuilderException("A lateral do primeiro componente não foi definida");
+      throw new CommandBuilderException("lateral do primeiro componente");
     }
 
     if (this._segundoComponente === null) {
-      throw new CommandBuilderException("O segundo componente não foi definido");
+      throw new CommandBuilderException("segundo componente");
     }
 
     if (this._lateralSegundoComponente === null) {
-      throw new CommandBuilderException("A lateral do segundo componente não foi definida");
+      throw new CommandBuilderException("lateral do segundo componente");
     }
 
     if (this._tipoConexao === null) {
-      throw new CommandBuilderException("O tipo de conexão não foi definido");
+      throw new CommandBuilderException("tipo de conexão");
     }
 
     return new ConectarComponentesCommand(

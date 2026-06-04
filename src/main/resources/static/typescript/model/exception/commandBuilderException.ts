@@ -12,7 +12,7 @@
  */
 
 export default class CommandBuilderException extends Error {
-  constructor(message: string) {
-    super(message);
+  constructor(atributo: string) {
+    super(`O(A) ${atributo} não foi definido(a)`);
   }
 }

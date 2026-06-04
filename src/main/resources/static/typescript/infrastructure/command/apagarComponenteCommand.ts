@@ -86,15 +86,15 @@ export class ApagarComponenteCommandBuilder implements ICommandBuilder<ApagarCom
 
   public build(): ApagarComponenteCommand {
     if (this._componente === null) {
-      throw new CommandBuilderException("O componente alvo não foi definido");
+      throw new CommandBuilderException("componente alvo");
     }
 
     if (this._diagrama === undefined || this._diagrama === null) {
-      throw new CommandBuilderException("O diagrama não foi definido");
+      throw new CommandBuilderException("diagrama");
     }
 
     if (this._repositorioComponente === null) {
-      throw new CommandBuilderException("O repositório de componentes não foi definido");
+      throw new CommandBuilderException("repositório de componentes");
     }
 
     return new ApagarComponenteCommand(

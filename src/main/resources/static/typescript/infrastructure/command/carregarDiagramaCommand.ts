@@ -160,19 +160,19 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
 
   public build(): CarregarDiagramaCommand {
     if (this._callbackCriarComponente === null) {
-      throw new CommandBuilderException("O CallbackCriarComponente não foi definido");
+      throw new CommandBuilderException("CallbackCriarComponente");
     }
 
     if (this._nomeDiagrama === null) {
-      throw new CommandBuilderException("O Nome do Diagrama não foi definido");
+      throw new CommandBuilderException("nome do diagrama");
     }
 
     if (this._repositorioTiposDiagrama === null) {
-      throw new CommandBuilderException("O Repositório de Tipos de Diagrama não foi definido");
+      throw new CommandBuilderException("repositório de tipos de diagrama");
     }
 
     if (this._sectionComponentes === null) {
-      throw new CommandBuilderException("O SectionComponentes não foi definida");
+      throw new CommandBuilderException("SectionComponentes");
     }
 
     return new CarregarDiagramaCommand(
