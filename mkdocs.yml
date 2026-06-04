@@ -9,8 +9,8 @@ nav:
   - Diagramas:
      - Dicionário de Dados: diagramas/dicionárioDados.md
      - Diagrama de Entidade e Relacionamento: diagramas/diagramaEntidadeRelacionamento.md
-     - Modelo Relacional: diagramas/modeloRelacional.md
      - Diagrama do Modelo Relacional: diagramas/diagramaModeloRelacional.md
+     - Diagrama do Modelo Relacional: diagramas/descricaoModeloRelacional.md
   - Sobre:
     - Licença: LICENSE.md
     - Política de Privacidade: políticaPrivacidade.md
