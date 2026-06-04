@@ -342,19 +342,19 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
 
 export class ConectarDuasEntidadesCommandBuilder implements ICommandBuilder<ConectarDuasEntidadesCommand> {
   private _diagrama: HTMLElement | undefined | null;
-  private _fabricaComponente: ComponenteFactory | undefined;
-  private _fabricaConexao: ComponenteConexaoFactory | undefined;
-  private _geradorID: GeradorIDComponente | undefined;
-  private _registradorEventosConexao: RegistradorEventosConexao | undefined;
-  private _registradorEventosElemento: RegistradorEventosElemento | undefined;
-  private _repositorioComponentes: IRepositorioComponente | undefined;
-  private _primeiroComponente: ComponenteDiagrama | undefined;
-  private _segundoComponente: ComponenteDiagrama | undefined;
-  private _lateralPrimeiroComponente: LateraisComponente | undefined;
-  private _lateralSegundoComponente: LateraisComponente | undefined;
-  private _tipoConexao: TiposConexao | undefined;
+  private _fabricaComponente: ComponenteFactory | null = null;
+  private _fabricaConexao: ComponenteConexaoFactory | null = null;
+  private _geradorID: GeradorIDComponente | null = null;
+  private _registradorEventosConexao: RegistradorEventosConexao | null = null;
+  private _registradorEventosElemento: RegistradorEventosElemento | null = null;
+  private _repositorioComponentes: IRepositorioComponente | null = null;
+  private _primeiroComponente: ComponenteDiagrama | null = null;
+  private _segundoComponente: ComponenteDiagrama | null = null;
+  private _lateralPrimeiroComponente: LateraisComponente | null = null;
+  private _lateralSegundoComponente: LateraisComponente | null = null;
+  private _tipoConexao: TiposConexao | null = null;
 
-  copyAttributes(source: ConectarComponentesCommandBuilder): this {
+  public copyAttributes(source: ConectarComponentesCommandBuilder): this {
     this._diagrama = source.diagrama;
     this._fabricaComponente = source.fabricaComponente;
     this._fabricaConexao = source.fabricaConexao;
@@ -371,52 +371,52 @@ export class ConectarDuasEntidadesCommandBuilder implements ICommandBuilder<Cone
     return this;
   }
 
-  build(): ConectarDuasEntidadesCommand {
+  public build(): ConectarDuasEntidadesCommand {
     if (this._diagrama === null || this._diagrama === undefined) {
       throw new CommandBuilderException("O diagrama não foi definido");
     }
 
-    if (this._fabricaComponente === undefined) {
+    if (this._fabricaComponente === null) {
       throw new CommandBuilderException("A fábrica de componentes não foi definida");
     }
 
-    if (this._fabricaConexao === undefined) {
+    if (this._fabricaConexao === null) {
       throw new CommandBuilderException("A fábrica de conexões não foi definida");
     }
 
-    if (this._geradorID === undefined) {
+    if (this._geradorID === null) {
       throw new CommandBuilderException("O gerador de IDs de componentes não foi definido");
     }
 
-    if (this._primeiroComponente === undefined) {
+    if (this._primeiroComponente === null) {
       throw new CommandBuilderException("O primeiro componente não foi definido");
     }
 
-    if (this._segundoComponente === undefined) {
+    if (this._segundoComponente === null) {
       throw new CommandBuilderException("O segundo componente não foi definido");
     }
 
-    if (this._lateralPrimeiroComponente === undefined) {
+    if (this._lateralPrimeiroComponente === null) {
       throw new CommandBuilderException("A lateral do primeiro componente não foi definida");
     }
 
-    if (this._lateralSegundoComponente === undefined) {
+    if (this._lateralSegundoComponente === null) {
       throw new CommandBuilderException("A lateral do segundo componente não foi definida");
     }
 
-    if (this._tipoConexao === undefined) {
+    if (this._tipoConexao === null) {
       throw new CommandBuilderException("O tipo de conexão não foi definido");
     }
 
-    if (this._registradorEventosConexao === undefined) {
+    if (this._registradorEventosConexao === null) {
       throw new CommandBuilderException("O registrador de eventos de conexão não foi definido");
     }
 
-    if (this._registradorEventosElemento === undefined) {
+    if (this._registradorEventosElemento === null) {
       throw new CommandBuilderException("O registrador de eventos de elemento não foi definido");
     }
 
-    if (this._repositorioComponentes === undefined) {
+    if (this._repositorioComponentes === null) {
       throw new CommandBuilderException("O repositório de componentes não foi definido");
     }
 

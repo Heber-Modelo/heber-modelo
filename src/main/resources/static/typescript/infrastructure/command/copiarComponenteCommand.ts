@@ -58,7 +58,7 @@ export class CopiarComponenteCommandBuilder implements ICommandBuilder<CopiarCom
     return this;
   }
 
-  build(): CopiarComponenteCommand {
+  public build(): CopiarComponenteCommand {
     if (this._componente === null) {
       throw new CommandBuilderException("O componente alvo não foi especificado");
     }
