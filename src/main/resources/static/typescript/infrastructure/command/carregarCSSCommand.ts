@@ -116,12 +116,12 @@ export default class CarregarCSSCommand implements ICommand {
 export class CarregarCSSCommandBuilder implements ICommandBuilder<CarregarCSSCommand> {
   private _nomeArquivo: string | null = null;
 
-  definirNomeArquivo(nomeArquivo: string): this {
+  public definirNomeArquivo(nomeArquivo: string | null): this {
     this._nomeArquivo = nomeArquivo;
     return this;
   }
 
-  build(): CarregarCSSCommand {
+  public build(): CarregarCSSCommand {
     if (this._nomeArquivo === null) {
       throw new CommandBuilderException("O nome do arquivo não foi definido");
     }

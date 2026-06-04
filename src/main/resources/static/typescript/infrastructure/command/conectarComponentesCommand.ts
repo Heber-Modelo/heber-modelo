@@ -233,97 +233,101 @@ export default class ConectarComponentesCommand implements ICommand {
 
 export class ConectarComponentesCommandBuilder implements ICommandBuilder<ConectarComponentesCommand> {
   private _diagrama: HTMLElement | undefined | null;
-  private _fabricaComponente: ComponenteFactory | undefined;
-  private _fabricaConexao: ComponenteConexaoFactory | undefined;
-  private _geradorID: GeradorIDComponente | undefined;
-  private _registradorEventosConexao: RegistradorEventosConexao | undefined;
-  private _registradorEventosElemento: RegistradorEventosElemento | undefined;
-  private _repositorioComponentes: IRepositorioComponente | undefined;
-  private _primeiroComponente: ComponenteDiagrama | undefined;
-  private _segundoComponente: ComponenteDiagrama | undefined;
-  private _lateralPrimeiroComponente: LateraisComponente | undefined;
-  private _lateralSegundoComponente: LateraisComponente | undefined;
-  private _tipoConexao: TiposConexao | undefined;
+  private _fabricaComponente: ComponenteFactory | null = null;
+  private _fabricaConexao: ComponenteConexaoFactory | null = null;
+  private _geradorID: GeradorIDComponente | null = null;
+  private _registradorEventosConexao: RegistradorEventosConexao | null = null;
+  private _registradorEventosElemento: RegistradorEventosElemento | null = null;
+  private _repositorioComponentes: IRepositorioComponente | null = null;
+  private _primeiroComponente: ComponenteDiagrama | null = null;
+  private _segundoComponente: ComponenteDiagrama | null = null;
+  private _lateralPrimeiroComponente: LateraisComponente | null = null;
+  private _lateralSegundoComponente: LateraisComponente | null = null;
+  private _tipoConexao: TiposConexao | null = null;
 
-  definirDiagrama(diagrama: HTMLElement | undefined | null): this {
+  public definirDiagrama(diagrama: HTMLElement | undefined | null): this {
     this._diagrama = diagrama;
 
     return this;
   }
 
-  definirFabricaComponente(fabricaComponente: ComponenteFactory | undefined): this {
+  public definirFabricaComponente(fabricaComponente: ComponenteFactory | null): this {
     this._fabricaComponente = fabricaComponente;
 
     return this;
   }
 
-  definirFabricaConexao(fabricaConexao: ComponenteConexaoFactory | undefined): this {
+  public definirFabricaConexao(fabricaConexao: ComponenteConexaoFactory | null): this {
     this._fabricaConexao = fabricaConexao;
 
     return this;
   }
 
-  definirGeradorID(geradorID: GeradorIDComponente | undefined): this {
+  public definirGeradorID(geradorID: GeradorIDComponente | null): this {
     this._geradorID = geradorID;
 
     return this;
   }
 
-  definirRegistradorEventosConexao(
-    registradorEventosConexao: RegistradorEventosConexao | undefined,
+  public definirRegistradorEventosConexao(
+    registradorEventosConexao: RegistradorEventosConexao | null,
   ): this {
     this._registradorEventosConexao = registradorEventosConexao;
 
     return this;
   }
 
-  definirRegistradorEventosElemento(
-    registradorEventosElemento: RegistradorEventosElemento | undefined,
+  public definirRegistradorEventosElemento(
+    registradorEventosElemento: RegistradorEventosElemento | null,
   ): this {
     this._registradorEventosElemento = registradorEventosElemento;
 
     return this;
   }
 
-  definirRepositorioComponentes(repositorioComponentes: IRepositorioComponente | undefined): this {
+  public definirRepositorioComponentes(
+    repositorioComponentes: IRepositorioComponente | null,
+  ): this {
     this._repositorioComponentes = repositorioComponentes;
 
     return this;
   }
 
-  definirPrimeiroComponente(primeiroComponente: ComponenteDiagrama | undefined): this {
+  public definirPrimeiroComponente(primeiroComponente: ComponenteDiagrama | null): this {
     this._primeiroComponente = primeiroComponente;
 
     return this;
   }
 
-  definirLateralPrimeiroComponente(
-    lateralPrimeiroComponente: LateraisComponente | undefined,
+  public definirLateralPrimeiroComponente(
+    lateralPrimeiroComponente: LateraisComponente | null,
   ): this {
     this._lateralPrimeiroComponente = lateralPrimeiroComponente;
 
     return this;
   }
 
-  definirSegundoComponente(segundoComponente: ComponenteDiagrama | undefined): this {
+  public definirSegundoComponente(segundoComponente: ComponenteDiagrama | null): this {
     this._segundoComponente = segundoComponente;
 
     return this;
   }
 
-  definirLateralSegundoComponente(lateralSegundoComponente: LateraisComponente | undefined): this {
+  public definirLateralSegundoComponente(
+    lateralSegundoComponente: LateraisComponente | null,
+  ): this {
     this._lateralSegundoComponente = lateralSegundoComponente;
 
     return this;
   }
 
-  definirTipoConexao(tipoConexao: TiposConexao | undefined): this {
+  public definirTipoConexao(tipoConexao: TiposConexao | null): this {
     this._tipoConexao = tipoConexao;
 
     return this;
   }
 
-  validate(): boolean {
+  public validate(): boolean {
     return [
       this._diagrama,
       this._fabricaComponente,
@@ -339,52 +343,52 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
     ].every((item: any): boolean => !!item);
   }
 
-  build(): ConectarComponentesCommand {
+  public build(): ConectarComponentesCommand {
     if (this._diagrama === undefined || this._diagrama === null) {
       throw new CommandBuilderException("O diagrama não foi definido");
     }
 
-    if (this._fabricaComponente === undefined) {
+    if (this._fabricaComponente === null) {
       throw new CommandBuilderException("A fábrica de componentes não foi definida");
     }
 
-    if (this._fabricaConexao === undefined) {
+    if (this._fabricaConexao === null) {
       throw new CommandBuilderException("A fábrica de conexões não foi definida");
     }
 
-    if (this._geradorID === undefined) {
+    if (this._geradorID === null) {
       throw new CommandBuilderException("O gerador de IDs de componentes não foi definido");
     }
 
-    if (this._registradorEventosConexao === undefined) {
+    if (this._registradorEventosConexao === null) {
       throw new CommandBuilderException("O registrador de eventos de conexão não foi definido");
     }
 
-    if (this._registradorEventosElemento === undefined) {
+    if (this._registradorEventosElemento === null) {
       throw new CommandBuilderException("O registrador de eventos de elemento não foi definido");
     }
 
-    if (this._repositorioComponentes === undefined) {
+    if (this._repositorioComponentes === null) {
       throw new CommandBuilderException("O repositório de componentes não foi definido");
     }
 
-    if (this._primeiroComponente === undefined) {
+    if (this._primeiroComponente === null) {
       throw new CommandBuilderException("O primeiro componente não foi definido");
     }
 
-    if (this._lateralPrimeiroComponente === undefined) {
+    if (this._lateralPrimeiroComponente === null) {
       throw new CommandBuilderException("A lateral do primeiro componente não foi definida");
     }
 
-    if (this._segundoComponente === undefined) {
+    if (this._segundoComponente === null) {
       throw new CommandBuilderException("O segundo componente não foi definido");
     }
 
-    if (this._lateralSegundoComponente === undefined) {
+    if (this._lateralSegundoComponente === null) {
       throw new CommandBuilderException("A lateral do segundo componente não foi definida");
     }
 
-    if (this._tipoConexao === undefined) {
+    if (this._tipoConexao === null) {
       throw new CommandBuilderException("O tipo de conexão não foi definido");
     }
 
@@ -408,47 +412,47 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
     return this._diagrama;
   }
 
-  get fabricaComponente(): ComponenteFactory | undefined {
+  get fabricaComponente(): ComponenteFactory | null {
     return this._fabricaComponente;
   }
 
-  get fabricaConexao(): ComponenteConexaoFactory | undefined {
+  get fabricaConexao(): ComponenteConexaoFactory | null {
     return this._fabricaConexao;
   }
 
-  get geradorID(): GeradorIDComponente | undefined {
+  get geradorID(): GeradorIDComponente | null {
     return this._geradorID;
   }
 
-  get registradorEventosConexao(): RegistradorEventosConexao | undefined {
+  get registradorEventosConexao(): RegistradorEventosConexao | null {
     return this._registradorEventosConexao;
   }
 
-  get registradorEventosElemento(): RegistradorEventosElemento | undefined {
+  get registradorEventosElemento(): RegistradorEventosElemento | null {
     return this._registradorEventosElemento;
   }
 
-  get repositorioComponentes(): IRepositorioComponente | undefined {
+  get repositorioComponentes(): IRepositorioComponente | null {
     return this._repositorioComponentes;
   }
 
-  get primeiroComponente(): ComponenteDiagrama | undefined {
+  get primeiroComponente(): ComponenteDiagrama | null {
     return this._primeiroComponente;
   }
 
-  get segundoComponente(): ComponenteDiagrama | undefined {
+  get segundoComponente(): ComponenteDiagrama | null {
     return this._segundoComponente;
   }
 
-  get lateralPrimeiroComponente(): LateraisComponente | undefined {
+  get lateralPrimeiroComponente(): LateraisComponente | null {
     return this._lateralPrimeiroComponente;
   }
 
-  get lateralSegundoComponente(): LateraisComponente | undefined {
+  get lateralSegundoComponente(): LateraisComponente | null {
     return this._lateralSegundoComponente;
   }
 
-  get tipoConexao(): TiposConexao | undefined {
+  get tipoConexao(): TiposConexao | null {
     return this._tipoConexao;
   }
 }

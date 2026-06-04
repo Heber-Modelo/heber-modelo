@@ -104,11 +104,11 @@ export default class CriarComponenteCommand implements ICommand {
 
 export class CriarComponenteCommandBuilder implements ICommandBuilder<CriarComponenteCommand> {
   private _diagrama: HTMLElement | undefined | null;
-  private _fabricaComponente: ComponenteFactory | undefined;
-  private _geradorIDComponente: GeradorIDComponente | undefined;
+  private _fabricaComponente: ComponenteFactory | null = null;
+  private _geradorIDComponente: GeradorIDComponente | null = null;
   private _nomeElemento: string | undefined | null;
-  private _registradorEventosElemento: RegistradorEventosElemento | undefined;
-  private _repositorioComponente: IRepositorioComponente | undefined;
+  private _registradorEventosElemento: RegistradorEventosElemento | null = null;
+  private _repositorioComponente: IRepositorioComponente | null = null;
 
   public definirDiagrama(diagrama: HTMLElement | undefined | null): this {
     this._diagrama = diagrama;
@@ -116,13 +116,13 @@ export class CriarComponenteCommandBuilder implements ICommandBuilder<CriarCompo
     return this;
   }
 
-  public definirFabricaComponente(fabricaComponente: ComponenteFactory | undefined): this {
+  public definirFabricaComponente(fabricaComponente: ComponenteFactory | null): this {
     this._fabricaComponente = fabricaComponente;
 
     return this;
   }
 
-  public definirGeradorIDComponente(geradorIDComponente: GeradorIDComponente | undefined): this {
+  public definirGeradorIDComponente(geradorIDComponente: GeradorIDComponente | null): this {
     this._geradorIDComponente = geradorIDComponente;
 
     return this;
@@ -135,7 +135,7 @@ export class CriarComponenteCommandBuilder implements ICommandBuilder<CriarCompo
   }
 
   public definirRegistradorEventosElemento(
-    registradorEventosElemento: RegistradorEventosElemento | undefined,
+    registradorEventosElemento: RegistradorEventosElemento | null,
   ): this {
     this._registradorEventosElemento = registradorEventosElemento;
 
@@ -143,23 +143,23 @@ export class CriarComponenteCommandBuilder implements ICommandBuilder<CriarCompo
   }
 
   public definirRepositorioComponentes(
-    repositorioComponentes: IRepositorioComponente | undefined,
+    repositorioComponentes: IRepositorioComponente | null,
   ): this {
     this._repositorioComponente = repositorioComponentes;
 
     return this;
   }
 
-  build(): CriarComponenteCommand {
+  public build(): CriarComponenteCommand {
     if (this._diagrama === undefined || this._diagrama === null) {
       throw new CommandBuilderException("O diagrama não foi definido");
     }
 
-    if (this._fabricaComponente === undefined) {
+    if (this._fabricaComponente === null) {
       throw new CommandBuilderException("A fábrica de componentes não foi definida");
     }
 
-    if (this._geradorIDComponente === undefined) {
+    if (this._geradorIDComponente === null) {
       throw new CommandBuilderException("O gerador de id de componente não foi definido");
     }
 
@@ -167,11 +167,11 @@ export class CriarComponenteCommandBuilder implements ICommandBuilder<CriarCompo
       throw new CommandBuilderException("O nome do elemento não foi definido");
     }
 
-    if (this._registradorEventosElemento === undefined) {
+    if (this._registradorEventosElemento === null) {
       throw new CommandBuilderException("O registrador de eventos de componente não foi definido");
     }
 
-    if (this._repositorioComponente === undefined) {
+    if (this._repositorioComponente === null) {
       throw new CommandBuilderException("O repositório de componentes não foi definido");
     }
 

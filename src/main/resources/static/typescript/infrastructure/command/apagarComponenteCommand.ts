@@ -78,13 +78,13 @@ export class ApagarComponenteCommandBuilder implements ICommandBuilder<ApagarCom
     return this;
   }
 
-  public definirRepositorioComponente(repositorio: IRepositorioComponente): this {
+  public definirRepositorioComponente(repositorio: IRepositorioComponente | null): this {
     this._repositorioComponente = repositorio;
 
     return this;
   }
 
-  build(): ApagarComponenteCommand {
+  public build(): ApagarComponenteCommand {
     if (this._componente === null) {
       throw new CommandBuilderException("O componente alvo não foi definido");
     }

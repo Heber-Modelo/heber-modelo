@@ -11,7 +11,9 @@
  *
  */
 
-import CarregarCSSCommand, { CarregarCSSCommandBuilder } from "infrastructure/command/carregarCSSCommand";
+import CarregarCSSCommand, {
+  CarregarCSSCommandBuilder,
+} from "infrastructure/command/carregarCSSCommand";
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
@@ -75,9 +77,14 @@ export default class ConectarAtributoCommand implements ICommand {
       let componentes: ComponenteDiagrama[] = this._repositorioComponentes.listar();
       this._componenteAtributo = componentes.at(componentes.length - 1);
 
-      let posicaoAtributo: Ponto = this._componenteAlvo.calcularPontoLateralComponente(LateraisComponente.LESTE);
+      let posicaoAtributo: Ponto = this._componenteAlvo.calcularPontoLateralComponente(
+        LateraisComponente.LESTE,
+      );
       this._componenteAtributo?.htmlComponente.style.setProperty("top", `${posicaoAtributo.y}px`);
-      this._componenteAtributo?.htmlComponente.style.setProperty("left", `${posicaoAtributo.x + 50}px`);
+      this._componenteAtributo?.htmlComponente.style.setProperty(
+        "left",
+        `${posicaoAtributo.x + 50}px`,
+      );
 
       this._commandConectarComponentes = new ConectarComponentesCommandBuilder()
         .definirDiagrama(this._diagrama)
@@ -95,7 +102,7 @@ export default class ConectarAtributoCommand implements ICommand {
         .build();
 
       this._commandConectarComponentes.execute();
-    }, 200)
+    }, 200);
 
     return {
       ok: true,
@@ -130,76 +137,78 @@ export default class ConectarAtributoCommand implements ICommand {
 }
 
 export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarAtributoCommand> {
-  private _componenteAlvo: ComponenteDiagrama | undefined;
+  private _componenteAlvo: ComponenteDiagrama | null = null;
   private _diagrama: HTMLElement | undefined | null;
-  private _fabricaComponente: ComponenteFactory | undefined;
-  private _fabricaConexao: ComponenteConexaoFactory | undefined;
-  private _geradorID: GeradorIDComponente | undefined;
-  private _registradorEventosConexao: RegistradorEventosConexao | undefined;
-  private _registradorEventosElemento: RegistradorEventosElemento | undefined;
-  private _repositorioComponentes: IRepositorioComponente | undefined;
-  private _tipoConexao: TiposConexao | undefined;
+  private _fabricaComponente: ComponenteFactory | null = null;
+  private _fabricaConexao: ComponenteConexaoFactory | null = null;
+  private _geradorID: GeradorIDComponente | null = null;
+  private _registradorEventosConexao: RegistradorEventosConexao | null = null;
+  private _registradorEventosElemento: RegistradorEventosElemento | null = null;
+  private _repositorioComponentes: IRepositorioComponente | null = null;
+  private _tipoConexao: TiposConexao | null = null;
 
-  definirComponenteAlvo(componenteAlvo: ComponenteDiagrama | undefined): this {
+  public definirComponenteAlvo(componenteAlvo: ComponenteDiagrama | null): this {
     this._componenteAlvo = componenteAlvo;
 
     return this;
   }
 
-  definirDiagrama(diagrama: HTMLElement | undefined | null): this {
+  public definirDiagrama(diagrama: HTMLElement | undefined | null): this {
     this._diagrama = diagrama;
 
     return this;
   }
 
-  definirFabricaComponente(fabricaComponente: ComponenteFactory | undefined): this {
+  public definirFabricaComponente(fabricaComponente: ComponenteFactory | null): this {
     this._fabricaComponente = fabricaComponente;
 
     return this;
   }
 
-  definirFabricaConexao(fabricaConexao: ComponenteConexaoFactory | undefined): this {
+  public definirFabricaConexao(fabricaConexao: ComponenteConexaoFactory | null): this {
     this._fabricaConexao = fabricaConexao;
 
     return this;
   }
 
-  definirGeradorID(geradorID: GeradorIDComponente | undefined): this {
+  public definirGeradorID(geradorID: GeradorIDComponente | null): this {
     this._geradorID = geradorID;
 
     return this;
   }
 
-  definirRegistradorEventosConexao(
-    registradorEventosConexao: RegistradorEventosConexao | undefined,
+  public definirRegistradorEventosConexao(
+    registradorEventosConexao: RegistradorEventosConexao | null,
   ): this {
     this._registradorEventosConexao = registradorEventosConexao;
 
     return this;
   }
 
-  definirRegistradorEventosElemento(
-    registradorEventosElemento: RegistradorEventosElemento | undefined,
+  public definirRegistradorEventosElemento(
+    registradorEventosElemento: RegistradorEventosElemento | null,
   ): this {
     this._registradorEventosElemento = registradorEventosElemento;
 
     return this;
   }
 
-  definirRepositorioComponentes(repositorioComponentes: IRepositorioComponente | undefined): this {
+  public definirRepositorioComponentes(
+    repositorioComponentes: IRepositorioComponente | null,
+  ): this {
     this._repositorioComponentes = repositorioComponentes;
 
     return this;
   }
 
-  definirTipoConexao(tipoConexao: TiposConexao | undefined): this {
+  public definirTipoConexao(tipoConexao: TiposConexao | null): this {
     this._tipoConexao = tipoConexao;
 
     return this;
   }
 
   public build(): ConectarAtributoCommand {
-    if (this._componenteAlvo === undefined) {
+    if (this._componenteAlvo === null) {
       throw new CommandBuilderException("O Componente Alvo não foi definido");
     }
 
@@ -207,31 +216,31 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
       throw new CommandBuilderException("O diagrama não foi definido");
     }
 
-    if (this._fabricaComponente === undefined) {
+    if (this._fabricaComponente === null) {
       throw new CommandBuilderException("A Fábrica de Componentes não foi definida");
     }
 
-    if (this._fabricaConexao === undefined) {
+    if (this._fabricaConexao === null) {
       throw new CommandBuilderException("A fábrica de conexões não foi definida");
     }
 
-    if (this._geradorID === undefined) {
+    if (this._geradorID === null) {
       throw new CommandBuilderException("O gerador de IDs de componentes não foi definido");
     }
 
-    if (this._registradorEventosConexao === undefined) {
+    if (this._registradorEventosConexao === null) {
       throw new CommandBuilderException("O registrador de eventos de conexão não foi definido");
     }
 
-    if (this._registradorEventosElemento === undefined) {
+    if (this._registradorEventosElemento === null) {
       throw new CommandBuilderException("O registrador de eventos de elemento não foi definido");
     }
 
-    if (this._repositorioComponentes === undefined) {
+    if (this._repositorioComponentes === null) {
       throw new CommandBuilderException("O repositório de componentes não foi definido");
     }
 
-    if (this._tipoConexao === undefined) {
+    if (this._tipoConexao === null) {
       throw new CommandBuilderException("O tipo de conexão não foi definido");
     }
 

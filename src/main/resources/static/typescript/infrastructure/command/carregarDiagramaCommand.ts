@@ -98,7 +98,7 @@ export default class CarregarDiagramaCommand implements ICommand {
       },
     );
 
-    this._repositorioTiposDiagrama.adicionar(this._nomeDiagrama)
+    this._repositorioTiposDiagrama.adicionar(this._nomeDiagrama);
 
     return {
       ok: true,
@@ -115,7 +115,7 @@ export default class CarregarDiagramaCommand implements ICommand {
 
   undo(): CommandResult {
     this._fieldSetElementos?.remove();
-    this._repositorioTiposDiagrama.remover(this._nomeDiagrama)
+    this._repositorioTiposDiagrama.remover(this._nomeDiagrama);
 
     return {
       ok: true,
@@ -130,31 +130,35 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
   private _repositorioTiposDiagrama: IRepositorioTiposDiagrama | null = null;
   private _sectionComponentes: HTMLElement | null = null;
 
-  definirCallCriarComponente(callbackCriarComponente: null | ((event: Event) => void)): this {
+  public definirCallCriarComponente(
+    callbackCriarComponente: null | ((event: Event) => void),
+  ): this {
     this._callbackCriarComponente = callbackCriarComponente;
 
     return this;
   }
 
-  definirNomeDiagrama(nomeDiagrama: string | null): this {
+  public definirNomeDiagrama(nomeDiagrama: string | null): this {
     this._nomeDiagrama = nomeDiagrama;
 
     return this;
   }
 
-  definirRepositorioTiposDiagrama(repositorioTiposDiagrama: IRepositorioTiposDiagrama | null): this {
+  public definirRepositorioTiposDiagrama(
+    repositorioTiposDiagrama: IRepositorioTiposDiagrama | null,
+  ): this {
     this._repositorioTiposDiagrama = repositorioTiposDiagrama;
 
     return this;
   }
 
-  definirSectionComponentes(sectionComponentes: HTMLElement | null): this {
+  public definirSectionComponentes(sectionComponentes: HTMLElement | null): this {
     this._sectionComponentes = sectionComponentes;
 
     return this;
   }
 
-  build(): CarregarDiagramaCommand {
+  public build(): CarregarDiagramaCommand {
     if (this._callbackCriarComponente === null) {
       throw new CommandBuilderException("O CallbackCriarComponente não foi definido");
     }
@@ -164,7 +168,7 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
     }
 
     if (this._repositorioTiposDiagrama === null) {
-      throw new CommandBuilderException(("O Repositório de Tipos de Diagrama não foi definido"))
+      throw new CommandBuilderException("O Repositório de Tipos de Diagrama não foi definido");
     }
 
     if (this._sectionComponentes === null) {
