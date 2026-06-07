@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-22.04
     if: startsWith(github.ref, 'refs/tags')
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - name: Setup Java
         uses: actions/setup-java@v5.2.0
         with:
@@ -35,7 +35,7 @@ jobs:
     outputs:
       version: ${{ steps.program-version.outputs.version }}
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
 
       - id: program-version
         name: Get Version to Output
@@ -86,7 +86,7 @@ jobs:
     needs: build
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - uses: actions/download-artifact@v8.0.1
         with:
           name: heber-modelo.jar
@@ -115,7 +115,7 @@ jobs:
       SITE_URL: "https://heber-modelo.github.io/heber-modelo/"
 
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
