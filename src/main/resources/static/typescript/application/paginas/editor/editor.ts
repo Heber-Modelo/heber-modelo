@@ -277,8 +277,8 @@ function callbackInicialSetaConectora(event: MouseEvent): void {
       ) as keyof typeof LateraisComponente
     ];
 
-  let componenteSelecionado: ComponenteDiagrama | undefined =
-    selecionadorComponente.componenteSelecionado || undefined;
+  let componenteSelecionado: ComponenteDiagrama | null =
+    selecionadorComponente.componenteSelecionado || null;
   conectarComponentesCommandBuilder
     .definirPrimeiroComponente(componenteSelecionado)
     .definirLateralPrimeiroComponente(lateralComponente);
