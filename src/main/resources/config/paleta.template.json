@@ -55,7 +55,7 @@
     },
     {
       "nomeVariavel": "cor_borda_componente_selecionado",
-      "valorPadraoVariavel": "#FFDC73"
+      "valorPadraoVariavel": "#55B7E8"
     },
     {
       "nomeVariavel": "cor_chave_primaria",
@@ -79,11 +79,11 @@
     },
     {
       "nomeVariavel": "cor_borda_ponto_extensor",
-      "valorPadraoVariavel": "#FFDC73"
+      "valorPadraoVariavel": "#55B7E8"
     },
     {
       "nomeVariavel": "cor_hover_ponto_extensor",
-      "valorPadraoVariavel": "#FFDC73"
+      "valorPadraoVariavel": "#55B7E8"
     },
     {
       "nomeVariavel": "cor_botao_desativado",
