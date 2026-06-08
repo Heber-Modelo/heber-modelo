@@ -13,42 +13,42 @@
 
 <!doctype html>
 <html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <th:block th:replace="~{fragments/head :: head}"></th:block>
-  <th:block th:insert="~{fragments/bindings :: script}"></th:block>
-  <link rel="stylesheet" th:href="@{/css/formulario.css}" />
-  <title th:text="#{web.page.exercise.title}"></title>
-</head>
-<body>
-  <header th:replace="~{fragments/header :: header}"> </header>
+  <head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <th:block th:insert="~{fragments/bindings :: script}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}" />
+    <title th:text="#{web.page.assignment.title}"></title>
+  </head>
+  <body>
+    <header th:replace="~{fragments/header :: header}"></header>
 
-  <main>
-    <form method="post">
-      <label>
-        <span class="campos-texto" th:text="#{web.page.exercise.label.title}"></span>
-        <input type="text" name="title" required>
-      </label>
+    <main>
+      <form method="post">
+        <label>
+          <span class="campos-texto" th:text="#{web.page.assignment.label.title}"></span>
+          <input type="text" name="title" required />
+        </label>
 
-      <label>
-        <span class="campos-texto" th:text="#{web.page.exercise.label.date-time}"></span>
-        <input type="datetime-local" name="datetime" required>
-      </label>
+        <label>
+          <span class="campos-texto" th:text="#{web.page.assignment.label.date-time}"></span>
+          <input type="datetime-local" name="datetime" required />
+        </label>
 
-      <label>
-        <span class="campos-texto" th:text="#{web.page.exercise.label.deadline}"></span>
-        <input type="datetime-local" name="deadline" required>
-      </label>
-      <label>
-        <span class="campos-texto" th:text="#{web.page.exercise.label.description}"></span>
-        <textarea name="description"></textarea>
-      </label>
+        <label>
+          <span class="campos-texto" th:text="#{web.page.assignment.label.deadline}"></span>
+          <input type="datetime-local" name="deadline" required />
+        </label>
+        <label>
+          <span class="campos-texto" th:text="#{web.page.assignment.label.description}"></span>
+          <textarea name="description"></textarea>
+        </label>
 
-      <div id="botoes">
-        <button th:text="#{web.page.session.button.cancel}" id="cancelar  "></button>
-        <button th:text="#{web.page.session.button.confirm}" id="confirmar"></button>
-      </div>
-    </form>
-  </main>
-  <footer th:replace="~{fragments/licenseFooter :: footer}"></footer>
-</body>
+        <div id="botoes">
+          <button th:text="#{web.page.session.button.cancel}" id="cancelar  "></button>
+          <button th:text="#{web.page.session.button.confirm}" id="confirmar"></button>
+        </div>
+      </form>
+    </main>
+    <footer th:replace="~{fragments/licenseFooter :: footer}"></footer>
+  </body>
 </html>
