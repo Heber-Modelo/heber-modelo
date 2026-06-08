@@ -59,6 +59,7 @@ export default class ComponenteFactory {
               componente,
               propriedade.label,
               propriedade.classeElemento,
+              propriedade.valoresPermitidos,
             );
           if (propriedadeComponente !== null) {
             componente.propriedades.push(propriedadeComponente);
