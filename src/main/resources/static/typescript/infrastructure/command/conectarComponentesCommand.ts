@@ -30,9 +30,9 @@ import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
 import Ponto from "model/ponto";
 
 export default class ConectarComponentesCommand implements ICommand {
+  public static readonly NOME_ELEMENTO_CARDINALIDADE: string = "cardinalidade";
   public static readonly NOME_ELEMENTO_ENTIDADE: string = "entidade";
   public static readonly NOME_ELEMENTO_RELACIONAMENTO: string = "relacionamento";
-  public static readonly NOME_ELEMENTO_TEXTO: string = "texto";
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
@@ -130,10 +130,10 @@ export default class ConectarComponentesCommand implements ICommand {
     }
 
     this._fabricaComponente
-      .criarComponente(ConectarComponentesCommand.NOME_ELEMENTO_TEXTO)
+      .criarComponente(ConectarComponentesCommand.NOME_ELEMENTO_CARDINALIDADE)
       .then((componente: ComponenteDiagrama): void => {
         this._commandCarregarCSSTexto = new CarregarCSSCommandBuilder()
-          .definirNomeArquivo(ConectarComponentesCommand.NOME_ELEMENTO_TEXTO)
+          .definirNomeArquivo(ConectarComponentesCommand.NOME_ELEMENTO_CARDINALIDADE)
           .build();
         this._commandCarregarCSSTexto.execute();
 

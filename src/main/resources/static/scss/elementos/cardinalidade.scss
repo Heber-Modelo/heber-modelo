@@ -1,0 +1,16 @@
+.elemento-cardinalidade {
+  border: none;
+  background-color: transparent;
+  width: fit-content;
+  height: fit-content;
+  padding: 1rem;
+
+  div.tipo {
+    pointer-events: none;
+  }
+
+  &:hover {
+    border: none;
+    background-color: transparent;
+  }
+}

@@ -32,8 +32,8 @@ import Ponto from "model/ponto";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
 
 export default class ConectarDuasEntidadesCommand implements ICommand {
+  public static readonly NOME_ELEMENTO_CARDINALIDADE: string = "cardinalidade";
   public static readonly NOME_ELEMENTO_RELACIONAMENTO: string = "relacionamento";
-  public static readonly NOME_ELEMENTO_TEXTO: string = "texto";
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
@@ -114,7 +114,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
       .definirNomeArquivo(ConectarDuasEntidadesCommand.NOME_ELEMENTO_RELACIONAMENTO)
       .build();
     this._commandCarregarCSSTexto = new CarregarCSSCommandBuilder()
-      .definirNomeArquivo(ConectarDuasEntidadesCommand.NOME_ELEMENTO_TEXTO)
+      .definirNomeArquivo(ConectarDuasEntidadesCommand.NOME_ELEMENTO_CARDINALIDADE)
       .build();
 
     this._commandCarregarCSSConexao.execute();
@@ -176,7 +176,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
 
         let primeiraCardinalidade: ComponenteDiagrama =
           await this._fabricaComponente.criarComponente(
-            ConectarDuasEntidadesCommand.NOME_ELEMENTO_TEXTO,
+            ConectarDuasEntidadesCommand.NOME_ELEMENTO_CARDINALIDADE,
           );
         this._diagrama.append(primeiraCardinalidade.htmlComponente);
         this._primeiroComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
@@ -231,7 +231,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
 
         let segundaCardinalidade: ComponenteDiagrama =
           await this._fabricaComponente.criarComponente(
-            ConectarDuasEntidadesCommand.NOME_ELEMENTO_TEXTO,
+            ConectarDuasEntidadesCommand.NOME_ELEMENTO_CARDINALIDADE,
           );
         this._diagrama.append(segundaCardinalidade.htmlComponente);
         this._segundoComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(

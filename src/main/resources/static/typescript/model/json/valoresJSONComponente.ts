@@ -24,4 +24,5 @@ export interface JSONPropriedade {
   label: string;
   nomePropriedade: string;
   sufixo: string;
+  valoresPermitidos: string[] | undefined;
 }

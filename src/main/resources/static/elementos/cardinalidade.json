@@ -1,0 +1,18 @@
+{
+  "$schema": ".elemento.schema.json",
+  "classesElemento": [
+    "elemento-cardinalidade"
+  ],
+  "valorHtmlInterno": "<div class=\"tipo\">(0, N)</div>",
+  "recebePontoExtensor": false,
+  "recebeSetaConectora": false,
+  "propriedades": [
+    {
+      "classeElemento": "tipo",
+      "label": "cardinalidade",
+      "nomePropriedade": "cardinalidade",
+      "sufixo": "",
+      "valoresPermitidos": ["(0, N)", "(1, N)", "(0, 1)", "(1, 1)"]
+    }
+  ]
+}
