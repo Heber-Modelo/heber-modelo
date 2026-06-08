@@ -33,6 +33,14 @@ header{
   padding: variaveis.$paddingPadrao;
   font-family: "Cookie", Roboto, Arial, serif;
   font-size: variaveis.$fontsizeHeader;
+
+  button {
+    svg {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
 }
 
 #home{
@@ -45,24 +53,15 @@ header{
 }
 
 #opcoes-botoes {
-  padding: 0 10rem;
   display: flex;
   flex-direction: row;
-  column-gap: 2rem;
+  column-gap: 1rem;
+  justify-content: right;
 
-  button{
-    background-color: unset;
-    z-index: 2;
 
-    svg{
-      height: 5rem;
-      width: 5rem;
-    }
-
-    &:hover {
+    button:hover .svg-cor-fundo {
       color: var(--cor-botao-hover);
     }
-  }
 
 
 }
