@@ -265,7 +265,7 @@ public class ControladorWeb {
     public String listagemEstudantes(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "students-list");
         InjetorAtributos.injetarPaleta(modelMap);
-        return "ListagemEstudantes";
+        return "listagemEstudantes";
     }
 
     @RequestMapping({"/redefinir", "/redefinir.html"})
