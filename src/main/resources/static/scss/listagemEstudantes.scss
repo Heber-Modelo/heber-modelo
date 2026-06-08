@@ -62,6 +62,43 @@ header{
     button:hover .svg-cor-fundo {
       color: var(--cor-botao-hover);
     }
+}
 
+main {
+  align-self: center;
+  justify-self: center;
+  max-width: 60%;
+}
 
+h2 {
+  font-size: 4rem;
+}
+
+hr {
+  border: 0.15rem solid var(--cor-borda);
+  width: 100%;
+}
+
+.user-data {
+  display: flex;
+  flex-direction: row;
+  column-gap: 1rem;
+  justify-self: center;
+
+  svg {
+   height: 2rem;
+    width: 2rem;
+  }
+
+  span{
+    font-size: 2rem;
+  }
+
+  .svg-cor-primaria {
+    color: var(--cor-letra);
+  }
+
+  .svg-cor-secundaria {
+    color: var(--cor-fonte-alternativa);
+  }
 }

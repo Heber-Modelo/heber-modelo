@@ -14,18 +14,23 @@
         </a>
       </button>
       <h1 th:text="${programa}"></h1>
-
       <div id="opcoes-botoes">
         <button>
           <th:block th:replace="~{fragments/listagemEstudantes/icons/notify :: svg}"></th:block>
         </button>
-
         <button>
           <th:block th:replace="~{fragments/listagemEstudantes/icons/config :: svg}"></th:block>
         </button>
       </div>
     </header>
-
-    <main></main>
+    <main>
+      <h2 th:text="#{web.page.students-list.professors.label}"></h2>
+      <hr />
+      <div class="user-data">
+        <th:block th:replace="~{fragments/listagemEstudantes/icons/profile :: svg}"></th:block>
+        <span>PLACEHOLDER</span>
+        <th:block th:replace="~{fragments/listagemEstudantes/icons/email :: svg}"></th:block>
+      </div>
+    </main>
   </body>
 </html>
