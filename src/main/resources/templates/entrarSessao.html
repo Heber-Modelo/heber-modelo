@@ -6,42 +6,37 @@
   <title th:text="#{web.page.session-enter.title}"></title>
 </head>
 <body>
-<!--
-Copyright (C) 2025 Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
-
-Licensed under the Massachusetts Institute of Technology (MIT) License.
-You may obtain a copy of the license at:
-
-https://choosealicense.com/licenses/mit/
-
-A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
-Licensed works, modifications, and larger works may be distributed under different terms and without source code.
--->
-
-<header th:replace="~{fragments/header :: header}"></header>
-
-<main>
-  <form method="post">
-
-    <h1 th:text="#{web.page.session-enter.title}"></h1>
-
-    <label>
-      <span class="campos-texto" th:text="#{web.page.session.label.name}"></span>
-      <input type="text" name="username" required />
-    </label>
-
-    <label>
-      <span class="campos-texto" th:text="#{web.page.session.label.password}"></span>
-      <input type="password" name="password" required />
-    </label>
-
-    <div id="botoes">
-      <button th:text="#{web.page.session.button.cancel}" id="cancelar  "></button>
-      <button th:text="#{web.page.session.button.confirm}" id="confirmar"></button>
-    </div>
-  </form>
-</main>
-
-<footer th:replace="~{fragments/licenseFooter :: footer}"></footer>
+  <!--
+  ~ Copyright (c) 2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+  ~
+  ~ Licensed under the Massachusetts Institute of Technology (MIT) License.
+  ~ You may obtain a copy of the license at:
+  ~
+  ~    https://choosealicense.com/licenses/mit/
+  ~
+  ~ A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+  ~ Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+  ~
+  -->
+  <header th:replace="~{fragments/header :: header}"></header>
+  <main>
+    <form method="post" action="editor">
+      <h1 th:text="#{web.page.session-enter.title}"></h1>
+      <label>
+        <span class="campos-texto" th:text="#{web.page.session.label.name}"></span>
+        <input type="text" name="session-name" required />
+      </label>
+      <label>
+        <span class="campos-texto" th:text="#{web.page.session.label.password}"></span>
+        <input type="password" name="password" required />
+      </label>
+      <div id="botoes">
+        <button th:text="#{web.page.session.button.cancel}" id="cancelar"></button>
+        <button th:text="#{web.page.session.button.confirm}" id="confirmar"></button>
+      </div>
+    </form>
+    <a href="criarSessao.html">CRIAR SESSÃO(LINK TEMPORÁRIO)</a>
+  </main>
+  <footer th:replace="~{fragments/licenseFooter :: footer}"></footer>
 </body>
 </html>
