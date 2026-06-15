@@ -264,6 +264,22 @@ public class ControladorWeb {
         return "anexarAtividade";
     }
 
+    @RequestMapping({"/listagemAtividades", "/listagemAtividades.html"})
+    public String listagemAtividades(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "assignments-list");
+        InjetorAtributos.injetarPaleta(modelMap);
+
+        return "listagemAtividades";
+    }
+
+    @RequestMapping({"/listagemAtividadesCorrecao", "/listagemAtividadesCorrecao.html"})
+    public String listagemAtividadesParaCorrecao(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "assignments-feedback-list");
+        InjetorAtributos.injetarPaleta(modelMap);
+
+        return "listagemAtividadesCorrecao";
+    }
+
     @RequestMapping({"/listagemEstudantes", "/listagemEstudantes.html"})
     public String listagemEstudantes(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "students-list");
