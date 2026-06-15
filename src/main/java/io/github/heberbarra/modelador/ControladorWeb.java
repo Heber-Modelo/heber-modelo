@@ -244,6 +244,7 @@ public class ControladorWeb {
     public String criarSessao(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "session-create");
         InjetorAtributos.injetarPaleta(modelMap);
+
         return "criarSessao";
     }
 
@@ -251,6 +252,7 @@ public class ControladorWeb {
     public String entrarSessao(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "session-enter");
         InjetorAtributos.injetarPaleta(modelMap);
+
         return "entrarSessao";
     }
 
@@ -258,6 +260,7 @@ public class ControladorWeb {
     public String anexarAtividade(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "assignment");
         InjetorAtributos.injetarPaleta(modelMap);
+
         return "anexarAtividade";
     }
 
@@ -265,7 +268,16 @@ public class ControladorWeb {
     public String listagemEstudantes(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "students-list");
         InjetorAtributos.injetarPaleta(modelMap);
+
         return "listagemEstudantes";
+    }
+
+    @RequestMapping({"/configurarSessao", "/configurarSessao.html"})
+    public String configurarSessao(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "session-configuration");
+        InjetorAtributos.injetarPaleta(modelMap);
+
+        return "configurarSessao";
     }
 
     @RequestMapping({"/redefinir", "/redefinir.html"})
