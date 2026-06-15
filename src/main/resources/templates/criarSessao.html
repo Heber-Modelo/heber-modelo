@@ -20,22 +20,24 @@
   -->
   <header th:replace="~{fragments/header :: header}"></header>
   <main>
-    <form method="post" action="listagemEstudantes.html">
+    <form method="post" th:action="@{listagemEstudantes.html}">
       <h1 th:text="#{web.page.session-create.title}"></h1>
       <label>
         <span class="campos-texto" th:text="#{web.page.session.label.name}"></span>
-        <input type="text" name="session-name" required />
+        <input type="text" name="session-name"/>
       </label>
       <label>
         <span class="campos-texto" th:text="#{web.page.session.label.password}"></span>
-        <input type="password" name="password" required />
+        <input type="password" name="password"/>
       </label>
       <div id="botoes">
-        <button th:text="#{web.page.session.button.cancel}" id="cancelar"></button>
-        <button th:text="#{web.page.session.button.confirm}" id="confirmar"></button>
+        <button id="cancelar" type="button">
+          <a th:href="@{index.html}" th:text="#{web.page.session.button.cancel}"></a>
+        </button>
+        <button th:text="#{web.page.session.button.confirm}" id="confirmar" type="submit"></button>
       </div>
     </form>
-    <a href="entrarSessao.html">ENTRAR SESSÃO (LINK TEMPORÁRIO)</a>
+    <a th:href="@{entrarSessao.html}">ENTRAR SESSÃO (LINK TEMPORÁRIO)</a>
   </main>
   <footer th:replace="~{fragments/licenseFooter :: footer}"></footer>
 </body>
