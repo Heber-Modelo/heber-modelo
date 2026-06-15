@@ -35,14 +35,24 @@ export default class ApagarTodosComponentesCommand implements ICommand {
       let idComponente: string | null = elemento.getAttribute(
         ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
       );
-      if (idComponente) {
-        let componente: ComponenteDiagrama = this._repositorioComponente.pegar(
-          Number(idComponente),
-        ) as ComponenteDiagrama;
-        this._repositorioComponente.remover(componente);
-        this._componentes.push(componente);
+
+      if (!idComponente) {
+        return;
       }
+
+      let componente: ComponenteDiagrama | null = this._repositorioComponente.pegar(
+        Number(idComponente),
+      );
+
+      if (!componente) {
+        return;
+      }
+
+      this._repositorioComponente.remover(componente);
+      this._componentes.push(componente);
     });
+
+    this._repositorioComponente.limparMemoria();
 
     return {
       ok: true,
