@@ -110,3 +110,10 @@ hr {
     color: var(--cor-fonte-alternativa);
   }
 }
+
+div:has(button) {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+}
