@@ -9,16 +9,17 @@
   </head>
   <body>
     <!--
-Copyright (C) 2025 Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
-
-Licensed under the Massachusetts Institute of Technology (MIT) License.
-You may obtain a copy of the license at:
-
-https://choosealicense.com/licenses/mit/
-
-A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
-Licensed works, modifications, and larger works may be distributed under different terms and without source code.
--->
+      ~ Copyright (c) 2025-2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+      ~
+      ~ Licensed under the Massachusetts Institute of Technology (MIT) License.
+      ~ You may obtain a copy of the license at:
+      ~
+      ~    https://choosealicense.com/licenses/mit/
+      ~
+      ~ A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+      ~ Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+      ~
+      -->
     <header>
       <h1>Heber-Modelo</h1>
     </header>
@@ -26,22 +27,7 @@ Licensed works, modifications, and larger works may be distributed under differe
       <div>
         <a href="novo.html">
           <button>
-            <svg
-              width="332"
-              height="351"
-              viewBox="0 0 332 351"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect width="332" height="351" rx="15" fill="svg-color-fill" />
-              <rect x="105" y="66" width="122" height="76" rx="5" fill="currentColor" />
-              <rect x="186" y="208" width="122" height="76" rx="5" fill="currentColor" />
-              <rect x="24" y="208" width="122" height="76" rx="5" fill="currentColor" />
-              <rect x="163" y="142" width="6" height="30" fill="currentColor" />
-              <rect x="244" y="175" width="6" height="33" fill="currentColor" />
-              <rect x="82" y="175" width="6" height="33" fill="currentColor" />
-              <rect x="82" y="172" width="168" height="6" rx="2" fill="currentColor" />
-            </svg>
+            <th:block th:replace="~{fragments/index/icons/novo :: svg}"></th:block>
           </button>
         </a>
         <p th:text="#{web.page.home.menu.1}"></p>
@@ -49,26 +35,7 @@ Licensed works, modifications, and larger works may be distributed under differe
       <div>
         <a href="entrarSessao.html">
           <button>
-            <svg
-              width="332"
-              height="351"
-              viewBox="0 0 332 351"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect width="332" height="351" rx="15" fill="svg-color-fill" />
-              <rect x="51" y="175" width="230" height="120" rx="60" fill="currentColor" />
-              <ellipse
-                cx="166"
-                cy="147"
-                rx="63"
-                ry="47"
-                fill="currentColor"
-                class="svg-color-fill"
-              />
-              <circle cx="166" cy="115" r="60" fill="currentColor" />
-              <rect x="51" y="232" width="230" height="63" rx="5" fill="currentColor" />
-            </svg>
+            <th:block th:replace="~{fragments/index/icons/sessao :: svg}"></th:block>
           </button>
         </a>
         <p th:text="#{web.page.home.menu.2}"></p>
@@ -76,58 +43,7 @@ Licensed works, modifications, and larger works may be distributed under differe
       <div>
         <a th:href="@{/docs/index.html}">
           <button>
-            <svg
-              width="332"
-              height="351"
-              viewBox="0 0 332 351"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect width="332" height="351" rx="15" fill="svg-color-fill" />
-              <mask id="path-2-inside-1_293_39" fill="currentColor">
-                <rect x="80" y="55" width="172" height="241" rx="10" />
-              </mask>
-              <rect
-                x="80"
-                y="55"
-                width="172"
-                height="241"
-                rx="10"
-                fill="svg-color-fill"
-                stroke="currentColor"
-                stroke-width="30"
-                mask="url(#path-2-inside-1_293_39)"
-              />
-              <rect x="120" y="173" width="57" height="13" fill="currentColor" />
-              <rect x="120" y="207" width="55" height="14" fill="currentColor" />
-              <rect x="120" y="241" width="75" height="14" fill="currentColor" />
-              <rect x="120" y="104" width="91" height="14" fill="currentColor" />
-              <rect x="120" y="139" width="91" height="13" fill="currentColor" />
-              <mask id="path-10-inside-2_293_39" fill="currentColor">
-                <rect x="80" y="55" width="172" height="241" rx="10" />
-              </mask>
-              <rect
-                x="80"
-                y="55"
-                width="172"
-                height="241"
-                rx="10"
-                fill="svg-color-fill"
-                stroke="currentColor"
-                stroke-width="30"
-                mask="url(#path-10-inside-2_293_39)"
-              />
-              <path
-                d="M254.696 223.972C256.258 222.409 258.791 222.409 260.353 223.972L302.172 265.79C303.734 267.353 303.734 269.885 302.172 271.447L298.161 275.458C296.599 277.02 294.066 277.02 292.504 275.458L250.685 233.639C249.123 232.077 249.123 229.544 250.685 227.982L254.696 223.972Z"
-                fill="currentColor"
-              />
-              <path
-                d="M227.5 163.5C248.487 163.5 265.5 180.513 265.5 201.5C265.5 222.487 248.487 239.5 227.5 239.5C206.513 239.5 189.5 222.487 189.5 201.5C189.5 180.513 206.513 163.5 227.5 163.5Z"
-                fill="#5E01AF"
-                stroke="white"
-                stroke-width="13"
-              />
-            </svg>
+            <th:block th:replace="~{fragments/index/icons/docs :: svg}"></th:block>
           </button>
         </a>
         <p th:text="#{web.page.home.menu.3}"></p>
@@ -139,26 +55,7 @@ Licensed works, modifications, and larger works may be distributed under differe
         MIT &copy; Heber Ferreira Barra; Matheus de Assis de Paula; Matheus Jun Alves Matuda.
       </span>
       <button th:if="${desligar != null}" type="submit" id="btn-desligar">
-        <svg
-          width="256"
-          height="256"
-          viewBox="0 0 256 256"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect width="256" height="256" rx="15" fill="currentColor" />
-          <circle
-            cx="128"
-            cy="128"
-            r="80"
-            stroke="currentColor"
-            stroke-width="20"
-            class="svg-cor-fonte-stroke"
-          />
-          <rect x="91" y="33" width="25" height="67" fill="currentColor" />
-          <rect x="116" y="15" width="25" height="65" fill="currentColor" class="svg-cor-fonte" />
-          <rect x="141" y="33" width="25" height="67" fill="currentColor" />
-        </svg>
+        <th:blocks th:replace="~{fragments/index/icons/desligar :: svg}"></th:blocks>
       </button>
     </footer>
   </body>
