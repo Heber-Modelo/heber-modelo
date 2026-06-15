@@ -3,6 +3,7 @@
 <head>
   <th:block th:replace="~{fragments/head :: head}"></th:block>
   <title th:text="#{web.page.session-configuration.title}"></title>
+  <link rel="stylesheet" th:href="@{/css/configurarSessao.css}">
 </head>
 <body>
   <!--
@@ -18,5 +19,15 @@
   ~
   -->
   <header th:replace="~{fragments/header :: header}"></header>
+  <main>
+    <div>
+      <button>
+        <a th:href="@{listagemEstudantes.html}" th:text="#{web.page.session-configuration.label.cancel}"></a>
+      </button>
+      <button>
+        <a th:href="@{listagemEstudantes.html}" th:text="#{web.page.session-configuration.label.save}"></a>
+      </button>
+    </div>
+  </main>
 </body>
 </html>
