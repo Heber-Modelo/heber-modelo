@@ -14,6 +14,7 @@
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
+import CriarComponenteCommand, { CriarComponenteCommandBuilder } from "infrastructure/command/criarComponenteCommand";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
@@ -27,7 +28,6 @@ import TiposConexao from "model/conexao/tiposConexao";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import Ponto from "model/ponto";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
-import CriarComponenteCommand, { CriarComponenteCommandBuilder } from "infrastructure/command/criarComponenteCommand";
 
 export default class ConectarAtributoCommand implements ICommand {
   public static readonly NOME_ELEMENTO_ATRIBUTO: string = "atributo_der";
@@ -84,7 +84,9 @@ export default class ConectarAtributoCommand implements ICommand {
       let posicaoAtributo: Ponto = this._componenteAlvo.calcularPontoLateralComponente(
         LateraisComponente.LESTE,
       );
-      this._componenteAtributo?.htmlComponente.style.setProperty("top", `${posicaoAtributo.y}px`);
+
+      let alturaComponenteAtributo: number = this._componenteAtributo?.htmlComponente.getBoundingClientRect().height || 0;
+      this._componenteAtributo?.htmlComponente.style.setProperty("top", `${posicaoAtributo.y - alturaComponenteAtributo / 2}px`);
       this._componenteAtributo?.htmlComponente.style.setProperty(
         "left",
         `${posicaoAtributo.x + 50}px`,
