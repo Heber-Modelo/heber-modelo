@@ -19,7 +19,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v5.2.0
         with:
-          java-version: '24'
+          java-version: '25'
           distribution: 'corretto'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
@@ -44,7 +44,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v5.2.0
         with:
-          java-version: '24'
+          java-version: '25'
           distribution: 'corretto'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
