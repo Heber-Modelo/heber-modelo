@@ -423,7 +423,9 @@ placeholderAtributo.style.display = "none";
 placeholderAtributo.style.position = "absolute";
 
 function trocarCallbackBtnAtributo(): void {
-  let btnAtributo: HTMLButtonElement | null | undefined = divComponentes?.querySelector("button[data-nome-elemento='atributo_der']");
+  let btnAtributo: HTMLButtonElement | null | undefined = divComponentes?.querySelector(
+    "button[data-nome-elemento='atributo_der']",
+  );
 
   if (btnAtributo) {
     btnAtributo.removeEventListener("click", callbackCriarComponente);
@@ -451,12 +453,14 @@ function callbackMoverConectorAtributo(event: MouseEvent): void {
 }
 
 function callbackTerminarConexaoAtributo(event: MouseEvent): void {
-  document.removeEventListener("mousemove", callbackMoverConectorAtributo)
-  diagrama?.removeEventListener("click", callbackTerminarConexaoAtributo)
+  document.removeEventListener("mousemove", callbackMoverConectorAtributo);
+  diagrama?.removeEventListener("click", callbackTerminarConexaoAtributo);
   placeholderAtributo.style.display = "none";
 
   let elementoAlvo: HTMLElement = event.target as HTMLElement;
-  let nomeElemento: string | null = elementoAlvo.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE)
+  let nomeElemento: string | null = elementoAlvo.getAttribute(
+    ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+  );
 
   if (!nomeElemento) {
     let command: CriarComponenteCommand = new CriarComponenteCommandBuilder()
@@ -471,11 +475,13 @@ function callbackTerminarConexaoAtributo(event: MouseEvent): void {
     commandHistory.saveAndExecuteCommand(command);
 
     setTimeout((): void => {
-      let componentes: ComponenteDiagrama[] = repositorioComponentes.listar()
-      let componenteAtributo: ComponenteDiagrama | undefined = componentes.at(componentes.length - 1);
+      let componentes: ComponenteDiagrama[] = repositorioComponentes.listar();
+      let componenteAtributo: ComponenteDiagrama | undefined = componentes.at(
+        componentes.length - 1,
+      );
       componenteAtributo?.htmlComponente.style.setProperty("left", placeholderAtributo.style.left);
       componenteAtributo?.htmlComponente.style.setProperty("top", placeholderAtributo.style.top);
-    }, 20)
+    }, 20);
 
     return;
   }
@@ -504,7 +510,7 @@ function callbackTerminarConexaoAtributo(event: MouseEvent): void {
 const conectarAtributoObserver = new MutationObserver(trocarCallbackBtnAtributo);
 
 if (divComponentes) {
-  conectarAtributoObserver.observe(divComponentes, { childList: true, subtree: true })
+  conectarAtributoObserver.observe(divComponentes, { childList: true, subtree: true });
 }
 
 /***********/

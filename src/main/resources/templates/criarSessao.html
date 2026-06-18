@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <th:block th:replace="~{fragments/head :: head}"></th:block>
-  <link rel="stylesheet" th:href="@{/css/formulario.css}" />
-  <title th:text="#{web.page.session-create.title}"></title>
-</head>
-<body>
-  <!--
+  <head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}" />
+    <title th:text="#{web.page.session-create.title}"></title>
+  </head>
+  <body>
+    <!--
   ~ Copyright (c) 2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
   ~
   ~ Licensed under the Massachusetts Institute of Technology (MIT) License.
@@ -18,27 +18,31 @@
   ~ Licensed works, modifications, and larger works may be distributed under different terms and without source code.
   ~
   -->
-  <header th:replace="~{fragments/header :: header}"></header>
-  <main>
-    <form method="post" th:action="@{listagemEstudantes.html}">
-      <h1 th:text="#{web.page.session-create.title}"></h1>
-      <label>
-        <span class="campos-texto" th:text="#{web.page.session.label.name}"></span>
-        <input type="text" name="session-name"/>
-      </label>
-      <label>
-        <span class="campos-texto" th:text="#{web.page.session.label.password}"></span>
-        <input type="password" name="password"/>
-      </label>
-      <div id="botoes">
-        <button id="cancelar" type="button">
-          <a th:href="@{index.html}" th:text="#{web.page.session.button.cancel}"></a>
-        </button>
-        <button th:text="#{web.page.session.button.confirm}" id="confirmar" type="submit"></button>
-      </div>
-    </form>
-    <a th:href="@{entrarSessao.html}">ENTRAR SESSÃO (LINK TEMPORÁRIO)</a>
-  </main>
-  <footer th:replace="~{fragments/licenseFooter :: footer}"></footer>
-</body>
+    <header th:replace="~{fragments/header :: header}"></header>
+    <main>
+      <form method="post" th:action="@{listagemEstudantes.html}">
+        <h1 th:text="#{web.page.session-create.title}"></h1>
+        <label>
+          <span class="campos-texto" th:text="#{web.page.session.label.name}"></span>
+          <input type="text" name="session-name" />
+        </label>
+        <label>
+          <span class="campos-texto" th:text="#{web.page.session.label.password}"></span>
+          <input type="password" name="password" />
+        </label>
+        <div id="botoes">
+          <button id="cancelar" type="button">
+            <a th:href="@{index.html}" th:text="#{web.page.session.button.cancel}"></a>
+          </button>
+          <button
+            th:text="#{web.page.session.button.confirm}"
+            id="confirmar"
+            type="submit"
+          ></button>
+        </div>
+      </form>
+      <a th:href="@{entrarSessao.html}">ENTRAR SESSÃO (LINK TEMPORÁRIO)</a>
+    </main>
+    <footer th:replace="~{fragments/licenseFooter :: footer}"></footer>
+  </body>
 </html>

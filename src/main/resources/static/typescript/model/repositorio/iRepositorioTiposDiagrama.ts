@@ -12,11 +12,9 @@
  */
 
 export default interface IRepositorioTiposDiagrama {
-
   adicionar(tipoDiagrama: string): void;
 
   remover(tipoDiagrama: string): void;
 
   listar(): string[];
-
 }

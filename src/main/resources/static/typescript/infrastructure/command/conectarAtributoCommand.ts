@@ -14,7 +14,9 @@
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
-import CriarComponenteCommand, { CriarComponenteCommandBuilder } from "infrastructure/command/criarComponenteCommand";
+import CriarComponenteCommand, {
+  CriarComponenteCommandBuilder,
+} from "infrastructure/command/criarComponenteCommand";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
@@ -85,8 +87,12 @@ export default class ConectarAtributoCommand implements ICommand {
         LateraisComponente.LESTE,
       );
 
-      let alturaComponenteAtributo: number = this._componenteAtributo?.htmlComponente.getBoundingClientRect().height || 0;
-      this._componenteAtributo?.htmlComponente.style.setProperty("top", `${posicaoAtributo.y - alturaComponenteAtributo / 2}px`);
+      let alturaComponenteAtributo: number =
+        this._componenteAtributo?.htmlComponente.getBoundingClientRect().height || 0;
+      this._componenteAtributo?.htmlComponente.style.setProperty(
+        "top",
+        `${posicaoAtributo.y - alturaComponenteAtributo / 2}px`,
+      );
       this._componenteAtributo?.htmlComponente.style.setProperty(
         "left",
         `${posicaoAtributo.x + 50}px`,
@@ -141,7 +147,12 @@ export default class ConectarAtributoCommand implements ICommand {
 }
 
 export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarAtributoCommand> {
-  private static readonly _elementosPermitidos: string[] = ["atributo_der", "agregacao", "entidade", "relacionamento"]
+  private static readonly _elementosPermitidos: string[] = [
+    "atributo_der",
+    "agregacao",
+    "entidade",
+    "relacionamento",
+  ];
   private _componenteAlvo: ComponenteDiagrama | null = null;
   private _diagrama: HTMLElement | undefined | null;
   private _fabricaComponente: ComponenteFactory | null = null;
@@ -153,7 +164,7 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
   private _tipoConexao: TiposConexao | null = null;
 
   public static verificarElementoPermitido(elemento: string): boolean {
-    return this._elementosPermitidos.includes(elemento)
+    return this._elementosPermitidos.includes(elemento);
   }
 
   public definirComponenteAlvo(componenteAlvo: ComponenteDiagrama | null): this {

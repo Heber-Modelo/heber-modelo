@@ -14,7 +14,8 @@
 import IRepositorioTiposDiagrama from "model/repositorio/iRepositorioTiposDiagrama";
 
 export default class RepositorioTiposDiagrama implements IRepositorioTiposDiagrama {
-  private readonly _tiposDiagramaElemento: HTMLElement | null = document.querySelector("#tipos-diagrama");
+  private readonly _tiposDiagramaElemento: HTMLElement | null =
+    document.querySelector("#tipos-diagrama");
   private _tipos: string[] = [];
 
   adicionar(tipoDiagrama: string): void {
@@ -27,7 +28,6 @@ export default class RepositorioTiposDiagrama implements IRepositorioTiposDiagra
     if (this._tiposDiagramaElemento) {
       this._tiposDiagramaElemento.innerHTML = `[${this._tipos.join(", ")}]`;
     }
-
   }
 
   listar(): string[] {
@@ -41,5 +41,4 @@ export default class RepositorioTiposDiagrama implements IRepositorioTiposDiagra
       this._tiposDiagramaElemento.innerHTML = `[${this._tipos.join(", ")}]`;
     }
   }
-
 }

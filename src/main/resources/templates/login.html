@@ -35,7 +35,11 @@ Licensed works, modifications, and larger works may be distributed under differe
         <label>
           <span class="campos-texto" th:text="#{web.page.login.label.password}"></span>
           <input type="password" name="password" required />
-          <a href="solicitar.html" th:text="#{web.page.login.request-new-password}" class="texto-ajuda"></a>
+          <a
+            href="solicitar.html"
+            th:text="#{web.page.login.request-new-password}"
+            class="texto-ajuda"
+          ></a>
         </label>
         <button th:text="#{web.page.login.continue}" id="continuar"></button>
         <small>
