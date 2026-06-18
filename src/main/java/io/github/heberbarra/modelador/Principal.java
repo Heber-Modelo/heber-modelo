@@ -53,7 +53,7 @@ public class Principal implements WebServerFactoryCustomizer<@NonNull Configurab
     private static final IConfigurador configurador = ConfiguradorFactory.build();
     private static Locale locale;
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
 
         if (Arrays.stream(args).toList().contains("--language=english")) {
             locale = Locale.ENGLISH;
@@ -94,7 +94,7 @@ public class Principal implements WebServerFactoryCustomizer<@NonNull Configurab
     }
 
     @Override
-    public void customize(ConfigurableWebServerFactory factory) {
+    public void customize(@NonNull ConfigurableWebServerFactory factory) {
         Optional<Long> porta = configurador.pegarValorConfiguracao("programa", "porta", long.class);
 
         porta.ifPresent(numeroPorta -> factory.setPort(Math.toIntExact(numeroPorta)));
