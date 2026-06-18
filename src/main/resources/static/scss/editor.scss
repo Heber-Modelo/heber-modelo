@@ -475,6 +475,10 @@ fieldset#conexoes-basicas {
   height: 100px;
   border: var(--cor-borda) solid 0.3rem;
 
+  div[contenteditable=true] {
+    cursor: text;
+  }
+
   &:hover {
     background-color: var(--cor-componente-hover);
   }
