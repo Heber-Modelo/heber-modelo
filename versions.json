@@ -1,10 +1,15 @@
 [
   {
-    "version": "0.0.31-SNAPSHOT",
-    "title": "0.0.31-SNAPSHOT",
+    "version": "0.0.32-SNAPSHOT",
+    "title": "0.0.32-SNAPSHOT",
     "aliases": [
       "latest"
     ]
+  },
+  {
+    "version": "0.0.31-SNAPSHOT",
+    "title": "0.0.31-SNAPSHOT",
+    "aliases": []
   },
   {
     "version": "0.0.30-SNAPSHOT",
