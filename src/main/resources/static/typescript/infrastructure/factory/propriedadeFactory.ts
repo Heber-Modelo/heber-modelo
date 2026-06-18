@@ -14,6 +14,7 @@
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 import PropriedadeInnerText from "model/propriedade/propriedadeInnerText";
+import PropriedadeSelecionavel from "model/propriedade/propriedadeSelecionavel";
 
 export default class PropriedadeFactory {
   public criarPropriedade(
@@ -22,9 +23,19 @@ export default class PropriedadeFactory {
     componente: ComponenteDiagrama,
     label: string,
     classeElemento: string,
+    valoresPermitidos: string[] | undefined,
   ): PropriedadeComponente | null {
     if (nomePropriedade === "innerText") {
       return new PropriedadeInnerText(componente, sufixo, label, classeElemento);
+    } else if (valoresPermitidos) {
+      return new PropriedadeSelecionavel(
+        nomePropriedade,
+        componente,
+        sufixo,
+        label,
+        classeElemento,
+        valoresPermitidos,
+      );
     } else {
       return new PropriedadeComponente(nomePropriedade, componente, sufixo, label, classeElemento);
     }

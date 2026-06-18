@@ -244,6 +244,7 @@ public class ControladorWeb {
     public String criarSessao(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "session-create");
         InjetorAtributos.injetarPaleta(modelMap);
+
         return "criarSessao";
     }
 
@@ -251,14 +252,48 @@ public class ControladorWeb {
     public String entrarSessao(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "session-enter");
         InjetorAtributos.injetarPaleta(modelMap);
+
         return "entrarSessao";
     }
 
     @RequestMapping({"/anexarAtividade", "/anexarAtividade.html"})
     public String anexarAtividade(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "exercise");
+        InjetorAtributos.injetarTituloPagina(modelMap, "assignment");
         InjetorAtributos.injetarPaleta(modelMap);
+
         return "anexarAtividade";
+    }
+
+    @RequestMapping({"/listagemAtividades", "/listagemAtividades.html"})
+    public String listagemAtividades(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "assignments-list");
+        InjetorAtributos.injetarPaleta(modelMap);
+
+        return "listagemAtividades";
+    }
+
+    @RequestMapping({"/listagemAtividadesCorrecao", "/listagemAtividadesCorrecao.html"})
+    public String listagemAtividadesParaCorrecao(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "assignments-feedback-list");
+        InjetorAtributos.injetarPaleta(modelMap);
+
+        return "listagemAtividadesCorrecao";
+    }
+
+    @RequestMapping({"/listagemEstudantes", "/listagemEstudantes.html"})
+    public String listagemEstudantes(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "students-list");
+        InjetorAtributos.injetarPaleta(modelMap);
+
+        return "listagemEstudantes";
+    }
+
+    @RequestMapping({"/configurarSessao", "/configurarSessao.html"})
+    public String configurarSessao(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "session-configuration");
+        InjetorAtributos.injetarPaleta(modelMap);
+
+        return "configurarSessao";
     }
 
     @RequestMapping({"/redefinir", "/redefinir.html"})

@@ -23,4 +23,6 @@ export default interface IRepositorio<T> {
   pegar(id: number): T | null;
 
   listar(): T[];
+
+  limparMemoria(): void;
 }

@@ -57,7 +57,7 @@ export default class PropriedadeComponente {
       ?.setAttribute(this._nome, `${valor}${this._sufixo}`);
   }
 
-  private formatarLabel(): string {
+  protected formatarLabel(): string {
     return this._label.substring(0, 1).toUpperCase() + this._label.substring(1) + ":";
   }
 

@@ -103,7 +103,7 @@ cd heber-modelo
 
 pnpm install
 pnpm run compile-scss
-pnpm run compilte-ts
+pnpm run compile-ts
 
 
 # Opcional, a fim de gerar a documentação integrada ao programa
@@ -119,7 +119,7 @@ uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/
 - [ ] Seletor Radial
 - [ ] Formatação automática
 - [x] Suporte para temas
-- [ ] Suporte para plugins
+- [ ] Suporte para plugins**
 - [x] Suporte para keymaps customizados
 - [ ] Formatação automática de atributos
 - [ ] Estilos diferentes de fundo/grade
@@ -128,6 +128,7 @@ uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/
 - [x] Auto atualização*
 
 \*Devido à mudança de nome do programa, versões anteriores a v0.0.5-SNAPSHOT não conseguem atualizar.
+\*\*A funcionalidade de plugins está em fase de planejamento, e não é prioritária no momento.
 
 # Autores
 

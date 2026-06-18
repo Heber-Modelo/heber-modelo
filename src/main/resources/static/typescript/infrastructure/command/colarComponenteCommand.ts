@@ -111,50 +111,50 @@ export class ColarComponenteCommandBuilder implements ICommandBuilder<ColarCompo
   private _registradorEventos: RegistradorEventosElemento | null = null;
   private _repositorioComponente: RepositorioComponente | null = null;
 
-  definirDiagrama(diagrama: HTMLElement | undefined | null): this {
+  public definirDiagrama(diagrama: HTMLElement | undefined | null): this {
     this._diagrama = diagrama;
     return this;
   }
 
-  definirGeradorID(geradorID: GeradorIDComponente | null): this {
+  public definirGeradorID(geradorID: GeradorIDComponente | null): this {
     this._geradorID = geradorID;
     return this;
   }
 
-  definirFabricaComponente(fabricaComponente: ComponenteFactory | null): this {
+  public definirFabricaComponente(fabricaComponente: ComponenteFactory | null): this {
     this._fabricaComponente = fabricaComponente;
     return this;
   }
 
-  definirRegistradorEventos(registradorEventos: RegistradorEventosElemento | null): this {
+  public definirRegistradorEventos(registradorEventos: RegistradorEventosElemento | null): this {
     this._registradorEventos = registradorEventos;
     return this;
   }
 
-  definirRepositorioComponente(repositorioComponente: RepositorioComponente | null): this {
+  public definirRepositorioComponente(repositorioComponente: RepositorioComponente | null): this {
     this._repositorioComponente = repositorioComponente;
     return this;
   }
 
   public build(): ColarComponenteCommand {
     if (this._diagrama === null || this._diagrama === undefined) {
-      throw new CommandBuilderException("O diagrama não foi especificado");
+      throw new CommandBuilderException("diagrama");
     }
 
     if (this._geradorID === null) {
-      throw new CommandBuilderException("O gerador de ID não foi especificado");
+      throw new CommandBuilderException("gerador de ID");
     }
 
     if (this._fabricaComponente === null) {
-      throw new CommandBuilderException("A fábrica de componentes não foi especificado");
+      throw new CommandBuilderException("fábrica de componentes");
     }
 
     if (this._registradorEventos === null) {
-      throw new CommandBuilderException("O registrador de eventos não foi especificado");
+      throw new CommandBuilderException("registrador de eventos");
     }
 
     if (this._repositorioComponente === null) {
-      throw new CommandBuilderException("O repositório de componentes não foi especificado");
+      throw new CommandBuilderException("repositório de componentes");
     }
 
     return new ColarComponenteCommand(

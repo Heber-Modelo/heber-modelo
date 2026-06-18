@@ -12,16 +12,10 @@
  */
 
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import DirecoesMovimento from "model/direcoesMovimento";
 import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 
-export enum DirecoesMovimento {
-  CIMA,
-  BAIXO,
-  ESQUERDA,
-  DIREITA,
-}
-
-export function moverComponente(
+export default function moverComponente(
   componenteAlvo: ComponenteDiagrama | null,
   direcao: DirecoesMovimento,
   incremento: number,

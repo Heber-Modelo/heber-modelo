@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/listagemEstudantes.css}" />
+    <title th:text="#{web.page.students-list.title}"></title>
+  </head>
+  <body>
+    <!--
+    ~ Copyright (c) 2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+    ~
+    ~ Licensed under the Massachusetts Institute of Technology (MIT) License.
+    ~ You may obtain a copy of the license at:
+    ~
+    ~    https://choosealicense.com/licenses/mit/
+    ~
+    ~ A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+    ~ Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+    ~
+    -->
+    <header>
+      <button id="home">
+        <a th:href="@{index.html}" title="Home">
+          <th:block th:replace="~{fragments/listagemEstudantes/icons/home :: svg}"></th:block>
+        </a>
+      </button>
+      <h1 th:text="${programa}"></h1>
+      <div id="opcoes-botoes">
+        <button>
+          <th:block th:replace="~{fragments/listagemEstudantes/icons/notify :: svg}"></th:block>
+        </button>
+        <button>
+          <a th:href="@{configurarSessao.html}" th:title="#{web.page.session-configuration.title}">
+            <th:block th:replace="~{fragments/listagemEstudantes/icons/config :: svg}"></th:block>
+          </a>
+        </button>
+      </div>
+    </header>
+    <main>
+      <h2 th:text="#{web.page.students-list.label.professors}"></h2>
+      <hr />
+      <div class="user-data">
+        <a
+          th:href="@{perfil.html}"
+          th:insert="~{fragments/listagemEstudantes/icons/profile :: svg}"
+        ></a>
+        <span>PLACEHOLDER</span>
+        <a><th:block th:replace="~{fragments/listagemEstudantes/icons/email :: svg}"></th:block></a>
+      </div>
+      <h2 th:text="#{web.page.students-list.label.students}"></h2>
+      <hr />
+      <div class="user-data">
+        <a
+          th:href="@{perfil.html}"
+          th:insert="~{fragments/listagemEstudantes/icons/profile :: svg}"
+        ></a>
+        <span>PLACEHOLDER</span>
+        <a><th:block th:replace="~{fragments/listagemEstudantes/icons/email :: svg}"></th:block></a>
+      </div>
+      <div class="user-data">
+        <a
+          th:href="@{perfil.html}"
+          th:insert="~{fragments/listagemEstudantes/icons/profile :: svg}"
+        ></a>
+        <span>PLACEHOLDER</span>
+        <a><th:block th:replace="~{fragments/listagemEstudantes/icons/email :: svg}"></th:block></a>
+      </div>
+      <div class="user-data">
+        <a
+          th:href="@{perfil.html}"
+          th:insert="~{fragments/listagemEstudantes/icons/profile :: svg}"
+        ></a>
+        <span>PLACEHOLDER</span>
+        <a><th:block th:replace="~{fragments/listagemEstudantes/icons/email :: svg}"></th:block></a>
+      </div>
+      <div>
+        <button>
+          <a th:href="@{index.html}" th:text="#{web.page.students-list.label.close-session}"></a>
+        </button>
+        <button>
+          <a
+            th:href="@{listagemAtividades.html}"
+            th:text="#{web.page.students-list.label.assignments}"
+          ></a>
+        </button>
+      </div>
+    </main>
+  </body>
+</html>

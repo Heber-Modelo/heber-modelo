@@ -87,4 +87,8 @@ export default class RepositorioComponente implements IRepositorioComponente {
   public listar(): ComponenteDiagrama[] {
     return this._componentesDiagrama;
   }
+
+  public limparMemoria(): void {
+    this._componentesDiagrama = [];
+  }
 }

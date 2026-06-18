@@ -6,7 +6,6 @@ build/
 
 ### IntelliJ IDEA ###
 .idea
-.ideia/*
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
@@ -19,6 +18,7 @@ out/
 !**/src/test/**/out/
 !.idea/copyright
 !.idea/codeStyles
+!.idea/runConfigurations
 !.idea/scopes
 !.idea/.gitignore
 
@@ -67,3 +67,4 @@ src/main/resources/static/docs
 site
 
 .env
+src/main/resources/**/*.svg

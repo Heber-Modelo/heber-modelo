@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <title th:text="#{web.page.assignments-list.title}"></title>
+    <link rel="stylesheet" th:href="@{/css/listagemAtividades.css}" />
+  </head>
+  <body>
+    <!--
+  ~ Copyright (c) 2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+  ~
+  ~ Licensed under the Massachusetts Institute of Technology (MIT) License.
+  ~ You may obtain a copy of the license at:
+  ~
+  ~    https://choosealicense.com/licenses/mit/
+  ~
+  ~ A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+  ~ Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+  ~
+  -->
+    <header th:replace="~{fragments/header :: header}"></header>
+    <main>
+      <div>
+        <button>
+          <a
+            th:href="@{listagemEstudantes.html}"
+            th:text="#{web.page.assignments-list.label.back}"
+          ></a>
+        </button>
+        <button>
+          <a
+            th:href="@{listagemAtividadesCorrecao.html}"
+            th:text="#{web.page.assignments-list.label.feedback-list}"
+          ></a>
+        </button>
+        <button>
+          <a
+            th:href="@{anexarAtividade.html}"
+            th:text="#{web.page.assignments-list.label.attach}"
+          ></a>
+        </button>
+      </div>
+    </main>
+  </body>
+</html>

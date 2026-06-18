@@ -14,7 +14,8 @@
 import IRepositorioTiposDiagrama from "model/repositorio/iRepositorioTiposDiagrama";
 
 export default class RepositorioTiposDiagrama implements IRepositorioTiposDiagrama {
-  private readonly _tiposDiagramaElemento: HTMLElement | null = document.querySelector("#tipos-diagrama");
+  private readonly _tiposDiagramaElemento: HTMLElement | null =
+    document.querySelector("#tipos-diagrama");
   private _tipos: string[] = [];
 
   adicionar(tipoDiagrama: string): void {

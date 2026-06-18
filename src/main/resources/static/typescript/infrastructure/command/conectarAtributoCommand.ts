@@ -11,10 +11,12 @@
  *
  */
 
-import CarregarCSSCommand, { CarregarCSSCommandBuilder } from "infrastructure/command/carregarCSSCommand";
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
+import CriarComponenteCommand, {
+  CriarComponenteCommandBuilder,
+} from "infrastructure/command/criarComponenteCommand";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
@@ -40,9 +42,9 @@ export default class ConectarAtributoCommand implements ICommand {
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponentes: IRepositorioComponente;
   private readonly _tipoConexao: TiposConexao;
-  private _commandCarregarCSSAtributo: CarregarCSSCommand | undefined;
+  private _commandCriarComponenteAtributo: CriarComponenteCommand | undefined;
   private _commandConectarComponentes: ConectarComponentesCommand | undefined;
-  private _componenteAtributo: ComponenteDiagrama | undefined;
+  private _componenteAtributo: ComponenteDiagrama | null = null;
 
   constructor(
     componenteAlvo: ComponenteDiagrama,
@@ -67,17 +69,34 @@ export default class ConectarAtributoCommand implements ICommand {
   }
 
   execute(): CommandResult {
-    this._commandCarregarCSSAtributo = new CarregarCSSCommandBuilder()
-      .definirNomeArquivo(ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO)
+    this._commandCriarComponenteAtributo = new CriarComponenteCommandBuilder()
+      .definirDiagrama(this._diagrama)
+      .definirFabricaComponente(this._fabricaComponente)
+      .definirGeradorIDComponente(this._geradorID)
+      .definirNomeElemento(ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO)
+      .definirRegistradorEventosElemento(this._registradorEventosElemento)
+      .definirRepositorioComponentes(this._repositorioComponentes)
       .build();
+    this._commandCriarComponenteAtributo.execute();
 
     setTimeout((): void => {
       let componentes: ComponenteDiagrama[] = this._repositorioComponentes.listar();
-      this._componenteAtributo = componentes.at(componentes.length - 1);
+      this._componenteAtributo = componentes.at(componentes.length - 1) || null;
 
-      let posicaoAtributo: Ponto = this._componenteAlvo.calcularPontoLateralComponente(LateraisComponente.LESTE);
-      this._componenteAtributo?.htmlComponente.style.setProperty("top", `${posicaoAtributo.y}px`);
-      this._componenteAtributo?.htmlComponente.style.setProperty("left", `${posicaoAtributo.x + 50}px`);
+      let posicaoAtributo: Ponto = this._componenteAlvo.calcularPontoLateralComponente(
+        LateraisComponente.LESTE,
+      );
+
+      let alturaComponenteAtributo: number =
+        this._componenteAtributo?.htmlComponente.getBoundingClientRect().height || 0;
+      this._componenteAtributo?.htmlComponente.style.setProperty(
+        "top",
+        `${posicaoAtributo.y - alturaComponenteAtributo / 2}px`,
+      );
+      this._componenteAtributo?.htmlComponente.style.setProperty(
+        "left",
+        `${posicaoAtributo.x + 50}px`,
+      );
 
       this._commandConectarComponentes = new ConectarComponentesCommandBuilder()
         .definirDiagrama(this._diagrama)
@@ -97,6 +116,7 @@ export default class ConectarAtributoCommand implements ICommand {
       this._commandConectarComponentes.execute();
     }, 200)
 
+
     return {
       ok: true,
       error: undefined,
@@ -104,7 +124,6 @@ export default class ConectarAtributoCommand implements ICommand {
   }
 
   redo(): CommandResult {
-    this._commandCarregarCSSAtributo?.redo();
     this._commandConectarComponentes?.redo();
 
     if (this._componenteAtributo) {
@@ -119,7 +138,6 @@ export default class ConectarAtributoCommand implements ICommand {
 
   undo(): CommandResult {
     this._componenteAtributo?.htmlComponente.remove();
-    this._commandCarregarCSSAtributo?.undo();
     this._commandConectarComponentes?.undo();
 
     return {
@@ -130,109 +148,121 @@ export default class ConectarAtributoCommand implements ICommand {
 }
 
 export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarAtributoCommand> {
-  private _componenteAlvo: ComponenteDiagrama | undefined;
+  private static readonly _elementosPermitidos: string[] = [
+    "atributo_der",
+    "agregacao",
+    "entidade",
+    "relacionamento",
+  ];
+  private _componenteAlvo: ComponenteDiagrama | null = null;
   private _diagrama: HTMLElement | undefined | null;
-  private _fabricaComponente: ComponenteFactory | undefined;
-  private _fabricaConexao: ComponenteConexaoFactory | undefined;
-  private _geradorID: GeradorIDComponente | undefined;
-  private _registradorEventosConexao: RegistradorEventosConexao | undefined;
-  private _registradorEventosElemento: RegistradorEventosElemento | undefined;
-  private _repositorioComponentes: IRepositorioComponente | undefined;
-  private _tipoConexao: TiposConexao | undefined;
+  private _fabricaComponente: ComponenteFactory | null = null;
+  private _fabricaConexao: ComponenteConexaoFactory | null = null;
+  private _geradorID: GeradorIDComponente | null = null;
+  private _registradorEventosConexao: RegistradorEventosConexao | null = null;
+  private _registradorEventosElemento: RegistradorEventosElemento | null = null;
+  private _repositorioComponentes: IRepositorioComponente | null = null;
+  private _tipoConexao: TiposConexao | null = null;
 
-  definirComponenteAlvo(componenteAlvo: ComponenteDiagrama | undefined): this {
+  public static verificarElementoPermitido(elemento: string): boolean {
+    return this._elementosPermitidos.includes(elemento);
+  }
+
+  public definirComponenteAlvo(componenteAlvo: ComponenteDiagrama | null): this {
     this._componenteAlvo = componenteAlvo;
 
     return this;
   }
 
-  definirDiagrama(diagrama: HTMLElement | undefined | null): this {
+  public definirDiagrama(diagrama: HTMLElement | undefined | null): this {
     this._diagrama = diagrama;
 
     return this;
   }
 
-  definirFabricaComponente(fabricaComponente: ComponenteFactory | undefined): this {
+  public definirFabricaComponente(fabricaComponente: ComponenteFactory | null): this {
     this._fabricaComponente = fabricaComponente;
 
     return this;
   }
 
-  definirFabricaConexao(fabricaConexao: ComponenteConexaoFactory | undefined): this {
+  public definirFabricaConexao(fabricaConexao: ComponenteConexaoFactory | null): this {
     this._fabricaConexao = fabricaConexao;
 
     return this;
   }
 
-  definirGeradorID(geradorID: GeradorIDComponente | undefined): this {
+  public definirGeradorID(geradorID: GeradorIDComponente | null): this {
     this._geradorID = geradorID;
 
     return this;
   }
 
-  definirRegistradorEventosConexao(
-    registradorEventosConexao: RegistradorEventosConexao | undefined,
+  public definirRegistradorEventosConexao(
+    registradorEventosConexao: RegistradorEventosConexao | null,
   ): this {
     this._registradorEventosConexao = registradorEventosConexao;
 
     return this;
   }
 
-  definirRegistradorEventosElemento(
-    registradorEventosElemento: RegistradorEventosElemento | undefined,
+  public definirRegistradorEventosElemento(
+    registradorEventosElemento: RegistradorEventosElemento | null,
   ): this {
     this._registradorEventosElemento = registradorEventosElemento;
 
     return this;
   }
 
-  definirRepositorioComponentes(repositorioComponentes: IRepositorioComponente | undefined): this {
+  public definirRepositorioComponentes(
+    repositorioComponentes: IRepositorioComponente | null,
+  ): this {
     this._repositorioComponentes = repositorioComponentes;
 
     return this;
   }
 
-  definirTipoConexao(tipoConexao: TiposConexao | undefined): this {
+  public definirTipoConexao(tipoConexao: TiposConexao | null): this {
     this._tipoConexao = tipoConexao;
 
     return this;
   }
 
   public build(): ConectarAtributoCommand {
-    if (this._componenteAlvo === undefined) {
-      throw new CommandBuilderException("O Componente Alvo não foi definido");
+    if (this._componenteAlvo === null) {
+      throw new CommandBuilderException("componente alvo");
     }
 
     if (this._diagrama === undefined || this._diagrama === null) {
-      throw new CommandBuilderException("O diagrama não foi definido");
+      throw new CommandBuilderException("diagrama");
     }
 
-    if (this._fabricaComponente === undefined) {
-      throw new CommandBuilderException("A Fábrica de Componentes não foi definida");
+    if (this._fabricaComponente === null) {
+      throw new CommandBuilderException("fábrica de componentes");
     }
 
-    if (this._fabricaConexao === undefined) {
-      throw new CommandBuilderException("A fábrica de conexões não foi definida");
+    if (this._fabricaConexao === null) {
+      throw new CommandBuilderException("fábrica de conexões");
     }
 
-    if (this._geradorID === undefined) {
-      throw new CommandBuilderException("O gerador de IDs de componentes não foi definido");
+    if (this._geradorID === null) {
+      throw new CommandBuilderException("gerador de ID");
     }
 
-    if (this._registradorEventosConexao === undefined) {
-      throw new CommandBuilderException("O registrador de eventos de conexão não foi definido");
+    if (this._registradorEventosConexao === null) {
+      throw new CommandBuilderException("registrador de eventos de conexão");
     }
 
-    if (this._registradorEventosElemento === undefined) {
-      throw new CommandBuilderException("O registrador de eventos de elemento não foi definido");
+    if (this._registradorEventosElemento === null) {
+      throw new CommandBuilderException("registrador de eventos de elemento");
     }
 
-    if (this._repositorioComponentes === undefined) {
-      throw new CommandBuilderException("O repositório de componentes não foi definido");
+    if (this._repositorioComponentes === null) {
+      throw new CommandBuilderException("repositório de componentes");
     }
 
-    if (this._tipoConexao === undefined) {
-      throw new CommandBuilderException("O tipo de conexão não foi definido");
+    if (this._tipoConexao === null) {
+      throw new CommandBuilderException("tipo de conexão");
     }
 
     return new ConectarAtributoCommand(

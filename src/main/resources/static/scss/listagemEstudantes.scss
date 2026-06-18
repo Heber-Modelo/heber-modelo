@@ -1,0 +1,119 @@
+@charset "UTF-8";
+
+/**
+ * Copyright (C) 2025 Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
+ *
+ * Licensed under the Massachusetts Institute of Technology (MIT) License.
+ * You may obtain a copy of the license at:
+ *
+ *     https://choosealicense.com/licenses/mit/
+ *
+ * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+ * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+ */
+
+@use "estiloComum";
+@use "estiloTracinho";
+@use "estiloFooter";
+@use "variaveis";
+
+
+.svg-cor-fundo {
+  color: var(--cor-botao);
+}
+
+header{
+  align-items: center;
+  display: grid;
+  grid-template-columns: 10% 60% 30%;
+  width: 100%;
+  height: fit-content;
+  background-color: var(--cor-cabecalho);
+  color: var(--cor-letra);
+  padding: variaveis.$paddingPadrao;
+  font-family: "Cookie", Roboto, Arial, serif;
+  font-size: variaveis.$fontsizeHeader;
+
+  button {
+    svg {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+}
+
+#home{
+  grid-column: 1;
+}
+
+#home svg {
+  height: 4rem;
+  width: 4rem;
+}
+
+#opcoes-botoes {
+  display: flex;
+  flex-direction: row;
+  column-gap: 1rem;
+  justify-content: right;
+
+  a {
+    color: var(--cor-letra);
+  }
+
+  button:hover .svg-cor-fundo {
+    color: var(--cor-botao-hover);
+  }
+}
+
+main {
+  align-self: center;
+  justify-self: center;
+  max-width: 60%;
+}
+
+h2 {
+  font-size: 4rem;
+  width: 100%;
+}
+
+hr {
+  border: 0.15rem solid var(--cor-borda);
+  width: 100%;
+}
+
+.user-data {
+  border-bottom: 0.1rem solid var(--cor-borda);
+  column-gap: 1rem;
+  display: flex;
+  flex-direction: row;
+  padding: 0.2rem;
+  justify-content: space-between;
+  width: 100%;
+
+  svg {
+    height: 2rem;
+    width: 2rem;
+  }
+
+  span{
+    font-size: 2rem;
+    width: 100%;
+  }
+
+  .svg-cor-primaria {
+    color: var(--cor-letra);
+  }
+
+  .svg-cor-secundaria {
+    color: var(--cor-fonte-alternativa);
+  }
+}
+
+div:has(button) {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+}

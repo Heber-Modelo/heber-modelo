@@ -40,12 +40,14 @@
           },
           "sufixo": {
             "type": "string"
+          },
+          "valoresPermitidos": {
+            "type": "array",
+            "items": { "type": "string" }
           }
         },
         "required": [
           "classeElemento",
-          "recebePontoExtensor",
-          "recebeSetaConectora",
           "label",
           "nomePropriedade",
           "sufixo"
@@ -56,6 +58,8 @@
   "required": [
     "classesElemento",
     "valorHtmlInterno",
+    "recebePontoExtensor",
+    "recebeSetaConectora",
     "propriedades"
   ]
 }

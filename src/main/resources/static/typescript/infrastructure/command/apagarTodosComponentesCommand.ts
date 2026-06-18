@@ -35,14 +35,24 @@ export default class ApagarTodosComponentesCommand implements ICommand {
       let idComponente: string | null = elemento.getAttribute(
         ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
       );
-      if (idComponente) {
-        let componente: ComponenteDiagrama = this._repositorioComponente.pegar(
-          Number(idComponente),
-        ) as ComponenteDiagrama;
-        this._repositorioComponente.remover(componente);
-        this._componentes.push(componente);
+
+      if (!idComponente) {
+        return;
       }
+
+      let componente: ComponenteDiagrama | null = this._repositorioComponente.pegar(
+        Number(idComponente),
+      );
+
+      if (!componente) {
+        return;
+      }
+
+      this._repositorioComponente.remover(componente);
+      this._componentes.push(componente);
     });
+
+    this._repositorioComponente.limparMemoria();
 
     return {
       ok: true,
@@ -77,19 +87,19 @@ export class ApagarTodosComponentesCommandBuilder implements ICommandBuilder<Apa
     return this;
   }
 
-  public definirRepositorioComponente(repositorio: IRepositorioComponente): this {
+  public definirRepositorioComponente(repositorio: IRepositorioComponente | null): this {
     this._repositorioComponente = repositorio;
 
     return this;
   }
 
-  build(): ApagarTodosComponentesCommand {
+  public build(): ApagarTodosComponentesCommand {
     if (this._diagrama === undefined || this._diagrama === null) {
-      throw new CommandBuilderException("O diagrama não foi definido");
+      throw new CommandBuilderException("diagrama");
     }
 
     if (this._repositorioComponente === null) {
-      throw new CommandBuilderException("O repositório de componentes não foi definido");
+      throw new CommandBuilderException("repositório de componentes");
     }
 
     return new ApagarTodosComponentesCommand(this._repositorioComponente, this._diagrama);

@@ -72,32 +72,34 @@ export class CortarComponenteCommandBuilder implements ICommandBuilder<CortarCom
   private _repositorio: RepositorioComponente | null = null;
   private _selecionadorComponente: SelecionadorComponente | null = null;
 
-  definirComponenteAlvo(componente: ComponenteDiagrama | null): this {
+  public definirComponenteAlvo(componente: ComponenteDiagrama | null): this {
     this._componente = componente;
     return this;
   }
 
-  definirRepositorioComponente(repositorio: RepositorioComponente): this {
+  public definirRepositorioComponente(repositorio: RepositorioComponente | null): this {
     this._repositorio = repositorio;
     return this;
   }
 
-  definirSelecionadorComponente(selecionadorComponente: SelecionadorComponente): this {
+  public definirSelecionadorComponente(
+    selecionadorComponente: SelecionadorComponente | null,
+  ): this {
     this._selecionadorComponente = selecionadorComponente;
     return this;
   }
 
-  build(): CortarComponenteCommand {
+  public build(): CortarComponenteCommand {
     if (this._componente === null) {
-      throw new CommandBuilderException("Componente alvo não foi especificado");
+      throw new CommandBuilderException("componente alvo");
     }
 
     if (this._repositorio === null) {
-      throw new CommandBuilderException("Repositório de componentes não foi especificado");
+      throw new CommandBuilderException("repositório de componentes");
     }
 
     if (this._selecionadorComponente === null) {
-      throw new CommandBuilderException("Selecionador componente não foi especificado");
+      throw new CommandBuilderException("selecionador componente");
     }
 
     return new CortarComponenteCommand(

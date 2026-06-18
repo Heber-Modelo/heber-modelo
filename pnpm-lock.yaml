@@ -1228,6 +1228,7 @@ packages:
 
   sass@1.101.0:
     resolution: {integrity: sha512-OL3GoQyoUdDt843DpVmDO6y2k1sc5IhUDSpu8XucEI+35neq5QivZ1iuegnpraEVTJXlQGK1gl27zKcTLEPbQw==}
+
     engines: {node: '>=20.19.0'}
     hasBin: true
 
@@ -2334,6 +2335,7 @@ snapshots:
     optionalDependencies:
       webpack: 5.107.2(webpack-cli@7.0.3)
 
+
   babel-plugin-module-resolver@5.0.3:
     dependencies:
       find-babel-config: 2.1.2
@@ -2879,6 +2881,7 @@ snapshots:
       webpack-sources: 3.5.0
     optionalDependencies:
       webpack-cli: 7.0.3(webpack@5.107.2)
+
     transitivePeerDependencies:
       - '@minify-html/node'
       - '@swc/core'
