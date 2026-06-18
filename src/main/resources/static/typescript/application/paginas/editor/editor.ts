@@ -143,8 +143,11 @@ function mouseUpPararMoverElemento(event: Event): void {
   componente.classList.remove("dragging");
   document.removeEventListener("mousemove", dragElement);
   document.body.style.removeProperty("user-select");
-  selecionadorComponente.mostrarPontosExtensores();
-  selecionadorComponente.reposicionarPontosExtensores();
+
+  if (selecionadorComponente.componenteSelecionado) {
+    selecionadorComponente.mostrarPontosExtensores();
+    selecionadorComponente.reposicionarPontosExtensores();
+  }
 }
 
 function dragElement(event: MouseEvent): void {
