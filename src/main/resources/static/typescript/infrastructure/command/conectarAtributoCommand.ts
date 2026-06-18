@@ -11,9 +11,6 @@
  *
  */
 
-import CarregarCSSCommand, {
-  CarregarCSSCommandBuilder,
-} from "infrastructure/command/carregarCSSCommand";
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
@@ -30,6 +27,7 @@ import TiposConexao from "model/conexao/tiposConexao";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import Ponto from "model/ponto";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
+import CriarComponenteCommand, { CriarComponenteCommandBuilder } from "infrastructure/command/criarComponenteCommand";
 
 export default class ConectarAtributoCommand implements ICommand {
   public static readonly NOME_ELEMENTO_ATRIBUTO: string = "atributo_der";
@@ -42,7 +40,7 @@ export default class ConectarAtributoCommand implements ICommand {
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponentes: IRepositorioComponente;
   private readonly _tipoConexao: TiposConexao;
-  private _commandCarregarCSSAtributo: CarregarCSSCommand | undefined;
+  private _commandCriarComponenteAtributo: CriarComponenteCommand | undefined;
   private _commandConectarComponentes: ConectarComponentesCommand | undefined;
   private _componenteAtributo: ComponenteDiagrama | null = null;
 
@@ -69,9 +67,15 @@ export default class ConectarAtributoCommand implements ICommand {
   }
 
   execute(): CommandResult {
-    this._commandCarregarCSSAtributo = new CarregarCSSCommandBuilder()
-      .definirNomeArquivo(ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO)
+    this._commandCriarComponenteAtributo = new CriarComponenteCommandBuilder()
+      .definirDiagrama(this._diagrama)
+      .definirFabricaComponente(this._fabricaComponente)
+      .definirGeradorIDComponente(this._geradorID)
+      .definirNomeElemento(ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO)
+      .definirRegistradorEventosElemento(this._registradorEventosElemento)
+      .definirRepositorioComponentes(this._repositorioComponentes)
       .build();
+    this._commandCriarComponenteAtributo.execute();
 
     setTimeout((): void => {
       let componentes: ComponenteDiagrama[] = this._repositorioComponentes.listar();
@@ -111,7 +115,6 @@ export default class ConectarAtributoCommand implements ICommand {
   }
 
   redo(): CommandResult {
-    this._commandCarregarCSSAtributo?.redo();
     this._commandConectarComponentes?.redo();
 
     if (this._componenteAtributo) {
@@ -126,7 +129,6 @@ export default class ConectarAtributoCommand implements ICommand {
 
   undo(): CommandResult {
     this._componenteAtributo?.htmlComponente.remove();
-    this._commandCarregarCSSAtributo?.undo();
     this._commandConectarComponentes?.undo();
 
     return {
@@ -137,6 +139,7 @@ export default class ConectarAtributoCommand implements ICommand {
 }
 
 export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarAtributoCommand> {
+  private static readonly _elementosPermitidos: string[] = ["atributo_der", "agregacao", "entidade", "relacionamento"]
   private _componenteAlvo: ComponenteDiagrama | null = null;
   private _diagrama: HTMLElement | undefined | null;
   private _fabricaComponente: ComponenteFactory | null = null;
@@ -146,6 +149,10 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
   private _registradorEventosElemento: RegistradorEventosElemento | null = null;
   private _repositorioComponentes: IRepositorioComponente | null = null;
   private _tipoConexao: TiposConexao | null = null;
+
+  public static verificarElementoPermitido(elemento: string): boolean {
+    return this._elementosPermitidos.includes(elemento)
+  }
 
   public definirComponenteAlvo(componenteAlvo: ComponenteDiagrama | null): this {
     this._componenteAlvo = componenteAlvo;

@@ -413,39 +413,96 @@ selecionadorComponente.setasConectoras.forEach((setaConectora: SetaConectora): v
 /*********************/
 
 let divComponentes: HTMLDivElement | null = document.querySelector("#painel-esquerdo");
-divComponentes?.addEventListener("click", (event: MouseEvent): void => {
-  let target: HTMLElement = event.target as HTMLElement;
+let placeholderAtributo: HTMLElement = document.createElement("div");
+placeholderAtributo.innerText = "X";
+placeholderAtributo.id = "atributo-placeholder";
+placeholderAtributo.style.display = "none";
+placeholderAtributo.style.position = "absolute";
 
-  if (
-    target.getAttribute(ATRIBUTO_NOME_ELEMENTO) !==
-      ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO ||
-    !selecionadorComponente.componenteSelecionado
-  ) {
+function trocarCallbackBtnAtributo(): void {
+  let btnAtributo: HTMLButtonElement | null | undefined = divComponentes?.querySelector("button[data-nome-elemento='atributo_der']");
+
+  if (btnAtributo) {
+    btnAtributo.removeEventListener("click", callbackCriarComponente);
+    btnAtributo.addEventListener("mousedown", callbackIniciarConexaoAtributo);
+    diagrama?.append(placeholderAtributo);
+  } else {
+    placeholderAtributo.remove();
+  }
+}
+
+function callbackIniciarConexaoAtributo(): void {
+  document.addEventListener("mousemove", callbackMoverConectorAtributo);
+  diagrama?.addEventListener("click", callbackTerminarConexaoAtributo);
+  placeholderAtributo.style.removeProperty("display");
+}
+
+function callbackMoverConectorAtributo(event: MouseEvent): void {
+  let x: number = event.clientX;
+  let y: number = event.clientY;
+
+  window.scrollTo(x, y);
+
+  placeholderAtributo.style.left = `${x}px`;
+  placeholderAtributo.style.top = `${y}px`;
+}
+
+function callbackTerminarConexaoAtributo(event: MouseEvent): void {
+  document.removeEventListener("mousemove", callbackMoverConectorAtributo)
+  diagrama?.removeEventListener("click", callbackTerminarConexaoAtributo)
+  placeholderAtributo.style.display = "none";
+
+  let elementoAlvo: HTMLElement = event.target as HTMLElement;
+  let nomeElemento: string | null = elementoAlvo.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE)
+
+  if (!nomeElemento) {
+    let command: CriarComponenteCommand = new CriarComponenteCommandBuilder()
+      .definirDiagrama(diagrama)
+      .definirFabricaComponente(fabricaComponente)
+      .definirGeradorIDComponente(geradorIDComponente)
+      .definirNomeElemento(ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO)
+      .definirRegistradorEventosElemento(registradorEventosElemento)
+      .definirRepositorioComponentes(repositorioComponentes)
+      .build();
+
+    commandHistory.saveAndExecuteCommand(command);
+
+    setTimeout((): void => {
+      let componentes: ComponenteDiagrama[] = repositorioComponentes.listar()
+      let componenteAtributo: ComponenteDiagrama | undefined = componentes.at(componentes.length - 1);
+      componenteAtributo?.htmlComponente.style.setProperty("left", placeholderAtributo.style.left);
+      componenteAtributo?.htmlComponente.style.setProperty("top", placeholderAtributo.style.top);
+    }, 20)
+
     return;
   }
 
-  let nomeComponenteSelecionado: string | null =
-    selecionadorComponente.componenteSelecionado.htmlComponente.getAttribute(
-      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-    );
-  let nomesComponentesValidos: string[] = ["atributo_der", "entidade", "relacionamento"];
-
-  if (nomeComponenteSelecionado && nomesComponentesValidos.includes(nomeComponenteSelecionado)) {
-    let commandConectarAtributo: ConectarAtributoCommand = new ConectarAtributoCommandBuilder()
-      .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
-      .definirDiagrama(diagrama)
-      .definirFabricaComponente(fabricaComponente)
-      .definirFabricaConexao(fabricaConexao)
-      .definirGeradorID(geradorIDComponente)
-      .definirRepositorioComponentes(repositorioComponentes)
-      .definirRegistradorEventosConexao(registradorEventosConexao)
-      .definirRegistradorEventosElemento(registradorEventosElemento)
-      .definirTipoConexao(seletorTipoConexao.tipoConexaoAtual)
-      .build();
-
-    commandHistory.saveAndExecuteCommand(commandConectarAtributo);
+  if (!ConectarAtributoCommandBuilder.verificarElementoPermitido(nomeElemento)) {
+    return;
   }
-});
+
+  let componenteAlvo: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(elementoAlvo);
+
+  let command: ConectarAtributoCommand = new ConectarAtributoCommandBuilder()
+    .definirComponenteAlvo(componenteAlvo)
+    .definirDiagrama(diagrama)
+    .definirFabricaComponente(fabricaComponente)
+    .definirFabricaConexao(fabricaConexao)
+    .definirGeradorID(geradorIDComponente)
+    .definirRegistradorEventosConexao(registradorEventosConexao)
+    .definirRegistradorEventosElemento(registradorEventosElemento)
+    .definirRepositorioComponentes(repositorioComponentes)
+    .definirTipoConexao(TiposConexao.CONEXAO_ANGULADA)
+    .build();
+
+  commandHistory.saveAndExecuteCommand(command);
+}
+
+const conectarAtributoObserver = new MutationObserver(trocarCallbackBtnAtributo);
+
+if (divComponentes) {
+  conectarAtributoObserver.observe(divComponentes, { childList: true, subtree: true })
+}
 
 /***********/
 /* TOOLBAR */
