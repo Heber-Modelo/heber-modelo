@@ -28,6 +28,7 @@ export default class RepositorioTiposDiagrama implements IRepositorioTiposDiagra
     if (this._tiposDiagramaElemento) {
       this._tiposDiagramaElemento.innerHTML = `[${this._tipos.join(", ")}]`;
     }
+
   }
 
   listar(): string[] {
@@ -41,4 +42,5 @@ export default class RepositorioTiposDiagrama implements IRepositorioTiposDiagra
       this._tiposDiagramaElemento.innerHTML = `[${this._tipos.join(", ")}]`;
     }
   }
+
 }

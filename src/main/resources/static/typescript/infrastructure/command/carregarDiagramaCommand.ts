@@ -98,7 +98,7 @@ export default class CarregarDiagramaCommand implements ICommand {
       },
     );
 
-    this._repositorioTiposDiagrama.adicionar(this._nomeDiagrama);
+    this._repositorioTiposDiagrama.adicionar(this._nomeDiagrama)
 
     return {
       ok: true,
@@ -151,6 +151,7 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
 
     return this;
   }
+
 
   public definirSectionComponentes(sectionComponentes: HTMLElement | null): this {
     this._sectionComponentes = sectionComponentes;

@@ -23,4 +23,5 @@ export default class RepositorioTiposDiagramaFactory {
 
     return this._instance;
   }
+
 }

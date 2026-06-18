@@ -114,7 +114,8 @@ export default class ConectarAtributoCommand implements ICommand {
         .build();
 
       this._commandConectarComponentes.execute();
-    }, 200);
+    }, 200)
+
 
     return {
       ok: true,
