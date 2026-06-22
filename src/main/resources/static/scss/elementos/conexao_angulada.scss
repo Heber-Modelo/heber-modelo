@@ -1,5 +1,8 @@
 .elemento-conexao-angulada {
   background: var(--cor-borda);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   height: 0.1rem;
   border: 0;
   transform-origin: 0 0;
@@ -7,5 +10,16 @@
   &:hover,
   &.selected {
     background: var(--cor-borda-componente-selecionado);
+
+    .ponto {
+      aspect-ratio: 1 / 1;
+      background: var(--cor-borda-componente-selecionado);
+      border-radius: 10rem;
+      width: 0.7rem;
+    }
+  }
+
+  .ponto div {
+    display: none;
   }
 }

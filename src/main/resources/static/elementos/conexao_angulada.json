@@ -1,8 +1,23 @@
 {
   "$schema": ".elemento.schema.json",
-  "valorHtmlInterno": "",
+  "valorHtmlInterno": "<div class=\"ponto ponto-norte\"><div class=\"ponto-norte-valor\"></div></div><div class=\"ponto ponto-sul\"><div class=\"ponto-sul-valor\"></div></div>",
   "classesElemento": ["elemento-conexao-angulada"],
   "recebePontoExtensor": false,
   "recebeSetaConectora": false,
-  "propriedades": []
+  "propriedades": [
+    {
+      "classeElemento": "ponto-norte-valor",
+      "label": "Posição Ponto Norte",
+      "nomePropriedade": "posicao-ponto-norte",
+      "sufixo": "",
+      "valoresPermitidos": ["NORTE", "SUL", "LESTE", "OESTE"]
+    },
+    {
+      "classeElemento": "ponto-sul-valor",
+      "label": "Posição Ponto Sul",
+      "nomePropriedade": "posicao-ponto-sul",
+      "sufixo": "",
+      "valoresPermitidos": ["NORTE", "SUL", "LESTE", "OESTE"]
+    }
+  ]
 }

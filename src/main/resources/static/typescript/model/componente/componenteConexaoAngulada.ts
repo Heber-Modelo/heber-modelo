@@ -12,9 +12,49 @@
  */
 
 import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import LateraisComponente from "model/componente/lateraisComponente";
+import Ponto from "model/ponto";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 import calcularAnguloDoisPontos from "model/services/calcularAnguloDoisPontos";
 
 export default class ComponenteConexaoAngulada extends AbstractComponenteConexao {
+  constructor(
+    htmlComponente: HTMLDivElement,
+    propriedades: PropriedadeComponente[],
+    ponto1: Ponto,
+    ponto2: Ponto,
+    lateralPrimeiroPonto: LateraisComponente,
+    lateralSegundoPonto: LateraisComponente,
+    primeiroComponente: ComponenteDiagrama,
+    segundoComponente: ComponenteDiagrama,
+  ) {
+    super(
+      htmlComponente,
+      propriedades,
+      ponto1,
+      ponto2,
+      lateralPrimeiroPonto,
+      lateralSegundoPonto,
+      primeiroComponente,
+      segundoComponente,
+    );
+
+    let elementoPontoNorteValor: HTMLDivElement | null =
+      this.htmlComponente.querySelector(".ponto-norte-valor");
+
+    if (elementoPontoNorteValor) {
+      elementoPontoNorteValor.innerText = LateraisComponente[lateralPrimeiroPonto];
+    }
+
+    let elementoPontoSulValor: HTMLDivElement | null =
+      this._htmlComponente.querySelector(".ponto-sul-valor");
+
+    if (elementoPontoSulValor) {
+      elementoPontoSulValor.innerText = LateraisComponente[lateralSegundoPonto];
+    }
+  }
+
   protected ajustarConexao(): void {
     let angulo: number = calcularAnguloDoisPontos(this._ponto1, this._ponto2);
     let distancia: number = this.calcularDistanciaConexao();
