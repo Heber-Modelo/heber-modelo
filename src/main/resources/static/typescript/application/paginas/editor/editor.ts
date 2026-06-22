@@ -597,9 +597,19 @@ buttonCortar?.addEventListener("click", (): void => {
 let buttonNovaAba: HTMLDivElement | null = document.querySelector("#nova-aba");
 let seletorAbas: HTMLElement | null = document.querySelector("footer div");
 
+function fecharAba(event: MouseEvent): void {
+  let elementoAlvo: HTMLElement = event.target as HTMLElement;
+  elementoAlvo.parentElement?.remove();
+}
+
 buttonNovaAba?.addEventListener("click", (): void => {
   let novaAba: HTMLDivElement = document.createElement("div");
+  let p: HTMLParagraphElement = document.createElement("p");
   novaAba.classList.add("aba");
+  p.innerText = "x";
+  p.addEventListener("click", fecharAba);
+
+  novaAba.append(p);
   seletorAbas?.append(novaAba);
 });
 

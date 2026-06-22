@@ -21,7 +21,7 @@ $estiloBordaPainel: var(--cor-borda) solid 0.1rem;
 body {
   display: grid;
   grid-template-columns: 20% 60% 20%;
-  grid-template-rows: 5rem 5rem calc(100% - 14rem) 4em;
+  grid-template-rows: 5rem 5rem calc(100% - 14.5rem) 4.5em;
   max-width: 100vw;
   overflow: hidden;
   &:has(#painel-direito.hidden) {
@@ -563,17 +563,25 @@ footer {
 
   .aba {
     background-color: var(--cor-painel-lateral);
-    min-height: 3rem;
-    min-width: 9rem;
+    min-height: 3.5rem;
+    min-width: 10rem;
     border: solid 0.15rem var(--cor-borda);
     border-radius: 0 1rem 0 0;
 
     p {
-      margin-left: 0.3rem;
+      margin: 0.2rem;
+      border-radius: 20rem;
+      height: 1.6rem;
+      width:  1.6rem;
+      cursor: pointer;
       align-self: flex-start;
       justify-self: flex-start;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       color: var(--cor-fonte-alternativa);
+    }
+
+    p:hover {
+      background-color: var(--cor-fundo-input);
     }
   }
 
@@ -581,8 +589,8 @@ footer {
     display: flex;
     position: relative;
     right: 0;
-    min-height: 3rem;
-    min-width: 3rem;
+    min-height: 3.5rem;
+    min-width: 3.5rem;
     border-radius: 0;
     align-items: center;
     justify-content: center;
