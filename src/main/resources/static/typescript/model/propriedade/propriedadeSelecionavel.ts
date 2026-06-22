@@ -30,21 +30,21 @@ export default class PropriedadeSelecionavel extends PropriedadeComponente {
   }
 
   definirValorPropriedade(valor: string): void {
-    let textoCardinalidade: HTMLElement | null = this._componente.htmlComponente.querySelector(
+    let texto: HTMLElement | null = this._componente.htmlComponente.querySelector(
       this._classeElemento,
     );
 
-    if (textoCardinalidade) {
-      textoCardinalidade.innerText = valor;
+    if (texto) {
+      texto.innerText = valor;
     }
   }
 
   protected pegarValorPropriedade(): string {
-    let textoCardinalidade: HTMLElement | null = this._componente.htmlComponente.querySelector(
+    let texto: HTMLElement | null = this._componente.htmlComponente.querySelector(
       this._classeElemento,
     );
 
-    return textoCardinalidade?.innerText ?? "";
+    return texto?.innerText ?? "";
   }
 
   criarElementoInputPropriedade(): HTMLLabelElement {
