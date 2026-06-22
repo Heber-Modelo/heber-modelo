@@ -21,7 +21,7 @@ $estiloBordaPainel: var(--cor-borda) solid 0.1rem;
 body {
   display: grid;
   grid-template-columns: 20% 60% 20%;
-  grid-template-rows: 5rem 5rem calc(100% - 10rem);
+  grid-template-rows: 5rem 5rem calc(100% - 14rem) 4em;
   max-width: 100vw;
   overflow: hidden;
   &:has(#painel-direito.hidden) {
@@ -539,5 +539,55 @@ fieldset#conexoes-basicas {
     width: fit-content;
     height: fit-content;
     font-size: 10pt;
+  }
+}
+
+footer {
+  background-color: unset;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  grid-row: 4;
+  grid-column: 2;
+  z-index: 16;
+  column-gap: 0.2rem;
+
+  div:has(.aba) {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    width: calc(90% - 2rem);
+    overflow-x: scroll;
+    scrollbar-width: thin;
+  }
+
+  .aba {
+    background-color: var(--cor-painel-lateral);
+    min-height: 3rem;
+    min-width: 9rem;
+    border: solid 0.15rem var(--cor-borda);
+    border-radius: 0 1rem 0 0;
+
+    p {
+      margin-left: 0.3rem;
+      align-self: flex-start;
+      justify-self: flex-start;
+      font-size: 1.2rem;
+      color: var(--cor-fonte-alternativa);
+    }
+  }
+
+  #nova-aba {
+    display: flex;
+    position: relative;
+    right: 0;
+    min-height: 3rem;
+    min-width: 3rem;
+    border-radius: 0;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-left: 2rem;
+    color: var(--cor-fonte-alternativa);
   }
 }

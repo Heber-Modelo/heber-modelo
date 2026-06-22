@@ -108,6 +108,10 @@
     {
       "nomeVariavel": "cor_fundo_area_de_edicao",
       "valorPadraoVariavel": "#E8E8E8"
+    },
+    {
+      "nomeVariavel": "cor_fundo_aba",
+      "valorPadraoVariavel": "#BFBFBF"
     }
   ]
 }

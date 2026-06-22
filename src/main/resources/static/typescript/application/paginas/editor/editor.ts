@@ -590,6 +590,19 @@ buttonCortar?.addEventListener("click", (): void => {
   commandHistory.saveAndExecuteCommand(command);
 });
 
+/*****************/
+/* TROCA DE ABAS */
+/*****************/
+
+let buttonNovaAba: HTMLDivElement | null = document.querySelector("#nova-aba");
+let seletorAbas: HTMLElement | null = document.querySelector("footer div");
+
+buttonNovaAba?.addEventListener("click", (): void => {
+  let novaAba: HTMLDivElement = document.createElement("div");
+  novaAba.classList.add("aba");
+  seletorAbas?.append(novaAba);
+});
+
 /***********************/
 /* BINDINGS DO USUÁRIO */
 /***********************/
