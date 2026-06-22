@@ -230,12 +230,7 @@ main {
 }
 
 aside#painel-esquerdo {
-    display: flex;
-  flex-direction: column;
-}
-
-aside#painel-esquerdo {
-    display: flex;
+  display: flex;
   flex-direction: column;
 }
 
@@ -381,10 +376,6 @@ section#diagramas > section {
   label {
     justify-self: center;
   }
-}
-
-section#propriedades{
-  height: 25%;
 }
 
 section#seletor-tipos-conexao {

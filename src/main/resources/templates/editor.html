@@ -103,6 +103,9 @@
     <aside id="painel-direito">
       <button type="button" class="btn-painel-direito btn-esconder">&gt;</button>
       <button type="button" class="btn-painel-direito btn-mostrar">&lt;</button>
+      <section id="seletor-tipos-conexao" class="pagina">
+        <h2 th:text="#{web.page.editor.section.type-selector}"></h2>
+      </section>
       <section id="propriedades" class="pagina">
         <h2 th:text="#{web.page.editor.section.properties}"></h2>
         <label>
@@ -125,9 +128,6 @@
           <th:block th:text="#{web.page.editor.section.properties.fontsize}"></th:block>
           <input type="text" name="componente-tamanho-fonte" />
         </label>
-      </section>
-      <section id="seletor-tipos-conexao" class="pagina">
-        <h2 th:text="#{web.page.editor.section.type-selector}"></h2>
       </section>
     </aside>
     <main>
