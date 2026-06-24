@@ -41,22 +41,8 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
     return this._propriedades;
   }
 
-  public definirValorPropriedade(nomePropriedade: string, valorPropriedade: string): void {
-    this._propriedades.forEach((propriedade: PropriedadeComponente): void => {
-      if (propriedade.nome === nomePropriedade) {
-        propriedade.definirValorPropriedade(valorPropriedade);
-        this.atualizarOuvintes();
-        return;
-      }
-    });
-
-    if (this._htmlComponente.hasAttribute(nomePropriedade)) {
-      this._htmlComponente.setAttribute(nomePropriedade, String(valorPropriedade));
-      this.atualizarOuvintes();
-      return;
-    }
-
-    throw `Propriedade ${nomePropriedade} não existe no elemento: ${this._htmlComponente}`;
+  get ouvintes(): ComponenteDiagramaOuvinte[] {
+    return this._ouvintes;
   }
 
   public pegarEstiloElemento(): CSSStyleDeclaration {
