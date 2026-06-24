@@ -11,8 +11,8 @@
  *
  */
 
-import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 
 export default class PropriedadeSelecionavel extends PropriedadeComponente {
   private readonly _valoresPermitidos: string[];
@@ -66,6 +66,12 @@ export default class PropriedadeSelecionavel extends PropriedadeComponente {
       if (selectedOption) {
         this.definirValorPropriedade(selectedOption.innerText);
       }
+    });
+
+    selectElement.addEventListener("change", (): void => {
+      let targetElement: HTMLElement | null | undefined =
+        this._componente.htmlComponente.querySelector(this._classeElemento);
+      targetElement?.dispatchEvent(new Event(PropriedadeSelecionavel.PROPERTY_CHANGE_EVENT));
     });
 
     let labelElement: HTMLLabelElement = document.createElement("label");
