@@ -78,6 +78,8 @@ import TiposConexao from "model/conexao/tiposConexao";
 import DirecoesMovimento from "model/direcoesMovimento";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 import SetaConectora from "model/setaConectora";
+import Ponto from "model/ponto";
+import calcularLateralComponente from "model/services/calcularLateralComponente";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -291,11 +293,6 @@ function conectarElementos(event: MouseEvent): void {
   event.stopPropagation();
   event.stopImmediatePropagation();
 
-  const HEIGHT_MINIMAL_THRESHOLD: number = 0.4;
-  const HEIGHT_MAXIMAL_THRESHOLD: number = 0.6;
-  const WIDTH_MINIMAL_THRESHOLD: number = 0.2;
-  const WIDTH_MAXIMAL_THRESHOLD: number = 0.8;
-
   let elementoAlvo: HTMLElement = event.target as HTMLElement;
   let elementoAlvoBoundingRectangle: DOMRect = elementoAlvo.getBoundingClientRect();
   let componenteAlvo: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(elementoAlvo);
@@ -304,55 +301,16 @@ function conectarElementos(event: MouseEvent): void {
     return;
   }
 
-  let alturaElemento: number = elementoAlvoBoundingRectangle.height;
-  let larguraElemento: number = elementoAlvoBoundingRectangle.width;
   let topElemento: number = elementoAlvoBoundingRectangle.top;
   let leftElemento: number = elementoAlvoBoundingRectangle.left;
 
   let positionX: number = event.pageX - leftElemento;
   let positionY: number = event.pageY - topElemento;
 
-  let esquerda: boolean = false;
-  let direita: boolean = false;
-  let centroX: boolean = false;
-
-  if (
-    positionX > larguraElemento * WIDTH_MINIMAL_THRESHOLD &&
-    positionX < larguraElemento * WIDTH_MAXIMAL_THRESHOLD
-  ) {
-    centroX = true;
-  } else if (positionX <= larguraElemento * WIDTH_MINIMAL_THRESHOLD) {
-    esquerda = true;
-  } else {
-    direita = true;
-  }
-
-  let cima: boolean = false;
-  let baixo: boolean = false;
-  let centroY: boolean = false;
-
-  if (
-    positionY > alturaElemento * HEIGHT_MINIMAL_THRESHOLD &&
-    positionY < alturaElemento * HEIGHT_MAXIMAL_THRESHOLD
-  ) {
-    centroY = true;
-  } else if (positionY <= alturaElemento * HEIGHT_MINIMAL_THRESHOLD) {
-    cima = true;
-  } else {
-    baixo = true;
-  }
-
-  let lateralSegundoComponente: LateraisComponente;
-
-  if ((centroY || baixo || cima) && esquerda) {
-    lateralSegundoComponente = LateraisComponente.OESTE;
-  } else if ((centroY || baixo || cima) && direita) {
-    lateralSegundoComponente = LateraisComponente.LESTE;
-  } else if ((centroX && centroY) || cima) {
-    lateralSegundoComponente = LateraisComponente.NORTE;
-  } else {
-    lateralSegundoComponente = LateraisComponente.SUL;
-  }
+  let lateralSegundoComponente: LateraisComponente = calcularLateralComponente(
+    elementoAlvo,
+    new Ponto(positionX, positionY),
+  );
 
   conectarComponentesCommandBuilder
     .definirSegundoComponente(componenteAlvo)
@@ -492,12 +450,17 @@ function callbackTerminarConexaoAtributo(event: MouseEvent): void {
 
   let componenteAlvo: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(elementoAlvo);
 
+  let elementoDOMRect: DOMRect = elementoAlvo.getBoundingClientRect();
+  let positionX: number = event.pageX - elementoDOMRect.left;
+  let positionY: number = event.pageY - elementoDOMRect.top;
+
   let command: ConectarAtributoCommand = new ConectarAtributoCommandBuilder()
     .definirComponenteAlvo(componenteAlvo)
     .definirDiagrama(diagrama)
     .definirFabricaComponente(fabricaComponente)
     .definirFabricaConexao(fabricaConexao)
     .definirGeradorID(geradorIDComponente)
+    .definirPontoAlvo(new Ponto(positionX, positionY))
     .definirRegistradorEventosConexao(registradorEventosConexao)
     .definirRegistradorEventosElemento(registradorEventosElemento)
     .definirRepositorioComponentes(repositorioComponentes)
