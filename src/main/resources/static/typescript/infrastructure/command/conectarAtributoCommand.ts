@@ -22,6 +22,7 @@ import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import calcularPosicaoAtributo from "infrastructure/services/calcularPosicaoAtributo";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
@@ -30,6 +31,7 @@ import TiposConexao from "model/conexao/tiposConexao";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import Ponto from "model/ponto";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
+import calcularLateralComponente from "model/services/calcularLateralComponente";
 
 export default class ConectarAtributoCommand implements ICommand {
   public static readonly NOME_ELEMENTO_ATRIBUTO: string = "atributo_der";
@@ -38,6 +40,7 @@ export default class ConectarAtributoCommand implements ICommand {
   private readonly _fabricaConexao: ComponenteConexaoFactory;
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _geradorID: GeradorIDComponente;
+  private readonly _pontoAlvo: Ponto;
   private readonly _registradorEventosConexao: RegistradorEventosConexao;
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponentes: IRepositorioComponente;
@@ -52,6 +55,7 @@ export default class ConectarAtributoCommand implements ICommand {
     fabricaConexao: ComponenteConexaoFactory,
     fabricaComponente: ComponenteFactory,
     geradorID: GeradorIDComponente,
+    pontoAlvo: Ponto,
     registradorEventosConexao: RegistradorEventosConexao,
     registradorEventosElemento: RegistradorEventosElemento,
     repositorioComponentes: IRepositorioComponente,
@@ -62,6 +66,7 @@ export default class ConectarAtributoCommand implements ICommand {
     this._fabricaConexao = fabricaConexao;
     this._fabricaComponente = fabricaComponente;
     this._geradorID = geradorID;
+    this._pontoAlvo = pontoAlvo;
     this._registradorEventosConexao = registradorEventosConexao;
     this._registradorEventosElemento = registradorEventosElemento;
     this._repositorioComponentes = repositorioComponentes;
@@ -83,20 +88,24 @@ export default class ConectarAtributoCommand implements ICommand {
       let componentes: ComponenteDiagrama[] = this._repositorioComponentes.listar();
       this._componenteAtributo = componentes.at(componentes.length - 1) || null;
 
-      let posicaoAtributo: Ponto = this._componenteAlvo.calcularPontoLateralComponente(
-        LateraisComponente.LESTE,
+      let lateralComponente: LateraisComponente = calcularLateralComponente(
+        this._componenteAlvo.htmlComponente,
+        this._pontoAlvo,
+      );
+      let posicaoAtributo: Ponto = calcularPosicaoAtributo(
+        this._componenteAlvo,
+        this._componenteAtributo,
+        lateralComponente,
       );
 
-      let alturaComponenteAtributo: number =
-        this._componenteAtributo?.htmlComponente.getBoundingClientRect().height || 0;
-      this._componenteAtributo?.htmlComponente.style.setProperty(
-        "top",
-        `${posicaoAtributo.y - alturaComponenteAtributo / 2}px`,
-      );
-      this._componenteAtributo?.htmlComponente.style.setProperty(
-        "left",
-        `${posicaoAtributo.x + 50}px`,
-      );
+      this._componenteAtributo?.htmlComponente.style.setProperty("top", `${posicaoAtributo.y}px`);
+      this._componenteAtributo?.htmlComponente.style.setProperty("left", `${posicaoAtributo.x}px`);
+
+      let lateralAtributo: LateraisComponente = LateraisComponente.OESTE;
+
+      if (lateralComponente === LateraisComponente.OESTE) {
+        lateralAtributo = LateraisComponente.LESTE;
+      }
 
       this._commandConectarComponentes = new ConectarComponentesCommandBuilder()
         .definirDiagrama(this._diagrama)
@@ -104,9 +113,9 @@ export default class ConectarAtributoCommand implements ICommand {
         .definirFabricaComponente(this._fabricaComponente)
         .definirGeradorID(this._geradorID)
         .definirPrimeiroComponente(this._componenteAlvo)
-        .definirLateralPrimeiroComponente(LateraisComponente.LESTE)
+        .definirLateralPrimeiroComponente(lateralComponente)
         .definirSegundoComponente(this._componenteAtributo)
-        .definirLateralSegundoComponente(LateraisComponente.OESTE)
+        .definirLateralSegundoComponente(lateralAtributo)
         .definirRegistradorEventosConexao(this._registradorEventosConexao)
         .definirRegistradorEventosElemento(this._registradorEventosElemento)
         .definirRepositorioComponentes(this._repositorioComponentes)
@@ -114,8 +123,7 @@ export default class ConectarAtributoCommand implements ICommand {
         .build();
 
       this._commandConectarComponentes.execute();
-    }, 200)
-
+    }, 200);
 
     return {
       ok: true,
@@ -159,6 +167,7 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
   private _fabricaComponente: ComponenteFactory | null = null;
   private _fabricaConexao: ComponenteConexaoFactory | null = null;
   private _geradorID: GeradorIDComponente | null = null;
+  private _pontoAlvo: Ponto | null = null;
   private _registradorEventosConexao: RegistradorEventosConexao | null = null;
   private _registradorEventosElemento: RegistradorEventosElemento | null = null;
   private _repositorioComponentes: IRepositorioComponente | null = null;
@@ -194,6 +203,12 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
 
   public definirGeradorID(geradorID: GeradorIDComponente | null): this {
     this._geradorID = geradorID;
+
+    return this;
+  }
+
+  public definirPontoAlvo(pontoAlvo: Ponto | null): this {
+    this._pontoAlvo = pontoAlvo;
 
     return this;
   }
@@ -249,6 +264,10 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
       throw new CommandBuilderException("gerador de ID");
     }
 
+    if (this._pontoAlvo === null) {
+      throw new CommandBuilderException("ponto alvo");
+    }
+
     if (this._registradorEventosConexao === null) {
       throw new CommandBuilderException("registrador de eventos de conexão");
     }
@@ -271,6 +290,7 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
       this._fabricaConexao,
       this._fabricaComponente,
       this._geradorID,
+      this._pontoAlvo,
       this._registradorEventosConexao,
       this._registradorEventosElemento,
       this._repositorioComponentes,
