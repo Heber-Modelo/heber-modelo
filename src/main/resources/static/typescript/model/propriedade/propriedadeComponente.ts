@@ -14,6 +14,8 @@
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 
 export default class PropriedadeComponente {
+  public static readonly PROPERTY_CHANGE_EVENT: string = "propertyChange";
+
   constructor(
     nome: string,
     componente: ComponenteDiagrama,

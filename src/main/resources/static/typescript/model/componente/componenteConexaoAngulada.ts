@@ -45,6 +45,16 @@ export default class ComponenteConexaoAngulada extends AbstractComponenteConexao
 
     if (elementoPontoNorteValor) {
       elementoPontoNorteValor.innerText = LateraisComponente[lateralPrimeiroPonto];
+      elementoPontoNorteValor.addEventListener(
+        PropriedadeComponente.PROPERTY_CHANGE_EVENT,
+        (): void => {
+          this._lateralPrimeiroPonto =
+            LateraisComponente[
+              elementoPontoNorteValor.innerText as keyof typeof LateraisComponente
+            ];
+          this.atualizar(this._primeiroComponente.htmlComponente);
+        },
+      );
     }
 
     let elementoPontoSulValor: HTMLDivElement | null =
@@ -52,6 +62,14 @@ export default class ComponenteConexaoAngulada extends AbstractComponenteConexao
 
     if (elementoPontoSulValor) {
       elementoPontoSulValor.innerText = LateraisComponente[lateralSegundoPonto];
+      elementoPontoSulValor.addEventListener(
+        PropriedadeComponente.PROPERTY_CHANGE_EVENT,
+        (): void => {
+          this._lateralSegundoPonto =
+            LateraisComponente[elementoPontoSulValor.innerText as keyof typeof LateraisComponente];
+          this.atualizar(this._segundoComponente.htmlComponente);
+        },
+      );
     }
   }
 
