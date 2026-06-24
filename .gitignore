@@ -68,3 +68,4 @@ site
 
 .env
 src/main/resources/**/*.svg
+!src/main/resources/static/elementos/simbolos
