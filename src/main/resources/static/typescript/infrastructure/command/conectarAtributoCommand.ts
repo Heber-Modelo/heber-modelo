@@ -23,6 +23,7 @@ import RegistradorEventosConexao from "infrastructure/registrador/registradorEve
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import calcularPosicaoAtributo from "infrastructure/services/calcularPosicaoAtributo";
+import colectarPosicoesAtributos from "infrastructure/services/colectarPosicoesAtributos";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
@@ -31,6 +32,7 @@ import TiposConexao from "model/conexao/tiposConexao";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import Ponto from "model/ponto";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
+import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 import calcularLateralComponente from "model/services/calcularLateralComponente";
 
 export default class ConectarAtributoCommand implements ICommand {
@@ -73,6 +75,38 @@ export default class ConectarAtributoCommand implements ICommand {
     this._tipoConexao = tipoConexao;
   }
 
+  private ajustarPosicaoAtributo(lateralComponente: LateraisComponente): void {
+    if (!this._componenteAtributo) {
+      return;
+    }
+
+    let posicoesOcupadas: Ponto[] = colectarPosicoesAtributos(
+      this._repositorioComponentes.listar(),
+    );
+    // A última posição da lista é do atributo atual
+    posicoesOcupadas.pop();
+
+    let realX: number = converterPixeisParaNumero(
+      this._componenteAtributo.htmlComponente.style.getPropertyValue("left"),
+    );
+    let realY: number = converterPixeisParaNumero(
+      this._componenteAtributo.htmlComponente.style.getPropertyValue("top"),
+    );
+
+    for (const ponto of posicoesOcupadas) {
+      while (ponto.x === realX && ponto.y === realY) {
+        if (lateralComponente === LateraisComponente.NORTE) {
+          realY -= 25;
+        } else {
+          realY += 25;
+        }
+
+        this._componenteAtributo.htmlComponente.style.setProperty("left", `${realX}px`);
+        this._componenteAtributo.htmlComponente.style.setProperty("top", `${realY}px`);
+      }
+    }
+  }
+
   execute(): CommandResult {
     this._commandCriarComponenteAtributo = new CriarComponenteCommandBuilder()
       .definirDiagrama(this._diagrama)
@@ -100,6 +134,8 @@ export default class ConectarAtributoCommand implements ICommand {
 
       this._componenteAtributo?.htmlComponente.style.setProperty("top", `${posicaoAtributo.y}px`);
       this._componenteAtributo?.htmlComponente.style.setProperty("left", `${posicaoAtributo.x}px`);
+
+      this.ajustarPosicaoAtributo(lateralComponente);
 
       let lateralAtributo: LateraisComponente = LateraisComponente.OESTE;
 

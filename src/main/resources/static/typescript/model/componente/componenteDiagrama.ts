@@ -41,10 +41,6 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
     return this._propriedades;
   }
 
-  get ouvintes(): ComponenteDiagramaOuvinte[] {
-    return this._ouvintes;
-  }
-
   public pegarEstiloElemento(): CSSStyleDeclaration {
     return getComputedStyle(this._htmlComponente);
   }

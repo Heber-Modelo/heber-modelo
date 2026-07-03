@@ -20,7 +20,7 @@ export default function calcularPosicaoAtributo(
   componenteAtributo: ComponenteDiagrama | null,
   lateralComponente: LateraisComponente,
 ): Ponto {
-  let pontoInicial = componenteAlvo.calcularPontoLateralComponente(lateralComponente);
+  let pontoInicial: Ponto = componenteAlvo.calcularPontoLateralComponente(lateralComponente);
 
   let offsetX: number = 0;
 
