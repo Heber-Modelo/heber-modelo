@@ -14,13 +14,13 @@
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 
 export default class RegistradorEventosElementoFactory {
-  private static _instance: RegistradorEventosElemento | null = null;
+  private static _registradorEventosElemento: RegistradorEventosElemento | null = null;
 
   public static build(): RegistradorEventosElemento {
-    if (this._instance === null) {
-      this._instance = new RegistradorEventosElemento();
+    if (this._registradorEventosElemento === null) {
+      this._registradorEventosElemento = new RegistradorEventosElemento();
     }
 
-    return this._instance;
+    return this._registradorEventosElemento;
   }
 }

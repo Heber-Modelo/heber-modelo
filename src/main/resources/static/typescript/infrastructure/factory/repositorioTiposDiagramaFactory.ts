@@ -14,14 +14,13 @@
 import RepositorioTiposDiagrama from "infrastructure/repositorio/repositorioTiposDiagrama";
 
 export default class RepositorioTiposDiagramaFactory {
-  private static _instance: RepositorioTiposDiagrama | null = null;
+  private static _repositorioTIposDiagrama: RepositorioTiposDiagrama | null = null;
 
   public static build(): RepositorioTiposDiagrama {
-    if (this._instance === null) {
-      this._instance = new RepositorioTiposDiagrama();
+    if (this._repositorioTIposDiagrama === null) {
+      this._repositorioTIposDiagrama = new RepositorioTiposDiagrama();
     }
 
-    return this._instance;
+    return this._repositorioTIposDiagrama;
   }
-
 }

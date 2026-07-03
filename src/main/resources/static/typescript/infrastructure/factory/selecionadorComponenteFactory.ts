@@ -21,10 +21,10 @@ import PosicoesRelativasSetasConectoras from "model/posicoes/posicoesRelativasSe
 import SetaConectora from "model/setaConectora";
 
 export default class SelecionadorComponenteFactory {
-  private static _selecionador: SelecionadorComponente | null = null;
+  private static _selecionadorComponente: SelecionadorComponente | null = null;
 
   public static build(): SelecionadorComponente {
-    if (this._selecionador === null) {
+    if (this._selecionadorComponente === null) {
       let diagrama: HTMLElement = document.querySelector("main") as HTMLElement;
       let pontoExtensorFactory: PontoExtensorFactory = new PontoExtensorFactory();
       let pontosExtensores: PontoExtensor[] = Object.keys(PosicoesRelativasPontoExtensor)
@@ -57,9 +57,9 @@ export default class SelecionadorComponenteFactory {
           ),
       );
 
-      this._selecionador = new SelecionadorComponente(pontosExtensores, setasConectoras);
+      this._selecionadorComponente = new SelecionadorComponente(pontosExtensores, setasConectoras);
     }
 
-    return this._selecionador;
+    return this._selecionadorComponente;
   }
 }

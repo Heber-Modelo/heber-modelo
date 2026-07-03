@@ -13,10 +13,10 @@
 
 import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
+import FormulaPosicaoAbsoluta from "model/formula/formulaPosicaoAbsoluta";
 import Ponto from "model/ponto";
 import PontoExtensor from "model/pontoExtensor";
 import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
-import FormulaPosicaoAbsoluta from "model/formula/formulaPosicaoAbsoluta";
 import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 
 export class PontoAnterior {
