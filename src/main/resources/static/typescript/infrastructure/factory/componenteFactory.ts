@@ -21,11 +21,6 @@ export default class ComponenteFactory {
   public static PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
   public static PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string = "data-recebe-pontos-extensores";
   public static PROPRIEDADE_RECEBE_SETAS_CONECTORAS: string = "data-recebe-setas-conectoras";
-  private static _CLASSE_COMUM_ELEMENTOS: string = "componente";
-
-  static get CLASSE_COMUM_ELEMENTOS(): string {
-    return this._CLASSE_COMUM_ELEMENTOS;
-  }
 
   private async pegarJSON(nomeComponente: string): Promise<ValoresJSONComponente> {
     return await fetch(`/elementos/${nomeComponente.toLowerCase()}.json`).then(
@@ -48,7 +43,7 @@ export default class ComponenteFactory {
           ComponenteFactory.PROPRIEDADE_RECEBE_SETAS_CONECTORAS,
           valores.recebeSetaConectora,
         );
-        elementoHTML.classList.add(ComponenteFactory.CLASSE_COMUM_ELEMENTOS);
+        elementoHTML.classList.add(ComponenteDiagrama.CLASSE_BASE_COMPONENTE);
         elementoHTML.classList.add(...valores.classesElemento);
         let componente: ComponenteDiagrama = new ComponenteDiagrama(elementoHTML, []);
         valores.propriedades.forEach((propriedade: JSONPropriedade): void => {

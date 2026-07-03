@@ -17,8 +17,7 @@ import CommandBuilderException from "model/exception/commandBuilderException";
 import IRepositorioTiposDiagrama from "model/repositorio/iRepositorioTiposDiagrama";
 import ResponseDiagramaJSON from "model/response/responseDiagramaJSON";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
-
-export const ATRIBUTO_NOME_ELEMENTO = "data-nome-elemento";
+import ComponenteFactory from "infrastructure/factory/componenteFactory";
 
 export default class CarregarDiagramaCommand implements ICommand {
   private readonly _callbackCriarComponente: (event: Event) => void;
@@ -53,7 +52,7 @@ export default class CarregarDiagramaCommand implements ICommand {
     let responseSimbolo: Response = await fetch(`elementos/simbolos/${tipoElemento}.svg`);
     let textoSimboloSvg: string = await responseSimbolo.text();
     botao.classList.add("btn-criar-elemento");
-    botao.setAttribute(ATRIBUTO_NOME_ELEMENTO, tipoElemento);
+    botao.setAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE, tipoElemento);
     botao.title = nomeElemento;
     botao.innerHTML = `${textoSimboloSvg} <h3>${nomeElemento.toUpperCase()}</h3>`;
     botao.addEventListener("click", this._callbackCriarComponente);
@@ -98,7 +97,7 @@ export default class CarregarDiagramaCommand implements ICommand {
       },
     );
 
-    this._repositorioTiposDiagrama.adicionar(this._nomeDiagrama)
+    this._repositorioTiposDiagrama.adicionar(this._nomeDiagrama);
 
     return {
       ok: true,
@@ -151,7 +150,6 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
 
     return this;
   }
-
 
   public definirSectionComponentes(sectionComponentes: HTMLElement | null): this {
     this._sectionComponentes = sectionComponentes;

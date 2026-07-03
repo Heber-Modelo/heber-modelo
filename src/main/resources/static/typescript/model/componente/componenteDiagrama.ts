@@ -19,6 +19,9 @@ import Ponto from "model/ponto";
 import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 
 export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
+  public static readonly CLASSE_BASE_COMPONENTE: string = "componente";
+  public static readonly CLASSE_ELEMENTO_SELECIONADO: string = "selected";
+
   constructor(htmlComponente: HTMLDivElement, propriedades: PropriedadeComponente[] | null) {
     this._htmlComponente = htmlComponente;
     this._propriedades = propriedades ?? [];

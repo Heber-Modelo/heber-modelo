@@ -11,7 +11,6 @@
  *
  */
 
-import { CLASSE_ELEMENTO_SELECIONADO } from "application/paginas/editor/selecionadorComponente";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
 import CommandBuilderException from "model/exception/commandBuilderException";
@@ -25,12 +24,14 @@ export default class CopiarComponenteCommand implements ICommand {
   }
 
   execute(): CommandResult {
-    this._componente.htmlComponente.classList.remove(CLASSE_ELEMENTO_SELECIONADO);
+    this._componente.htmlComponente.classList.remove(
+      ComponenteDiagrama.CLASSE_ELEMENTO_SELECIONADO,
+    );
     navigator.clipboard
       .writeText(this._componente.htmlComponente.outerHTML)
       .then((): void => {})
       .catch((): void => {});
-    this._componente.htmlComponente.classList.add(CLASSE_ELEMENTO_SELECIONADO);
+    this._componente.htmlComponente.classList.add(ComponenteDiagrama.CLASSE_ELEMENTO_SELECIONADO);
 
     return {
       ok: true,

@@ -32,7 +32,6 @@ import CortarComponenteCommand, {
   CortarComponenteCommandBuilder,
 } from "infrastructure/command/cortarComponenteCommand";
 import CarregarDiagramaCommand, {
-  ATRIBUTO_NOME_ELEMENTO,
   CarregarDiagramaCommandBuilder,
 } from "infrastructure/command/carregarDiagramaCommand";
 import { CarregarCSSCommandBuilder } from "infrastructure/command/carregarCSSCommand";
@@ -198,7 +197,7 @@ let tiposDiagrama: HTMLElement | null = document.querySelector("#tipos-diagrama"
 
 function callbackCriarComponente(event: Event): void {
   let btn: HTMLButtonElement = event.target as HTMLButtonElement;
-  let nomeElemento: string | null = btn.getAttribute(ATRIBUTO_NOME_ELEMENTO);
+  let nomeElemento: string | null = btn.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE);
 
   let command: CriarComponenteCommand = new CriarComponenteCommandBuilder()
     .definirDiagrama(diagrama)
@@ -325,10 +324,10 @@ function conectarElementos(event: MouseEvent): void {
   if (
     conectarComponentesCommandBuilder.primeiroComponente?.htmlComponente.getAttribute(
       ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-    ) === ConectarComponentesCommand.NOME_ELEMENTO_ENTIDADE &&
+    ) === ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE &&
     conectarComponentesCommandBuilder.segundoComponente?.htmlComponente.getAttribute(
       ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-    ) === ConectarComponentesCommand.NOME_ELEMENTO_ENTIDADE
+    ) === ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE
   ) {
     let command: ConectarDuasEntidadesCommand = new ConectarDuasEntidadesCommandBuilder()
       .copyAttributes(conectarComponentesCommandBuilder)
@@ -425,7 +424,7 @@ function callbackTerminarConexaoAtributo(event: MouseEvent): void {
       .definirDiagrama(diagrama)
       .definirFabricaComponente(fabricaComponente)
       .definirGeradorIDComponente(geradorIDComponente)
-      .definirNomeElemento(ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO)
+      .definirNomeElemento(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE)
       .definirRegistradorEventosElemento(registradorEventosElemento)
       .definirRepositorioComponentes(repositorioComponentes)
       .build();
