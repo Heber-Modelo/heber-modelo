@@ -28,6 +28,7 @@ import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
+import NomesComponente from "model/componente/nomesComponente";
 import TiposConexao from "model/conexao/tiposConexao";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import Ponto from "model/ponto";
@@ -36,7 +37,6 @@ import converterPixeisParaNumero from "model/services/converterPixeisParaNumero"
 import calcularLateralComponente from "model/services/calcularLateralComponente";
 
 export default class ConectarAtributoCommand implements ICommand {
-  public static readonly NOME_ELEMENTO_ATRIBUTO: string = "atributo_der";
   private readonly _componenteAlvo: ComponenteDiagrama;
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
@@ -112,7 +112,7 @@ export default class ConectarAtributoCommand implements ICommand {
       .definirDiagrama(this._diagrama)
       .definirFabricaComponente(this._fabricaComponente)
       .definirGeradorIDComponente(this._geradorID)
-      .definirNomeElemento(ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO)
+      .definirNomeElemento(NomesComponente.ATRIBUTO_DER)
       .definirRegistradorEventosElemento(this._registradorEventosElemento)
       .definirRepositorioComponentes(this._repositorioComponentes)
       .build();
@@ -193,10 +193,10 @@ export default class ConectarAtributoCommand implements ICommand {
 
 export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarAtributoCommand> {
   private static readonly _elementosPermitidos: string[] = [
-    "atributo_der",
-    "agregacao",
-    "entidade",
-    "relacionamento",
+    NomesComponente.ATRIBUTO_DER,
+    NomesComponente.AGREGACAO,
+    NomesComponente.ENTIDADE,
+    NomesComponente.RELACIONAMENTO,
   ];
   private _componenteAlvo: ComponenteDiagrama | null = null;
   private _diagrama: HTMLElement | undefined | null;

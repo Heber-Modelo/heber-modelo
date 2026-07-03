@@ -13,6 +13,7 @@
 
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import NomesComponente from "model/componente/nomesComponente";
 import Ponto from "model/ponto";
 import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 
@@ -22,7 +23,7 @@ export default function colectarPosicoesAtributos(componentes: ComponenteDiagram
   for (const componente of componentes) {
     if (
       componente.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE) ===
-      "atributo_der"
+      NomesComponente.ATRIBUTO_DER
     ) {
       let x: number = converterPixeisParaNumero(
         componente.htmlComponente.style.getPropertyValue("left"),
