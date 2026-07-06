@@ -11,10 +11,12 @@
  *
  */
 
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 
 export default class PropriedadeSelecionavel extends PropriedadeComponente {
+  private readonly _chavesI18nLabelsValoresPermitidos: string[] | undefined;
   private readonly _valoresPermitidos: string[];
 
   constructor(
@@ -23,9 +25,11 @@ export default class PropriedadeSelecionavel extends PropriedadeComponente {
     sufixo: string,
     label: string,
     classeElemento: string,
+    chavesI18nLabelsValoresPermitidos: string[] | undefined,
     valoresPermitidos: string[],
   ) {
     super(nome, componente, sufixo, label, classeElemento);
+    this._chavesI18nLabelsValoresPermitidos = chavesI18nLabelsValoresPermitidos;
     this._valoresPermitidos = valoresPermitidos;
   }
 
@@ -51,12 +55,27 @@ export default class PropriedadeSelecionavel extends PropriedadeComponente {
     let selectElement: HTMLSelectElement = document.createElement("select");
     selectElement.name = this._nome;
 
-    this._valoresPermitidos.forEach((valorPermitido: string): void => {
-      let option: HTMLOptionElement = document.createElement("option");
-      option.value = valorPermitido;
-      option.innerText = valorPermitido;
-      selectElement.appendChild(option);
-    });
+    if (this._chavesI18nLabelsValoresPermitidos) {
+      for (let i: number = 0; i < this._valoresPermitidos.length; i++) {
+        let option: HTMLOptionElement = document.createElement("option");
+        option.value = this._valoresPermitidos[i];
+
+        traduzirChaveI18n(this._chavesI18nLabelsValoresPermitidos[i]).then(
+          (label: string): void => {
+            option.innerText = label.toUpperCase();
+          },
+        );
+
+        selectElement.appendChild(option);
+      }
+    } else {
+      this._valoresPermitidos.forEach((valorPermitido: string): void => {
+        let option: HTMLOptionElement = document.createElement("option");
+        option.value = valorPermitido;
+        option.innerText = valorPermitido;
+        selectElement.appendChild(option);
+      });
+    }
 
     selectElement.addEventListener("change", (): void => {
       let selectedOption: HTMLOptionElement | null = selectElement.options.item(
@@ -81,7 +100,7 @@ export default class PropriedadeSelecionavel extends PropriedadeComponente {
 
     let valorAtual: string = this.pegarValorPropriedade();
     for (let option of selectElement.options) {
-      option.selected = option.innerText === valorAtual;
+      option.selected = option.value === valorAtual;
     }
 
     return labelElement;

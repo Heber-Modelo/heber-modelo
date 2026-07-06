@@ -24,5 +24,6 @@ export interface JSONPropriedade {
   classeElemento: string;
   nomePropriedade: string;
   sufixo: string;
+  chavesI18nLabelsValoresPermitidos: string[] | undefined;
   valoresPermitidos: string[] | undefined;
 }

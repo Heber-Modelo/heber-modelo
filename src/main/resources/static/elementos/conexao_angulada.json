@@ -10,6 +10,12 @@
       "classeElemento": "ponto-norte-valor",
       "nomePropriedade": "posicao-ponto-norte",
       "sufixo": "",
+      "chavesI18nLabelsValoresPermitidos": [
+        "element.property-value.north.label",
+        "element.property-value.south.label",
+        "element.property-value.east.label",
+        "element.property-value.west.label"
+      ],
       "valoresPermitidos": ["NORTE", "SUL", "LESTE", "OESTE"]
     },
     {
@@ -17,6 +23,12 @@
       "classeElemento": "ponto-sul-valor",
       "nomePropriedade": "posicao-ponto-sul",
       "sufixo": "",
+      "chavesI18nLabelsValoresPermitidos": [
+        "element.property-value.north.label",
+        "element.property-value.south.label",
+        "element.property-value.east.label",
+        "element.property-value.west.label"
+      ],
       "valoresPermitidos": ["NORTE", "SUL", "LESTE", "OESTE"]
     }
   ]

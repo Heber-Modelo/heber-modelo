@@ -57,6 +57,7 @@ export default class ComponenteFactory {
               componente,
               label,
               propriedade.classeElemento,
+              propriedade.chavesI18nLabelsValoresPermitidos,
               propriedade.valoresPermitidos,
             );
           if (propriedadeComponente !== null) {

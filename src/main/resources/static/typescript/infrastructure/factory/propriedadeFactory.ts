@@ -23,6 +23,7 @@ export default class PropriedadeFactory {
     componente: ComponenteDiagrama,
     label: string,
     classeElemento: string,
+    chavesI18nLabelsValoresPermitidos: string[] | undefined,
     valoresPermitidos: string[] | undefined,
   ): PropriedadeComponente | null {
     if (nomePropriedade === "innerText") {
@@ -34,6 +35,7 @@ export default class PropriedadeFactory {
         sufixo,
         label,
         classeElemento,
+        chavesI18nLabelsValoresPermitidos,
         valoresPermitidos,
       );
     } else {

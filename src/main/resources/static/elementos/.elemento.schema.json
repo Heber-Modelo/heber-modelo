@@ -41,6 +41,10 @@
           "sufixo": {
             "type": "string"
           },
+          "chavesI18nLabelsValoresPermitidos": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
           "valoresPermitidos": {
             "type": "array",
             "items": { "type": "string" }
