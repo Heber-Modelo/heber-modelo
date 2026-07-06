@@ -45,6 +45,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponente: IRepositorioComponente;
   private readonly _tipoConexao: TiposConexao;
+  private _commandCarregarCSSCardinalidade: CarregarCSSCommand | undefined;
   private _commandCarregarCSSConexao: CarregarCSSCommand | undefined;
   private _commandCarregarCSSRelacionamento: CarregarCSSCommand | undefined;
   private _commandCarregarCSSTexto: CarregarCSSCommand | undefined;
@@ -106,6 +107,9 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
       this._lateralSegundoComponente,
     );
 
+    this._commandCarregarCSSCardinalidade = new CarregarCSSCommandBuilder()
+      .definirNomeArquivo(NomesComponente.CARDINALIDADE)
+      .build();
     this._commandCarregarCSSConexao = new CarregarCSSCommandBuilder()
       .definirNomeArquivo(this._tipoConexao)
       .build();
@@ -116,6 +120,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
       .definirNomeArquivo(NomesComponente.RELACIONAMENTO)
       .build();
 
+    this._commandCarregarCSSCardinalidade.execute();
     this._commandCarregarCSSConexao.execute();
     this._commandCarregarCSSRelacionamento.execute();
     this._commandCarregarCSSTexto.execute();
@@ -255,6 +260,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
   }
 
   redo(): CommandResult {
+    this._commandCarregarCSSCardinalidade?.redo();
     this._commandCarregarCSSConexao?.redo();
     this._commandCarregarCSSRelacionamento?.redo();
     this._commandCarregarCSSTexto?.redo();
@@ -299,6 +305,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
   }
 
   undo(): CommandResult {
+    this._commandCarregarCSSCardinalidade?.undo();
     this._commandCarregarCSSConexao?.undo();
     this._commandCarregarCSSRelacionamento?.undo();
     this._commandCarregarCSSTexto?.undo();

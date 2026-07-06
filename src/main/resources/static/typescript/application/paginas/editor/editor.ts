@@ -79,6 +79,7 @@ import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 import SetaConectora from "model/setaConectora";
 import Ponto from "model/ponto";
 import calcularLateralComponente from "model/services/calcularLateralComponente";
+import NomesComponente from "model/componente/nomesComponente";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -324,10 +325,10 @@ function conectarElementos(event: MouseEvent): void {
   if (
     conectarComponentesCommandBuilder.primeiroComponente?.htmlComponente.getAttribute(
       ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-    ) === ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE &&
+    ) === NomesComponente.ENTIDADE &&
     conectarComponentesCommandBuilder.segundoComponente?.htmlComponente.getAttribute(
       ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-    ) === ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE
+    ) === NomesComponente.ENTIDADE
   ) {
     let command: ConectarDuasEntidadesCommand = new ConectarDuasEntidadesCommandBuilder()
       .copyAttributes(conectarComponentesCommandBuilder)
