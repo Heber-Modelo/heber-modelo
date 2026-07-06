@@ -6,15 +6,15 @@
   "recebeSetaConectora": false,
   "propriedades": [
     {
+      "chaveI18nLabel": "element.property.position-north-point.label",
       "classeElemento": "ponto-norte-valor",
-      "label": "Posição Ponto Norte",
       "nomePropriedade": "posicao-ponto-norte",
       "sufixo": "",
       "valoresPermitidos": ["NORTE", "SUL", "LESTE", "OESTE"]
     },
     {
+      "chaveI18nLabel": "element.property.position-south-point.label",
       "classeElemento": "ponto-sul-valor",
-      "label": "Posição Ponto Sul",
       "nomePropriedade": "posicao-ponto-sul",
       "sufixo": "",
       "valoresPermitidos": ["NORTE", "SUL", "LESTE", "OESTE"]

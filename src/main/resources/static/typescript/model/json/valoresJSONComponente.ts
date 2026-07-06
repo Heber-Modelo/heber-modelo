@@ -20,8 +20,8 @@ export default interface ValoresJSONComponente {
 }
 
 export interface JSONPropriedade {
+  chaveI18nLabel: string;
   classeElemento: string;
-  label: string;
   nomePropriedade: string;
   sufixo: string;
   valoresPermitidos: string[] | undefined;

@@ -8,8 +8,8 @@
   "recebeSetaConectora": false,
   "propriedades": [
     {
+      "chaveI18nLabel": "element.property.cardinality.label",
       "classeElemento": "tipo",
-      "label": "cardinalidade",
       "nomePropriedade": "cardinalidade",
       "sufixo": "",
       "valoresPermitidos": ["(0, N)", "(1, N)", "(0, 1)", "(1, 1)"]

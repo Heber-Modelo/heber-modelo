@@ -11,13 +11,13 @@
  *
  */
 
+import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import IRepositorioTiposDiagrama from "model/repositorio/iRepositorioTiposDiagrama";
 import ResponseDiagramaJSON from "model/response/responseDiagramaJSON";
-import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
-import ComponenteFactory from "infrastructure/factory/componenteFactory";
 
 export default class CarregarDiagramaCommand implements ICommand {
   private readonly _callbackCriarComponente: (event: Event) => void;
@@ -37,11 +37,6 @@ export default class CarregarDiagramaCommand implements ICommand {
     this._nomeDiagrama = nomeDiagrama;
     this._repositorioTiposDiagrama = repositorioTiposDiagrama;
     this._sectionComponentes = sectionComponentes;
-  }
-
-  private async callbackMensagemTraducao(response: Response): Promise<string> {
-    let responseTraducao: ResponseTraducaoJSON = await response.json();
-    return responseTraducao.mensagem;
   }
 
   private async criarBotaoElemento(
@@ -67,9 +62,7 @@ export default class CarregarDiagramaCommand implements ICommand {
 
         let labelNomeDiagrama: string = diagramaJSON.nome;
         if (diagramaJSON.chaveI18N !== null && diagramaJSON.chaveI18N !== undefined) {
-          labelNomeDiagrama = await fetch(`/traducao/${diagramaJSON.chaveI18N}`).then(
-            this.callbackMensagemTraducao,
-          );
+          labelNomeDiagrama = await traduzirChaveI18n(diagramaJSON.chaveI18N);
         }
 
         this._fieldSetElementos = document.createElement("fieldset");
@@ -82,9 +75,7 @@ export default class CarregarDiagramaCommand implements ICommand {
           let nomeElemento: string = tipoElemento.nome;
 
           if (tipoElemento.chaveI18N !== null && tipoElemento.chaveI18N !== undefined) {
-            nomeElemento = await fetch(`/traducao/${tipoElemento.chaveI18N}`).then(
-              this.callbackMensagemTraducao,
-            );
+            nomeElemento = await traduzirChaveI18n(tipoElemento.chaveI18N);
           }
 
           this._fieldSetElementos.append(

@@ -29,10 +29,10 @@
       "items": {
         "type": "object",
         "properties": {
-          "classeElemento": {
+          "chaveI18nLabel": {
             "type": "string"
           },
-          "label": {
+          "classeElemento": {
             "type": "string"
           },
           "nomePropriedade": {
@@ -47,8 +47,8 @@
           }
         },
         "required": [
+          "chaveI18nLabel",
           "classeElemento",
-          "label",
           "nomePropriedade",
           "sufixo"
         ]
