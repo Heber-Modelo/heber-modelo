@@ -18,6 +18,7 @@ import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 export default class PropriedadeSelecionavel extends PropriedadeComponente {
   private readonly _chavesI18nLabelsValoresPermitidos: string[] | undefined;
   private readonly _valoresPermitidos: string[];
+  private _selectElement: HTMLSelectElement | undefined;
 
   constructor(
     nome: string,
@@ -52,8 +53,8 @@ export default class PropriedadeSelecionavel extends PropriedadeComponente {
   }
 
   criarElementoInputPropriedade(): HTMLLabelElement {
-    let selectElement: HTMLSelectElement = document.createElement("select");
-    selectElement.name = this._nome;
+    this._selectElement = document.createElement("select");
+    this._selectElement.name = this._nome;
 
     if (this._chavesI18nLabelsValoresPermitidos) {
       for (let i: number = 0; i < this._valoresPermitidos.length; i++) {
@@ -66,28 +67,28 @@ export default class PropriedadeSelecionavel extends PropriedadeComponente {
           },
         );
 
-        selectElement.appendChild(option);
+        this._selectElement.appendChild(option);
       }
     } else {
       this._valoresPermitidos.forEach((valorPermitido: string): void => {
         let option: HTMLOptionElement = document.createElement("option");
         option.value = valorPermitido;
         option.innerText = valorPermitido;
-        selectElement.appendChild(option);
+        this._selectElement?.appendChild(option);
       });
     }
 
-    selectElement.addEventListener("change", (): void => {
-      let selectedOption: HTMLOptionElement | null = selectElement.options.item(
-        selectElement.selectedIndex,
+    this._selectElement.addEventListener("change", (): void => {
+      let selectedOption: HTMLOptionElement | undefined | null = this._selectElement?.options.item(
+        this._selectElement.selectedIndex,
       );
 
       if (selectedOption) {
-        this.definirValorPropriedade(selectedOption.innerText);
+        this.definirValorPropriedade(selectedOption.value);
       }
     });
 
-    selectElement.addEventListener("change", (): void => {
+    this._selectElement.addEventListener("change", (): void => {
       let targetElement: HTMLElement | null | undefined =
         this._componente.htmlComponente.querySelector(this._classeElemento);
       targetElement?.dispatchEvent(new Event(PropriedadeSelecionavel.PROPERTY_CHANGE_EVENT));
@@ -95,11 +96,11 @@ export default class PropriedadeSelecionavel extends PropriedadeComponente {
 
     let labelElement: HTMLLabelElement = document.createElement("label");
     labelElement.innerText = this.formatarLabel();
-    labelElement.appendChild(selectElement);
+    labelElement.appendChild(this._selectElement);
     labelElement.classList.add(PropriedadeComponente.CLASSE_PROPRIEDADE_CUSTOMIZADA);
 
     let valorAtual: string = this.pegarValorPropriedade();
-    for (let option of selectElement.options) {
+    for (let option of this._selectElement.options) {
       option.selected = option.value === valorAtual;
     }
 
