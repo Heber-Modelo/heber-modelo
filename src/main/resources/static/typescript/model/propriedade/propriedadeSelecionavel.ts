@@ -89,8 +89,9 @@ export default class PropriedadeSelecionavel extends PropriedadeComponente {
     });
 
     this._selectElement.addEventListener("change", (): void => {
-      let targetElement: HTMLElement | null | undefined =
-        this._componente.htmlComponente.querySelector(this._classeElemento);
+      let targetElement: HTMLElement | null = this._componente.htmlComponente.querySelector(
+        this._classeElemento,
+      );
       targetElement?.dispatchEvent(new Event(PropriedadeSelecionavel.PROPERTY_CHANGE_EVENT));
     });
 
