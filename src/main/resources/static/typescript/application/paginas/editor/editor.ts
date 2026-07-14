@@ -381,8 +381,8 @@ placeholderAtributo.style.display = "none";
 placeholderAtributo.style.position = "absolute";
 
 function trocarCallbackBtnAtributo(): void {
-  let btnAtributo: HTMLButtonElement | null | undefined = divComponentes?.querySelector(
-    "button[data-nome-elemento='atributo_der']",
+  let btnAtributo: HTMLButtonElement | null = document.querySelector(
+    `button[${ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE}='${NomesComponente.ATRIBUTO_DER}']`,
   );
 
   if (btnAtributo) {
