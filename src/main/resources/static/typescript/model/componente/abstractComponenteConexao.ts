@@ -23,8 +23,8 @@ export default abstract class AbstractComponenteConexao
 {
   protected _ponto1: Ponto;
   protected _ponto2: Ponto;
-  protected readonly _lateralPrimeiroPonto: LateraisComponente;
-  protected readonly _lateralSegundoPonto: LateraisComponente;
+  protected _lateralPrimeiroPonto: LateraisComponente;
+  protected _lateralSegundoPonto: LateraisComponente;
   protected readonly _primeiroComponente: ComponenteDiagrama;
   protected readonly _segundoComponente: ComponenteDiagrama;
 

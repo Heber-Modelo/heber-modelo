@@ -32,7 +32,6 @@ import CortarComponenteCommand, {
   CortarComponenteCommandBuilder,
 } from "infrastructure/command/cortarComponenteCommand";
 import CarregarDiagramaCommand, {
-  ATRIBUTO_NOME_ELEMENTO,
   CarregarDiagramaCommandBuilder,
 } from "infrastructure/command/carregarDiagramaCommand";
 import { CarregarCSSCommandBuilder } from "infrastructure/command/carregarCSSCommand";
@@ -78,6 +77,9 @@ import TiposConexao from "model/conexao/tiposConexao";
 import DirecoesMovimento from "model/direcoesMovimento";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 import SetaConectora from "model/setaConectora";
+import Ponto from "model/ponto";
+import calcularLateralComponente from "model/services/calcularLateralComponente";
+import NomesComponente from "model/componente/nomesComponente";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -196,7 +198,7 @@ let tiposDiagrama: HTMLElement | null = document.querySelector("#tipos-diagrama"
 
 function callbackCriarComponente(event: Event): void {
   let btn: HTMLButtonElement = event.target as HTMLButtonElement;
-  let nomeElemento: string | null = btn.getAttribute(ATRIBUTO_NOME_ELEMENTO);
+  let nomeElemento: string | null = btn.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE);
 
   let command: CriarComponenteCommand = new CriarComponenteCommandBuilder()
     .definirDiagrama(diagrama)
@@ -291,11 +293,6 @@ function conectarElementos(event: MouseEvent): void {
   event.stopPropagation();
   event.stopImmediatePropagation();
 
-  const HEIGHT_MINIMAL_THRESHOLD: number = 0.4;
-  const HEIGHT_MAXIMAL_THRESHOLD: number = 0.6;
-  const WIDTH_MINIMAL_THRESHOLD: number = 0.2;
-  const WIDTH_MAXIMAL_THRESHOLD: number = 0.8;
-
   let elementoAlvo: HTMLElement = event.target as HTMLElement;
   let elementoAlvoBoundingRectangle: DOMRect = elementoAlvo.getBoundingClientRect();
   let componenteAlvo: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(elementoAlvo);
@@ -304,55 +301,16 @@ function conectarElementos(event: MouseEvent): void {
     return;
   }
 
-  let alturaElemento: number = elementoAlvoBoundingRectangle.height;
-  let larguraElemento: number = elementoAlvoBoundingRectangle.width;
   let topElemento: number = elementoAlvoBoundingRectangle.top;
   let leftElemento: number = elementoAlvoBoundingRectangle.left;
 
   let positionX: number = event.pageX - leftElemento;
   let positionY: number = event.pageY - topElemento;
 
-  let esquerda: boolean = false;
-  let direita: boolean = false;
-  let centroX: boolean = false;
-
-  if (
-    positionX > larguraElemento * WIDTH_MINIMAL_THRESHOLD &&
-    positionX < larguraElemento * WIDTH_MAXIMAL_THRESHOLD
-  ) {
-    centroX = true;
-  } else if (positionX <= larguraElemento * WIDTH_MINIMAL_THRESHOLD) {
-    esquerda = true;
-  } else {
-    direita = true;
-  }
-
-  let cima: boolean = false;
-  let baixo: boolean = false;
-  let centroY: boolean = false;
-
-  if (
-    positionY > alturaElemento * HEIGHT_MINIMAL_THRESHOLD &&
-    positionY < alturaElemento * HEIGHT_MAXIMAL_THRESHOLD
-  ) {
-    centroY = true;
-  } else if (positionY <= alturaElemento * HEIGHT_MINIMAL_THRESHOLD) {
-    cima = true;
-  } else {
-    baixo = true;
-  }
-
-  let lateralSegundoComponente: LateraisComponente;
-
-  if ((centroY || baixo || cima) && esquerda) {
-    lateralSegundoComponente = LateraisComponente.OESTE;
-  } else if ((centroY || baixo || cima) && direita) {
-    lateralSegundoComponente = LateraisComponente.LESTE;
-  } else if ((centroX && centroY) || cima) {
-    lateralSegundoComponente = LateraisComponente.NORTE;
-  } else {
-    lateralSegundoComponente = LateraisComponente.SUL;
-  }
+  let lateralSegundoComponente: LateraisComponente = calcularLateralComponente(
+    elementoAlvo,
+    new Ponto(positionX, positionY),
+  );
 
   conectarComponentesCommandBuilder
     .definirSegundoComponente(componenteAlvo)
@@ -367,10 +325,10 @@ function conectarElementos(event: MouseEvent): void {
   if (
     conectarComponentesCommandBuilder.primeiroComponente?.htmlComponente.getAttribute(
       ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-    ) === ConectarComponentesCommand.NOME_ELEMENTO_ENTIDADE &&
+    ) === NomesComponente.ENTIDADE &&
     conectarComponentesCommandBuilder.segundoComponente?.htmlComponente.getAttribute(
       ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-    ) === ConectarComponentesCommand.NOME_ELEMENTO_ENTIDADE
+    ) === NomesComponente.ENTIDADE
   ) {
     let command: ConectarDuasEntidadesCommand = new ConectarDuasEntidadesCommandBuilder()
       .copyAttributes(conectarComponentesCommandBuilder)
@@ -423,8 +381,8 @@ placeholderAtributo.style.display = "none";
 placeholderAtributo.style.position = "absolute";
 
 function trocarCallbackBtnAtributo(): void {
-  let btnAtributo: HTMLButtonElement | null | undefined = divComponentes?.querySelector(
-    "button[data-nome-elemento='atributo_der']",
+  let btnAtributo: HTMLButtonElement | null = document.querySelector(
+    `button[${ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE}='${NomesComponente.ATRIBUTO_DER}']`,
   );
 
   if (btnAtributo) {
@@ -467,7 +425,7 @@ function callbackTerminarConexaoAtributo(event: MouseEvent): void {
       .definirDiagrama(diagrama)
       .definirFabricaComponente(fabricaComponente)
       .definirGeradorIDComponente(geradorIDComponente)
-      .definirNomeElemento(ConectarAtributoCommand.NOME_ELEMENTO_ATRIBUTO)
+      .definirNomeElemento(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE)
       .definirRegistradorEventosElemento(registradorEventosElemento)
       .definirRepositorioComponentes(repositorioComponentes)
       .build();
@@ -492,12 +450,17 @@ function callbackTerminarConexaoAtributo(event: MouseEvent): void {
 
   let componenteAlvo: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(elementoAlvo);
 
+  let elementoDOMRect: DOMRect = elementoAlvo.getBoundingClientRect();
+  let positionX: number = event.pageX - elementoDOMRect.left;
+  let positionY: number = event.pageY - elementoDOMRect.top;
+
   let command: ConectarAtributoCommand = new ConectarAtributoCommandBuilder()
     .definirComponenteAlvo(componenteAlvo)
     .definirDiagrama(diagrama)
     .definirFabricaComponente(fabricaComponente)
     .definirFabricaConexao(fabricaConexao)
     .definirGeradorID(geradorIDComponente)
+    .definirPontoAlvo(new Ponto(positionX, positionY))
     .definirRegistradorEventosConexao(registradorEventosConexao)
     .definirRegistradorEventosElemento(registradorEventosElemento)
     .definirRepositorioComponentes(repositorioComponentes)
@@ -588,6 +551,29 @@ buttonCortar?.addEventListener("click", (): void => {
     .definirSelecionadorComponente(selecionadorComponente)
     .build();
   commandHistory.saveAndExecuteCommand(command);
+});
+
+/*****************/
+/* TROCA DE ABAS */
+/*****************/
+
+let buttonNovaAba: HTMLDivElement | null = document.querySelector("#nova-aba");
+let seletorAbas: HTMLElement | null = document.querySelector("footer div");
+
+function fecharAba(event: MouseEvent): void {
+  let elementoAlvo: HTMLElement = event.target as HTMLElement;
+  elementoAlvo.parentElement?.remove();
+}
+
+buttonNovaAba?.addEventListener("click", (): void => {
+  let novaAba: HTMLDivElement = document.createElement("div");
+  let p: HTMLParagraphElement = document.createElement("p");
+  novaAba.classList.add("aba");
+  p.innerText = "x";
+  p.addEventListener("click", fecharAba);
+
+  novaAba.append(p);
+  seletorAbas?.append(novaAba);
 });
 
 /***********************/

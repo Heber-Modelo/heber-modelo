@@ -16,8 +16,6 @@ import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import PontoExtensor from "model/pontoExtensor";
 import SetaConectora from "model/setaConectora";
 
-export const CLASSE_ELEMENTO_SELECIONADO: string = "selected";
-
 export default class SelecionadorComponente {
   private _componenteSelecionado: ComponenteDiagrama | null;
   private readonly _pontosExtensores: PontoExtensor[];
@@ -37,10 +35,14 @@ export default class SelecionadorComponente {
 
   public selecionarElemento(componente: ComponenteDiagrama): void {
     if (this._componenteSelecionado !== null) {
-      this._componenteSelecionado.htmlComponente.classList.remove(CLASSE_ELEMENTO_SELECIONADO);
+      this._componenteSelecionado.htmlComponente.classList.remove(
+        ComponenteDiagrama.CLASSE_ELEMENTO_SELECIONADO,
+      );
     }
     this._componenteSelecionado = componente;
-    this._componenteSelecionado.htmlComponente.classList.add(CLASSE_ELEMENTO_SELECIONADO);
+    this._componenteSelecionado.htmlComponente.classList.add(
+      ComponenteDiagrama.CLASSE_ELEMENTO_SELECIONADO,
+    );
     this.reposicionarPontosExtensores();
     this.reposicionarSetasConectoras(componente);
   }
@@ -100,7 +102,9 @@ export default class SelecionadorComponente {
 
   public removerSelecao(): void {
     if (this._componenteSelecionado !== null) {
-      this._componenteSelecionado.htmlComponente.classList.remove(CLASSE_ELEMENTO_SELECIONADO);
+      this._componenteSelecionado.htmlComponente.classList.remove(
+        ComponenteDiagrama.CLASSE_ELEMENTO_SELECIONADO,
+      );
       this._componenteSelecionado = null;
     }
 

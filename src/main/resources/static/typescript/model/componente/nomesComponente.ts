@@ -11,16 +11,12 @@
  *
  */
 
-import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
-
-export default class RegistradorEventosElementoFactory {
-  private static _registradorEventosElemento: RegistradorEventosElemento | null = null;
-
-  public static build(): RegistradorEventosElemento {
-    if (this._registradorEventosElemento === null) {
-      this._registradorEventosElemento = new RegistradorEventosElemento();
-    }
-
-    return this._registradorEventosElemento;
-  }
+enum NomesComponente {
+  ATRIBUTO_DER = "atributo_der",
+  AGREGACAO = "agregacao",
+  CARDINALIDADE = "cardinalidade",
+  ENTIDADE = "entidade",
+  RELACIONAMENTO = "relacionamento",
 }
+
+export default NomesComponente;

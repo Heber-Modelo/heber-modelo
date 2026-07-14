@@ -12,20 +12,16 @@
  */
 
 import PropriedadeFactory from "infrastructure/factory/propriedadeFactory";
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import ValoresJSONComponente from "model/json/valoresJSONComponente";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
-import ValoresJSONComponente, { JSONPropriedade } from "model/json/valoresJSONComponente";
 
 export default class ComponenteFactory {
   public static PROPRIEDADE_ID_COMPONENTE: string = "data-id";
   public static PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
   public static PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string = "data-recebe-pontos-extensores";
   public static PROPRIEDADE_RECEBE_SETAS_CONECTORAS: string = "data-recebe-setas-conectoras";
-  private static _CLASSE_COMUM_ELEMENTOS: string = "componente";
-
-  static get CLASSE_COMUM_ELEMENTOS(): string {
-    return this._CLASSE_COMUM_ELEMENTOS;
-  }
 
   private async pegarJSON(nomeComponente: string): Promise<ValoresJSONComponente> {
     return await fetch(`/elementos/${nomeComponente.toLowerCase()}.json`).then(
@@ -35,7 +31,7 @@ export default class ComponenteFactory {
 
   public async criarComponente(nomeComponente: string): Promise<ComponenteDiagrama> {
     return this.pegarJSON(nomeComponente).then(
-      (valores: ValoresJSONComponente): ComponenteDiagrama => {
+      async (valores: ValoresJSONComponente): Promise<ComponenteDiagrama> => {
         let fabricaPropriedade: PropriedadeFactory = new PropriedadeFactory();
         let elementoHTML: HTMLDivElement = document.createElement("div");
         elementoHTML.innerHTML = valores.valorHtmlInterno;
@@ -48,23 +44,26 @@ export default class ComponenteFactory {
           ComponenteFactory.PROPRIEDADE_RECEBE_SETAS_CONECTORAS,
           valores.recebeSetaConectora,
         );
-        elementoHTML.classList.add(ComponenteFactory.CLASSE_COMUM_ELEMENTOS);
+        elementoHTML.classList.add(ComponenteDiagrama.CLASSE_BASE_COMPONENTE);
         elementoHTML.classList.add(...valores.classesElemento);
         let componente: ComponenteDiagrama = new ComponenteDiagrama(elementoHTML, []);
-        valores.propriedades.forEach((propriedade: JSONPropriedade): void => {
+        for (const propriedade of valores.propriedades) {
+          let label: string = await traduzirChaveI18n(propriedade.chaveI18nLabel);
+
           let propriedadeComponente: PropriedadeComponente | null =
             fabricaPropriedade.criarPropriedade(
               propriedade.nomePropriedade,
               propriedade.sufixo,
               componente,
-              propriedade.label,
+              label,
               propriedade.classeElemento,
+              propriedade.chavesI18nLabelsValoresPermitidos,
               propriedade.valoresPermitidos,
             );
           if (propriedadeComponente !== null) {
             componente.propriedades.push(propriedadeComponente);
           }
-        });
+        }
 
         return componente;
       },

@@ -29,10 +29,10 @@
       "items": {
         "type": "object",
         "properties": {
-          "classeElemento": {
+          "chaveI18nLabel": {
             "type": "string"
           },
-          "label": {
+          "classeElemento": {
             "type": "string"
           },
           "nomePropriedade": {
@@ -41,14 +41,18 @@
           "sufixo": {
             "type": "string"
           },
+          "chavesI18nLabelsValoresPermitidos": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
           "valoresPermitidos": {
             "type": "array",
             "items": { "type": "string" }
           }
         },
         "required": [
+          "chaveI18nLabel",
           "classeElemento",
-          "label",
           "nomePropriedade",
           "sufixo"
         ]

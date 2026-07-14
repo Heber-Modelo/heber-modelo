@@ -14,6 +14,9 @@
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 
 export default class PropriedadeComponente {
+  public static readonly CLASSE_PROPRIEDADE_CUSTOMIZADA: string = "custom";
+  public static readonly PROPERTY_CHANGE_EVENT: string = "propertyChange";
+
   constructor(
     nome: string,
     componente: ComponenteDiagrama,
@@ -28,20 +31,11 @@ export default class PropriedadeComponente {
     this._classeElemento = classeElemento.startsWith(".") ? classeElemento : `.${classeElemento}`;
   }
 
-  private static _CLASSE_PROPRIEDADE_CUSTOMIZADA: string = "custom";
   protected _nome: string;
   protected _componente: ComponenteDiagrama;
   protected _sufixo: string;
   protected _label: string;
   protected _classeElemento: string;
-
-  static get CLASSE_PROPRIEDADE_CUSTOMIZADA(): string {
-    return this._CLASSE_PROPRIEDADE_CUSTOMIZADA;
-  }
-
-  get nome(): string {
-    return this._nome;
-  }
 
   protected pegarValorPropriedade(): string {
     return (

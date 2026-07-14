@@ -1,8 +1,35 @@
 {
   "$schema": ".elemento.schema.json",
-  "valorHtmlInterno": "",
+  "valorHtmlInterno": "<div class=\"ponto ponto-norte\"><div class=\"ponto-norte-valor\"></div></div><div class=\"ponto ponto-sul\"><div class=\"ponto-sul-valor\"></div></div>",
   "classesElemento": ["elemento-conexao-angulada"],
   "recebePontoExtensor": false,
   "recebeSetaConectora": false,
-  "propriedades": []
+  "propriedades": [
+    {
+      "chaveI18nLabel": "element.property.position-north-point.label",
+      "classeElemento": "ponto-norte-valor",
+      "nomePropriedade": "posicao-ponto-norte",
+      "sufixo": "",
+      "chavesI18nLabelsValoresPermitidos": [
+        "element.property-value.north.label",
+        "element.property-value.south.label",
+        "element.property-value.east.label",
+        "element.property-value.west.label"
+      ],
+      "valoresPermitidos": ["NORTE", "SUL", "LESTE", "OESTE"]
+    },
+    {
+      "chaveI18nLabel": "element.property.position-south-point.label",
+      "classeElemento": "ponto-sul-valor",
+      "nomePropriedade": "posicao-ponto-sul",
+      "sufixo": "",
+      "chavesI18nLabelsValoresPermitidos": [
+        "element.property-value.north.label",
+        "element.property-value.south.label",
+        "element.property-value.east.label",
+        "element.property-value.west.label"
+      ],
+      "valoresPermitidos": ["NORTE", "SUL", "LESTE", "OESTE"]
+    }
+  ]
 }

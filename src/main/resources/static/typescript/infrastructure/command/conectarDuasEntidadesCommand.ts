@@ -26,14 +26,13 @@ import AbstractComponenteConexao from "model/componente/abstractComponenteConexa
 import ComponenteCardinalidadeRelacionamento from "model/componente/componenteCardinalidadeRelacionamento";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
+import NomesComponente from "model/componente/nomesComponente";
 import TiposConexao from "model/conexao/tiposConexao";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import Ponto from "model/ponto";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
 
 export default class ConectarDuasEntidadesCommand implements ICommand {
-  public static readonly NOME_ELEMENTO_CARDINALIDADE: string = "cardinalidade";
-  public static readonly NOME_ELEMENTO_RELACIONAMENTO: string = "relacionamento";
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
@@ -46,6 +45,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponente: IRepositorioComponente;
   private readonly _tipoConexao: TiposConexao;
+  private _commandCarregarCSSCardinalidade: CarregarCSSCommand | undefined;
   private _commandCarregarCSSConexao: CarregarCSSCommand | undefined;
   private _commandCarregarCSSRelacionamento: CarregarCSSCommand | undefined;
   private _commandCarregarCSSTexto: CarregarCSSCommand | undefined;
@@ -107,22 +107,26 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
       this._lateralSegundoComponente,
     );
 
+    this._commandCarregarCSSCardinalidade = new CarregarCSSCommandBuilder()
+      .definirNomeArquivo(NomesComponente.CARDINALIDADE)
+      .build();
     this._commandCarregarCSSConexao = new CarregarCSSCommandBuilder()
       .definirNomeArquivo(this._tipoConexao)
       .build();
     this._commandCarregarCSSRelacionamento = new CarregarCSSCommandBuilder()
-      .definirNomeArquivo(ConectarDuasEntidadesCommand.NOME_ELEMENTO_RELACIONAMENTO)
+      .definirNomeArquivo(NomesComponente.RELACIONAMENTO)
       .build();
     this._commandCarregarCSSTexto = new CarregarCSSCommandBuilder()
-      .definirNomeArquivo(ConectarDuasEntidadesCommand.NOME_ELEMENTO_CARDINALIDADE)
+      .definirNomeArquivo(NomesComponente.RELACIONAMENTO)
       .build();
 
+    this._commandCarregarCSSCardinalidade.execute();
     this._commandCarregarCSSConexao.execute();
     this._commandCarregarCSSRelacionamento.execute();
     this._commandCarregarCSSTexto.execute();
 
     this._fabricaComponente
-      .criarComponente(ConectarDuasEntidadesCommand.NOME_ELEMENTO_RELACIONAMENTO)
+      .criarComponente(NomesComponente.RELACIONAMENTO)
       .then(async (componente: ComponenteDiagrama): Promise<void> => {
         this._diagrama.append(componente.htmlComponente);
         this._registradorEventosElemento.registrarEventos(componente.htmlComponente);
@@ -175,9 +179,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
         this._diagrama.append(this._primeiroComponenteConexao.htmlComponente);
 
         let primeiraCardinalidade: ComponenteDiagrama =
-          await this._fabricaComponente.criarComponente(
-            ConectarDuasEntidadesCommand.NOME_ELEMENTO_CARDINALIDADE,
-          );
+          await this._fabricaComponente.criarComponente(NomesComponente.CARDINALIDADE);
         this._diagrama.append(primeiraCardinalidade.htmlComponente);
         this._primeiroComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
           primeiraCardinalidade.htmlComponente,
@@ -230,9 +232,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
         this._diagrama.append(this._segundoComponenteConexao.htmlComponente);
 
         let segundaCardinalidade: ComponenteDiagrama =
-          await this._fabricaComponente.criarComponente(
-            ConectarDuasEntidadesCommand.NOME_ELEMENTO_CARDINALIDADE,
-          );
+          await this._fabricaComponente.criarComponente(NomesComponente.CARDINALIDADE);
         this._diagrama.append(segundaCardinalidade.htmlComponente);
         this._segundoComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
           segundaCardinalidade.htmlComponente,
@@ -260,6 +260,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
   }
 
   redo(): CommandResult {
+    this._commandCarregarCSSCardinalidade?.redo();
     this._commandCarregarCSSConexao?.redo();
     this._commandCarregarCSSRelacionamento?.redo();
     this._commandCarregarCSSTexto?.redo();
@@ -304,6 +305,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
   }
 
   undo(): CommandResult {
+    this._commandCarregarCSSCardinalidade?.undo();
     this._commandCarregarCSSConexao?.undo();
     this._commandCarregarCSSRelacionamento?.undo();
     this._commandCarregarCSSTexto?.undo();

@@ -19,6 +19,9 @@ import Ponto from "model/ponto";
 import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 
 export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
+  public static readonly CLASSE_BASE_COMPONENTE: string = "componente";
+  public static readonly CLASSE_ELEMENTO_SELECIONADO: string = "selected";
+
   constructor(htmlComponente: HTMLDivElement, propriedades: PropriedadeComponente[] | null) {
     this._htmlComponente = htmlComponente;
     this._propriedades = propriedades ?? [];
@@ -39,24 +42,6 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
 
   get propriedades(): PropriedadeComponente[] {
     return this._propriedades;
-  }
-
-  public definirValorPropriedade(nomePropriedade: string, valorPropriedade: string): void {
-    this._propriedades.forEach((propriedade: PropriedadeComponente): void => {
-      if (propriedade.nome === nomePropriedade) {
-        propriedade.definirValorPropriedade(valorPropriedade);
-        this.atualizarOuvintes();
-        return;
-      }
-    });
-
-    if (this._htmlComponente.hasAttribute(nomePropriedade)) {
-      this._htmlComponente.setAttribute(nomePropriedade, String(valorPropriedade));
-      this.atualizarOuvintes();
-      return;
-    }
-
-    throw `Propriedade ${nomePropriedade} não existe no elemento: ${this._htmlComponente}`;
   }
 
   public pegarEstiloElemento(): CSSStyleDeclaration {

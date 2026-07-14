@@ -14,13 +14,13 @@
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 
 export default class GeradorIDComponenteFactory {
-  private static _instance: GeradorIDComponente | null = null;
+  private static _geradorIDComponente: GeradorIDComponente | null = null;
 
   static build(): GeradorIDComponente {
-    if (this._instance === null) {
-      this._instance = new GeradorIDComponente();
+    if (this._geradorIDComponente === null) {
+      this._geradorIDComponente = new GeradorIDComponente();
     }
 
-    return this._instance;
+    return this._geradorIDComponente;
   }
 }

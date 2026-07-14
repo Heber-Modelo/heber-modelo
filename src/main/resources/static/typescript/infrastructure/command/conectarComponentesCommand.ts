@@ -25,14 +25,12 @@ import ICommandBuilder from "model/command/iCommandBuilder";
 import ComponenteCardinalidadeRelacionamento from "model/componente/componenteCardinalidadeRelacionamento";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
+import NomesComponente from "model/componente/nomesComponente";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
 import Ponto from "model/ponto";
 
 export default class ConectarComponentesCommand implements ICommand {
-  public static readonly NOME_ELEMENTO_CARDINALIDADE: string = "cardinalidade";
-  public static readonly NOME_ELEMENTO_ENTIDADE: string = "entidade";
-  public static readonly NOME_ELEMENTO_RELACIONAMENTO: string = "relacionamento";
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
@@ -118,10 +116,10 @@ export default class ConectarComponentesCommand implements ICommand {
     if (
       this._primeiroComponente.htmlComponente.getAttribute(
         ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-      ) !== ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO &&
+      ) !== NomesComponente.RELACIONAMENTO &&
       this._segundoComponente.htmlComponente.getAttribute(
         ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-      ) !== ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO
+      ) !== NomesComponente.RELACIONAMENTO
     ) {
       return {
         ok: true,
@@ -130,10 +128,10 @@ export default class ConectarComponentesCommand implements ICommand {
     }
 
     this._fabricaComponente
-      .criarComponente(ConectarComponentesCommand.NOME_ELEMENTO_CARDINALIDADE)
+      .criarComponente(NomesComponente.CARDINALIDADE)
       .then((componente: ComponenteDiagrama): void => {
         this._commandCarregarCSSTexto = new CarregarCSSCommandBuilder()
-          .definirNomeArquivo(ConectarComponentesCommand.NOME_ELEMENTO_CARDINALIDADE)
+          .definirNomeArquivo(NomesComponente.CARDINALIDADE)
           .build();
         this._commandCarregarCSSTexto.execute();
 
@@ -152,7 +150,7 @@ export default class ConectarComponentesCommand implements ICommand {
         if (
           this._primeiroComponente.htmlComponente.getAttribute(
             ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-          ) === ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO
+          ) === NomesComponente.RELACIONAMENTO
         ) {
           this._componenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
             componente.htmlComponente,
@@ -196,7 +194,7 @@ export default class ConectarComponentesCommand implements ICommand {
       if (
         this._primeiroComponente.htmlComponente.getAttribute(
           ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-        ) === ConectarComponentesCommand.NOME_ELEMENTO_RELACIONAMENTO
+        ) === NomesComponente.RELACIONAMENTO
       ) {
         this._segundoComponente.adicionarOuvinte(this._componenteCardinalidade);
       } else {

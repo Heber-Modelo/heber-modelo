@@ -14,13 +14,13 @@
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 
 export default class RegistradorEventosConexaoFactory {
-  private static _instance: RegistradorEventosConexao | null = null;
+  private static _registradorEventosConexao: RegistradorEventosConexao | null = null;
 
   public static build(): RegistradorEventosConexao {
-    if (this._instance === null) {
-      this._instance = new RegistradorEventosConexao();
+    if (this._registradorEventosConexao === null) {
+      this._registradorEventosConexao = new RegistradorEventosConexao();
     }
 
-    return this._instance;
+    return this._registradorEventosConexao;
   }
 }

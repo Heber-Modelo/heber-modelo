@@ -6,8 +6,8 @@
   "recebeSetaConectora": true,
   "propriedades": [
     {
+      "chaveI18nLabel": "element.property.name.label",
       "classeElemento": "nome",
-      "label": "nome",
       "nomePropriedade": "innerText",
       "sufixo": ""
     }

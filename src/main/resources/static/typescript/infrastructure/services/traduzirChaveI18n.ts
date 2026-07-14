@@ -11,16 +11,10 @@
  *
  */
 
-import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
+import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 
-export default class RegistradorEventosElementoFactory {
-  private static _registradorEventosElemento: RegistradorEventosElemento | null = null;
-
-  public static build(): RegistradorEventosElemento {
-    if (this._registradorEventosElemento === null) {
-      this._registradorEventosElemento = new RegistradorEventosElemento();
-    }
-
-    return this._registradorEventosElemento;
-  }
+export default async function traduzirChaveI18n(chaveI18n: string): Promise<string> {
+  return await fetch(`/traducao/${chaveI18n}`)
+    .then(async (response: Response): Promise<ResponseTraducaoJSON> => await response.json())
+    .then((responseTraducao: ResponseTraducaoJSON): string => responseTraducao.mensagem);
 }
