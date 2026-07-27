@@ -80,6 +80,9 @@ import SetaConectora from "model/setaConectora";
 import Ponto from "model/ponto";
 import calcularLateralComponente from "model/services/calcularLateralComponente";
 import NomesComponente from "model/componente/nomesComponente";
+import GeradorIDAbaFactory from "infrastructure/factory/geradorIDAbaFactory";
+import GeradorIDAba from "infrastructure/gerador/geradorIDAba";
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -557,6 +560,8 @@ buttonCortar?.addEventListener("click", (): void => {
 /* TROCA DE ABAS */
 /*****************/
 
+let geradorIDAba: GeradorIDAba = GeradorIDAbaFactory.build();
+
 let buttonNovaAba: HTMLDivElement | null = document.querySelector("#nova-aba");
 let seletorAbas: HTMLElement | null = document.querySelector("footer div");
 
@@ -565,14 +570,23 @@ function fecharAba(event: MouseEvent): void {
   elementoAlvo.parentElement?.remove();
 }
 
-buttonNovaAba?.addEventListener("click", (): void => {
+buttonNovaAba?.addEventListener("click", async (): Promise<void> => {
   let novaAba: HTMLDivElement = document.createElement("div");
-  let p: HTMLParagraphElement = document.createElement("p");
-  novaAba.classList.add("aba");
-  p.innerText = "x";
-  p.addEventListener("click", fecharAba);
+  let btnFechar: HTMLParagraphElement = document.createElement("p");
+  let tabLabel: HTMLParagraphElement = document.createElement("p");
 
-  novaAba.append(p);
+  novaAba.classList.add("aba");
+  novaAba.setAttribute("data-indice-aba", `${geradorIDAba.pegarProximoID()}`);
+
+  btnFechar.innerText = "x";
+  btnFechar.addEventListener("click", fecharAba);
+
+  tabLabel.classList.add("numero-aba");
+  tabLabel.innerText = `${await traduzirChaveI18n("web.page.editor.label.tab")} ${geradorIDAba.id}`;
+  tabLabel.setAttribute("contenteditable", "true");
+
+  novaAba.append(tabLabel);
+  novaAba.append(btnFechar);
   seletorAbas?.append(novaAba);
 });
 

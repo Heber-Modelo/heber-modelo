@@ -554,25 +554,41 @@ footer {
 
   .aba {
     background-color: var(--cor-painel-lateral);
-    min-height: 3.5rem;
-    min-width: 10rem;
     border: solid 0.15rem var(--cor-borda);
     border-radius: 0 1rem 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 2.8rem;
+    min-width: 10rem;
 
     p {
-      margin: 0.2rem;
       border-radius: 20rem;
-      height: 1.6rem;
-      width:  1.6rem;
-      cursor: pointer;
-      align-self: flex-start;
-      justify-self: flex-start;
-      font-size: 1.3rem;
       color: var(--cor-fonte-alternativa);
+      cursor: pointer;
+      font-size: 1.3rem;
+      height: 1.6rem;
+      padding: 0.2rem;
+      width:  1.6rem;
     }
 
-    p:hover {
+    p:hover:not(.numero-aba){
       background-color: var(--cor-fundo-input);
+    }
+
+    p:not(.numero-aba) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 0;
+    }
+
+    p.numero-aba{
+      border-radius: 0;
+      cursor: text;
+      font-size: 1rem;
+      outline: none;
+      width: max-content;
     }
   }
 

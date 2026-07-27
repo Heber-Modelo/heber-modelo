@@ -147,8 +147,12 @@
 
     <footer>
       <div>
-        <div class="aba">
-          <p>x</p>
+        <div class="aba" data-indice-aba="1">
+          <p
+            class="numero-aba"
+            contenteditable="plaintext-only"
+            th:text="#{web.page.editor.label.tab} + ' 1'"
+          ></p>
         </div>
       </div>
       <div class="aba" id="nova-aba">+</div>
