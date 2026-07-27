@@ -15,6 +15,7 @@ import AbstractComponenteConexao from "model/componente/abstractComponenteConexa
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
+import removerElementoArray from "model/services/removerElementoArray";
 
 export default class RepositorioComponente implements IRepositorioComponente {
   private _componentesDiagrama: ComponenteDiagrama[] = [];
@@ -45,7 +46,10 @@ export default class RepositorioComponente implements IRepositorioComponente {
 
     componenteAlvo.htmlComponente.remove();
     let componentes: ComponenteDiagramaOuvinte[] = componenteAlvo.removerTodosOuvintes();
-    this.removerComponenteArray(componenteAlvo);
+    this._componentesDiagrama = removerElementoArray<ComponenteDiagrama>(
+      componenteAlvo,
+      this._componentesDiagrama,
+    );
 
     componentes.forEach((componente: ComponenteDiagramaOuvinte): void => {
       if (componente.isDependente()) {
