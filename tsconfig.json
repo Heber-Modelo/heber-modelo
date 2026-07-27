@@ -5,14 +5,18 @@
     "declaration": false,
     "declarationMap": false,
     "sourceMap": false,
-    "baseUrl": "./src/main/resources/static/typescript",
     "rootDir": "./src/main/resources/static/typescript",
     "outDir": "./src/main/resources/static/javascript",
     "removeComments": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "application/*": ["./src/main/resources/static/typescript/application/*"],
+      "infrastructure/*": ["./src/main/resources/static/typescript/infrastructure/*"],
+      "model/*": ["./src/main/resources/static/typescript/model/*"]
+    }
   },
   "exclude": [
     "build"
