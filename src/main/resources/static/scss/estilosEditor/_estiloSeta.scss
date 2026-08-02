@@ -11,8 +11,11 @@
  *
  */
 
+@use "../variaveis";
+
 .seta {
-  position: absolute;
+  grid-area: variaveis.$editorGridArea;
+  position: relative;
   width: 2rem;
   height: 1.5rem;
   background: var(--cor-borda);
