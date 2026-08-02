@@ -11,12 +11,15 @@
  *
  */
 
+@use "../variaveis";
+
 .ponto-extensor {
   border-radius: 50%;
   border: var(--cor-borda-ponto-extensor) solid 0.3rem;
   background-color: var(--cor-ponto-extensor);
+  grid-area: variaveis.$editorGridArea;
   height: 1rem;
-  position: absolute;
+  position: relative;
   width: 1rem;
   z-index: 3;
 

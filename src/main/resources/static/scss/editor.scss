@@ -21,6 +21,8 @@
 @use "estilosEditor/estiloSeta";
 @use "estilosEditor/estloSeletorTipoConexao";
 
+@use "variaveis";
+
 $estiloBordaPainel: var(--cor-borda) solid 0.1rem;
 
 body {
@@ -78,10 +80,13 @@ main {
     );
   background-size: var(--tamanho-quadrado-grade) var(--tamanho-quadrado-grade);
   border: 0.2rem solid var(--cor-borda);
+  display: grid;
+  grid-template-areas: variaveis.$editorGridAreaString;
   grid-column: 2;
   grid-row: 3 / 4;
   height: 95%;
   justify-self: center;
+  place-content: center;
   overflow: scroll;
   width: 95%;
 }

@@ -24,6 +24,7 @@ export class PontoAnterior {
   static y: number = 0;
 }
 
+// noinspection DuplicatedCode
 export default class PontoExtensorFactory {
   private decidirCallbackPontoExtensor(
     posicao: PosicoesRelativasPontoExtensor,
@@ -45,10 +46,10 @@ export default class PontoExtensorFactory {
             return;
           }
 
-          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaY: number = (event.clientY - PontoAnterior.y) * -1;
-          let newTop: number = boundingRectangle.top - deltaY;
-          let newHeight: number = boundingRectangle.height + deltaY;
+          let newTop: number = converterPixeisParaNumero(cssStyleDeclaration.top) - deltaY / 2;
+          let newHeight: number = converterPixeisParaNumero(cssStyleDeclaration.height) + deltaY;
 
           elementoAtual.style.top = `${newTop}px`;
           elementoAtual.style.height = `${newHeight}px`;
@@ -75,16 +76,15 @@ export default class PontoExtensorFactory {
             return;
           }
 
-          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaX: number = (event.clientX - PontoAnterior.x) * -1;
           let deltaY: number = (event.clientY - PontoAnterior.y) * -1;
-          let newLeft: number = boundingRectangle.left - deltaX;
-          let newTop: number = boundingRectangle.top - deltaY;
-          let newHeight: number = boundingRectangle.height + deltaY;
-          let newWidth: number = boundingRectangle.width + deltaX;
+          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) - deltaX / 2;
+          let newTop: number = converterPixeisParaNumero(cssStyleDeclaration.top) - deltaY / 2;
+          let newHeight: number = converterPixeisParaNumero(cssStyleDeclaration.height) + deltaY;
+          let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
 
           elementoAtual.style.left = `${newLeft}px`;
-          // noinspection DuplicatedCode
           elementoAtual.style.top = `${newTop}px`;
           elementoAtual.style.height = `${newHeight}px`;
           elementoAtual.style.width = `${newWidth}px`;
@@ -112,16 +112,15 @@ export default class PontoExtensorFactory {
             return;
           }
 
-          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaX: number = event.clientX - PontoAnterior.x;
           let deltaY: number = (event.clientY - PontoAnterior.y) * -1;
-          let oldLeft: number = boundingRectangle.left;
-          let newTop: number = boundingRectangle.top - deltaY;
-          let newHeight: number = boundingRectangle.height + deltaY;
-          let newWidth: number = boundingRectangle.width + deltaX;
+          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) + deltaX / 2;
+          let newTop: number = converterPixeisParaNumero(cssStyleDeclaration.top) - deltaY / 2;
+          let newHeight: number = converterPixeisParaNumero(cssStyleDeclaration.height) + deltaY;
+          let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
 
-          elementoAtual.style.left = `${oldLeft}px`;
-          // noinspection DuplicatedCode
+          elementoAtual.style.left = `${newLeft}px`;
           elementoAtual.style.top = `${newTop}px`;
           elementoAtual.style.height = `${newHeight}px`;
           elementoAtual.style.width = `${newWidth}px`;
@@ -147,10 +146,10 @@ export default class PontoExtensorFactory {
             return;
           }
 
-          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaX: number = (event.clientX - PontoAnterior.x) * -1;
-          let newLeft: number = boundingRectangle.left - deltaX;
-          let newWidth: number = boundingRectangle.width + deltaX;
+          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) - deltaX / 2;
+          let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
 
           elementoAtual.style.left = `${newLeft}px`;
           elementoAtual.style.width = `${newWidth}px`;
@@ -175,9 +174,11 @@ export default class PontoExtensorFactory {
             return;
           }
 
-          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaX: number = event.clientX - PontoAnterior.x;
-          let newWidth: number = boundingRectangle.width + deltaX;
+          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) + deltaX / 2;
+          let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
+          elementoAtual.style.left = `${newLeft}px`;
           elementoAtual.style.width = `${newWidth}px`;
 
           PontoAnterior.x = event.clientX;
@@ -200,9 +201,11 @@ export default class PontoExtensorFactory {
             return;
           }
 
-          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaY: number = event.clientY - PontoAnterior.y;
-          let newHeight: number = boundingRectangle.height + deltaY;
+          let newTop: number = converterPixeisParaNumero(cssStyleDeclaration.top) + deltaY / 2;
+          let newHeight: number = converterPixeisParaNumero(cssStyleDeclaration.height) + deltaY;
+          elementoAtual.style.top = `${newTop}px`;
           elementoAtual.style.height = `${newHeight}px`;
 
           PontoAnterior.y = event.clientY;
@@ -211,7 +214,6 @@ export default class PontoExtensorFactory {
 
       case PosicoesRelativasPontoExtensor.BOTTOM_LEFT:
         return function callback(event: MouseEvent): void {
-          // noinspection DuplicatedCode
           let selecionadorComponente: SelecionadorComponente =
             SelecionadorComponenteFactory.build();
           let elementoAtual: HTMLDivElement | undefined =
@@ -227,14 +229,14 @@ export default class PontoExtensorFactory {
             return;
           }
 
-          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaX: number = (event.clientX - PontoAnterior.x) * -1;
           let deltaY: number = event.clientY - PontoAnterior.y;
-          let oldTop: number = boundingRectangle.top;
-          let newLeft: number = boundingRectangle.left - deltaX;
-          let newHeight: number = boundingRectangle.height + deltaY;
-          let newWidth: number = boundingRectangle.width + deltaX;
-          elementoAtual.style.top = `${oldTop}px`;
+          let newTop: number = converterPixeisParaNumero(cssStyleDeclaration.top) + deltaY / 2;
+          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) - deltaX / 2;
+          let newHeight: number = converterPixeisParaNumero(cssStyleDeclaration.height) + deltaY;
+          let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
+          elementoAtual.style.top = `${newTop}px`;
           elementoAtual.style.left = `${newLeft}px`;
           elementoAtual.style.height = `${newHeight}px`;
           elementoAtual.style.width = `${newWidth}px`;
@@ -246,7 +248,6 @@ export default class PontoExtensorFactory {
 
       case PosicoesRelativasPontoExtensor.BOTTOM_RIGHT:
         return function callback(event: MouseEvent): void {
-          // noinspection DuplicatedCode
           let selecionadorComponente: SelecionadorComponente =
             SelecionadorComponenteFactory.build();
           let elementoAtual: HTMLDivElement | undefined =
@@ -262,15 +263,15 @@ export default class PontoExtensorFactory {
             return;
           }
 
-          let boundingRectangle: DOMRect = elementoAtual.getBoundingClientRect();
+          let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaX: number = event.clientX - PontoAnterior.x;
           let deltaY: number = event.clientY - PontoAnterior.y;
-          let oldTop: number = boundingRectangle.top;
-          let oldLeft: number = boundingRectangle.left;
-          let newHeight: number = boundingRectangle.height + deltaY;
-          let newWidth: number = boundingRectangle.width + deltaX;
-          elementoAtual.style.top = `${oldTop}px`;
-          elementoAtual.style.left = `${oldLeft}px`;
+          let newTop: number = converterPixeisParaNumero(cssStyleDeclaration.top) + deltaY / 2;
+          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) + deltaX / 2;
+          let newHeight: number = converterPixeisParaNumero(cssStyleDeclaration.height) + deltaY;
+          let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
+          elementoAtual.style.top = `${newTop}px`;
+          elementoAtual.style.left = `${newLeft}px`;
           elementoAtual.style.height = `${newHeight}px`;
           elementoAtual.style.width = `${newWidth}px`;
 
@@ -295,7 +296,7 @@ export default class PontoExtensorFactory {
               converterPixeisParaNumero(estiloElementoAtual.width) / 2 -
               converterPixeisParaNumero(estiloPonto.width) / 2,
             converterPixeisParaNumero(estiloElementoAtual.top) -
-              converterPixeisParaNumero(estiloPonto.height) / 2,
+              converterPixeisParaNumero(estiloElementoAtual.height) / 2,
           );
 
       case PosicoesRelativasPontoExtensor.TOP_LEFT:
@@ -307,7 +308,7 @@ export default class PontoExtensorFactory {
             converterPixeisParaNumero(estiloElementoAtual.left) -
               converterPixeisParaNumero(estiloPonto.width) / 2,
             converterPixeisParaNumero(estiloElementoAtual.top) -
-              converterPixeisParaNumero(estiloPonto.height) / 2,
+              converterPixeisParaNumero(estiloElementoAtual.height) / 2,
           );
 
       case PosicoesRelativasPontoExtensor.TOP_RIGHT:
@@ -320,7 +321,7 @@ export default class PontoExtensorFactory {
               converterPixeisParaNumero(estiloElementoAtual.width) -
               converterPixeisParaNumero(estiloPonto.width) / 2,
             converterPixeisParaNumero(estiloElementoAtual.top) -
-              converterPixeisParaNumero(estiloPonto.height) / 2,
+              converterPixeisParaNumero(estiloElementoAtual.height) / 2,
           );
 
       case PosicoesRelativasPontoExtensor.CENTER_LEFT:
@@ -331,9 +332,7 @@ export default class PontoExtensorFactory {
           new Ponto(
             converterPixeisParaNumero(estiloElementoAtual.left) -
               converterPixeisParaNumero(estiloPonto.height) / 2,
-            converterPixeisParaNumero(estiloElementoAtual.top) +
-              converterPixeisParaNumero(estiloElementoAtual.height) / 2 -
-              converterPixeisParaNumero(estiloPonto.height) / 2,
+            converterPixeisParaNumero(estiloElementoAtual.top),
           );
 
       case PosicoesRelativasPontoExtensor.CENTER_RIGHT:
@@ -345,9 +344,7 @@ export default class PontoExtensorFactory {
             converterPixeisParaNumero(estiloElementoAtual.left) +
               converterPixeisParaNumero(estiloElementoAtual.width) -
               converterPixeisParaNumero(estiloPonto.width) / 2,
-            converterPixeisParaNumero(estiloElementoAtual.top) +
-              converterPixeisParaNumero(estiloElementoAtual.height) / 2 -
-              converterPixeisParaNumero(estiloPonto.height) / 2,
+            converterPixeisParaNumero(estiloElementoAtual.top),
           );
 
       case PosicoesRelativasPontoExtensor.BOTTOM:
@@ -360,8 +357,7 @@ export default class PontoExtensorFactory {
               converterPixeisParaNumero(estiloElementoAtual.width) / 2 -
               converterPixeisParaNumero(estiloPonto.width) / 2,
             converterPixeisParaNumero(estiloElementoAtual.top) +
-              converterPixeisParaNumero(estiloElementoAtual.height) -
-              converterPixeisParaNumero(estiloPonto.height) / 2,
+              converterPixeisParaNumero(estiloElementoAtual.height) / 2,
           );
 
       case PosicoesRelativasPontoExtensor.BOTTOM_LEFT:
@@ -373,8 +369,7 @@ export default class PontoExtensorFactory {
             converterPixeisParaNumero(estiloElementoAtual.left) -
               converterPixeisParaNumero(estiloPonto.width) / 2,
             converterPixeisParaNumero(estiloElementoAtual.top) +
-              converterPixeisParaNumero(estiloElementoAtual.height) -
-              converterPixeisParaNumero(estiloPonto.height) / 2,
+              converterPixeisParaNumero(estiloElementoAtual.height) / 2,
           );
 
       case PosicoesRelativasPontoExtensor.BOTTOM_RIGHT:
@@ -387,8 +382,7 @@ export default class PontoExtensorFactory {
               converterPixeisParaNumero(estiloElementoAtual.width) -
               converterPixeisParaNumero(estiloPonto.width) / 2,
             converterPixeisParaNumero(estiloElementoAtual.top) +
-              converterPixeisParaNumero(estiloElementoAtual.height) -
-              converterPixeisParaNumero(estiloPonto.height) / 2,
+              converterPixeisParaNumero(estiloElementoAtual.height) / 2,
           );
     }
   }

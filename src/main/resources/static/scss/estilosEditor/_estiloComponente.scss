@@ -11,12 +11,15 @@
  *
  */
 
+@use "../variaveis";
+
 .componente {
   display: flex;
   background-color: var(--cor-fundo);
+  grid-area: variaveis.$editorGridArea;
   align-items: center;
   justify-content: center;
-  position: absolute;
+  position: relative;
   cursor: crosshair;
   width: 150px;
   height: 100px;
