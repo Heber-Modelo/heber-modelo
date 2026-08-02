@@ -1,0 +1,31 @@
+/*!
+ * Copyright (c) 2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+ *
+ * Licensed under the Massachusetts Institute of Technology (MIT) License.
+ * You may obtain a copy of the license at:
+ *
+ *    https://choosealicense.com/licenses/mit/
+ *
+ * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+ * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+ *
+ */
+
+.seletor-tipo-conexao {
+  z-index: 5;
+  display: flex;
+  gap: 0.2rem;
+  width: fit-content;
+  height: fit-content;
+  background-color: var(--cor-fundo);
+  border: var(--cor-borda) solid 0.3rem;
+  border-radius: 0.5rem;
+  padding: 0.2rem;
+
+  button {
+    padding: 0.2rem;
+    width: fit-content;
+    height: fit-content;
+    font-size: 10pt;
+  }
+}
