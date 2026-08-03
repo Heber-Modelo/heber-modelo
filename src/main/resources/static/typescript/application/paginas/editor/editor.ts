@@ -80,6 +80,7 @@ import SetaConectora from "model/setaConectora";
 import Ponto from "model/ponto";
 import calcularLateralComponente from "model/services/calcularLateralComponente";
 import NomesComponente from "model/componente/nomesComponente";
+import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -131,8 +132,9 @@ function mouseDownComecarMoverElemento(event: MouseEvent): void {
     return;
   }
 
-  offsetX = event.clientX - componente.getBoundingClientRect().left;
-  offsetY = event.clientY - componente.getBoundingClientRect().top;
+  let estiloComponente: CSSStyleDeclaration = getComputedStyle(componente);
+  offsetX = event.clientX - converterPixeisParaNumero(estiloComponente.left);
+  offsetY = event.clientY - converterPixeisParaNumero(estiloComponente.top);
   componente.classList.add("dragging");
   document.addEventListener("mousemove", dragElement);
   document.body.style.setProperty("user-select", "none");
