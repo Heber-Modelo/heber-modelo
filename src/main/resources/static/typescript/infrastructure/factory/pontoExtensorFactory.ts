@@ -79,7 +79,7 @@ export default class PontoExtensorFactory {
           let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaX: number = (event.clientX - PontoAnterior.x) * -1;
           let deltaY: number = (event.clientY - PontoAnterior.y) * -1;
-          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) - deltaX / 2;
+          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) - deltaX;
           let newTop: number = converterPixeisParaNumero(cssStyleDeclaration.top) - deltaY / 2;
           let newHeight: number = converterPixeisParaNumero(cssStyleDeclaration.height) + deltaY;
           let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
@@ -115,12 +115,12 @@ export default class PontoExtensorFactory {
           let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaX: number = event.clientX - PontoAnterior.x;
           let deltaY: number = (event.clientY - PontoAnterior.y) * -1;
-          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) + deltaX / 2;
+          let oldLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left);
           let newTop: number = converterPixeisParaNumero(cssStyleDeclaration.top) - deltaY / 2;
           let newHeight: number = converterPixeisParaNumero(cssStyleDeclaration.height) + deltaY;
           let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
 
-          elementoAtual.style.left = `${newLeft}px`;
+          elementoAtual.style.left = `${oldLeft}px`;
           elementoAtual.style.top = `${newTop}px`;
           elementoAtual.style.height = `${newHeight}px`;
           elementoAtual.style.width = `${newWidth}px`;
@@ -148,7 +148,7 @@ export default class PontoExtensorFactory {
 
           let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaX: number = (event.clientX - PontoAnterior.x) * -1;
-          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) - deltaX / 2;
+          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) - deltaX;
           let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
 
           elementoAtual.style.left = `${newLeft}px`;
@@ -176,9 +176,9 @@ export default class PontoExtensorFactory {
 
           let cssStyleDeclaration: CSSStyleDeclaration = getComputedStyle(elementoAtual);
           let deltaX: number = event.clientX - PontoAnterior.x;
-          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) + deltaX / 2;
+          let oldLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left);
           let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
-          elementoAtual.style.left = `${newLeft}px`;
+          elementoAtual.style.left = `${oldLeft}px`;
           elementoAtual.style.width = `${newWidth}px`;
 
           PontoAnterior.x = event.clientX;
@@ -233,7 +233,7 @@ export default class PontoExtensorFactory {
           let deltaX: number = (event.clientX - PontoAnterior.x) * -1;
           let deltaY: number = event.clientY - PontoAnterior.y;
           let newTop: number = converterPixeisParaNumero(cssStyleDeclaration.top) + deltaY / 2;
-          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) - deltaX / 2;
+          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) - deltaX;
           let newHeight: number = converterPixeisParaNumero(cssStyleDeclaration.height) + deltaY;
           let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
           elementoAtual.style.top = `${newTop}px`;
@@ -267,11 +267,11 @@ export default class PontoExtensorFactory {
           let deltaX: number = event.clientX - PontoAnterior.x;
           let deltaY: number = event.clientY - PontoAnterior.y;
           let newTop: number = converterPixeisParaNumero(cssStyleDeclaration.top) + deltaY / 2;
-          let newLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left) + deltaX / 2;
+          let oldLeft: number = converterPixeisParaNumero(cssStyleDeclaration.left);
           let newHeight: number = converterPixeisParaNumero(cssStyleDeclaration.height) + deltaY;
           let newWidth: number = converterPixeisParaNumero(cssStyleDeclaration.width) + deltaX;
           elementoAtual.style.top = `${newTop}px`;
-          elementoAtual.style.left = `${newLeft}px`;
+          elementoAtual.style.left = `${oldLeft}px`;
           elementoAtual.style.height = `${newHeight}px`;
           elementoAtual.style.width = `${newWidth}px`;
 

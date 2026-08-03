@@ -86,7 +86,7 @@ main {
   grid-row: 3 / 4;
   height: 95%;
   justify-self: center;
-  place-content: center;
+  place-content: stretch;
   overflow: scroll;
   width: 95%;
 }

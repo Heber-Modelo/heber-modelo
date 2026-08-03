@@ -128,7 +128,7 @@ let offsetY: number;
 function mouseDownComecarMoverElemento(event: MouseEvent): void {
   let componente: HTMLDivElement = event.target as HTMLDivElement;
 
-  if (!componente.classList.contains("componente")) {
+  if (!componente.classList.contains(ComponenteDiagrama.CLASSE_BASE_COMPONENTE)) {
     return;
   }
 
