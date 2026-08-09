@@ -19,6 +19,8 @@ updates:
     schedule:
       interval: weekly
     rebase-strategy: disabled
+    commit-message:
+      prefix: "[ GITHUB ACTIONS ] "
   - package-ecosystem: gradle
     directory: /
     schedule:
