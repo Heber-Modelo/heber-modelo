@@ -81,8 +81,8 @@ java -jar heber-modelo.jar
 
 ### Dependências:
 
-- [Gradle](https://gradle.org/) 9.4.1
-- [Java](https://www.oracle.com/java/technologies/downloads/) 24
+- [Gradle](https://gradle.org/) 9.7.0
+- [Java](https://www.oracle.com/java/technologies/downloads/) 25
 - [PNPM](https://pnpm.io/pt/) ^10.33.0
 - [NodeJS](https://nodejs.org/pt) 25.2.1
 
