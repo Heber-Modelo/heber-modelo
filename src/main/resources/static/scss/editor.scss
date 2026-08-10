@@ -282,6 +282,7 @@ aside {
 
   section#propriedades {
     gap: 0.7rem;
+    height: 100%;
 
     label {
       display: grid;
@@ -390,15 +391,16 @@ section#seletor-tipos-conexao {
 }
 
 fieldset.componentes-diagrama {
-  align-items: center;
   border: $estiloBordaPainel;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   display: grid;
-  gap: 1rem;
-  padding: 0.5rem;
-  width: 95%;
+  width: 85%;
+  row-gap: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   margin-bottom: 1.5rem;
-  grid-template-columns: repeat(2, calc(50% - 0.25rem));
+  grid-template-columns: repeat(2, calc(55% - 1rem));
+  justify-content: center;
 
   button {
     align-items: center;
@@ -407,21 +409,21 @@ fieldset.componentes-diagrama {
     flex-direction: column;
     justify-content: center;
     justify-self: center;
-    width: 95%;
+    width: 90%;
 
     h4 {
       pointer-events: none;
     }
 
     h3 {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
     }
 
     svg {
       aspect-ratio: 1 / 1;
       pointer-events: none;
       color: var(--cor-fundo);
-      width: 100%;
+      width: 80%;
       height: 70%;
 
       .svg-cor-borda {
@@ -438,7 +440,7 @@ fieldset.componentes-diagrama {
 
   legend {
     text-align: center;
-    width: 100%;
+    width: 70%;
   }
 
 }
