@@ -60,6 +60,7 @@
           type="button"
           id="btn-cancelar"
         ></button>
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
       </form>
       <div th:replace="~{fragments/cookiesBanner.html :: #cookies-banner}"></div>
     </main>

@@ -40,6 +40,7 @@
             type="submit"
           ></button>
         </div>
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
       </form>
       <a th:href="@{entrarSessao.html}">ENTRAR SESSÃO (LINK TEMPORÁRIO)</a>
     </main>

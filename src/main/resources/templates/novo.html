@@ -4,6 +4,7 @@
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <link rel="stylesheet" th:href="@{/css/novo.css}" />
     <title th:text="#{web.page.new-diagram.title}"></title>
+    <script th:src="@{/javascript/novo.js}" defer></script>
   </head>
   <body>
     <!--
@@ -44,6 +45,7 @@ Licensed works, modifications, and larger works may be distributed under differe
           </button>
           <button type="submit" th:text="#{web.page.new-diagram.label.button.confirm}"></button>
         </div>
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
       </form>
     </main>
     <div th:replace="~{fragments/cookiesBanner :: #cookies-banner}"></div>
