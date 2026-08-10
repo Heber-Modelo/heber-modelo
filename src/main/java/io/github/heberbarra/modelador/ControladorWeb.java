@@ -329,10 +329,12 @@ public class ControladorWeb {
             Optional<Long> tamanhoQuadradoGrade =
                     configurador.pegarValorConfiguracao("grade", "tamanho_quadrado_px", long.class);
             Optional<Long> espessuraGrade = configurador.pegarValorConfiguracao("grade", "espessura", long.class);
+            Optional<Boolean> modoAvancadoEditorPropriedades = configurador.pegarValorConfiguracao("editor", "modoAvancadoEditorPropriedades", boolean.class);
 
-            if (tamanhoQuadradoGrade.isPresent() && espessuraGrade.isPresent()) {
+            if (tamanhoQuadradoGrade.isPresent() && espessuraGrade.isPresent() && modoAvancadoEditorPropriedades.isPresent()) {
                 modelMap.addAttribute("tamanhoQuadradoGrade", tamanhoQuadradoGrade.get() + "px");
                 modelMap.addAttribute("espessuraGrade", espessuraGrade.get() + "px");
+                modelMap.addAttribute("modoAvancadoEditorPropriedades", modoAvancadoEditorPropriedades.get());
             }
         }
 

@@ -162,6 +162,12 @@
       "atributo": "host",
       "tipo": "String",
       "valorPadrao": "localhost"
+    },
+    {
+      "categoria": "editor",
+      "atributo": "modoAvancadoEditorPropriedades",
+      "tipo": "Boolean",
+      "valorPadrao": false
     }
   ]
 }

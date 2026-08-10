@@ -10,9 +10,9 @@
     <script th:src="@{/javascript/helperSeletorTipoConexao.js}" defer></script>
     <script th:src="@{/javascript/application/paginas/editor/salvar.js}" defer></script>
     <script>
-      incrementoMovimentacao = Number("[(${incrementoMovimentacaoElemento})]");
       configurarGrade("--espessura-grade", "[(${espessuraGrade})]");
       configurarGrade("--tamanho-quadrado-grade", "[(${tamanhoQuadradoGrade})]");
+      incrementoMovimentacao = Number("[(${incrementoMovimentacaoElemento})]");
     </script>
     <title th:text="#{web.page.editor.title}"></title>
   </head>
@@ -109,19 +109,19 @@
       </section>
       <section id="propriedades" class="pagina">
         <h2 th:text="#{web.page.editor.section.properties}"></h2>
-        <label>
+        <label th:if="${modoAvancadoEditorPropriedades}">
           <th:block th:text="#{web.page.editor.section.properties.x}"></th:block>
           <input type="text" name="componente-x" />
         </label>
-        <label>
+        <label th:if="${modoAvancadoEditorPropriedades}">
           <th:block th:text="#{web.page.editor.section.properties.y}"></th:block>
           <input type="text" name="componente-y" />
         </label>
-        <label>
+        <label th:if="${modoAvancadoEditorPropriedades}">
           <th:block th:text="#{web.page.editor.section.properties.height}"></th:block>
           <input type="text" name="componente-altura" />
         </label>
-        <label>
+        <label th:if="${modoAvancadoEditorPropriedades}">
           <th:block th:text="#{web.page.editor.section.properties.width}"></th:block>
           <input type="text" name="componente-largura" />
         </label>
