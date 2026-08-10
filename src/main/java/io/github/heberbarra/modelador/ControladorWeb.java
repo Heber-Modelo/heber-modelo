@@ -256,6 +256,24 @@ public class ControladorWeb {
         return "entrarSessao";
     }
 
+    @RequestMapping(value = {"/criarSessao", "/criarSessao.html"}, method = RequestMethod.POST)
+    public String criarSessao(@ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha){
+
+        System.out.println("Porta: " + porta);
+        System.out.println("Senha: " + senha);
+
+        return "redirect:/login";
+    }
+
+    @RequestMapping(value = {"/entrarSessao", "/entrarSessao.html"}, method = RequestMethod.POST)
+    public String entrarSessao(@ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha){
+
+        System.out.println("Porta: " + porta);
+        System.out.println("Senha: " + senha);
+
+        return "redirect:/login";
+    }
+
     @RequestMapping({"/anexarAtividade", "/anexarAtividade.html"})
     public String anexarAtividade(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "assignment");

@@ -20,15 +20,15 @@
   -->
     <header th:replace="~{fragments/header :: header}"></header>
     <main>
-      <form method="post" th:action="@{editor.html}">
+      <form method="post" th:action="@{entrarSessao}">
         <h1 th:text="#{web.page.session-enter.title}"></h1>
         <label>
-          <span class="campos-texto" th:text="#{web.page.session.label.name}"></span>
-          <input type="text" name="session-name" />
+          <span class="campos-texto" th:text="#{web.page.session.label.port}"></span>
+          <input type="text" name="session-port" required/>
         </label>
         <label>
           <span class="campos-texto" th:text="#{web.page.session.label.password}"></span>
-          <input type="password" name="password" />
+          <input type="password" name="password" required/>
         </label>
         <div id="botoes">
           <button id="cancelar" type="button">
