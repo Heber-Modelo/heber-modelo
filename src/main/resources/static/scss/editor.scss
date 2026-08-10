@@ -144,6 +144,7 @@ aside {
 
   section#propriedades {
     gap: 0.7rem;
+    height: 100%;
 
     label {
       display: grid;
@@ -252,15 +253,16 @@ section#seletor-tipos-conexao {
 }
 
 fieldset.componentes-diagrama {
-  align-items: center;
   border: $estiloBordaPainel;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   display: grid;
-  gap: 1rem;
-  padding: 0.5rem;
-  width: 95%;
+  width: 85%;
+  row-gap: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   margin-bottom: 1.5rem;
-  grid-template-columns: repeat(2, calc(50% - 0.25rem));
+  grid-template-columns: repeat(2, calc(55% - 1rem));
+  justify-content: center;
 
   button {
     align-items: center;
@@ -269,21 +271,21 @@ fieldset.componentes-diagrama {
     flex-direction: column;
     justify-content: center;
     justify-self: center;
-    width: 95%;
+    width: 90%;
 
     h4 {
       pointer-events: none;
     }
 
     h3 {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
     }
 
     svg {
       aspect-ratio: 1 / 1;
       pointer-events: none;
       color: var(--cor-fundo);
-      width: 100%;
+      width: 80%;
       height: 70%;
 
       .svg-cor-borda {
@@ -300,7 +302,7 @@ fieldset.componentes-diagrama {
 
   legend {
     text-align: center;
-    width: 100%;
+    width: 70%;
   }
 
 }
@@ -338,25 +340,41 @@ footer {
 
   .aba {
     background-color: var(--cor-painel-lateral);
-    min-height: 3.5rem;
-    min-width: 10rem;
     border: solid 0.15rem var(--cor-borda);
     border-radius: 0 1rem 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 2.8rem;
+    min-width: 10rem;
 
     p {
-      margin: 0.2rem;
       border-radius: 20rem;
-      height: 1.6rem;
-      width:  1.6rem;
-      cursor: pointer;
-      align-self: flex-start;
-      justify-self: flex-start;
-      font-size: 1.3rem;
       color: var(--cor-fonte-alternativa);
+      cursor: pointer;
+      font-size: 1.3rem;
+      height: 1.6rem;
+      padding: 0.2rem;
+      width:  1.6rem;
     }
 
-    p:hover {
+    p:hover:not(.numero-aba){
       background-color: var(--cor-fundo-input);
+    }
+
+    p:not(.numero-aba) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 0;
+    }
+
+    p.numero-aba{
+      border-radius: 0;
+      cursor: text;
+      font-size: 1rem;
+      outline: none;
+      width: max-content;
     }
   }
 
@@ -364,8 +382,8 @@ footer {
     display: flex;
     position: relative;
     right: 0;
-    min-height: 3.5rem;
-    min-width: 3.5rem;
+    min-height: 2.8rem;
+    min-width: 2.8rem;
     border-radius: 0;
     align-items: center;
     justify-content: center;
