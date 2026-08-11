@@ -16,8 +16,12 @@ let checkboxDiagramaRelacional: HTMLInputElement | null =
 let checkboxDicionarioDados: HTMLInputElement | null = document.querySelector("input[value='DDD']");
 
 checkboxDicionarioDados?.addEventListener("input", (): void => {
-  if (checkboxDiagramaRelacional && checkboxDicionarioDados?.checked) {
-    checkboxDiagramaRelacional.checked = true;
+  if (
+    checkboxDiagramaRelacional &&
+    checkboxDicionarioDados?.checked &&
+    !checkboxDiagramaRelacional.checked
+  ) {
+    checkboxDiagramaRelacional.click();
   }
 });
 
