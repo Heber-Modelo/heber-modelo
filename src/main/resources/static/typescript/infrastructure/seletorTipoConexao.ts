@@ -11,9 +11,9 @@
  *
  */
 
-import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
 import helperTraducaoConexao from "infrastructure/helper/helperTraducaoConexao";
+import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import TiposConexao from "model/conexao/tiposConexao";
 import ChangeConnectionTypeEvent from "model/event/changeConnectionTypeEvent";
 

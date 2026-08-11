@@ -21,7 +21,6 @@ import {
   mouseDownSelecionarElemento,
 } from "application/paginas/editor/editorPropriedades";
 import "application/paginas/editor/painelLateral";
-import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import ColarComponenteCommand, {
   ColarComponenteCommandBuilder,
 } from "infrastructure/command/colarComponenteCommand";
@@ -72,6 +71,7 @@ import RegistradorEventosElemento from "infrastructure/registrador/registradorEv
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 import RepositorioTiposDiagrama from "infrastructure/repositorio/repositorioTiposDiagrama";
+import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import "infrastructure/variaveisConfiguracao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
