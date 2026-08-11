@@ -11,8 +11,11 @@
  *
  */
 
+import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
+import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
 import helperTraducaoConexao from "infrastructure/helper/helperTraducaoConexao";
 import TiposConexao from "model/conexao/tiposConexao";
+import ChangeConnectionTypeEvent from "model/event/changeConnectionTypeEvent";
 
 export default class SeletorTipoConexao {
   static readonly ID_SELETOR: string = "#seletor-tipos-conexao";
@@ -27,6 +30,15 @@ export default class SeletorTipoConexao {
       inputSeletorTipoConexao.type = "radio";
       inputSeletorTipoConexao.name = SeletorTipoConexao.NOME_SELETOR;
       inputSeletorTipoConexao.value = tipoConexao;
+
+      inputSeletorTipoConexao.addEventListener("input", (): void => {
+        let selecionadorComponente: SelecionadorComponente = SelecionadorComponenteFactory.build();
+        selecionadorComponente.componenteSelecionado?.htmlComponente?.dispatchEvent(
+          new ChangeConnectionTypeEvent(
+            TiposConexao[inputSeletorTipoConexao.value as keyof typeof TiposConexao],
+          ),
+        );
+      });
 
       let labelSeletorTipoConexao: HTMLLabelElement = document.createElement("label");
       this._elemento.appendChild(labelSeletorTipoConexao);

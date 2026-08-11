@@ -49,6 +49,38 @@ export default abstract class AbstractComponenteConexao
     this._segundoComponente.adicionarOuvinte(this);
     this._recebeSetas = false;
     this.ajustarConexao();
+
+    let elementoPontoNorteValor: HTMLDivElement | null =
+      this.htmlComponente.querySelector(".ponto-norte-valor");
+
+    if (elementoPontoNorteValor) {
+      elementoPontoNorteValor.innerText = LateraisComponente[lateralPrimeiroPonto];
+      elementoPontoNorteValor.addEventListener(
+        PropriedadeComponente.PROPERTY_CHANGE_EVENT,
+        (): void => {
+          this._lateralPrimeiroPonto =
+            LateraisComponente[
+              elementoPontoNorteValor.innerText as keyof typeof LateraisComponente
+            ];
+          this.atualizar(this._primeiroComponente.htmlComponente);
+        },
+      );
+    }
+
+    let elementoPontoSulValor: HTMLDivElement | null =
+      this._htmlComponente.querySelector(".ponto-sul-valor");
+
+    if (elementoPontoSulValor) {
+      elementoPontoSulValor.innerText = LateraisComponente[lateralSegundoPonto];
+      elementoPontoSulValor.addEventListener(
+        PropriedadeComponente.PROPERTY_CHANGE_EVENT,
+        (): void => {
+          this._lateralSegundoPonto =
+            LateraisComponente[elementoPontoSulValor.innerText as keyof typeof LateraisComponente];
+          this.atualizar(this._segundoComponente.htmlComponente);
+        },
+      );
+    }
   }
 
   protected abstract ajustarConexao(): void;
