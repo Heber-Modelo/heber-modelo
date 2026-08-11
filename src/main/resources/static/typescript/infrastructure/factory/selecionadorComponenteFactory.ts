@@ -11,9 +11,9 @@
  *
  */
 
-import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import PontoExtensorFactory from "infrastructure/factory/pontoExtensorFactory";
 import SetaConectoraFactory from "infrastructure/factory/setaConectoraFactory";
+import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import LateraisComponente from "model/componente/lateraisComponente";
 import PontoExtensor from "model/pontoExtensor";
 import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
@@ -32,14 +32,11 @@ export default class SelecionadorComponenteFactory {
           Object.keys(PosicoesRelativasPontoExtensor).length / 2,
           Object.keys(PosicoesRelativasPontoExtensor).length,
         )
-        .map(
-          (posicao: string): PontoExtensor =>
-            pontoExtensorFactory.build(
-              diagrama,
-              PosicoesRelativasPontoExtensor[
-                posicao as keyof typeof PosicoesRelativasPontoExtensor
-              ],
-            ),
+        .map((posicao: string): PontoExtensor =>
+          pontoExtensorFactory.build(
+            diagrama,
+            PosicoesRelativasPontoExtensor[posicao as keyof typeof PosicoesRelativasPontoExtensor],
+          ),
         );
 
       let setaConectoraFactory: SetaConectoraFactory = new SetaConectoraFactory();

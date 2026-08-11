@@ -11,11 +11,11 @@
  *
  */
 
-import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
 import selecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
+import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 

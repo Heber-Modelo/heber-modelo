@@ -14,8 +14,8 @@
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import SelecionadorComponente from "application/paginas/editor/selecionadorComponente";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
+import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import CommandBuilderException from "model/exception/commandBuilderException";
 
 export default class CortarComponenteCommand implements ICommand {
