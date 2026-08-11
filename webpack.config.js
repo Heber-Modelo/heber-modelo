@@ -16,6 +16,10 @@ export default {
     cookiesBanner: path.resolve(baseDirectory, "application/paginas/cookiesBanner.ts"),
     desligar: path.resolve(baseDirectory, "application/paginas/desligar.ts"),
     editor: path.resolve(baseDirectory, "application/paginas/editor/editor.ts"),
+    helperSeletorTipoConexao: path.resolve(
+      baseDirectory,
+      "application/paginas/helperSeletorTipoConexao",
+    ),
     login: path.resolve(baseDirectory, "application/paginas/login.ts"),
   },
   output: {

@@ -18,6 +18,7 @@ import Ponto from "model/ponto";
 import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 import SetaConectora from "model/setaConectora";
 
+// noinspection DuplicatedCode
 export default class SetaConectoraFactory {
   private decidirFormulaPosicaoSeta(
     posicaoSeta: PosicoesRelativasSetasConectoras,
@@ -27,6 +28,7 @@ export default class SetaConectoraFactory {
         return (estiloComponente: CSSStyleDeclaration, estiloSeta: CSSStyleDeclaration): Ponto => {
           let componenteTop: number = converterPixeisParaNumero(estiloComponente.top);
           let componenteLeft: number = converterPixeisParaNumero(estiloComponente.left);
+          let componenteHeight: number = converterPixeisParaNumero(estiloComponente.height);
           let componenteWidth: number = converterPixeisParaNumero(estiloComponente.width);
           let centroHorizontal: number = componenteLeft + componenteWidth / 2;
 
@@ -34,7 +36,7 @@ export default class SetaConectoraFactory {
           let setaWidth: number = converterPixeisParaNumero(estiloSeta.width);
 
           let x: number = centroHorizontal - setaWidth / 2;
-          let y: number = componenteTop - setaHeight * 1.5;
+          let y: number = componenteTop - componenteHeight / 2 - setaHeight;
 
           return new Ponto(x, y);
         };
@@ -51,7 +53,7 @@ export default class SetaConectoraFactory {
           let setaWidth: number = converterPixeisParaNumero(estiloSeta.width);
 
           let x: number = centroHorizontal - setaWidth / 2;
-          let y: number = componenteTop + componenteHeight + setaHeight * 0.5;
+          let y: number = componenteTop + componenteHeight / 2 + setaHeight;
 
           return new Ponto(x, y);
         };
@@ -63,11 +65,10 @@ export default class SetaConectoraFactory {
           let componenteHeight: number = converterPixeisParaNumero(estiloComponente.height);
           let centroVertical: number = componenteTop + componenteHeight / 2;
 
-          let setaHeight: number = converterPixeisParaNumero(estiloSeta.height);
           let setaWidth: number = converterPixeisParaNumero(estiloSeta.width);
 
           let x: number = componenteLeft - setaWidth * 1.5;
-          let y: number = centroVertical - setaHeight / 2;
+          let y: number = centroVertical - componenteHeight / 2;
 
           return new Ponto(x, y);
         };
@@ -83,7 +84,7 @@ export default class SetaConectoraFactory {
           let setaHeight: number = converterPixeisParaNumero(estiloSeta.height);
 
           let x: number = componenteLeft + componenteWidth + setaHeight * 0.5;
-          let y: number = centroVertical - setaHeight / 2;
+          let y: number = centroVertical - componenteHeight / 2;
 
           return new Ponto(x, y);
         };

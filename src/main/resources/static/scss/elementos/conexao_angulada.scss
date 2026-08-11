@@ -1,10 +1,14 @@
+@use "../variaveis";
+
 .elemento-conexao-angulada {
   background: var(--cor-borda);
   display: flex;
   flex-direction: row;
+  grid-area: variaveis.$editorGridArea;
   justify-content: space-between;
   height: 0.1rem;
   border: 0;
+  position: relative;
   transform-origin: 0 0;
 
   &:hover,

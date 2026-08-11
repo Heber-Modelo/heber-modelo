@@ -7,11 +7,12 @@
     <script th:src="@{/javascript/editor.js}" type="module" defer></script>
     <script th:src="@{/javascript/application/paginas/editor/callbacksElementos.js}"></script>
     <script th:src="@{/javascript/application/paginas/editor/grade.js}"></script>
+    <script th:src="@{/javascript/helperSeletorTipoConexao.js}" defer></script>
     <script th:src="@{/javascript/application/paginas/editor/salvar.js}" defer></script>
-    <script th:inline="javascript">
-      incrementoMovimentacao = Number("[(${incrementoMovimentacaoElemento})]");
+    <script>
       configurarGrade("--espessura-grade", "[(${espessuraGrade})]");
       configurarGrade("--tamanho-quadrado-grade", "[(${tamanhoQuadradoGrade})]");
+      incrementoMovimentacao = Number("[(${incrementoMovimentacaoElemento})]");
     </script>
     <title th:text="#{web.page.editor.title}"></title>
   </head>
@@ -108,19 +109,19 @@
       </section>
       <section id="propriedades" class="pagina">
         <h2 th:text="#{web.page.editor.section.properties}"></h2>
-        <label>
+        <label th:if="${modoAvancadoEditorPropriedades}">
           <th:block th:text="#{web.page.editor.section.properties.x}"></th:block>
           <input type="text" name="componente-x" />
         </label>
-        <label>
+        <label th:if="${modoAvancadoEditorPropriedades}">
           <th:block th:text="#{web.page.editor.section.properties.y}"></th:block>
           <input type="text" name="componente-y" />
         </label>
-        <label>
+        <label th:if="${modoAvancadoEditorPropriedades}">
           <th:block th:text="#{web.page.editor.section.properties.height}"></th:block>
           <input type="text" name="componente-altura" />
         </label>
-        <label>
+        <label th:if="${modoAvancadoEditorPropriedades}">
           <th:block th:text="#{web.page.editor.section.properties.width}"></th:block>
           <input type="text" name="componente-largura" />
         </label>
@@ -147,8 +148,12 @@
 
     <footer>
       <div>
-        <div class="aba">
-          <p>x</p>
+        <div class="aba" data-indice-aba="1">
+          <p
+            class="numero-aba"
+            contenteditable="plaintext-only"
+            th:text="#{web.page.editor.label.tab} + ' 1'"
+          ></p>
         </div>
       </div>
       <div class="aba" id="nova-aba">+</div>

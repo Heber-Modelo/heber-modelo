@@ -1,0 +1,165 @@
+/*!
+ * Copyright (c) 2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+ *
+ * Licensed under the Massachusetts Institute of Technology (MIT) License.
+ * You may obtain a copy of the license at:
+ *
+ *    https://choosealicense.com/licenses/mit/
+ *
+ * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+ * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+ *
+ */
+
+.barra-de-tarefas {
+  align-items: center;
+  background-color: var(--cor-painel-lateral);
+  border-bottom: 0.1rem solid var(--cor-borda);
+  column-gap: 2rem;
+  display: flex;
+  flex-direction: row;
+  grid-column: 1 / 4;
+  grid-row: 2;
+  height: 5rem;
+  justify-content: center;
+  position: fixed;
+  top: 5rem;
+  width: 100%;
+
+  button, summary{
+    background-color: unset;
+    z-index: 2;
+  }
+
+  button:hover, summary:hover {
+    svg {
+      transform: scale(1.2);
+      transition: 0.5s;
+
+      .svg-cor-contorno {
+        color: var(--cor-botao-hover);
+      }
+    }
+  }
+
+  .menu-opcoes{
+    position: relative;
+    display: inline-block;
+  }
+
+  summary {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    list-style: none;
+    padding: 0.5rem;
+    outline: none;
+  }
+
+  .mostrar-conteudo {
+    background-color: var(--cor-fundo-menu);
+    border: 0.01rem solid var(--cor-borda);
+    border-radius: 0.2rem;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-width: 22rem;
+    padding: 0.8rem 0.8rem;
+    position: absolute;
+    top: 100%;
+    z-index: 10;
+  }
+
+  #menu-pagina{
+    background-color: var(--cor-fundo-menu);
+    border: 0.01rem solid var(--cor-borda);
+    column-gap: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    height: auto;
+    max-width: 40rem;
+    padding: 1.5rem 2rem;
+    position: absolute;
+    overflow-x: scroll;
+    top: 100%;
+    z-index: 30;
+
+    .pagina-selecao {
+      min-height: 9rem;
+      min-width: 12rem;
+      border: 0.2rem solid var(--cor-borda);
+      border-radius: unset;
+      justify-content: center;
+      align-content: center;
+
+      & > span{
+        font-size: 4rem;
+        color: var(--cor-fonte-alternativa);
+      }
+    }
+  }
+
+  .comando {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1rem;
+  }
+
+  .comando:hover{
+    background-color: var(--cor-fundo-input);
+  }
+
+  .itens-menu {
+    color: var(--cor-letra-alternativa);
+    font-size: 1.2rem;
+  }
+
+  .atalho {
+    color: var(--cor-fonte-clara);
+    font-size: 1rem;
+  }
+
+
+  details[open] summary {
+    svg {
+      transform: scale(1.2);
+      transition: 0.5s;
+
+      .svg-cor-contorno {
+        color: var(--cor-botao-hover);
+      }
+    }
+  }
+
+  hr {
+    border: 0;
+    border-top: 0.3rem solid var(--cor-fundo-input-focus);
+    margin: 0.5rem 0;
+  }
+
+  details[open] > summary::before{
+    content: "";
+    position: fixed;
+    z-index: 11;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  svg {
+    height: 3rem;
+    width: 3rem;
+    pointer-events: none;
+  }
+
+  .svg-cor-contorno {
+    color: var(--cor-botao);
+  }
+
+  .svg-cor-completar {
+    color: var(--cor-painel-lateral);
+  }
+}

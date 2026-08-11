@@ -11,12 +11,18 @@
  *
  */
 
+import CarregarCSSCommand, {
+  CarregarCSSCommandBuilder,
+} from "infrastructure/command/carregarCSSCommand";
 import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
-import Ponto from "model/ponto";
+import TiposConexao from "model/conexao/tiposConexao";
+import ChangeConnectionTypeEvent from "model/event/changeConnectionTypeEvent";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 import calcularAnguloDoisPontos from "model/services/calcularAnguloDoisPontos";
+import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
+import Ponto from "model/ponto";
 
 export default class ComponenteConexaoAngulada extends AbstractComponenteConexao {
   constructor(
@@ -40,52 +46,60 @@ export default class ComponenteConexaoAngulada extends AbstractComponenteConexao
       segundoComponente,
     );
 
-    let elementoPontoNorteValor: HTMLDivElement | null =
-      this.htmlComponente.querySelector(".ponto-norte-valor");
+    this._htmlComponente.addEventListener(
+      ChangeConnectionTypeEvent.CHANGE_CONNECTION_TYPE_EVENT,
+      (event: Event): void => {
+        let changeConnectionTypeEvent: ChangeConnectionTypeEvent =
+          event as ChangeConnectionTypeEvent;
 
-    if (elementoPontoNorteValor) {
-      elementoPontoNorteValor.innerText = LateraisComponente[lateralPrimeiroPonto];
-      elementoPontoNorteValor.addEventListener(
-        PropriedadeComponente.PROPERTY_CHANGE_EVENT,
-        (): void => {
-          this._lateralPrimeiroPonto =
-            LateraisComponente[
-              elementoPontoNorteValor.innerText as keyof typeof LateraisComponente
-            ];
-          this.atualizar(this._primeiroComponente.htmlComponente);
-        },
-      );
-    }
+        if (
+          changeConnectionTypeEvent.tipoConexao !== TiposConexao.CONEXAO_ANGULADA &&
+          changeConnectionTypeEvent.tipoConexao !== TiposConexao.CONEXAO_ENTIDADE_FRACA
+        ) {
+          return;
+        }
 
-    let elementoPontoSulValor: HTMLDivElement | null =
-      this._htmlComponente.querySelector(".ponto-sul-valor");
-
-    if (elementoPontoSulValor) {
-      elementoPontoSulValor.innerText = LateraisComponente[lateralSegundoPonto];
-      elementoPontoSulValor.addEventListener(
-        PropriedadeComponente.PROPERTY_CHANGE_EVENT,
-        (): void => {
-          this._lateralSegundoPonto =
-            LateraisComponente[elementoPontoSulValor.innerText as keyof typeof LateraisComponente];
-          this.atualizar(this._segundoComponente.htmlComponente);
-        },
-      );
-    }
+        if (changeConnectionTypeEvent.tipoConexao === TiposConexao.CONEXAO_ENTIDADE_FRACA) {
+          this._htmlComponente.classList.add("elemento-conexao-entidade-fraca");
+          let command: CarregarCSSCommand = new CarregarCSSCommandBuilder()
+            .definirNomeArquivo(changeConnectionTypeEvent.tipoConexao)
+            .build();
+          command.execute();
+        } else {
+          this._htmlComponente.classList.remove("elemento-conexao-entidade-fraca");
+        }
+      },
+    );
   }
 
   protected ajustarConexao(): void {
-    let angulo: number = calcularAnguloDoisPontos(this._ponto1, this._ponto2);
-    let distancia: number = this.calcularDistanciaConexao();
+    let alturaPrimeiroComponente: number = converterPixeisParaNumero(
+      getComputedStyle(this._primeiroComponente.htmlComponente).height,
+    );
+    let alturaSegundoComponente: number = converterPixeisParaNumero(
+      getComputedStyle(this._segundoComponente.htmlComponente).height,
+    );
+
+    let ponto1Ajustado: Ponto = new Ponto(
+      this._ponto1.x,
+      this._ponto1.y - alturaPrimeiroComponente / 2,
+    );
+    let ponto2Ajustado: Ponto = new Ponto(
+      this._ponto2.x,
+      this._ponto2.y - alturaSegundoComponente / 2,
+    );
+    let angulo: number = calcularAnguloDoisPontos(ponto1Ajustado, ponto2Ajustado);
+    let distancia: number = this.calcularDistanciaConexao(ponto1Ajustado, ponto2Ajustado);
 
     this._htmlComponente.style.width = `${distancia}px`;
     this._htmlComponente.style.rotate = `${angulo}rad`;
-    this._htmlComponente.style.top = `${this._ponto1.y}px`;
-    this._htmlComponente.style.left = `${this._ponto1.x}px`;
+    this._htmlComponente.style.top = `${ponto1Ajustado.y}px`;
+    this._htmlComponente.style.left = `${ponto1Ajustado.x}px`;
   }
 
-  private calcularDistanciaConexao(): number {
-    let deltaX: number = this._ponto2.x - this._ponto1.x;
-    let deltaY: number = this._ponto2.y - this._ponto1.y;
+  private calcularDistanciaConexao(ponto1: Ponto, ponto2: Ponto): number {
+    let deltaX: number = ponto2.x - ponto1.x;
+    let deltaY: number = ponto2.y - ponto1.y;
 
     return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
   }

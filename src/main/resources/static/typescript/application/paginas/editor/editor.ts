@@ -57,12 +57,14 @@ import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import GeradorIDAbaFactory from "infrastructure/factory/geradorIDAbaFactory";
 import GeradorIDComponenteFactory from "infrastructure/factory/geradorIDComponenteFactory";
 import RegistradorEventosConexaoFactory from "infrastructure/factory/registradorEventosConexaoFactory";
 import RegistradorEventosElementoFactory from "infrastructure/factory/registradorEventosElementoFactory";
 import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
 import RepositorioTiposDiagramaFactory from "infrastructure/factory/repositorioTiposDiagramaFactory";
 import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
+import GeradorIDAba from "infrastructure/gerador/geradorIDAba";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import CommandHistory from "infrastructure/history/commandHistory";
 import moverComponente from "infrastructure/moverComponente";
@@ -70,16 +72,18 @@ import RegistradorEventosElemento from "infrastructure/registrador/registradorEv
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 import RepositorioTiposDiagrama from "infrastructure/repositorio/repositorioTiposDiagrama";
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import "infrastructure/variaveisConfiguracao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
+import NomesComponente from "model/componente/nomesComponente";
 import TiposConexao from "model/conexao/tiposConexao";
 import DirecoesMovimento from "model/direcoesMovimento";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 import SetaConectora from "model/setaConectora";
 import Ponto from "model/ponto";
+import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 import calcularLateralComponente from "model/services/calcularLateralComponente";
-import NomesComponente from "model/componente/nomesComponente";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -127,12 +131,13 @@ let offsetY: number;
 function mouseDownComecarMoverElemento(event: MouseEvent): void {
   let componente: HTMLDivElement = event.target as HTMLDivElement;
 
-  if (!componente.classList.contains("componente")) {
+  if (!componente.classList.contains(ComponenteDiagrama.CLASSE_BASE_COMPONENTE)) {
     return;
   }
 
-  offsetX = event.clientX - componente.getBoundingClientRect().left;
-  offsetY = event.clientY - componente.getBoundingClientRect().top;
+  let estiloComponente: CSSStyleDeclaration = getComputedStyle(componente);
+  offsetX = event.clientX - converterPixeisParaNumero(estiloComponente.left);
+  offsetY = event.clientY - converterPixeisParaNumero(estiloComponente.top);
   componente.classList.add("dragging");
   document.addEventListener("mousemove", dragElement);
   document.body.style.setProperty("user-select", "none");
@@ -557,6 +562,8 @@ buttonCortar?.addEventListener("click", (): void => {
 /* TROCA DE ABAS */
 /*****************/
 
+let geradorIDAba: GeradorIDAba = GeradorIDAbaFactory.build();
+
 let buttonNovaAba: HTMLDivElement | null = document.querySelector("#nova-aba");
 let seletorAbas: HTMLElement | null = document.querySelector("footer div");
 
@@ -565,14 +572,23 @@ function fecharAba(event: MouseEvent): void {
   elementoAlvo.parentElement?.remove();
 }
 
-buttonNovaAba?.addEventListener("click", (): void => {
+buttonNovaAba?.addEventListener("click", async (): Promise<void> => {
   let novaAba: HTMLDivElement = document.createElement("div");
-  let p: HTMLParagraphElement = document.createElement("p");
-  novaAba.classList.add("aba");
-  p.innerText = "x";
-  p.addEventListener("click", fecharAba);
+  let btnFechar: HTMLParagraphElement = document.createElement("p");
+  let tabLabel: HTMLParagraphElement = document.createElement("p");
 
-  novaAba.append(p);
+  novaAba.classList.add("aba");
+  novaAba.setAttribute("data-indice-aba", `${geradorIDAba.pegarProximoID()}`);
+
+  btnFechar.innerText = "x";
+  btnFechar.addEventListener("click", fecharAba);
+
+  tabLabel.classList.add("numero-aba");
+  tabLabel.innerText = `${await traduzirChaveI18n("web.page.editor.label.tab")} ${geradorIDAba.id}`;
+  tabLabel.setAttribute("contenteditable", "true");
+
+  novaAba.append(tabLabel);
+  novaAba.append(btnFechar);
   seletorAbas?.append(novaAba);
 });
 

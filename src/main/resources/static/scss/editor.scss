@@ -15,6 +15,13 @@
 @use "estiloComum";
 @use "estiloHeader";
 @use "estiloTracinho";
+@use "estilosEditor/estiloBarraDeTarefas";
+@use "estilosEditor/estiloComponente";
+@use "estilosEditor/estiloPontoExtensor";
+@use "estilosEditor/estiloSeta";
+@use "estilosEditor/estloSeletorTipoConexao";
+
+@use "variaveis";
 
 $estiloBordaPainel: var(--cor-borda) solid 0.1rem;
 
@@ -24,22 +31,27 @@ body {
   grid-template-rows: 5rem 5rem calc(100% - 14.5rem) 4.5em;
   max-width: 100vw;
   overflow: hidden;
+
   &:has(#painel-direito.hidden) {
     grid-template-columns: 20% 80%;
   }
 
   &:has(#painel-esquerdo.hidden) {
     grid-template-columns: 80% 20%;
+
     main{
       grid-column: 1;
     }
+
   }
 
   &:has(#painel-direito.hidden):has(#painel-esquerdo.hidden) {
     grid-template-columns: 100%;
+
     main{
       grid-column: 1;
     }
+
   }
 
 }
@@ -48,21 +60,14 @@ header {
   grid-column: 1 / 4;
   grid-row: 1;
   height: 5rem;
+  left: 0;
   position: fixed;
   top: 0;
-  left: 0;
 }
 
 main {
-  grid-column: 2;
-  grid-row: 3 / 4;
-  background-color: var(--cor-fundo-area-de-edicao);
-  width: 95%;
-  height: 95%;
-  justify-self: center;
   align-self: center;
-  border: 0.2rem solid var(--cor-borda);
-  overflow: scroll;
+  background-color: var(--cor-fundo-area-de-edicao);
   background-image:
     repeating-linear-gradient(
       var(--cor-grade-horizontal) 0 var(--espessura-grade),
@@ -74,159 +79,16 @@ main {
       transparent 1px 100%
     );
   background-size: var(--tamanho-quadrado-grade) var(--tamanho-quadrado-grade);
-}
-
-.barra-de-tarefas {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--cor-painel-lateral);
-  grid-row: 2;
-  height: 5rem;
-  column-gap: 2rem;
-  top: 5rem;
-  width: 100%;
-  grid-column: 1 / 4;
-  border-bottom: 0.1rem solid var(--cor-borda);
-  position: fixed;
-
-  button, summary{
-    background-color: unset;
-    z-index: 2;
-  }
-
-  button:hover, summary:hover {
-    svg {
-      transform: scale(1.2);
-      transition: 0.5s;
-
-      .svg-cor-contorno {
-        color: var(--cor-botao-hover);
-      }
-    }
-  }
-
-  .menu-opcoes{
-    position: relative;
-    display: inline-block;
-  }
-
-  summary {
-    list-style: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
-    outline: none;
-  }
-
-  .mostrar-conteudo {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    z-index: 10;
-    top: 100%;
-    background-color: var(--cor-fundo-menu);
-    border: 0.01rem solid var(--cor-borda);
-    border-radius: 0.2rem;
-    min-width: 22rem;
-    height: auto;
-    padding: 0.8rem 0.8rem;
-  }
-
-  #menu-pagina{
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    z-index: 30;
-    top: 100%;
-    background-color: var(--cor-fundo-menu);
-    border: 0.01rem solid var(--cor-borda);
-    height: auto;
-    max-width: 40rem;
-    overflow-x: scroll;
-    padding: 1.5rem 2rem;
-    column-gap: 0.5rem;
-
-    .pagina-selecao {
-      min-height: 9rem;
-      min-width: 12rem;
-      border: 0.2rem solid var(--cor-borda);
-      border-radius: unset;
-      justify-content: center;
-      align-content: center;
-
-      & > span{
-        font-size: 4rem;
-        color: var(--cor-fonte-alternativa);
-      }
-    }
-  }
-
-  .comando {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1rem;
-  }
-
-  .comando:hover{
-    background-color: var(--cor-fundo-input);
-  }
-
-  .itens-menu {
-    color: var(--cor-letra-alternativa);
-    font-size: 1.2rem;
-  }
-
-  .atalho {
-    color: var(--cor-fonte-clara);
-    font-size: 1rem;
-  }
-
-
-  details[open] summary {
-    svg {
-      transform: scale(1.2);
-      transition: 0.5s;
-
-      .svg-cor-contorno {
-        color: var(--cor-botao-hover);
-      }
-    }
-  }
-
-  hr {
-    border: 0;
-    border-top: 0.3rem solid var(--cor-fundo-input-focus);
-    margin: 0.5rem 0;
-  }
-
-  details[open] > summary::before{
-    content: "";
-    position: fixed;
-    z-index: 11;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  svg {
-    height: 3rem;
-    width: 3rem;
-    pointer-events: none;
-  }
-
-  .svg-cor-contorno {
-    color: var(--cor-botao);
-  }
-
-  .svg-cor-completar {
-    color: var(--cor-painel-lateral);
-  }
+  border: 0.2rem solid var(--cor-borda);
+  display: grid;
+  grid-template-areas: variaveis.$editorGridAreaString;
+  grid-column: 2;
+  grid-row: 3 / 4;
+  height: 95%;
+  justify-self: center;
+  place-content: stretch;
+  overflow: scroll;
+  width: 95%;
 }
 
 aside#painel-esquerdo {
@@ -282,6 +144,7 @@ aside {
 
   section#propriedades {
     gap: 0.7rem;
+    height: 100%;
 
     label {
       display: grid;
@@ -390,15 +253,16 @@ section#seletor-tipos-conexao {
 }
 
 fieldset.componentes-diagrama {
-  align-items: center;
   border: $estiloBordaPainel;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   display: grid;
-  gap: 1rem;
-  padding: 0.5rem;
-  width: 95%;
+  width: 85%;
+  row-gap: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   margin-bottom: 1.5rem;
-  grid-template-columns: repeat(2, calc(50% - 0.25rem));
+  grid-template-columns: repeat(2, calc(55% - 1rem));
+  justify-content: center;
 
   button {
     align-items: center;
@@ -407,21 +271,21 @@ fieldset.componentes-diagrama {
     flex-direction: column;
     justify-content: center;
     justify-self: center;
-    width: 95%;
+    width: 90%;
 
     h4 {
       pointer-events: none;
     }
 
     h3 {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
     }
 
     svg {
       aspect-ratio: 1 / 1;
       pointer-events: none;
       color: var(--cor-fundo);
-      width: 100%;
+      width: 80%;
       height: 70%;
 
       .svg-cor-borda {
@@ -438,7 +302,7 @@ fieldset.componentes-diagrama {
 
   legend {
     text-align: center;
-    width: 100%;
+    width: 70%;
   }
 
 }
@@ -452,84 +316,6 @@ fieldset#conexoes-basicas {
 
   button {
     width: 100%;
-  }
-}
-
-.componente {
-  display: flex;
-  background-color: var(--cor-fundo);
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  cursor: crosshair;
-  width: 150px;
-  height: 100px;
-  border: var(--cor-borda) solid 0.3rem;
-
-  div[contenteditable=true] {
-    cursor: text;
-  }
-
-  &:hover {
-    background-color: var(--cor-componente-hover);
-  }
-
-  &.dragging {
-    cursor: grabbing;
-  }
-
-  &.selected,
-  &:hover {
-    border-color: var(--cor-borda-componente-selecionado);
-  }
-}
-
-.ponto-extensor {
-  border-radius: 50%;
-  border: var(--cor-borda-ponto-extensor) solid 0.3rem;
-  background-color: var(--cor-ponto-extensor);
-  height: 1rem;
-  position: absolute;
-  width: 1rem;
-  z-index: 3;
-
-  &:hover {
-    background-color: var(--cor-hover-ponto-extensor);
-  }
-
-}
-
-.seta {
-  position: absolute;
-  width: 2rem;
-  height: 1.5rem;
-  background: var(--cor-borda);
-  clip-path: polygon(0% 20%, 60% 20%, 60% 0%, 100% 50%, 60% 100%, 60% 80%, 0% 80%);
-  opacity: 0;
-  z-index: 1;
-
-  &:hover {
-    background: var(--cor-borda-componente-selecionado);
-    opacity: 1;
-  }
-}
-
-.seletor-tipo-conexao {
-  z-index: 5;
-  display: flex;
-  gap: 0.2rem;
-  width: fit-content;
-  height: fit-content;
-  background-color: var(--cor-fundo);
-  border: var(--cor-borda) solid 0.3rem;
-  border-radius: 0.5rem;
-  padding: 0.2rem;
-
-  button {
-    padding: 0.2rem;
-    width: fit-content;
-    height: fit-content;
-    font-size: 10pt;
   }
 }
 
@@ -554,25 +340,41 @@ footer {
 
   .aba {
     background-color: var(--cor-painel-lateral);
-    min-height: 3.5rem;
-    min-width: 10rem;
     border: solid 0.15rem var(--cor-borda);
     border-radius: 0 1rem 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 2.8rem;
+    min-width: 10rem;
 
     p {
-      margin: 0.2rem;
       border-radius: 20rem;
-      height: 1.6rem;
-      width:  1.6rem;
-      cursor: pointer;
-      align-self: flex-start;
-      justify-self: flex-start;
-      font-size: 1.3rem;
       color: var(--cor-fonte-alternativa);
+      cursor: pointer;
+      font-size: 1.3rem;
+      height: 1.6rem;
+      padding: 0.2rem;
+      width:  1.6rem;
     }
 
-    p:hover {
+    p:hover:not(.numero-aba){
       background-color: var(--cor-fundo-input);
+    }
+
+    p:not(.numero-aba) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 0;
+    }
+
+    p.numero-aba{
+      border-radius: 0;
+      cursor: text;
+      font-size: 1rem;
+      outline: none;
+      width: max-content;
     }
   }
 
@@ -580,8 +382,8 @@ footer {
     display: flex;
     position: relative;
     right: 0;
-    min-height: 3.5rem;
-    min-width: 3.5rem;
+    min-height: 2.8rem;
+    min-width: 2.8rem;
     border-radius: 0;
     align-items: center;
     justify-content: center;

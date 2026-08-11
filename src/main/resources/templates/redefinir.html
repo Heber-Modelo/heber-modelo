@@ -41,6 +41,7 @@ Licensed works, modifications, and larger works may be distributed under differe
             .
           </span>
         </small>
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
       </form>
     </main>
     <div th:replace="~{fragments/cookiesBanner :: #cookies-banner}"></div>

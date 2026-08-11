@@ -48,6 +48,7 @@
             type="button"
           ></button>
         </div>
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
       </form>
     </main>
     <footer th:replace="~{fragments/licenseFooter :: footer}"></footer>

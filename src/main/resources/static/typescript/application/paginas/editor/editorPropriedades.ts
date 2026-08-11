@@ -72,6 +72,10 @@ function modificarPropriedadeElemento(
 
   let novoValorAtributo: string = ajustarValorAtributo(inputAtributo.value);
   elemento.style.setProperty(nomePropriedade, novoValorAtributo);
+
+  if (selecionadorComponente.componenteSelecionado) {
+    selecionadorComponente.selecionarElemento(selecionadorComponente.componenteSelecionado);
+  }
 }
 
 export function atualizarValorInput(

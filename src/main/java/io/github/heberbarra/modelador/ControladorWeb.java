@@ -256,6 +256,29 @@ public class ControladorWeb {
         return "entrarSessao";
     }
 
+    @RequestMapping(
+            value = {"/criarSessao", "/criarSessao.html"},
+            method = RequestMethod.POST)
+    public String criarSessao(@ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
+
+        System.out.println("Porta: " + porta);
+        System.out.println("Senha: " + senha);
+
+        return "redirect:/login";
+    }
+
+    @RequestMapping(
+            value = {"/entrarSessao", "/entrarSessao.html"},
+            method = RequestMethod.POST)
+    public String entrarSessao(
+            @ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
+
+        System.out.println("Porta: " + porta);
+        System.out.println("Senha: " + senha);
+
+        return "redirect:/login";
+    }
+
     @RequestMapping({"/anexarAtividade", "/anexarAtividade.html"})
     public String anexarAtividade(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "assignment");
@@ -329,10 +352,15 @@ public class ControladorWeb {
             Optional<Long> tamanhoQuadradoGrade =
                     configurador.pegarValorConfiguracao("grade", "tamanho_quadrado_px", long.class);
             Optional<Long> espessuraGrade = configurador.pegarValorConfiguracao("grade", "espessura", long.class);
+            Optional<Boolean> modoAvancadoEditorPropriedades =
+                    configurador.pegarValorConfiguracao("editor", "modoAvancadoEditorPropriedades", boolean.class);
 
-            if (tamanhoQuadradoGrade.isPresent() && espessuraGrade.isPresent()) {
+            if (tamanhoQuadradoGrade.isPresent()
+                    && espessuraGrade.isPresent()
+                    && modoAvancadoEditorPropriedades.isPresent()) {
                 modelMap.addAttribute("tamanhoQuadradoGrade", tamanhoQuadradoGrade.get() + "px");
                 modelMap.addAttribute("espessuraGrade", espessuraGrade.get() + "px");
+                modelMap.addAttribute("modoAvancadoEditorPropriedades", modoAvancadoEditorPropriedades.get());
             }
         }
 
