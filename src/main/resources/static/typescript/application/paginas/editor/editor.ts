@@ -56,14 +56,12 @@ import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
-import GeradorIDAbaFactory from "infrastructure/factory/geradorIDAbaFactory";
 import GeradorIDComponenteFactory from "infrastructure/factory/geradorIDComponenteFactory";
 import RegistradorEventosConexaoFactory from "infrastructure/factory/registradorEventosConexaoFactory";
 import RegistradorEventosElementoFactory from "infrastructure/factory/registradorEventosElementoFactory";
 import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
 import RepositorioTiposDiagramaFactory from "infrastructure/factory/repositorioTiposDiagramaFactory";
 import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
-import GeradorIDAba from "infrastructure/gerador/geradorIDAba";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import CommandHistory from "infrastructure/history/commandHistory";
 import moverComponente from "infrastructure/moverComponente";
@@ -72,7 +70,6 @@ import RegistradorEventosConexao from "infrastructure/registrador/registradorEve
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 import RepositorioTiposDiagrama from "infrastructure/repositorio/repositorioTiposDiagrama";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
-import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import "infrastructure/variaveisConfiguracao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
@@ -556,40 +553,6 @@ buttonCortar?.addEventListener("click", (): void => {
     .definirSelecionadorComponente(selecionadorComponente)
     .build();
   commandHistory.saveAndExecuteCommand(command);
-});
-
-/*****************/
-/* TROCA DE ABAS */
-/*****************/
-
-let geradorIDAba: GeradorIDAba = GeradorIDAbaFactory.build();
-
-let buttonNovaAba: HTMLDivElement | null = document.querySelector("#nova-aba");
-let seletorAbas: HTMLElement | null = document.querySelector("footer div");
-
-function fecharAba(event: MouseEvent): void {
-  let elementoAlvo: HTMLElement = event.target as HTMLElement;
-  elementoAlvo.parentElement?.remove();
-}
-
-buttonNovaAba?.addEventListener("click", async (): Promise<void> => {
-  let novaAba: HTMLDivElement = document.createElement("div");
-  let btnFechar: HTMLParagraphElement = document.createElement("p");
-  let tabLabel: HTMLParagraphElement = document.createElement("p");
-
-  novaAba.classList.add("aba");
-  novaAba.setAttribute("data-indice-aba", `${geradorIDAba.pegarProximoID()}`);
-
-  btnFechar.innerText = "x";
-  btnFechar.addEventListener("click", fecharAba);
-
-  tabLabel.classList.add("numero-aba");
-  tabLabel.innerText = `${await traduzirChaveI18n("web.page.editor.label.tab")} ${geradorIDAba.id}`;
-  tabLabel.setAttribute("contenteditable", "true");
-
-  novaAba.append(tabLabel);
-  novaAba.append(btnFechar);
-  seletorAbas?.append(novaAba);
 });
 
 /***********************/
