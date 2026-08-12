@@ -22,6 +22,7 @@ import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import calcularPosicaoAtributo from "infrastructure/services/calcularPosicaoAtributo";
 import colectarPosicoesAtributos from "infrastructure/services/colectarPosicoesAtributos";
 import ICommand, { CommandResult } from "model/command/iCommand";
@@ -46,6 +47,7 @@ export default class ConectarAtributoCommand implements ICommand {
   private readonly _registradorEventosConexao: RegistradorEventosConexao;
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponentes: IRepositorioComponente;
+  private readonly _selecionadorAba: SelecionadorAba;
   private readonly _tipoConexao: TiposConexao;
   private _commandCriarComponenteAtributo: CriarComponenteCommand | undefined;
   private _commandConectarComponentes: ConectarComponentesCommand | undefined;
@@ -61,6 +63,7 @@ export default class ConectarAtributoCommand implements ICommand {
     registradorEventosConexao: RegistradorEventosConexao,
     registradorEventosElemento: RegistradorEventosElemento,
     repositorioComponentes: IRepositorioComponente,
+    selecionadorAba: SelecionadorAba,
     tipoConexao: TiposConexao,
   ) {
     this._componenteAlvo = componenteAlvo;
@@ -72,6 +75,7 @@ export default class ConectarAtributoCommand implements ICommand {
     this._registradorEventosConexao = registradorEventosConexao;
     this._registradorEventosElemento = registradorEventosElemento;
     this._repositorioComponentes = repositorioComponentes;
+    this._selecionadorAba = selecionadorAba;
     this._tipoConexao = tipoConexao;
   }
 
@@ -115,6 +119,7 @@ export default class ConectarAtributoCommand implements ICommand {
       .definirNomeElemento(NomesComponente.ATRIBUTO_DER)
       .definirRegistradorEventosElemento(this._registradorEventosElemento)
       .definirRepositorioComponentes(this._repositorioComponentes)
+      .definirSelecionadorAba(this._selecionadorAba)
       .build();
     this._commandCriarComponenteAtributo.execute();
 
@@ -207,6 +212,7 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
   private _registradorEventosConexao: RegistradorEventosConexao | null = null;
   private _registradorEventosElemento: RegistradorEventosElemento | null = null;
   private _repositorioComponentes: IRepositorioComponente | null = null;
+  private _selecionadorAba: SelecionadorAba | null = null;
   private _tipoConexao: TiposConexao | null = null;
 
   public static verificarElementoPermitido(elemento: string): boolean {
@@ -273,6 +279,12 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
     return this;
   }
 
+  public definirSelecionadorAba(selecionadorAba: SelecionadorAba | null): this {
+    this._selecionadorAba = selecionadorAba;
+
+    return this;
+  }
+
   public definirTipoConexao(tipoConexao: TiposConexao | null): this {
     this._tipoConexao = tipoConexao;
 
@@ -316,6 +328,10 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
       throw new CommandBuilderException("repositório de componentes");
     }
 
+    if (this._selecionadorAba === null) {
+      throw new CommandBuilderException("selecionador de aba");
+    }
+
     if (this._tipoConexao === null) {
       throw new CommandBuilderException("tipo de conexão");
     }
@@ -330,6 +346,7 @@ export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarA
       this._registradorEventosConexao,
       this._registradorEventosElemento,
       this._repositorioComponentes,
+      this._selecionadorAba,
       this._tipoConexao,
     );
   }

@@ -17,6 +17,7 @@ import CarregarCSSCommand, {
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
+import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
@@ -30,6 +31,7 @@ export default class CriarComponenteCommand implements ICommand {
   private readonly _nomeElemento: string;
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponentes: IRepositorioComponente;
+  private readonly _selecionadorAba: SelecionadorAba;
   private _carregarCSSCommand: CarregarCSSCommand | undefined;
   private _componenteCriado: ComponenteDiagrama | undefined;
 
@@ -40,6 +42,7 @@ export default class CriarComponenteCommand implements ICommand {
     nomeElemento: string,
     registradorEventosElemento: RegistradorEventosElemento,
     repositorioComponentes: IRepositorioComponente,
+    selecionadorAba: SelecionadorAba,
   ) {
     this._diagrama = diagrama;
     this._fabricaComponente = fabricaComponente;
@@ -47,6 +50,7 @@ export default class CriarComponenteCommand implements ICommand {
     this._nomeElemento = nomeElemento;
     this._registradorEventosElemento = registradorEventosElemento;
     this._repositorioComponentes = repositorioComponentes;
+    this._selecionadorAba = selecionadorAba;
   }
 
   execute(): CommandResult {
@@ -61,6 +65,10 @@ export default class CriarComponenteCommand implements ICommand {
         componente.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
+        );
+        componente.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          String(this._selecionadorAba.abaSelecionada?.id),
         );
         this._repositorioComponentes.adicionar(componente);
         this._diagrama.appendChild(componente.htmlComponente);
@@ -109,6 +117,7 @@ export class CriarComponenteCommandBuilder implements ICommandBuilder<CriarCompo
   private _nomeElemento: string | undefined | null;
   private _registradorEventosElemento: RegistradorEventosElemento | null = null;
   private _repositorioComponente: IRepositorioComponente | null = null;
+  private _selecionadorAba: SelecionadorAba | null = null;
 
   public definirDiagrama(diagrama: HTMLElement | undefined | null): this {
     this._diagrama = diagrama;
@@ -150,6 +159,12 @@ export class CriarComponenteCommandBuilder implements ICommandBuilder<CriarCompo
     return this;
   }
 
+  public definirSelecionadorAba(selecionadorAba: SelecionadorAba | null): this {
+    this._selecionadorAba = selecionadorAba;
+
+    return this;
+  }
+
   public build(): CriarComponenteCommand {
     if (this._diagrama === undefined || this._diagrama === null) {
       throw new CommandBuilderException("diagrama");
@@ -175,6 +190,10 @@ export class CriarComponenteCommandBuilder implements ICommandBuilder<CriarCompo
       throw new CommandBuilderException("repositório de componentes");
     }
 
+    if (this._selecionadorAba === null) {
+      throw new CommandBuilderException("selecionador de aba");
+    }
+
     return new CriarComponenteCommand(
       this._diagrama,
       this._fabricaComponente,
@@ -182,6 +201,7 @@ export class CriarComponenteCommandBuilder implements ICommandBuilder<CriarCompo
       this._nomeElemento,
       this._registradorEventosElemento,
       this._repositorioComponente,
+      this._selecionadorAba,
     );
   }
 }

@@ -18,6 +18,7 @@ import ValoresJSONComponente from "model/json/valoresJSONComponente";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 
 export default class ComponenteFactory {
+  public static PROPRIEDADE_ID_ABA: string = "data-indice-aba";
   public static PROPRIEDADE_ID_COMPONENTE: string = "data-id";
   public static PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
   public static PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string = "data-recebe-pontos-extensores";
