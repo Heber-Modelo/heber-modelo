@@ -52,6 +52,13 @@ import ConectarDuasEntidadesCommand, {
 import CriarComponenteCommand, {
   CriarComponenteCommandBuilder,
 } from "infrastructure/command/criarComponenteCommand";
+import TrocarTipoConexaoCommand, {
+  TrocarTipoConexaoCommandBuilder,
+} from "infrastructure/command/trocarTipoConexaoCommand";
+import ConectarDuasEntidadesRelacionaisCommand, {
+  ConectarDuasEntidadesRelacionaisCommandBuilder,
+} from "infrastructure/command/conectarDuasEntidadesRelacionaisCommand";
+import ChangeConnectionTypeEvent from "model/event/changeConnectionTypeEvent";
 import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
@@ -78,6 +85,7 @@ import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import criarAba from "infrastructure/services/criarAba";
 import "infrastructure/variaveisConfiguracao";
+import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
 import NomesComponente from "model/componente/nomesComponente";
@@ -89,14 +97,6 @@ import DirecoesMovimento from "model/direcoesMovimento";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 import SetaConectora from "model/setaConectora";
 import Ponto from "model/ponto";
-import ConectarDuasEntidadesRelacionaisCommand, {
-  ConectarDuasEntidadesRelacionaisCommandBuilder,
-} from "infrastructure/command/conectarDuasEntidadesRelacionaisCommand";
-import ChangeConnectionTypeEvent from "model/event/changeConnectionTypeEvent";
-import TrocarTipoConexaoCommand, {
-  TrocarTipoConexaoCommandBuilder,
-} from "infrastructure/command/trocarTipoConexaoCommand";
-import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
