@@ -56,31 +56,39 @@ import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import GeradorIDAbaFactory from "infrastructure/factory/geradorIDAbaFactory";
 import GeradorIDComponenteFactory from "infrastructure/factory/geradorIDComponenteFactory";
 import RegistradorEventosConexaoFactory from "infrastructure/factory/registradorEventosConexaoFactory";
 import RegistradorEventosElementoFactory from "infrastructure/factory/registradorEventosElementoFactory";
+import RepositorioAbasFactory from "infrastructure/factory/repositorioAbasFactory";
 import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
 import RepositorioTiposDiagramaFactory from "infrastructure/factory/repositorioTiposDiagramaFactory";
+import SelecionadorAbaFactory from "infrastructure/factory/selecionadorAbaFactory";
 import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
+import GeradorIDAba from "infrastructure/gerador/geradorIDAba";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import CommandHistory from "infrastructure/history/commandHistory";
 import moverComponente from "infrastructure/moverComponente";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
+import RepositorioAbas from "infrastructure/repositorio/repositorioAbas";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 import RepositorioTiposDiagrama from "infrastructure/repositorio/repositorioTiposDiagrama";
+import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import "infrastructure/variaveisConfiguracao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
 import NomesComponente from "model/componente/nomesComponente";
 import TiposConexao from "model/conexao/tiposConexao";
+import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
+import calcularLateralComponente from "model/services/calcularLateralComponente";
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
+import Aba from "model/aba";
 import DirecoesMovimento from "model/direcoesMovimento";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 import SetaConectora from "model/setaConectora";
 import Ponto from "model/ponto";
-import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
-import calcularLateralComponente from "model/services/calcularLateralComponente";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -90,13 +98,16 @@ let abaPropriedades: HTMLDivElement | null = document.querySelector("section#pro
 let commandHistory: CommandHistory = CommandHistoryFactory.build();
 let diagrama: HTMLElement | null = document.querySelector("main");
 let fabricaComponente: ComponenteFactory = new ComponenteFactory();
+let geradorIDAba: GeradorIDAba = GeradorIDAbaFactory.build();
 let geradorIDComponente: GeradorIDComponente = GeradorIDComponenteFactory.build();
 let registradorEventosConexao: RegistradorEventosConexao = RegistradorEventosConexaoFactory.build();
 let registradorEventosElemento: RegistradorEventosElemento =
   RegistradorEventosElementoFactory.build();
+let repositorioAbas: RepositorioAbas = RepositorioAbasFactory.build();
 let repositorioComponentes: RepositorioComponente = RepositorioComponenteFactory.build();
 let repositorioTiposDiagrama: RepositorioTiposDiagrama = RepositorioTiposDiagramaFactory.build();
 let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
+let selecionadorAba: SelecionadorAba = SelecionadorAbaFactory.build();
 let selecionadorComponente: SelecionadorComponente = SelecionadorComponenteFactory.build();
 
 componentes.forEach((componente: HTMLDivElement): void => {
@@ -209,6 +220,7 @@ function callbackCriarComponente(event: Event): void {
     .definirNomeElemento(nomeElemento)
     .definirRegistradorEventosElemento(registradorEventosElemento)
     .definirRepositorioComponentes(repositorioComponentes)
+    .definirSelecionadorAba(selecionadorAba)
     .build();
   commandHistory.saveAndExecuteCommand(command);
 }
@@ -466,6 +478,7 @@ function callbackTerminarConexaoAtributo(event: MouseEvent): void {
     .definirRegistradorEventosConexao(registradorEventosConexao)
     .definirRegistradorEventosElemento(registradorEventosElemento)
     .definirRepositorioComponentes(repositorioComponentes)
+    .definirSelecionadorAba(selecionadorAba)
     .definirTipoConexao(TiposConexao.CONEXAO_ANGULADA)
     .build();
 
@@ -553,6 +566,71 @@ buttonCortar?.addEventListener("click", (): void => {
     .definirSelecionadorComponente(selecionadorComponente)
     .build();
   commandHistory.saveAndExecuteCommand(command);
+});
+
+/******************/
+/* SELETOR DE ABA */
+/******************/
+
+let buttonNovaAba: HTMLDivElement | null = document.querySelector("#nova-aba");
+let seletorAbas: HTMLElement | null = document.querySelector("footer div");
+let htmlElementAbaPadrao: HTMLDivElement = seletorAbas?.querySelector("div") as HTMLDivElement;
+let abaPadrao: Aba = new Aba(1, htmlElementAbaPadrao);
+
+repositorioAbas.adicionar(abaPadrao);
+
+abaPadrao.htmlElement.addEventListener("click", (): void => {
+  selecionadorAba.selecionarAba(abaPadrao);
+});
+
+selecionadorAba.selecionarAba(abaPadrao);
+
+function fecharAba(event: MouseEvent): void {
+  event.stopImmediatePropagation();
+  event.stopPropagation();
+  let elementoAlvo: HTMLElement = event.target as HTMLElement;
+  elementoAlvo.parentElement?.remove();
+
+  let idAbaAlvo: number = Number(elementoAlvo.parentElement?.getAttribute(Aba.ATRIBUTO_INDICE_ABA));
+  repositorioAbas.removerPorID(idAbaAlvo);
+
+  let abaSelecionada: Aba | null = selecionadorAba.abaSelecionada;
+  selecionadorAba.removerSelecao();
+
+  if (abaSelecionada === null || abaSelecionada?.htmlElement !== elementoAlvo.parentElement) {
+    return;
+  }
+
+  let abas: Aba[] = repositorioAbas.listar();
+  let proximaAba: Aba = abas[abas.length - 1];
+  selecionadorAba.selecionarAba(proximaAba);
+}
+
+buttonNovaAba?.addEventListener("click", async (): Promise<void> => {
+  let htmlElementNovaAba: HTMLDivElement = document.createElement("div");
+  let btnFechar: HTMLParagraphElement = document.createElement("p");
+  let tabLabel: HTMLParagraphElement = document.createElement("p");
+
+  htmlElementNovaAba.classList.add(Aba.CLASSE_ABA);
+  htmlElementNovaAba.setAttribute(Aba.ATRIBUTO_INDICE_ABA, `${geradorIDAba.pegarProximoID()}`);
+
+  btnFechar.innerText = "x";
+  btnFechar.addEventListener("click", fecharAba);
+
+  tabLabel.classList.add(Aba.CLASSE_NUMERO_ABA);
+  tabLabel.innerText = `${await traduzirChaveI18n("web.page.editor.label.tab")} ${geradorIDAba.id}`;
+  tabLabel.setAttribute("contenteditable", "true");
+
+  htmlElementNovaAba.append(tabLabel);
+  htmlElementNovaAba.append(btnFechar);
+  seletorAbas?.append(htmlElementNovaAba);
+
+  let novaAba: Aba = new Aba(geradorIDAba.id, htmlElementNovaAba);
+  repositorioAbas.adicionar(novaAba);
+
+  htmlElementNovaAba.addEventListener("click", (): void => {
+    selecionadorAba.selecionarAba(novaAba);
+  });
 });
 
 /***********************/

@@ -21,7 +21,6 @@ export default {
       "application/paginas/helperSeletorTipoConexao",
     ),
     login: path.resolve(baseDirectory, "application/paginas/login.ts"),
-    seletorAba: path.resolve(baseDirectory, "infrastructure/seletor/seletorAba.ts"),
   },
   output: {
     path: path.resolve(__dirname, "src/main/resources/static/javascript"),
