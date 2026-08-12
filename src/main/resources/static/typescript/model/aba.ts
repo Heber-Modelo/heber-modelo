@@ -12,11 +12,23 @@
  */
 
 export default class Aba {
-  id: number;
-  aba: HTMLDivElement;
+  public static readonly ATRIBUTO_INDICE_ABA: string = "data-indice-aba";
+  public static readonly CLASSE_ABA: string = "aba";
+  public static readonly CLASSE_NUMERO_ABA: string = "numero-aba";
 
-  constructor(id: number, aba: HTMLDivElement) {
-    this.id = id;
-    this.aba = aba;
+  private readonly _id: number;
+  private readonly _htmlElement: HTMLDivElement;
+
+  constructor(id: number, htmlElement: HTMLDivElement) {
+    this._id = id;
+    this._htmlElement = htmlElement;
+  }
+
+  get id(): number {
+    return this._id;
+  }
+
+  get htmlElement(): HTMLDivElement {
+    return this._htmlElement;
   }
 }
