@@ -287,7 +287,8 @@ function callbackInicialSetaConectora(event: MouseEvent): void {
     .definirGeradorID(geradorIDComponente)
     .definirRegistradorEventosConexao(registradorEventosConexao)
     .definirRegistradorEventosElemento(registradorEventosElemento)
-    .definirRepositorioComponentes(repositorioComponentes);
+    .definirRepositorioComponentes(repositorioComponentes)
+    .definirSelecionadorAba(selecionadorAba);
   let targetEvent: HTMLElement = event.target as HTMLElement;
   let lateralComponente: LateraisComponente =
     LateraisComponente[

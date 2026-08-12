@@ -19,6 +19,7 @@ import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFa
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
+import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import TiposConexao from "model/conexao/tiposConexao";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
@@ -38,6 +39,7 @@ export default class ConectarComponentesCommand implements ICommand {
   private readonly _registradorEventosConexao: RegistradorEventosConexao;
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponente: IRepositorioComponente;
+  private readonly _selecionadorAba: SelecionadorAba;
   private readonly _primeiroComponente: ComponenteDiagrama;
   private readonly _segundoComponente: ComponenteDiagrama;
   private readonly _lateralPrimeiroComponente: LateraisComponente;
@@ -56,6 +58,7 @@ export default class ConectarComponentesCommand implements ICommand {
     registradorEventosConexao: RegistradorEventosConexao,
     registradorEventosElemento: RegistradorEventosElemento,
     repositorioComponente: IRepositorioComponente,
+    selecionadorAba: SelecionadorAba,
     primeiroComponente: ComponenteDiagrama,
     segundoComponente: ComponenteDiagrama,
     lateralPrimeiroComponente: LateraisComponente,
@@ -69,6 +72,7 @@ export default class ConectarComponentesCommand implements ICommand {
     this._registradorEventosConexao = registradorEventosConexao;
     this._registradorEventosElemento = registradorEventosElemento;
     this._repositorioComponente = repositorioComponente;
+    this._selecionadorAba = selecionadorAba;
     this._primeiroComponente = primeiroComponente;
     this._segundoComponente = segundoComponente;
     this._lateralPrimeiroComponente = lateralPrimeiroComponente;
@@ -103,7 +107,10 @@ export default class ConectarComponentesCommand implements ICommand {
           this._primeiroComponente,
           this._segundoComponente,
         );
-
+        this._componenteConexao.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          String(this._selecionadorAba.abaSelecionada?.id),
+        );
         this._componenteConexao.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
@@ -241,6 +248,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
   private _segundoComponente: ComponenteDiagrama | null = null;
   private _lateralPrimeiroComponente: LateraisComponente | null = null;
   private _lateralSegundoComponente: LateraisComponente | null = null;
+  private _selecionadorAba: SelecionadorAba | null = null;
   private _tipoConexao: TiposConexao | null = null;
 
   public definirDiagrama(diagrama: HTMLElement | undefined | null): this {
@@ -291,6 +299,12 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
     return this;
   }
 
+  public definirSelecionadorAba(selecionadorAba: SelecionadorAba | null): this {
+    this._selecionadorAba = selecionadorAba;
+
+    return this;
+  }
+
   public definirPrimeiroComponente(primeiroComponente: ComponenteDiagrama | null): this {
     this._primeiroComponente = primeiroComponente;
 
@@ -337,6 +351,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
       this._segundoComponente,
       this._lateralPrimeiroComponente,
       this._lateralSegundoComponente,
+      this._selecionadorAba,
       this._tipoConexao,
     ].every((item: any): boolean => !!item);
   }
@@ -370,6 +385,10 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
       throw new CommandBuilderException("repositório de componentes");
     }
 
+    if (this._selecionadorAba === null) {
+      throw new CommandBuilderException("selecionador de aba");
+    }
+
     if (this._primeiroComponente === null) {
       throw new CommandBuilderException("primeiro componente");
     }
@@ -398,6 +417,7 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
       this._registradorEventosConexao,
       this._registradorEventosElemento,
       this._repositorioComponentes,
+      this._selecionadorAba,
       this._primeiroComponente,
       this._segundoComponente,
       this._lateralPrimeiroComponente,
@@ -432,6 +452,10 @@ export class ConectarComponentesCommandBuilder implements ICommandBuilder<Conect
 
   get repositorioComponentes(): IRepositorioComponente | null {
     return this._repositorioComponentes;
+  }
+
+  get selecionadorAba(): SelecionadorAba | null {
+    return this._selecionadorAba;
   }
 
   get primeiroComponente(): ComponenteDiagrama | null {
