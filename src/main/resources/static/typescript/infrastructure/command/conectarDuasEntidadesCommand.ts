@@ -20,6 +20,7 @@ import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFa
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
+import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
 import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
@@ -44,6 +45,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
   private readonly _registradorEventosConexao: RegistradorEventosConexao;
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioComponente: IRepositorioComponente;
+  private readonly _selecionadorAba: SelecionadorAba;
   private readonly _tipoConexao: TiposConexao;
   private _commandCarregarCSSCardinalidade: CarregarCSSCommand | undefined;
   private _commandCarregarCSSConexao: CarregarCSSCommand | undefined;
@@ -67,6 +69,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
     registradorEventosConexao: RegistradorEventosConexao,
     registradorEventosElemento: RegistradorEventosElemento,
     repositorioComponente: IRepositorioComponente,
+    selecionadorAba: SelecionadorAba,
     tipoConexao: TiposConexao,
   ) {
     this._diagrama = diagrama;
@@ -80,6 +83,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
     this._registradorEventosConexao = registradorEventosConexao;
     this._registradorEventosElemento = registradorEventosElemento;
     this._repositorioComponente = repositorioComponente;
+    this._selecionadorAba = selecionadorAba;
     this._tipoConexao = tipoConexao;
   }
 
@@ -142,6 +146,10 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
           `${(primeiroPonto.y + segundoPonto.y) / 2 - componenteBoundingRect.height / 2}px`,
         );
         componente.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          String(this._selecionadorAba.abaSelecionada?.id),
+        );
+        componente.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
         );
@@ -171,6 +179,10 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
 
         this._registradorEventosConexao.registrarEventos(primeiraConexao.htmlComponente);
         primeiraConexao.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          String(this._selecionadorAba.abaSelecionada?.id),
+        );
+        primeiraConexao.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
         );
@@ -188,6 +200,10 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
           this._primeiroComponenteConexao,
           this._componenteRelacionamento,
           this._lateralPrimeiroComponente,
+        );
+        this._primeiroComponenteCardinalidade.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          String(this._selecionadorAba.abaSelecionada?.id),
         );
         this._primeiroComponenteCardinalidade.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
@@ -224,6 +240,10 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
 
         this._registradorEventosConexao.registrarEventos(segundaConexao.htmlComponente);
         segundaConexao.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          String(this._selecionadorAba.abaSelecionada?.id),
+        );
+        segundaConexao.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
         );
@@ -241,6 +261,10 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
           this._segundoComponenteConexao,
           this._componenteRelacionamento,
           this._lateralSegundoComponente,
+        );
+        this._segundoComponenteCardinalidade.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          String(this._selecionadorAba.abaSelecionada?.id),
         );
         this._segundoComponenteCardinalidade.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
@@ -350,6 +374,7 @@ export class ConectarDuasEntidadesCommandBuilder implements ICommandBuilder<Cone
   private _registradorEventosConexao: RegistradorEventosConexao | null = null;
   private _registradorEventosElemento: RegistradorEventosElemento | null = null;
   private _repositorioComponentes: IRepositorioComponente | null = null;
+  private _selecionadorAba: SelecionadorAba | null = null;
   private _primeiroComponente: ComponenteDiagrama | null = null;
   private _segundoComponente: ComponenteDiagrama | null = null;
   private _lateralPrimeiroComponente: LateraisComponente | null = null;
@@ -368,6 +393,7 @@ export class ConectarDuasEntidadesCommandBuilder implements ICommandBuilder<Cone
     this._registradorEventosConexao = source.registradorEventosConexao;
     this._registradorEventosElemento = source.registradorEventosElemento;
     this._repositorioComponentes = source.repositorioComponentes;
+    this._selecionadorAba = source.selecionadorAba;
     this._tipoConexao = source.tipoConexao;
 
     return this;
@@ -422,6 +448,10 @@ export class ConectarDuasEntidadesCommandBuilder implements ICommandBuilder<Cone
       throw new CommandBuilderException("repositório de componentes");
     }
 
+    if (this._selecionadorAba === null) {
+      throw new CommandBuilderException("selecionador de aba");
+    }
+
     return new ConectarDuasEntidadesCommand(
       this._diagrama,
       this._fabricaComponente,
@@ -434,6 +464,7 @@ export class ConectarDuasEntidadesCommandBuilder implements ICommandBuilder<Cone
       this._registradorEventosConexao,
       this._registradorEventosElemento,
       this._repositorioComponentes,
+      this._selecionadorAba,
       this._tipoConexao,
     );
   }

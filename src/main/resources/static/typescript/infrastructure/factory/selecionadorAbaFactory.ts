@@ -11,6 +11,7 @@
  *
  */
 
+import RepositorioComponenteFactory from "infrastructure/factory/repositorioComponenteFactory";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 
 export default class SelecionadorAbaFactory {
@@ -18,7 +19,7 @@ export default class SelecionadorAbaFactory {
 
   public static build(): SelecionadorAba {
     if (this._selecionadorAba === null) {
-      this._selecionadorAba = new SelecionadorAba();
+      this._selecionadorAba = new SelecionadorAba(RepositorioComponenteFactory.build());
     }
 
     return this._selecionadorAba;
