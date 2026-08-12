@@ -53,16 +53,9 @@ function fecharAba(event: MouseEvent): void {
     return;
   }
 
-  let idAba: number = abaSelecionada.id;
-
-  for (let i: number = idAba - 1; i >= 1; i--) {
-    let aba: Aba | null = repositorioAbas.pegar(i);
-
-    if (aba) {
-      aba.htmlElement.click();
-      return;
-    }
-  }
+  let abas: Aba[] = repositorioAbas.listar();
+  let proximaAba: Aba = abas[abas.length - 1];
+  selecionadorAba.selecionarAba(proximaAba);
 }
 
 buttonNovaAba?.addEventListener("click", async (): Promise<void> => {
