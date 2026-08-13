@@ -1,0 +1,32 @@
+.elemento-dicionario-dados {
+  align-items: unset;
+  background-color: var(--cor-fundo-area-de-edicao);
+  border: none;
+  justify-content: unset;
+  pointer-events: none;
+
+  left: 0;
+  top: 0;
+  height: inherit;
+  width: inherit;
+  min-height: 100%;
+  min-width: 100%;
+
+  &:hover {
+    background-color: var(--cor-fundo-area-de-edicao);
+  }
+
+  caption {
+    caption-side: top;
+    cursor: text;
+    font-weight: bold;
+    padding: 0.5rem;
+    pointer-events: all;
+  }
+
+  table {
+    height: 100%;
+    width: 100%;
+  }
+
+}

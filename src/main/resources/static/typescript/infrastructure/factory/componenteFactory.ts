@@ -51,6 +51,16 @@ export default class ComponenteFactory {
         for (const propriedade of valores.propriedades) {
           let label: string = await traduzirChaveI18n(propriedade.chaveI18nLabel);
 
+          if (propriedade.chaveI18nValorInicial) {
+            let elementoAlvo: HTMLElement | null = elementoHTML.querySelector(
+              `.${propriedade.classeElemento}`,
+            );
+
+            if (elementoAlvo) {
+              elementoAlvo.innerText = await traduzirChaveI18n(propriedade.chaveI18nValorInicial);
+            }
+          }
+
           let propriedadeComponente: PropriedadeComponente | null =
             fabricaPropriedade.criarPropriedade(
               propriedade.nomePropriedade,

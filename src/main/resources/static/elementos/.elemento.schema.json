@@ -32,6 +32,9 @@
           "chaveI18nLabel": {
             "type": "string"
           },
+          "chaveI18nValorInicial": {
+            "type": "string"
+          },
           "classeElemento": {
             "type": "string"
           },

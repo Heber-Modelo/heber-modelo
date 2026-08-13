@@ -1,8 +1,16 @@
 {
   "$schema": ".elemento.schema.json",
-  "valorHtmlInterno": "<table></table>",
+  "valorHtmlInterno": "<table><caption contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">ENTIDADE</caption></table>",
   "classesElemento": ["elemento-dicionario-dados"],
   "recebePontoExtensor": false,
   "recebeSetaConectora": false,
-  "propriedades": []
+  "propriedades": [
+    {
+      "chaveI18nLabel": "element.property.name.label",
+      "chaveI18nValorInicial": "element.property.default-name.entity",
+      "classeElemento": "nome",
+      "nomePropriedade": "innerText",
+      "sufixo": ""
+    }
+  ]
 }

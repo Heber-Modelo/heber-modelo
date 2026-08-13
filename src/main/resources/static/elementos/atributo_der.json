@@ -7,6 +7,7 @@
   "propriedades": [
     {
       "chaveI18nLabel": "element.property.name.label",
+      "chaveI18nValorInicial": "element.property.default-value.attribute",
       "classeElemento": "nome",
       "nomePropriedade": "innerText",
       "sufixo": ""
