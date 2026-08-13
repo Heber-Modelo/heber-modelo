@@ -2,6 +2,7 @@
   "$schema": ".diagrama.schema.json",
   "nome": "Diagrama Entidade Relacionamento",
   "chaveI18N": "diagram.entity.title",
+  "exigeAbaExclusiva": false,
   "elementos": [
     {
       "nome": "agregação",

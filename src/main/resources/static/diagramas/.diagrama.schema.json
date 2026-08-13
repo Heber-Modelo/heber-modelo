@@ -7,6 +7,9 @@
     "chaveI18N": {
       "type": "string"
     },
+    "exigeAbaExclusiva": {
+      "type": "boolean"
+    },
     "elementos": {
       "type": "array",
       "items": {
@@ -22,9 +25,9 @@
             "type": "string"
           }
         },
-        "required": ["nome", "tipo"]
+        "required": ["nome", "tipo", "chaveI18N"]
       }
     }
   },
-  "required": ["nome", "elementos"]
+  "required": ["nome", "chaveI18N", "exigeAbaExclusiva", "elementos"]
 }

@@ -1,0 +1,13 @@
+{
+  "$schema": ".diagrama.schema.json",
+  "nome": "Dicionário de Dados",
+  "exigeAbaExclusiva": true,
+  "chaveI18N": "diagram.dictionary.title",
+  "elementos": [
+    {
+      "nome": "Tabela Dicionário de Dados",
+      "tipo": "tabela_dicionario",
+      "chaveI18N": "element.dictionary-table"
+    }
+  ]
+}

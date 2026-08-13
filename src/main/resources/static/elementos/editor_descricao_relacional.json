@@ -1,0 +1,8 @@
+{
+  "$schema": ".elemento.schema.json",
+  "valorHtmlInterno": "<div></div>",
+  "classesElemento": ["elemento-editor-descricao-relacional"],
+  "recebePontoExtensor": false,
+  "recebeSetaConectora": false,
+  "propriedades": []
+}

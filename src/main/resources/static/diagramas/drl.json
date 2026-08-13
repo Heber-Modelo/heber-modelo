@@ -2,6 +2,7 @@
   "$schema": ".diagrama.schema.json",
   "nome": "Diagrama do Modelo Relacional",
   "chaveI18N": "diagram.relational.title",
+  "exigeAbaExclusiva": false,
   "elementos": [
     {
       "nome": "entidade",
