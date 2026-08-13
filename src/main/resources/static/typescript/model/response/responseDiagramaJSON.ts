@@ -14,6 +14,7 @@ export default interface ResponseDiagramaJSON {
   nome: string;
   chaveI18N: string;
   elementos: TipoComponenteJSON[];
+  exigeAbaExclusiva: boolean;
 }
 
 export interface TipoComponenteJSON {

@@ -1,8 +1,8 @@
 {
   "$schema": ".diagrama.schema.json",
   "nome": "Dicionário de Dados",
-  "exigeAbaExclusiva": true,
   "chaveI18N": "diagram.dictionary.title",
+  "exigeAbaExclusiva": true,
   "elementos": [
     {
       "nome": "Tabela Dicionário de Dados",
