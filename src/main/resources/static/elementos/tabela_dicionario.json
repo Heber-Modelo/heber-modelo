@@ -1,0 +1,8 @@
+{
+  "$schema": ".elemento.schema.json",
+  "valorHtmlInterno": "<table></table>",
+  "classesElemento": ["elemento-dicionario-dados"],
+  "recebePontoExtensor": false,
+  "recebeSetaConectora": false,
+  "propriedades": []
+}

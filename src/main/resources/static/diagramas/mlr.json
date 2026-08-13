@@ -1,0 +1,13 @@
+{
+  "$schema": ".diagrama.schema.json",
+  "nome": "Descrição do Modelo Relacional",
+  "chaveI18N": "diagram.relational-model.title",
+  "exigeAbaExclusiva": true,
+  "elementos": [
+    {
+      "nome": "Editor de Descrição Relacional",
+      "tipo": "editor_descricao_relacional",
+      "chaveI18N": "element.relational-model-editor"
+    }
+  ]
+}
