@@ -76,6 +76,7 @@ import RepositorioComponente from "infrastructure/repositorio/repositorioCompone
 import RepositorioTiposDiagrama from "infrastructure/repositorio/repositorioTiposDiagrama";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
+import criarAba from "infrastructure/services/criarAba";
 import "infrastructure/variaveisConfiguracao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
@@ -83,7 +84,6 @@ import NomesComponente from "model/componente/nomesComponente";
 import TiposConexao from "model/conexao/tiposConexao";
 import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 import calcularLateralComponente from "model/services/calcularLateralComponente";
-import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import Aba from "model/aba";
 import DirecoesMovimento from "model/direcoesMovimento";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
@@ -109,6 +109,7 @@ let repositorioTiposDiagrama: RepositorioTiposDiagrama = RepositorioTiposDiagram
 let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
 let selecionadorAba: SelecionadorAba = SelecionadorAbaFactory.build();
 let selecionadorComponente: SelecionadorComponente = SelecionadorComponenteFactory.build();
+let seletorAbas: HTMLElement | null = document.querySelector("footer div");
 
 componentes.forEach((componente: HTMLDivElement): void => {
   repositorioComponentes.adicionar(new ComponenteDiagrama(componente, []));
@@ -231,10 +232,15 @@ inputsCarregarDiagrama.forEach((input: HTMLInputElement): void => {
   inputsPorTipo[input.value] = input;
 
   const command: CarregarDiagramaCommand = new CarregarDiagramaCommandBuilder()
-    .definirSectionComponentes(sectionComponentes as HTMLElement)
-    .definirCallCriarComponente(callbackCriarComponente)
-    .definirRepositorioTiposDiagrama(repositorioTiposDiagrama)
+    .definirCallbackCriarComponente(callbackCriarComponente)
+    .definirCallbackFecharAba(fecharAba)
+    .definirGeradorIDAba(geradorIDAba)
     .definirNomeDiagrama(input.value.toLowerCase())
+    .definirRepositorioAbas(repositorioAbas)
+    .definirRepositorioTiposDiagrama(repositorioTiposDiagrama)
+    .definirSectionComponentes(sectionComponentes)
+    .definirSelecionadorAba(selecionadorAba)
+    .definirSeletorAbas(seletorAbas)
     .build();
 
   input.addEventListener("click", (event: Event): void => {
@@ -574,7 +580,6 @@ buttonCortar?.addEventListener("click", (): void => {
 /******************/
 
 let buttonNovaAba: HTMLDivElement | null = document.querySelector("#nova-aba");
-let seletorAbas: HTMLElement | null = document.querySelector("footer div");
 let htmlElementAbaPadrao: HTMLDivElement = seletorAbas?.querySelector("div") as HTMLDivElement;
 let abaPadrao: Aba = new Aba(1, htmlElementAbaPadrao);
 
@@ -608,28 +613,13 @@ function fecharAba(event: MouseEvent): void {
 }
 
 buttonNovaAba?.addEventListener("click", async (): Promise<void> => {
-  let htmlElementNovaAba: HTMLDivElement = document.createElement("div");
-  let btnFechar: HTMLParagraphElement = document.createElement("p");
-  let tabLabel: HTMLParagraphElement = document.createElement("p");
+  let novaAba: Aba = await criarAba(geradorIDAba.pegarProximoID(), fecharAba);
 
-  htmlElementNovaAba.classList.add(Aba.CLASSE_ABA);
-  htmlElementNovaAba.setAttribute(Aba.ATRIBUTO_INDICE_ABA, `${geradorIDAba.pegarProximoID()}`);
+  seletorAbas?.append(novaAba.htmlElement);
 
-  btnFechar.innerText = "x";
-  btnFechar.addEventListener("click", fecharAba);
-
-  tabLabel.classList.add(Aba.CLASSE_NUMERO_ABA);
-  tabLabel.innerText = `${await traduzirChaveI18n("web.page.editor.label.tab")} ${geradorIDAba.id}`;
-  tabLabel.setAttribute("contenteditable", "true");
-
-  htmlElementNovaAba.append(tabLabel);
-  htmlElementNovaAba.append(btnFechar);
-  seletorAbas?.append(htmlElementNovaAba);
-
-  let novaAba: Aba = new Aba(geradorIDAba.id, htmlElementNovaAba);
   repositorioAbas.adicionar(novaAba);
 
-  htmlElementNovaAba.addEventListener("click", (): void => {
+  novaAba.htmlElement.addEventListener("click", (): void => {
     selecionadorAba.selecionarAba(novaAba);
   });
 });
