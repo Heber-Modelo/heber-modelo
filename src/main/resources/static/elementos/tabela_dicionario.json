@@ -1,6 +1,6 @@
 {
   "$schema": ".elemento.schema.json",
-  "valorHtmlInterno": "<table><caption contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">ENTIDADE</caption></table>",
+  "valorHtmlInterno": "<table><caption contenteditable=\"true\" spellcheck=\"true\" class=\"nome\"></caption><thead><tr><th scope=\"col\" class=\"nome-atributo\"></th><th scope=\"col\" class=\"description\"></th><th scope=\"col\" class=\"tipo\"></th><th scope=\"col\" class=\"tamanho\"></th><th scope=\"col\" class=\"nulo\"></th><th scope=\"col\" class=\"regra\"></th><th scope=\"col\" class=\"chave\"></th><th scope=\"col\" class=\"default\"></th><th scope=\"col\" class=\"unique\"></th></tr></thead><tbody><tr><th scope=\"row\" contenteditable=\"true\" spellcheck=\"true\"></th><td contenteditable=\"true\" spellcheck=\"true\"></td><td contenteditable=\"true\" spellcheck=\"true\"></td><td contenteditable=\"true\" spellcheck=\"true\"></td><td contenteditable=\"true\" spellcheck=\"true\"></td><td contenteditable=\"true\" spellcheck=\"true\"></td><td contenteditable=\"true\" spellcheck=\"true\"></td><td contenteditable=\"true\" spellcheck=\"true\"></td><td contenteditable=\"true\" spellcheck=\"true\"></td></tr></tbody></table>",
   "classesElemento": ["elemento-dicionario-dados"],
   "recebePontoExtensor": false,
   "recebeSetaConectora": false,
@@ -9,6 +9,69 @@
       "chaveI18nLabel": "element.property.name.label",
       "chaveI18nValorInicial": "element.property.default-name.entity",
       "classeElemento": "nome",
+      "nomePropriedade": "innerText",
+      "sufixo": ""
+    },
+    {
+      "chaveI18nLabel": "element.property.attribute-name.label",
+      "chaveI18nValorInicial": "element.property.default-name.attribute-label",
+      "classeElemento": "nome-atributo",
+      "nomePropriedade": "innerText",
+      "sufixo": ""
+    },
+    {
+      "chaveI18nLabel": "element.property.description.label",
+      "chaveI18nValorInicial": "element.property.default-name.description-label",
+      "classeElemento": "description",
+      "nomePropriedade": "innerText",
+      "sufixo": ""
+    },
+    {
+      "chaveI18nLabel": "element.property.type.label",
+      "chaveI18nValorInicial": "element.property.default-name.type-label",
+      "classeElemento": "tipo",
+      "nomePropriedade": "innerText",
+      "sufixo": ""
+    },
+    {
+      "chaveI18nLabel": "element.property.size.label",
+      "chaveI18nValorInicial": "element.property.default-name.size-label",
+      "classeElemento": "tamanho",
+      "nomePropriedade": "innerText",
+      "sufixo": ""
+    },
+    {
+      "chaveI18nLabel": "element.property.nullable.label",
+      "chaveI18nValorInicial": "element.property.default-name.nullable-label",
+      "classeElemento": "nulo",
+      "nomePropriedade": "innerText",
+      "sufixo": ""
+    },
+    {
+      "chaveI18nLabel": "element.property.check.label",
+      "chaveI18nValorInicial": "element.property.default-name.check-label",
+      "classeElemento": "regra",
+      "nomePropriedade": "innerText",
+      "sufixo": ""
+    },
+    {
+      "chaveI18nLabel": "element.property.key.label",
+      "chaveI18nValorInicial": "element.property.default-name.key-label",
+      "classeElemento": "chave",
+      "nomePropriedade": "innerText",
+      "sufixo": ""
+    },
+    {
+      "chaveI18nLabel": "element.property.default.label",
+      "chaveI18nValorInicial": "element.property.default-name.default-label",
+      "classeElemento": "default",
+      "nomePropriedade": "innerText",
+      "sufixo": ""
+    },
+    {
+      "chaveI18nLabel": "element.property.unique.label",
+      "chaveI18nValorInicial": "element.property.default-name.unique-label",
+      "classeElemento": "unique",
       "nomePropriedade": "innerText",
       "sufixo": ""
     }

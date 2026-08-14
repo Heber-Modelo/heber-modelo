@@ -17,6 +17,7 @@
   }
 
   caption {
+    border: 0.1rem solid var(--cor-borda);
     caption-side: top;
     cursor: text;
     font-weight: bold;
@@ -25,8 +26,27 @@
   }
 
   table {
+    border: 0.1rem solid var(--cor-borda);
     height: 100%;
     width: 100%;
+
+    thead {
+      th {
+        border: solid var(--cor-borda);
+        border-width: 0 .1rem;
+        padding: 0.2rem 0;
+      }
+    }
+
+    tbody {
+      height: 100%;
+
+      td, th {
+        border: 0.1rem solid var(--cor-borda);
+        height: 0.5rem;
+      }
+    }
+
   }
 
 }
