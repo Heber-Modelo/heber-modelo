@@ -111,6 +111,13 @@ const callbackCriarAtributoRelacional = (event: MouseEvent): void => {
   // noinspection JSCheckFunctionSignatures,JSDeprecatedSymbols
   novoAtributo.outerHTML =
     '<div class="atributo" onmouseup="callbackAlterarAtributoRelacional(event)"><span class="chave"><span class="desc-chave"></span></span><span contenteditable="true" spellcheck="true" class="texto">atributo: tipo</span></div>';
+
+  let elementoEntidade: HTMLElement | null = (event.target as HTMLElement).parentElement;
+  let alturaEntidade: number | undefined = elementoEntidade?.getBoundingClientRect().height;
+
+  if (alturaEntidade) {
+    elementoEntidade?.style.setProperty("height", `calc(${alturaEntidade}px + 2rem)`);
+  }
 };
 
 /***********************/
