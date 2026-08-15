@@ -1,5 +1,5 @@
 .elemento-cardinalidade {
-  border: none;
+  border-color: transparent;
   background-color: transparent;
   width: fit-content;
   height: fit-content;
@@ -9,8 +9,11 @@
     pointer-events: none;
   }
 
+  &.selected {
+    border-color: var(--cor-borda-componente-selecionado);
+  }
+
   &:hover {
-    border: none;
     background-color: transparent;
   }
 }

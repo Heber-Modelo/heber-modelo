@@ -1,12 +1,15 @@
 .elemento-texto {
-  border: none;
+  border-color: transparent;
   background-color: transparent;
   width: fit-content;
   height: fit-content;
   padding: 1rem;
 
+  &.selected {
+    border-color: var(--cor-borda-componente-selecionado);
+  }
+
   &:hover {
-    border: none;
     background-color: transparent;
   }
 }
