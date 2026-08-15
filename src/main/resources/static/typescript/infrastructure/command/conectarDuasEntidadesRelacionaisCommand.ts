@@ -21,21 +21,20 @@ import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
+import ComponenteCardinalidadeRelacionamento from "model/componente/componenteCardinalidadeRelacionamento";
+import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import ICommand, { CommandResult } from "model/command/iCommand";
 import ICommandBuilder from "model/command/iCommandBuilder";
 import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
-import ComponenteCardinalidadeRelacionamento from "model/componente/componenteCardinalidadeRelacionamento";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
 import NomesComponente from "model/componente/nomesComponente";
 import TiposConexao from "model/conexao/tiposConexao";
 import CommandBuilderException from "model/exception/commandBuilderException";
 import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
-import pegarLateralComponenteOposta from "model/services/pegarLateralComponenteOposta";
 import Ponto from "model/ponto";
 
 // noinspection DuplicatedCode
-export default class ConectarDuasEntidadesCommand implements ICommand {
+export default class ConectarDuasEntidadesRelacionaisCommand implements ICommand {
   private readonly _diagrama: HTMLElement;
   private readonly _fabricaComponente: ComponenteFactory;
   private readonly _fabricaConexao: ComponenteConexaoFactory;
@@ -51,13 +50,9 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
   private readonly _tipoConexao: TiposConexao;
   private _commandCarregarCSSCardinalidade: CarregarCSSCommand | undefined;
   private _commandCarregarCSSConexao: CarregarCSSCommand | undefined;
-  private _commandCarregarCSSRelacionamento: CarregarCSSCommand | undefined;
-  private _commandCarregarCSSTexto: CarregarCSSCommand | undefined;
-  private _componenteRelacionamento: ComponenteDiagrama | undefined;
-  private _primeiroComponenteConexao: ComponenteDiagrama | undefined;
-  private _segundoComponenteConexao: ComponenteDiagrama | undefined;
-  private _primeiroComponenteCardinalidade: ComponenteDiagrama | undefined;
-  private _segundoComponenteCardinalidade: ComponenteDiagrama | undefined;
+  private _componenteConexao: AbstractComponenteConexao | undefined;
+  private _primeiroComponenteCardinalidade: ComponenteCardinalidadeRelacionamento | undefined;
+  private _segundoComponenteCardinalidade: ComponenteCardinalidadeRelacionamento | undefined;
 
   constructor(
     diagrama: HTMLElement,
@@ -103,90 +98,52 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
     this._commandCarregarCSSConexao = new CarregarCSSCommandBuilder()
       .definirNomeArquivo(this._tipoConexao)
       .build();
-    this._commandCarregarCSSRelacionamento = new CarregarCSSCommandBuilder()
-      .definirNomeArquivo(NomesComponente.RELACIONAMENTO)
-      .build();
-    this._commandCarregarCSSTexto = new CarregarCSSCommandBuilder()
-      .definirNomeArquivo(NomesComponente.RELACIONAMENTO)
-      .build();
 
     this._commandCarregarCSSCardinalidade.execute();
     this._commandCarregarCSSConexao.execute();
-    this._commandCarregarCSSRelacionamento.execute();
-    this._commandCarregarCSSTexto.execute();
 
     this._fabricaComponente
-      .criarComponente(NomesComponente.RELACIONAMENTO)
+      .criarComponente(this._tipoConexao)
       .then(async (componente: ComponenteDiagrama): Promise<void> => {
-        this._diagrama.append(componente.htmlComponente);
-        this._registradorEventosElemento.registrarEventos(componente.htmlComponente);
-        this._repositorioComponente.adicionar(componente);
-
-        let componenteBoundingRect: DOMRect = componente.htmlComponente.getBoundingClientRect();
-        componente.htmlComponente.style.setProperty(
-          "left",
-          `${(primeiroPonto.x + segundoPonto.x) / 2 - componenteBoundingRect.width / 2}px`,
-        );
-        componente.htmlComponente.style.setProperty(
-          "top",
-          `${(primeiroPonto.y + segundoPonto.y) / 2 - componenteBoundingRect.height / 2}px`,
-        );
-        componente.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
-          String(this._selecionadorAba.abaSelecionada?.id),
-        );
-        componente.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
-
-        this._componenteRelacionamento = componente;
-
-        let primeiraLateralRelacionamento: LateraisComponente = pegarLateralComponenteOposta(
-          this._lateralPrimeiroComponente,
-        );
-        let primeiroPontoAuxiliar: Ponto = componente.calcularPontoLateralComponente(
-          primeiraLateralRelacionamento,
-        );
-        let primeiraConexao: ComponenteDiagrama = await this._fabricaComponente.criarComponente(
+        this._componenteConexao = this._fabricaConexao.criarConexao(
           this._tipoConexao,
-        );
-        this._primeiroComponenteConexao = this._fabricaConexao.criarConexao(
-          this._tipoConexao,
-          primeiraConexao.htmlComponente,
-          primeiraConexao.propriedades,
+          componente.htmlComponente,
+          componente.propriedades,
           primeiroPonto,
-          primeiroPontoAuxiliar,
+          segundoPonto,
           this._lateralPrimeiroComponente,
-          primeiraLateralRelacionamento,
+          this._lateralSegundoComponente,
           this._primeiroComponente,
-          this._componenteRelacionamento,
+          this._segundoComponente,
         );
 
-        this._registradorEventosConexao.registrarEventos(primeiraConexao.htmlComponente);
-        primeiraConexao.htmlComponente.setAttribute(
+        this._registradorEventosConexao.registrarEventos(this._componenteConexao.htmlComponente);
+        this._componenteConexao.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
-        primeiraConexao.htmlComponente.setAttribute(
+        this._componenteConexao.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
         );
 
-        this._repositorioComponente.adicionar(this._primeiroComponenteConexao);
-        this._diagrama.append(this._primeiroComponenteConexao.htmlComponente);
+        this._repositorioComponente.adicionar(this._componenteConexao);
+        this._diagrama.append(this._componenteConexao.htmlComponente);
 
         let primeiraCardinalidade: ComponenteDiagrama =
           await this._fabricaComponente.criarComponente(NomesComponente.CARDINALIDADE);
+
         this._diagrama.append(primeiraCardinalidade.htmlComponente);
+
         this._primeiroComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
           primeiraCardinalidade.htmlComponente,
           primeiraCardinalidade.propriedades,
           this._primeiroComponente,
-          this._primeiroComponenteConexao,
-          this._componenteRelacionamento,
+          this._componenteConexao,
+          this._segundoComponente,
           this._lateralPrimeiroComponente,
         );
+
         this._primeiroComponenteCardinalidade.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
@@ -195,59 +152,24 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
         );
-
         this._registradorEventosElemento.registrarEventos(
           this._primeiroComponenteCardinalidade.htmlComponente,
         );
         this._repositorioComponente.adicionar(this._primeiroComponenteCardinalidade);
 
-        let segundaLateralRelacionamento: LateraisComponente = pegarLateralComponenteOposta(
-          this._lateralSegundoComponente,
-        );
-        let segundoPontoAuxiliar: Ponto =
-          this._componenteRelacionamento.calcularPontoLateralComponente(
-            segundaLateralRelacionamento,
-          );
-
-        let segundaConexao: ComponenteDiagrama = await this._fabricaComponente.criarComponente(
-          this._tipoConexao,
-        );
-        this._segundoComponenteConexao = this._fabricaConexao.criarConexao(
-          this._tipoConexao,
-          segundaConexao.htmlComponente,
-          segundaConexao.propriedades,
-          segundoPontoAuxiliar,
-          segundoPonto,
-          segundaLateralRelacionamento,
-          this._lateralSegundoComponente,
-          this._componenteRelacionamento,
-          this._segundoComponente,
-        );
-
-        this._registradorEventosConexao.registrarEventos(segundaConexao.htmlComponente);
-        segundaConexao.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
-          String(this._selecionadorAba.abaSelecionada?.id),
-        );
-        segundaConexao.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
-
-        this._repositorioComponente.adicionar(this._segundoComponenteConexao);
-        this._diagrama.append(this._segundoComponenteConexao.htmlComponente);
-
         let segundaCardinalidade: ComponenteDiagrama =
           await this._fabricaComponente.criarComponente(NomesComponente.CARDINALIDADE);
         this._diagrama.append(segundaCardinalidade.htmlComponente);
+
         this._segundoComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
           segundaCardinalidade.htmlComponente,
           segundaCardinalidade.propriedades,
           this._segundoComponente,
-          this._segundoComponenteConexao,
-          this._componenteRelacionamento,
+          this._componenteConexao,
+          this._primeiroComponente,
           this._lateralSegundoComponente,
         );
+
         this._segundoComponenteCardinalidade.htmlComponente.setAttribute(
           ComponenteFactory.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
@@ -256,7 +178,6 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
           ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
         );
-
         this._registradorEventosElemento.registrarEventos(
           this._segundoComponenteCardinalidade.htmlComponente,
         );
@@ -264,75 +185,49 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
       });
 
     return {
-      ok: true,
       error: undefined,
+      ok: true,
     };
   }
 
   redo(): CommandResult {
-    this._commandCarregarCSSCardinalidade?.redo();
     this._commandCarregarCSSConexao?.redo();
-    this._commandCarregarCSSRelacionamento?.redo();
-    this._commandCarregarCSSTexto?.redo();
+    this._commandCarregarCSSCardinalidade?.redo();
 
-    if (this._componenteRelacionamento) {
-      this._diagrama.append(this._componenteRelacionamento.htmlComponente);
-      this._repositorioComponente.adicionar(this._componenteRelacionamento);
-    }
-
-    if (this._primeiroComponenteConexao instanceof AbstractComponenteConexao) {
-      this._primeiroComponente.adicionarOuvinte(this._primeiroComponenteConexao);
-      this._componenteRelacionamento?.adicionarOuvinte(this._primeiroComponenteConexao);
-      this._diagrama.append(this._primeiroComponenteConexao.htmlComponente);
-      this._repositorioComponente.adicionar(this._primeiroComponenteConexao);
-    }
-
-    if (this._segundoComponenteConexao instanceof AbstractComponenteConexao) {
-      this._segundoComponente.adicionarOuvinte(this._segundoComponenteConexao);
-      this._componenteRelacionamento?.adicionarOuvinte(this._segundoComponenteConexao);
-      this._diagrama.append(this._segundoComponenteConexao.htmlComponente);
-      this._repositorioComponente.adicionar(this._segundoComponenteConexao);
+    if (this._componenteConexao instanceof AbstractComponenteConexao) {
+      this._primeiroComponente.adicionarOuvinte(this._componenteConexao);
+      this._segundoComponente.adicionarOuvinte(this._componenteConexao);
+      this._diagrama.append(this._componenteConexao.htmlComponente);
+      this._repositorioComponente.adicionar(this._componenteConexao);
     }
 
     if (this._primeiroComponenteCardinalidade instanceof ComponenteCardinalidadeRelacionamento) {
       this._primeiroComponente.adicionarOuvinte(this._primeiroComponenteCardinalidade);
-      this._primeiroComponenteConexao?.adicionarOuvinte(this._primeiroComponenteCardinalidade);
+      this._componenteConexao?.adicionarOuvinte(this._primeiroComponenteCardinalidade);
       this._diagrama.append(this._primeiroComponenteCardinalidade.htmlComponente);
       this._repositorioComponente.adicionar(this._primeiroComponenteCardinalidade);
     }
 
     if (this._segundoComponenteCardinalidade instanceof ComponenteCardinalidadeRelacionamento) {
       this._segundoComponente.adicionarOuvinte(this._segundoComponenteCardinalidade);
-      this._segundoComponenteConexao?.adicionarOuvinte(this._segundoComponenteCardinalidade);
+      this._componenteConexao?.adicionarOuvinte(this._segundoComponenteCardinalidade);
       this._diagrama.append(this._segundoComponenteCardinalidade.htmlComponente);
       this._repositorioComponente.adicionar(this._segundoComponenteCardinalidade);
     }
 
     return {
-      ok: true,
       error: undefined,
+      ok: true,
     };
   }
 
   undo(): CommandResult {
     this._commandCarregarCSSCardinalidade?.undo();
     this._commandCarregarCSSConexao?.undo();
-    this._commandCarregarCSSRelacionamento?.undo();
-    this._commandCarregarCSSTexto?.undo();
 
-    if (this._componenteRelacionamento) {
-      this._componenteRelacionamento.htmlComponente.remove();
-      this._repositorioComponente.remover(this._componenteRelacionamento);
-    }
-
-    if (this._primeiroComponenteConexao) {
-      this._primeiroComponenteConexao.htmlComponente.remove();
-      this._repositorioComponente.remover(this._primeiroComponenteConexao);
-    }
-
-    if (this._segundoComponenteConexao) {
-      this._segundoComponenteConexao.htmlComponente.remove();
-      this._repositorioComponente.remover(this._segundoComponenteConexao);
+    if (this._componenteConexao) {
+      this._componenteConexao.htmlComponente.remove();
+      this._repositorioComponente.remover(this._componenteConexao);
     }
 
     if (this._primeiroComponenteCardinalidade) {
@@ -346,15 +241,15 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
     }
 
     return {
-      ok: true,
       error: undefined,
+      ok: true,
     };
   }
 }
 
 // noinspection DuplicatedCode
-export class ConectarDuasEntidadesCommandBuilder implements ICommandBuilder<ConectarDuasEntidadesCommand> {
-  private _diagrama: HTMLElement | undefined | null;
+export class ConectarDuasEntidadesRelacionaisCommandBuilder implements ICommandBuilder<ConectarDuasEntidadesRelacionaisCommand> {
+  private _diagrama: HTMLElement | undefined | null = null;
   private _fabricaComponente: ComponenteFactory | null = null;
   private _fabricaConexao: ComponenteConexaoFactory | null = null;
   private _geradorID: GeradorIDComponente | null = null;
@@ -386,7 +281,7 @@ export class ConectarDuasEntidadesCommandBuilder implements ICommandBuilder<Cone
     return this;
   }
 
-  public build(): ConectarDuasEntidadesCommand {
+  build(): ConectarDuasEntidadesRelacionaisCommand {
     if (this._diagrama === null || this._diagrama === undefined) {
       throw new CommandBuilderException("diagrama");
     }
@@ -439,7 +334,7 @@ export class ConectarDuasEntidadesCommandBuilder implements ICommandBuilder<Cone
       throw new CommandBuilderException("selecionador de aba");
     }
 
-    return new ConectarDuasEntidadesCommand(
+    return new ConectarDuasEntidadesRelacionaisCommand(
       this._diagrama,
       this._fabricaComponente,
       this._fabricaConexao,
