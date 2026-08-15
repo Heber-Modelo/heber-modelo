@@ -1,0 +1,20 @@
+.elemento-editor-descricao-relacional {
+  background-color: var(--cor-fundo-area-de-edicao);
+  border: none;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  height: 100%;
+  width: 100%;
+
+  &:hover {
+    background-color: var(--cor-fundo-area-de-edicao);
+    border: none;
+  }
+
+  .ql-toolbar, .ql-container {
+    pointer-events: all;
+    width: 100%;
+  }
+
+}

@@ -12,6 +12,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
+    "noUncheckedSideEffectImports": false,
     "paths": {
       "application/*": ["./src/main/resources/static/typescript/application/*"],
       "infrastructure/*": ["./src/main/resources/static/typescript/infrastructure/*"],
