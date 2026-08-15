@@ -89,6 +89,9 @@ import DirecoesMovimento from "model/direcoesMovimento";
 import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
 import SetaConectora from "model/setaConectora";
 import Ponto from "model/ponto";
+import ConectarDuasEntidadesRelacionaisCommand, {
+  ConectarDuasEntidadesRelacionaisCommandBuilder,
+} from "infrastructure/command/conectarDuasEntidadesRelacionaisCommand";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -354,6 +357,23 @@ function conectarElementos(event: MouseEvent): void {
     let command: ConectarDuasEntidadesCommand = new ConectarDuasEntidadesCommandBuilder()
       .copyAttributes(conectarComponentesCommandBuilder)
       .build();
+    commandHistory.saveAndExecuteCommand(command);
+    callbackFinalSetaConectora();
+    return;
+  }
+
+  if (
+    conectarComponentesCommandBuilder.primeiroComponente?.htmlComponente.getAttribute(
+      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+    ) === NomesComponente.ENTIDADE_RELACIONAL &&
+    conectarComponentesCommandBuilder.segundoComponente?.htmlComponente.getAttribute(
+      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+    ) === NomesComponente.ENTIDADE_RELACIONAL
+  ) {
+    let command: ConectarDuasEntidadesRelacionaisCommand =
+      new ConectarDuasEntidadesRelacionaisCommandBuilder()
+        .copyAttributes(conectarComponentesCommandBuilder)
+        .build();
     commandHistory.saveAndExecuteCommand(command);
     callbackFinalSetaConectora();
     return;

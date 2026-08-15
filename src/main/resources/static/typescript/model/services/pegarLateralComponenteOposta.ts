@@ -11,13 +11,22 @@
  *
  */
 
-enum NomesComponente {
-  ATRIBUTO_DER = "atributo_der",
-  AGREGACAO = "agregacao",
-  CARDINALIDADE = "cardinalidade",
-  ENTIDADE = "entidade",
-  ENTIDADE_RELACIONAL = "entidade_relacional",
-  RELACIONAMENTO = "relacionamento",
-}
+import LateraisComponente from "model/componente/lateraisComponente";
 
-export default NomesComponente;
+export default function pegarLateralComponenteOposta(
+  lateralComponente: LateraisComponente,
+): LateraisComponente {
+  switch (lateralComponente) {
+    case LateraisComponente.NORTE:
+      return LateraisComponente.SUL;
+
+    case LateraisComponente.SUL:
+      return LateraisComponente.NORTE;
+
+    case LateraisComponente.LESTE:
+      return LateraisComponente.OESTE;
+
+    case LateraisComponente.OESTE:
+      return LateraisComponente.LESTE;
+  }
+}
