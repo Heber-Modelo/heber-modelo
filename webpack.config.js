@@ -16,6 +16,10 @@ export default {
     cookiesBanner: path.resolve(baseDirectory, "application/paginas/cookiesBanner.ts"),
     desligar: path.resolve(baseDirectory, "application/paginas/desligar.ts"),
     editor: path.resolve(baseDirectory, "application/paginas/editor/editor.ts"),
+    helperEditorDescricaoModeloRelacional: path.resolve(
+      baseDirectory,
+      "application/paginas/editor/helperEditorDescricaoModeloRelacional",
+    ),
     helperSeletorTipoConexao: path.resolve(
       baseDirectory,
       "application/paginas/helperSeletorTipoConexao",
@@ -28,13 +32,16 @@ export default {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.([jt])s?$/,
         loader: "babel-loader",
-        exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
       },
     ],
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js"],
+    extensions: [".ts", ".js", ".css"],
   },
 };

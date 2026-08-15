@@ -47,6 +47,7 @@ export default class ComponenteFactory {
         );
         elementoHTML.classList.add(ComponenteDiagrama.CLASSE_BASE_COMPONENTE);
         elementoHTML.classList.add(...valores.classesElemento);
+
         let componente: ComponenteDiagrama = new ComponenteDiagrama(elementoHTML, []);
         for (const propriedade of valores.propriedades) {
           let label: string = await traduzirChaveI18n(propriedade.chaveI18nLabel);
