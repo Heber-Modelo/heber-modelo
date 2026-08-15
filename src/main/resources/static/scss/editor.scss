@@ -41,7 +41,7 @@ body {
   &:has(#painel-esquerdo.hidden) {
     grid-template-columns: 80% 20%;
 
-    main{
+    main, footer {
       grid-column: 1;
     }
 
@@ -50,7 +50,7 @@ body {
   &:has(#painel-direito.hidden):has(#painel-esquerdo.hidden) {
     grid-template-columns: 100%;
 
-    main{
+    main, footer {
       grid-column: 1;
     }
 
