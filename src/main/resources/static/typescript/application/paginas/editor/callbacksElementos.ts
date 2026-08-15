@@ -54,7 +54,7 @@ class ModeloChaveRelacional {
 }
 
 const callbackAlterarAtributoRelacional = (event: MouseEvent): void => {
-  if (event.button == 1) {
+  if (event.button == 1 && (event.target as HTMLElement).tagName.toLowerCase() === "div") {
     (event.target as HTMLElement).remove();
     return;
   }

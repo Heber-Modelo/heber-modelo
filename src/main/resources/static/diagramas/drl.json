@@ -15,6 +15,11 @@
       "chaveI18N": "element.note"
     },
     {
+      "nome": "cardinalidade",
+      "tipo": "cardinalidade",
+      "chaveI18N": "element.entity-cardinality"
+    },
+    {
       "nome": "texto",
       "tipo": "texto",
       "chaveI18N": "element.text"
