@@ -112,3 +112,43 @@ const callbackCriarAtributoRelacional = (event: MouseEvent): void => {
   novoAtributo.outerHTML =
     '<div class="atributo" onmouseup="callbackAlterarAtributoRelacional(event)"><span class="chave"><span class="desc-chave"></span></span><span contenteditable="true" spellcheck="true" class="texto">atributo: tipo</span></div>';
 };
+
+/***********************/
+/* DICIONÁRIO DE DADOS */
+/***********************/
+
+const NUMERO_COLUNAS: number = 9;
+
+function criarLinha(event: Event): void {
+  let table: HTMLTableElement | null | undefined = (
+    event.target as HTMLElement | null
+  )?.parentElement?.parentElement?.querySelector("table");
+  let tbody: HTMLTableSectionElement | undefined = table?.tBodies[0];
+  let newRow: HTMLTableRowElement | undefined = tbody?.insertRow();
+
+  let th: HTMLTableCellElement = document.createElement("th");
+  th.setAttribute("scope", "row");
+  let p: HTMLParagraphElement = document.createElement("p");
+  p.setAttribute("contenteditable", "true");
+  p.setAttribute("spellcheck", "true");
+
+  th.append(p);
+  newRow?.append(th);
+
+  for (let i: number = 1; i < NUMERO_COLUNAS; i++) {
+    let td: HTMLTableCellElement = document.createElement("td");
+    p = document.createElement("p");
+    p.setAttribute("contenteditable", "true");
+    p.setAttribute("spellcheck", "true");
+    td.append(p);
+    newRow?.append(td);
+  }
+}
+
+function excluirLinha(event: Event): void {
+  let table: HTMLTableElement | null | undefined = (
+    event.target as HTMLElement | null
+  )?.parentElement?.parentElement?.querySelector("table");
+  let tbody: HTMLTableSectionElement | undefined = table?.tBodies[0];
+  tbody?.deleteRow(-1);
+}
