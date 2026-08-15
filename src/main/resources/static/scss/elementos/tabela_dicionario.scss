@@ -21,7 +21,7 @@
     caption-side: top;
     cursor: text;
     font-weight: bold;
-    padding: 0.5rem;
+    padding: 0.5rem 0.8rem;
     pointer-events: all;
   }
 
@@ -64,21 +64,22 @@
 
   div {
     align-items: center;
-    top: 0.5rem;
+    top: 0.2rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     position: absolute;
-    right: 0.5rem;
-    width: 3.5rem;
+    right: 0.2rem;
+    width: 4.5rem;
 
     button {
       align-items: center;
+      border-radius: 0.2rem;
       display: flex;
       justify-content: center;
       pointer-events: all;
-      height: 1.5rem;
-      width: 1.5rem;
+      height: 2rem;
+      width: 2rem;
       z-index: 1;
     }
   }
