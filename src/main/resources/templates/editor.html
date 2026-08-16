@@ -30,60 +30,75 @@
     ~ Licensed works, modifications, and larger works may be distributed under different terms and without source code.
     ~
     -->
-    <header th:replace="~{fragments/header :: header}"></header>
-
-    <div class="barra-de-tarefas">
-      <details class="menu-opcoes">
-        <summary th:title="#{web.editor.toolbar.file}" id="arquivo">
-          <th:block th:insert="~{fragments/editor/icons/file :: svg}"></th:block>
-        </summary>
-        <div class="mostrar-conteudo">
-          <div class="comando">
-            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.new-file}"></span>
-            <span class="atalho">Ctrl+N</span>
-          </div>
-          <div class="comando">
-            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.open-file}"></span>
-            <span class="atalho">Ctrl+O</span>
-          </div>
-          <hr />
-          <div class="comando">
-            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.save-file}"></span>
-            <span class="atalho">Ctrl+S</span>
-          </div>
-          <div class="comando">
-            <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.export-file}"></span>
-            <span class="atalho">Ctrl+E</span>
-          </div>
-          <hr />
-          <div class="comando">
-            <span class="itens-menu">Imprimir</span>
-            <span class="atalho">Ctrl+P</span>
-          </div>
+    <header>
+      <button>
+        <a th:href="@{index.html}" title="Home">
+          <th:block th:insert="~{fragments/common/icons/home.html}"></th:block>
+        </a>
+      </button>
+      <button id="barra-de-tarefas-button">V</button>
+      <details>
+        <summary style="display: none"></summary>
+        <div class="barra-de-tarefas">
+          <details class="menu-opcoes">
+            <summary th:title="#{web.editor.toolbar.file}" id="arquivo">
+              <th:block th:insert="~{fragments/editor/icons/file :: svg}"></th:block>
+            </summary>
+            <div class="mostrar-conteudo">
+              <div class="comando">
+                <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.new-file}"></span>
+                <span class="atalho">Ctrl+N</span>
+              </div>
+              <div class="comando">
+                <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.open-file}"></span>
+                <span class="atalho">Ctrl+O</span>
+              </div>
+              <hr />
+              <div class="comando">
+                <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.save-file}"></span>
+                <span class="atalho">Ctrl+S</span>
+              </div>
+              <div class="comando">
+                <span
+                  class="itens-menu"
+                  th:text="#{web.page.editor.toolbar.item.export-file}"
+                ></span>
+                <span class="atalho">Ctrl+E</span>
+              </div>
+              <hr />
+              <div class="comando">
+                <span class="itens-menu">Imprimir</span>
+                <span class="atalho">Ctrl+P</span>
+              </div>
+            </div>
+          </details>
+          <button th:title="#{web.editor.toolbar.copy}" id="copiar">
+            <th:block th:replace="~{fragments/editor/icons/copy :: svg}"></th:block>
+          </button>
+          <button th:title="#{web.editor.toolbar.paste}" id="colar">
+            <th:block th:replace="~{fragments/editor/icons/paste :: svg}"></th:block>
+          </button>
+          <button th:title="#{web.editor.toolbar.cut}" id="cortar">
+            <th:block th:replace="~{fragments/editor/icons/cut :: svg}"></th:block>
+          </button>
+          <button th:title="#{web.editor.toolbar.undo}" id="desfazer">
+            <th:block th:replace="~{fragments/editor/icons/undo :: svg}"></th:block>
+          </button>
+          <button th:title="#{web.editor.toolbar.redo}" id="refazer">
+            <th:block th:replace="~{fragments/editor/icons/redo :: svg}"></th:block>
+          </button>
+          <button th:title="#{web.editor.toolbar.erase}" id="apagar">
+            <th:block th:replace="~{fragments/editor/icons/delete :: svg}"></th:block>
+          </button>
+          <button th:title="#{web.editor.toolbar.delete}" id="deletar">
+            <th:block th:replace="~{fragments/editor/icons/deleteAll :: svg}"></th:block>
+          </button>
         </div>
       </details>
-      <button th:title="#{web.editor.toolbar.copy}" id="copiar">
-        <th:block th:replace="~{fragments/editor/icons/copy :: svg}"></th:block>
-      </button>
-      <button th:title="#{web.editor.toolbar.paste}" id="colar">
-        <th:block th:replace="~{fragments/editor/icons/paste :: svg}"></th:block>
-      </button>
-      <button th:title="#{web.editor.toolbar.cut}" id="cortar">
-        <th:block th:replace="~{fragments/editor/icons/cut :: svg}"></th:block>
-      </button>
-      <button th:title="#{web.editor.toolbar.undo}" id="desfazer">
-        <th:block th:replace="~{fragments/editor/icons/undo :: svg}"></th:block>
-      </button>
-      <button th:title="#{web.editor.toolbar.redo}" id="refazer">
-        <th:block th:replace="~{fragments/editor/icons/redo :: svg}"></th:block>
-      </button>
-      <button th:title="#{web.editor.toolbar.erase}" id="apagar">
-        <th:block th:replace="~{fragments/editor/icons/delete :: svg}"></th:block>
-      </button>
-      <button th:title="#{web.editor.toolbar.delete}" id="deletar">
-        <th:block th:replace="~{fragments/editor/icons/deleteAll :: svg}"></th:block>
-      </button>
-    </div>
+      <!--/*@thymesVar id="programa" type="java.lang.String"*/-->
+      <h1 th:text="${programa}"></h1>
+    </header>
+
     <aside id="painel-esquerdo">
       <button type="button" class="btn-painel-esquerdo btn-esconder">&lt;</button>
       <button type="button" class="btn-painel-esquerdo btn-mostrar">&gt;</button>

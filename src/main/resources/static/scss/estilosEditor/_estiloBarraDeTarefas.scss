@@ -14,12 +14,13 @@
 .barra-de-tarefas {
   align-items: center;
   background-color: var(--cor-painel-lateral);
-  border-bottom: 0.1rem solid var(--cor-borda);
+  border: 0.1rem solid var(--cor-borda);
+  border-top: none;
+  color: var(--cor-fonte-alternativa);
   column-gap: 2rem;
   display: flex;
   flex-direction: row;
-  grid-column: 1 / 4;
-  grid-row: 2;
+  font-family: Arial, serif;
   height: 5rem;
   justify-content: center;
   position: fixed;

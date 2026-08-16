@@ -522,6 +522,20 @@ if (divComponentes) {
 /* TOOLBAR */
 /***********/
 
+let toolbarButton: HTMLButtonElement | null = document.querySelector("#barra-de-tarefas-button");
+let toolbar: HTMLDetailsElement | null = document.querySelector("details:has(.barra-de-tarefas)");
+
+toolbarButton?.addEventListener("click", (): void => {
+  if (toolbar) {
+    toolbar.open = !toolbar.open;
+
+    let larguraBody: number = document.body.getBoundingClientRect().width;
+    let larguraDivToolbar: number = larguraBody * 0.6;
+
+    toolbar.querySelector("div")?.style.setProperty("width", `${larguraDivToolbar}px`);
+  }
+});
+
 let buttonCopiar: HTMLDivElement | null = document.querySelector("button#copiar");
 let buttonColar: HTMLDivElement | null = document.querySelector("button#colar");
 let buttonCortar: HTMLDivElement | null = document.querySelector("button#cortar");

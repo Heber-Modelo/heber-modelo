@@ -61,10 +61,32 @@ body {
 header {
   grid-column: 1 / 4;
   grid-row: 1;
+  grid-template-columns: 5% 5% 10% 60% 20%;
   height: 5rem;
-  left: 0;
-  position: fixed;
-  top: 0;
+  padding: 0.5rem 0;
+
+  button {
+    align-self: center;
+    aspect-ratio: 1 / 1;
+    justify-self: center;
+    width: 60%;
+    z-index: 3;
+  }
+
+  button#barra-de-tarefas-button {
+    grid-column: 2;
+  }
+
+  details {
+    grid-column: 4;
+    grid-row: 2;
+  }
+
+  h1 {
+    grid-column: 4;
+    grid-row: 1;
+  }
+
 }
 
 main {
@@ -85,7 +107,7 @@ main {
   display: grid;
   grid-template-areas: variaveis.$editorGridAreaString;
   grid-column: 2;
-  grid-row: 3 / 4;
+  grid-row: 2 / 4;
   height: 95%;
   justify-self: center;
   place-content: stretch;
