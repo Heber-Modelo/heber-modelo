@@ -18,6 +18,8 @@ import RepositorioComponente from "infrastructure/repositorio/repositorioCompone
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import PropriedadeComponente from "model/propriedade/propriedadeComponente";
+import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
+import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
 
 class InputPropriedade {
   private readonly _elementoInput: HTMLInputElement | null;
@@ -116,6 +118,16 @@ export function limparPropriedades(abaPropriedades: HTMLElement | null): void {
 
 export let inputs: InputPropriedade[] = [];
 
+function adicionarPropriedades(
+  abaPropriedades: HTMLElement | null,
+  propriedades: PropriedadeComponente[],
+): void {
+  propriedades.forEach((propriedade: PropriedadeComponente): void => {
+    let editorPropriedade: HTMLLabelElement = propriedade.criarElementoInputPropriedade();
+    abaPropriedades?.appendChild(editorPropriedade);
+  });
+}
+
 export function mouseDownSelecionarElemento(event: Event): void {
   let selecionador: SelecionadorComponente = selecionadorComponenteFactory.build();
   let repositorio: RepositorioComponente = RepositorioComponenteFactory.build();
@@ -128,9 +140,12 @@ export function mouseDownSelecionarElemento(event: Event): void {
 
   selecionador.selecionarElemento(componente);
   limparPropriedades(abaPropriedades);
-  componente.propriedades.forEach((propriedade: PropriedadeComponente): void => {
-    let editorPropriedade: HTMLLabelElement = propriedade.criarElementoInputPropriedade();
-    abaPropriedades?.appendChild(editorPropriedade);
+  adicionarPropriedades(abaPropriedades, componente.propriedades);
+
+  componente.ouvintes.forEach((ouvinte: ComponenteDiagramaOuvinte): void => {
+    if (ouvinte instanceof ComponenteDiagrama && !(ouvinte instanceof AbstractComponenteConexao)) {
+      adicionarPropriedades(abaPropriedades, ouvinte.propriedades);
+    }
   });
 
   atualizarInputs(selecionador.componenteSelecionado?.htmlComponente ?? null, inputs);
