@@ -11,67 +11,12 @@
  *
  */
 
-import CarregarCSSCommand, {
-  CarregarCSSCommandBuilder,
-} from "infrastructure/command/carregarCSSCommand";
 import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import LateraisComponente from "model/componente/lateraisComponente";
-import TiposConexao from "model/conexao/tiposConexao";
-import ChangeConnectionTypeEvent from "model/event/changeConnectionTypeEvent";
-import PropriedadeComponente from "model/propriedade/propriedadeComponente";
 import calcularAnguloDoisPontos from "model/services/calcularAnguloDoisPontos";
 import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
 import Ponto from "model/ponto";
 
 export default class ComponenteConexaoAngulada extends AbstractComponenteConexao {
-  constructor(
-    htmlComponente: HTMLDivElement,
-    propriedades: PropriedadeComponente[],
-    ponto1: Ponto,
-    ponto2: Ponto,
-    lateralPrimeiroPonto: LateraisComponente,
-    lateralSegundoPonto: LateraisComponente,
-    primeiroComponente: ComponenteDiagrama,
-    segundoComponente: ComponenteDiagrama,
-  ) {
-    super(
-      htmlComponente,
-      propriedades,
-      ponto1,
-      ponto2,
-      lateralPrimeiroPonto,
-      lateralSegundoPonto,
-      primeiroComponente,
-      segundoComponente,
-    );
-
-    this._htmlComponente.addEventListener(
-      ChangeConnectionTypeEvent.CHANGE_CONNECTION_TYPE_EVENT,
-      (event: Event): void => {
-        let changeConnectionTypeEvent: ChangeConnectionTypeEvent =
-          event as ChangeConnectionTypeEvent;
-
-        if (
-          changeConnectionTypeEvent.tipoConexao !== TiposConexao.CONEXAO_ANGULADA &&
-          changeConnectionTypeEvent.tipoConexao !== TiposConexao.CONEXAO_ENTIDADE_FRACA
-        ) {
-          return;
-        }
-
-        if (changeConnectionTypeEvent.tipoConexao === TiposConexao.CONEXAO_ENTIDADE_FRACA) {
-          this._htmlComponente.classList.add("elemento-conexao-entidade-fraca");
-          let command: CarregarCSSCommand = new CarregarCSSCommandBuilder()
-            .definirNomeArquivo(changeConnectionTypeEvent.tipoConexao)
-            .build();
-          command.execute();
-        } else {
-          this._htmlComponente.classList.remove("elemento-conexao-entidade-fraca");
-        }
-      },
-    );
-  }
-
   protected ajustarConexao(): void {
     let alturaPrimeiroComponente: number = converterPixeisParaNumero(
       getComputedStyle(this._primeiroComponente.htmlComponente).height,

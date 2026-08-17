@@ -14,7 +14,7 @@
 export default class RegistradorEventosElemento {
   private _callbacksElemento: { [eventType: string]: [(event: Event | any) => void] } = {};
 
-  public adicionarCallback<K extends keyof HTMLElementEventMap, T extends Event>(
+  public adicionarCallback<K extends keyof HTMLElementEventMap | string, T extends Event>(
     eventType: K,
     callback: (event: T) => void,
   ): void {
