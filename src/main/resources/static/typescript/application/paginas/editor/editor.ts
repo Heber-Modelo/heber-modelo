@@ -92,6 +92,11 @@ import Ponto from "model/ponto";
 import ConectarDuasEntidadesRelacionaisCommand, {
   ConectarDuasEntidadesRelacionaisCommandBuilder,
 } from "infrastructure/command/conectarDuasEntidadesRelacionaisCommand";
+import ChangeConnectionTypeEvent from "model/event/changeConnectionTypeEvent";
+import TrocarTipoConexaoCommand, {
+  TrocarTipoConexaoCommandBuilder,
+} from "infrastructure/command/trocarTipoConexaoCommand";
+import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -194,6 +199,10 @@ function dragElement(event: MouseEvent): void {
 /***********************/
 
 registradorEventosConexao.adicionarCallback("mousedown", mouseDownSelecionarElemento);
+registradorEventosConexao.adicionarCallback(
+  ChangeConnectionTypeEvent.CHANGE_CONNECTION_TYPE_EVENT,
+  trocarTipoConexao,
+);
 
 registradorEventosElemento.adicionarCallback("mousedown", mouseDownSelecionarElemento);
 registradorEventosElemento.adicionarCallback("mousedown", mouseDownComecarMoverElemento);
@@ -279,6 +288,29 @@ let setaPlaceholder: HTMLElement = document.querySelector("#seta-placeholder") a
 let conectarComponentesCommandBuilder: ConectarComponentesCommandBuilder =
   new ConectarComponentesCommandBuilder();
 selecionadorComponente.esconderSetasConectoras();
+
+function trocarTipoConexao(event: Event): void {
+  let changeConnectionTypeEvent: ChangeConnectionTypeEvent = event as ChangeConnectionTypeEvent;
+  let conexaoAlvo: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(
+    event.target as HTMLElement,
+  );
+
+  if (conexaoAlvo === null) {
+    return;
+  }
+
+  let command: TrocarTipoConexaoCommand = new TrocarTipoConexaoCommandBuilder()
+    .definirConexaoAlvo(conexaoAlvo as AbstractComponenteConexao)
+    .definirDiagrama(diagrama)
+    .definirFabricaComponente(fabricaComponente)
+    .definirFabricaConexao(fabricaConexao)
+    .definirRegistradorEventosConexao(registradorEventosConexao)
+    .definirRepositorioComponentes(repositorioComponentes)
+    .definirTipoConexao(changeConnectionTypeEvent.tipoConexao)
+    .build();
+
+  commandHistory.saveAndExecuteCommand(command);
+}
 
 function callbackInicialSetaConectora(event: MouseEvent): void {
   document.addEventListener("mousemove", callbackMoverSeta);

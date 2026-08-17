@@ -135,4 +135,8 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
 
     return ouvintesRemovidos;
   }
+
+  get ouvintes(): ComponenteDiagramaOuvinte[] {
+    return this._ouvintes;
+  }
 }

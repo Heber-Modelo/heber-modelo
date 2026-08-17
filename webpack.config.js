@@ -20,9 +20,9 @@ export default {
       baseDirectory,
       "application/paginas/editor/helperEditorDescricaoModeloRelacional",
     ),
-    helperSeletorTipoConexao: path.resolve(
+    helperSeletorTipoDiagrama: path.resolve(
       baseDirectory,
-      "application/paginas/helperSeletorTipoConexao",
+      "application/paginas/helperSeletorTipoDiagrama",
     ),
     login: path.resolve(baseDirectory, "application/paginas/login.ts"),
   },

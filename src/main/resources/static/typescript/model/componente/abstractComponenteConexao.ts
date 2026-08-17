@@ -107,4 +107,28 @@ export default abstract class AbstractComponenteConexao
   isDependente(): boolean {
     return true;
   }
+
+  get primeiroPonto(): Ponto {
+    return this._ponto1;
+  }
+
+  get segundoPonto(): Ponto {
+    return this._ponto2;
+  }
+
+  get lateralPrimeiroPonto(): LateraisComponente {
+    return this._lateralPrimeiroPonto;
+  }
+
+  get lateralSegundoPonto(): LateraisComponente {
+    return this._lateralSegundoPonto;
+  }
+
+  get primeiroComponente(): ComponenteDiagrama {
+    return this._primeiroComponente;
+  }
+
+  get segundoComponente(): ComponenteDiagrama {
+    return this._segundoComponente;
+  }
 }
