@@ -15,22 +15,30 @@ package io.github.heberbarra.modelador.infrastructure.factory;
 
 import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
 import io.github.heberbarra.modelador.domain.model.Sessao;
+import jakarta.annotation.Nullable;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SessaoFactory {
 
-    private Sessao sessao;
+    private static Sessao sessao;
 
-    public Sessao build(Integer porta, String password) {
+    public static Sessao build(Integer porta, @Nullable String ip, String password) {
         if (sessao == null) {
             try {
-                IConfigurador configurador = ConfiguradorFactory.build();
-                Socket socket = new Socket(
-                        configurador
-                                .pegarValorConfiguracao("programa", "dominio", String.class)
-                                .orElse("localhost"),
-                        porta);
+                Socket socket;
+                if (ip != null) {
+                    IConfigurador configurador = ConfiguradorFactory.build();
+                    socket = new Socket(ip, porta);
+
+
+                } else {
+                    ServerSocket serverSocket = new ServerSocket(porta);
+                    socket = serverSocket.accept();
+                }
+
+                sessao = new Sessao(socket);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

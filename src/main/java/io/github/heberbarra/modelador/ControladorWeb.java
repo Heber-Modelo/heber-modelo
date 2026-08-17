@@ -16,20 +16,25 @@ package io.github.heberbarra.modelador;
 import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama;
 import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama.GruposDiagrama;
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
+import io.github.heberbarra.modelador.application.tradutor.Tradutor;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
 import io.github.heberbarra.modelador.domain.model.NovoDiagramaDTO;
+import io.github.heberbarra.modelador.domain.model.Sessao;
 import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
 import io.github.heberbarra.modelador.infrastructure.configurador.WatcherConfiguracao;
 import io.github.heberbarra.modelador.infrastructure.controller.ControladorDesligar;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
+import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
 import io.github.heberbarra.modelador.infrastructure.services.UsuarioServices;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import java.awt.Desktop;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -261,8 +266,7 @@ public class ControladorWeb {
             method = RequestMethod.POST)
     public String criarSessao(@ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
 
-        System.out.println("Porta: " + porta);
-        System.out.println("Senha: " + senha);
+        Sessao sessao = SessaoFactory.build(porta, null, senha);
 
         return "redirect:/login";
     }
@@ -271,10 +275,17 @@ public class ControladorWeb {
             value = {"/entrarSessao", "/entrarSessao.html"},
             method = RequestMethod.POST)
     public String entrarSessao(
-            @ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
+            @ModelAttribute("ip") String ip, @ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
 
-        System.out.println("Porta: " + porta);
-        System.out.println("Senha: " + senha);
+        Sessao sessao = SessaoFactory.build(porta, ip, senha);
+
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(sessao.getSocket().getOutputStream()));) {
+            bufferedWriter.write(senha);
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            logger.severe(TradutorWrapper.tradutor.traduzirMensagem("error.session.send-message").formatted(e.getMessage()));
+        }
+        
 
         return "redirect:/login";
     }
