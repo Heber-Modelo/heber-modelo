@@ -16,7 +16,6 @@ package io.github.heberbarra.modelador;
 import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama;
 import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama.GruposDiagrama;
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
-import io.github.heberbarra.modelador.application.tradutor.Tradutor;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
 import io.github.heberbarra.modelador.domain.model.NovoDiagramaDTO;
@@ -24,6 +23,7 @@ import io.github.heberbarra.modelador.domain.model.Sessao;
 import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
 import io.github.heberbarra.modelador.infrastructure.configurador.WatcherConfiguracao;
 import io.github.heberbarra.modelador.infrastructure.controller.ControladorDesligar;
+import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
 import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
@@ -209,7 +209,7 @@ public class ControladorWeb {
     @PostMapping({"/cadastro", "/cadastro.html"})
     public String cadastro(@ModelAttribute("usuario") UsuarioDTO usuarioDTO) {
 
-        usuarioDTO.setTipo(Principal.getTipoUsuario());
+        usuarioDTO.setTipo(DataSourceBuilder.getTipoUsuario());
         usuarioDTO.setNome(usuarioDTO.getNome().trim());
         usuarioDTO.setEmail(usuarioDTO.getEmail().trim());
         usuarioDTO.setSenha(usuarioDTO.getSenha().trim());
@@ -275,17 +275,21 @@ public class ControladorWeb {
             value = {"/entrarSessao", "/entrarSessao.html"},
             method = RequestMethod.POST)
     public String entrarSessao(
-            @ModelAttribute("ip") String ip, @ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
+            @ModelAttribute("ip") String ip,
+            @ModelAttribute("session-port") Integer porta,
+            @ModelAttribute("password") String senha) {
 
         Sessao sessao = SessaoFactory.build(porta, ip, senha);
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(sessao.getSocket().getOutputStream()));) {
+        try (BufferedWriter bufferedWriter =
+                new BufferedWriter(new OutputStreamWriter(sessao.getSocket().getOutputStream())); ) {
             bufferedWriter.write(senha);
             bufferedWriter.flush();
         } catch (IOException e) {
-            logger.severe(TradutorWrapper.tradutor.traduzirMensagem("error.session.send-message").formatted(e.getMessage()));
+            logger.severe(TradutorWrapper.tradutor
+                    .traduzirMensagem("error.session.send-message")
+                    .formatted(e.getMessage()));
         }
-        
 
         return "redirect:/login";
     }

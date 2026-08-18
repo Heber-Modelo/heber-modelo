@@ -32,7 +32,6 @@ public class SessaoFactory {
                     IConfigurador configurador = ConfiguradorFactory.build();
                     socket = new Socket(ip, porta);
 
-
                 } else {
                     ServerSocket serverSocket = new ServerSocket(porta);
                     socket = serverSocket.accept();
