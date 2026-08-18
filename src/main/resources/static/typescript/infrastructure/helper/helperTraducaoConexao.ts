@@ -11,8 +11,8 @@
  *
  */
 
-import TiposConexao from "model/conexao/tiposConexao";
-import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
+import TiposConexao from "domain/enum/tiposConexao";
+import ResponseTraducaoJSON from "domain/json/responseTraducaoJSON";
 
 export default async function helperTraducaoConexao(tipoConexao: TiposConexao): Promise<string> {
   let chaveTraducao: string;

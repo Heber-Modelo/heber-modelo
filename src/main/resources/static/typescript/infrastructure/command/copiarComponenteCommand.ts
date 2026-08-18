@@ -11,10 +11,10 @@
  *
  */
 
-import ICommand, { CommandResult } from "model/command/iCommand";
-import ICommandBuilder from "model/command/iCommandBuilder";
-import CommandBuilderException from "model/exception/commandBuilderException";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
+import CommandBuilderException from "domain/exception/commandBuilderException";
+import ICommand, { CommandResult } from "domain/model/command/iCommand";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import ICommandBuilder from "domain/model/command/iCommandBuilder";
 
 export default class CopiarComponenteCommand implements ICommand {
   private _componente: ComponenteDiagrama;

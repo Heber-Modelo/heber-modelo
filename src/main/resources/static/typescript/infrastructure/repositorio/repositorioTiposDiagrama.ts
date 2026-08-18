@@ -11,7 +11,7 @@
  *
  */
 
-import IRepositorioTiposDiagrama from "model/repositorio/iRepositorioTiposDiagrama";
+import IRepositorioTiposDiagrama from "domain/model/repositorio/iRepositorioTiposDiagrama";
 
 export default class RepositorioTiposDiagrama implements IRepositorioTiposDiagrama {
   private readonly _tiposDiagramaElemento: HTMLElement | null =
@@ -28,7 +28,6 @@ export default class RepositorioTiposDiagrama implements IRepositorioTiposDiagra
     if (this._tiposDiagramaElemento) {
       this._tiposDiagramaElemento.innerHTML = `[${this._tipos.join(", ")}]`;
     }
-
   }
 
   listar(): string[] {
@@ -42,5 +41,4 @@ export default class RepositorioTiposDiagrama implements IRepositorioTiposDiagra
       this._tiposDiagramaElemento.innerHTML = `[${this._tipos.join(", ")}]`;
     }
   }
-
 }

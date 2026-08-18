@@ -18,11 +18,11 @@ import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
-import CommandBuilderException from "model/exception/commandBuilderException";
-import ICommand, { CommandResult } from "model/command/iCommand";
-import ICommandBuilder from "model/command/iCommandBuilder";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
+import CommandBuilderException from "domain/exception/commandBuilderException";
+import ICommand, { CommandResult } from "domain/model/command/iCommand";
+import ICommandBuilder from "domain/model/command/iCommandBuilder";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
 
 export default class CriarComponenteCommand implements ICommand {
   private readonly _diagrama: HTMLElement;

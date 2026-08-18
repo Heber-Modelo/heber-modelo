@@ -11,7 +11,7 @@
  *
  */
 
-import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
+import ResponseTraducaoJSON from "domain/json/responseTraducaoJSON";
 
 export default async function traduzirChaveI18n(chaveI18n: string): Promise<string> {
   return await fetch(`/traducao/${chaveI18n}`)

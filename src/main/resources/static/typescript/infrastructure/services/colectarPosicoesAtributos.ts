@@ -12,10 +12,10 @@
  */
 
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import NomesComponente from "model/componente/nomesComponente";
-import Ponto from "model/ponto";
-import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
+import NomesComponente from "domain/enum/nomesComponente";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import Ponto from "domain/model/ponto";
+import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 
 export default function colectarPosicoesAtributos(componentes: ComponenteDiagrama[]): Ponto[] {
   let pontos: Ponto[] = [];

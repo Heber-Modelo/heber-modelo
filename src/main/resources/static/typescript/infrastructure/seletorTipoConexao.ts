@@ -14,8 +14,8 @@
 import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
 import helperTraducaoConexao from "infrastructure/helper/helperTraducaoConexao";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
-import TiposConexao from "model/conexao/tiposConexao";
-import ChangeConnectionTypeEvent from "model/event/changeConnectionTypeEvent";
+import TiposConexao from "domain/enum/tiposConexao";
+import ChangeConnectionTypeEvent from "domain/event/changeConnectionTypeEvent";
 
 export default class SeletorTipoConexao {
   static readonly ID_SELETOR: string = "#seletor-tipos-conexao";

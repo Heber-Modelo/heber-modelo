@@ -11,12 +11,12 @@
  *
  */
 
-import ICommand, { CommandResult } from "model/command/iCommand";
-import ICommandBuilder from "model/command/iCommandBuilder";
-import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import CommandBuilderException from "model/exception/commandBuilderException";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import CommandBuilderException from "domain/exception/commandBuilderException";
+import ICommand, { CommandResult } from "domain/model/command/iCommand";
+import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import ICommandBuilder from "domain/model/command/iCommandBuilder";
 
 export default class ApagarTodosComponentesCommand implements ICommand {
   private readonly _repositorioComponente: IRepositorioComponente;

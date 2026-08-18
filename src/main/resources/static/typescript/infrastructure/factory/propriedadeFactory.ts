@@ -11,10 +11,10 @@
  *
  */
 
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import PropriedadeComponente from "model/propriedade/propriedadeComponente";
-import PropriedadeInnerText from "model/propriedade/propriedadeInnerText";
-import PropriedadeSelecionavel from "model/propriedade/propriedadeSelecionavel";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
+import PropriedadeInnerText from "domain/model/propriedade/propriedadeInnerText";
+import PropriedadeSelecionavel from "domain/model/propriedade/propriedadeSelecionavel";
 
 export default class PropriedadeFactory {
   public criarPropriedade(

@@ -11,11 +11,11 @@
  *
  */
 
-import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
-import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
-import removerElementoArray from "model/services/removerElementoArray";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
+import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
+import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
+import removerElementoArray from "domain/services/removerElementoArray";
 
 export default class RepositorioComponente implements IRepositorioComponente {
   private _componentesDiagrama: ComponenteDiagrama[] = [];

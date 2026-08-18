@@ -11,12 +11,12 @@
  *
  */
 
-import ICommand, { CommandResult } from "model/command/iCommand";
-import ICommandBuilder from "model/command/iCommandBuilder";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
-import CommandBuilderException from "model/exception/commandBuilderException";
+import CommandBuilderException from "domain/exception/commandBuilderException";
+import ICommand, { CommandResult } from "domain/model/command/iCommand";
+import ICommandBuilder from "domain/model/command/iCommandBuilder";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 
 export default class CortarComponenteCommand implements ICommand {
   private readonly _componente: ComponenteDiagrama;

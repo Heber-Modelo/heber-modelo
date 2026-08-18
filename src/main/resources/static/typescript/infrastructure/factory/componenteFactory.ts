@@ -13,9 +13,9 @@
 
 import PropriedadeFactory from "infrastructure/factory/propriedadeFactory";
 import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import ValoresJSONComponente from "model/json/valoresJSONComponente";
-import PropriedadeComponente from "model/propriedade/propriedadeComponente";
+import ValoresJSONComponente from "domain/json/valoresJSONComponente";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 
 export default class ComponenteFactory {
   public static PROPRIEDADE_ID_ABA: string = "data-indice-aba";
