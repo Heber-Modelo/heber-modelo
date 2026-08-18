@@ -27,6 +27,6 @@ checkboxDicionarioDados?.addEventListener("input", (): void => {
 
 checkboxDiagramaRelacional?.addEventListener("input", (): void => {
   if (!checkboxDiagramaRelacional?.checked && checkboxDicionarioDados) {
-    checkboxDicionarioDados.checked = false;
+    checkboxDicionarioDados.click();
   }
 });
