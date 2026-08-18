@@ -59,7 +59,6 @@ import ConectarDuasEntidadesRelacionaisCommand, {
   ConectarDuasEntidadesRelacionaisCommandBuilder,
 } from "infrastructure/command/conectarDuasEntidadesRelacionaisCommand";
 import ChangeConnectionTypeEvent from "model/event/changeConnectionTypeEvent";
-import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
@@ -85,6 +84,7 @@ import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import criarAba from "infrastructure/services/criarAba";
 import "infrastructure/variaveisConfiguracao";
+import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
 import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
 import ComponenteDiagrama from "model/componente/componenteDiagrama";
 import LateraisComponente from "model/componente/lateraisComponente";
