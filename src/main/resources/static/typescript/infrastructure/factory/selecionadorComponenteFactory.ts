@@ -14,11 +14,11 @@
 import PontoExtensorFactory from "infrastructure/factory/pontoExtensorFactory";
 import SetaConectoraFactory from "infrastructure/factory/setaConectoraFactory";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
-import LateraisComponente from "model/componente/lateraisComponente";
-import PontoExtensor from "model/pontoExtensor";
-import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
-import PosicoesRelativasSetasConectoras from "model/posicoes/posicoesRelativasSetasConectoras";
-import SetaConectora from "model/setaConectora";
+import LateraisComponente from "domain/enum/lateraisComponente";
+import PosicoesRelativasPontoExtensor from "domain/enum/posicoesRelativasPontoExtensor";
+import PosicoesRelativasSetasConectoras from "domain/enum/posicoesRelativasSetasConectoras";
+import PontoExtensor from "domain/model/pontoExtensor";
+import SetaConectora from "domain/model/setaConectora";
 
 export default class SelecionadorComponenteFactory {
   private static _selecionadorComponente: SelecionadorComponente | null = null;

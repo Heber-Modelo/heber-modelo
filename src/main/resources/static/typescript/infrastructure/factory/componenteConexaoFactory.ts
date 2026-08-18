@@ -11,14 +11,14 @@
  *
  */
 
-import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
-import ComponenteConexaoAngulada from "model/componente/componenteConexaoAngulada";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import LateraisComponente from "model/componente/lateraisComponente";
-import ComponenteConexaoReta from "model/componente/componenteConexaoReta";
-import TiposConexao from "model/conexao/tiposConexao";
-import PropriedadeComponente from "model/propriedade/propriedadeComponente";
-import Ponto from "model/ponto";
+import LateraisComponente from "domain/enum/lateraisComponente";
+import TiposConexao from "domain/enum/tiposConexao";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
+import ComponenteConexaoAngulada from "domain/model/componente/componenteConexaoAngulada";
+import ComponenteConexaoReta from "domain/model/componente/componenteConexaoReta";
+import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
+import Ponto from "domain/model/ponto";
 
 export default class ComponenteConexaoFactory {
   public criarConexao(

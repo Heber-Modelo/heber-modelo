@@ -11,9 +11,9 @@
  *
  */
 
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import LateraisComponente from "model/componente/lateraisComponente";
-import Ponto from "model/ponto";
+import LateraisComponente from "domain/enum/lateraisComponente";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import Ponto from "domain/model/ponto";
 
 export default function calcularPosicaoAtributo(
   componenteAlvo: ComponenteDiagrama,

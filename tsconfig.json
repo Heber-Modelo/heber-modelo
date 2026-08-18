@@ -16,7 +16,7 @@
     "paths": {
       "application/*": ["./src/main/resources/static/typescript/application/*"],
       "infrastructure/*": ["./src/main/resources/static/typescript/infrastructure/*"],
-      "model/*": ["./src/main/resources/static/typescript/model/*"]
+      "domain/*": ["./src/main/resources/static/typescript/domain/*"]
     }
   },
   "exclude": [

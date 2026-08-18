@@ -11,18 +11,18 @@
  *
  */
 
-import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import GeradorIDAba from "infrastructure/gerador/geradorIDAba";
 import RepositorioAbas from "infrastructure/repositorio/repositorioAbas";
-import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import criarAba from "infrastructure/services/criarAba";
 import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
-import ICommand, { CommandResult } from "model/command/iCommand";
-import ICommandBuilder from "model/command/iCommandBuilder";
-import CommandBuilderException from "model/exception/commandBuilderException";
-import IRepositorioTiposDiagrama from "model/repositorio/iRepositorioTiposDiagrama";
-import ResponseDiagramaJSON from "model/response/responseDiagramaJSON";
-import Aba from "model/aba";
+import CommandBuilderException from "domain/exception/commandBuilderException";
+import ResponseDiagramaJSON from "domain/json/responseDiagramaJSON";
+import ICommand, { CommandResult } from "domain/model/command/iCommand";
+import ICommandBuilder from "domain/model/command/iCommandBuilder";
+import IRepositorioTiposDiagrama from "domain/model/repositorio/iRepositorioTiposDiagrama";
+import Aba from "domain/model/aba";
+import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
+import ComponenteFactory from "infrastructure/factory/componenteFactory";
 
 export default class CarregarDiagramaCommand implements ICommand {
   private readonly _callbackCriarComponente: (event: Event) => void;

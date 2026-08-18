@@ -25,17 +25,17 @@ import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import calcularPosicaoAtributo from "infrastructure/services/calcularPosicaoAtributo";
 import colectarPosicoesAtributos from "infrastructure/services/colectarPosicoesAtributos";
-import ICommand, { CommandResult } from "model/command/iCommand";
-import ICommandBuilder from "model/command/iCommandBuilder";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import LateraisComponente from "model/componente/lateraisComponente";
-import NomesComponente from "model/componente/nomesComponente";
-import TiposConexao from "model/conexao/tiposConexao";
-import CommandBuilderException from "model/exception/commandBuilderException";
-import Ponto from "model/ponto";
-import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
-import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
-import calcularLateralComponente from "model/services/calcularLateralComponente";
+import ICommandBuilder from "domain/model/command/iCommandBuilder";
+import LateraisComponente from "domain/enum/lateraisComponente";
+import NomesComponente from "domain/enum/nomesComponente";
+import TiposConexao from "domain/enum/tiposConexao";
+import CommandBuilderException from "domain/exception/commandBuilderException";
+import ICommand, { CommandResult } from "domain/model/command/iCommand";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
+import Ponto from "domain/model/ponto";
+import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
+import calcularLateralComponente from "domain/services/calcularLateralComponente";
 
 export default class ConectarAtributoCommand implements ICommand {
   private readonly _componenteAlvo: ComponenteDiagrama;
@@ -196,6 +196,7 @@ export default class ConectarAtributoCommand implements ICommand {
   }
 }
 
+// noinspection DuplicatedCode
 export class ConectarAtributoCommandBuilder implements ICommandBuilder<ConectarAtributoCommand> {
   private static readonly _elementosPermitidos: string[] = [
     NomesComponente.ATRIBUTO_DER,

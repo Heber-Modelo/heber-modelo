@@ -12,9 +12,9 @@
  */
 
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import PontoExtensor from "model/pontoExtensor";
-import SetaConectora from "model/setaConectora";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import PontoExtensor from "domain/model/pontoExtensor";
+import SetaConectora from "domain/model/setaConectora";
 
 export default class SelecionadorComponente {
   private _componenteSelecionado: ComponenteDiagrama | null;

@@ -17,14 +17,14 @@ import CarregarCSSCommand, {
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
-import ICommand, { CommandResult } from "model/command/iCommand";
-import ICommandBuilder from "model/command/iCommandBuilder";
-import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import TiposConexao from "model/conexao/tiposConexao";
-import CommandBuilderException from "model/exception/commandBuilderException";
-import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
-import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
+import TiposConexao from "domain/enum/tiposConexao";
+import CommandBuilderException from "domain/exception/commandBuilderException";
+import ICommand, { CommandResult } from "domain/model/command/iCommand";
+import ICommandBuilder from "domain/model/command/iCommandBuilder";
+import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
+import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
 
 export default class TrocarTipoConexaoCommand implements ICommand {
   private readonly _conexaoAlvo: AbstractComponenteConexao;

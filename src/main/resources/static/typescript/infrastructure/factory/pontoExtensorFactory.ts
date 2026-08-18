@@ -12,12 +12,12 @@
  */
 
 import SelecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
-import FormulaPosicaoAbsoluta from "model/formula/formulaPosicaoAbsoluta";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
-import Ponto from "model/ponto";
-import PontoExtensor from "model/pontoExtensor";
-import PosicoesRelativasPontoExtensor from "model/posicoes/posicoesRelativasPontoExtensor";
-import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
+import PosicoesRelativasPontoExtensor from "domain/enum/posicoesRelativasPontoExtensor";
+import FormulaPosicaoAbsoluta from "domain/formula/formulaPosicaoAbsoluta";
+import Ponto from "domain/model/ponto";
+import PontoExtensor from "domain/model/pontoExtensor";
+import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 
 export class PontoAnterior {
   static x: number = 0;

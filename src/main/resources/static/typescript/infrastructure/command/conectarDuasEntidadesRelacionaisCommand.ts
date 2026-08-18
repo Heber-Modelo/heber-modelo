@@ -21,17 +21,17 @@ import GeradorIDComponente from "infrastructure/gerador/geradorIDComponente";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
-import ComponenteCardinalidadeRelacionamento from "model/componente/componenteCardinalidadeRelacionamento";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import ICommand, { CommandResult } from "model/command/iCommand";
-import ICommandBuilder from "model/command/iCommandBuilder";
-import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
-import LateraisComponente from "model/componente/lateraisComponente";
-import NomesComponente from "model/componente/nomesComponente";
-import TiposConexao from "model/conexao/tiposConexao";
-import CommandBuilderException from "model/exception/commandBuilderException";
-import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
-import Ponto from "model/ponto";
+import LateraisComponente from "domain/enum/lateraisComponente";
+import NomesComponente from "domain/enum/nomesComponente";
+import TiposConexao from "domain/enum/tiposConexao";
+import CommandBuilderException from "domain/exception/commandBuilderException";
+import ICommand, { CommandResult } from "domain/model/command/iCommand";
+import ICommandBuilder from "domain/model/command/iCommandBuilder";
+import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
+import ComponenteCardinalidadeRelacionamento from "domain/model/componente/componenteCardinalidadeRelacionamento";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
+import Ponto from "domain/model/ponto";
 
 // noinspection DuplicatedCode
 export default class ConectarDuasEntidadesRelacionaisCommand implements ICommand {

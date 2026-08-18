@@ -11,8 +11,8 @@
  *
  */
 
-import Aba from "model/aba";
-import IRepositorioAbas from "model/repositorio/iRepositorioAbas";
+import IRepositorioAbas from "domain/model/repositorio/iRepositorioAbas";
+import Aba from "domain/model/aba";
 
 export default class RepositorioAbas implements IRepositorioAbas {
   private _abas: Aba[] = [];

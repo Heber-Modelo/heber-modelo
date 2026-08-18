@@ -12,8 +12,8 @@
  */
 
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
-import IRepositorioComponente from "model/repositorio/iRepositorioComponente";
-import Aba from "model/aba";
+import Aba from "domain/model/aba";
+import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
 
 export default class SelecionadorAba {
   public static readonly CLASSE_ABA_SELECIONADA: string = "selected";

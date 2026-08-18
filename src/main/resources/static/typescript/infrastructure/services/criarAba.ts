@@ -12,7 +12,7 @@
  */
 
 import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
-import Aba from "model/aba";
+import Aba from "domain/model/aba";
 
 export default async function criarAba(
   id: number,

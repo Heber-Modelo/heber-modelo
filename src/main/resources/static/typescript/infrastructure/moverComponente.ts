@@ -11,9 +11,9 @@
  *
  */
 
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import DirecoesMovimento from "model/direcoesMovimento";
-import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
+import DirecoesMovimento from "domain/enum/direcoesMovimento";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 
 export default function moverComponente(
   componenteAlvo: ComponenteDiagrama | null,

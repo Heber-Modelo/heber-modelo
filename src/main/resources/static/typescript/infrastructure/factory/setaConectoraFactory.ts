@@ -11,12 +11,12 @@
  *
  */
 
-import LateraisComponente from "model/componente/lateraisComponente";
-import FormulaPosicaoSeta from "model/formula/formulaPosicaoSeta";
-import PosicoesRelativasSetasConectoras from "model/posicoes/posicoesRelativasSetasConectoras";
-import Ponto from "model/ponto";
-import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
-import SetaConectora from "model/setaConectora";
+import LateraisComponente from "domain/enum/lateraisComponente";
+import PosicoesRelativasSetasConectoras from "domain/enum/posicoesRelativasSetasConectoras";
+import FormulaPosicaoSeta from "domain/formula/formulaPosicaoSeta";
+import Ponto from "domain/model/ponto";
+import SetaConectora from "domain/model/setaConectora";
+import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 
 // noinspection DuplicatedCode
 export default class SetaConectoraFactory {

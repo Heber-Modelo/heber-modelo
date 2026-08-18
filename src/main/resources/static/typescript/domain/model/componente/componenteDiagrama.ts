@@ -1,0 +1,142 @@
+/*
+ * Copyright (c) 2025. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+ *
+ * Licensed under the Massachusetts Institute of Technology (MIT) License.
+ * You may obtain a copy of the license at:
+ *
+ *   https://choosealicense.com/licenses/mit/
+ *
+ * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+ * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+ *
+ */
+
+import LateraisComponente from "domain/enum/lateraisComponente";
+import ComponenteDiagramaOuvido from "domain/model/componente/componenteDiagramaOuvido";
+import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
+import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
+import Ponto from "domain/model/ponto";
+import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
+
+export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
+  public static readonly CLASSE_BASE_COMPONENTE: string = "componente";
+  public static readonly CLASSE_ELEMENTO_SELECIONADO: string = "selected";
+
+  constructor(htmlComponente: HTMLDivElement, propriedades: PropriedadeComponente[] | null) {
+    this._htmlComponente = htmlComponente;
+    this._propriedades = propriedades ?? [];
+  }
+
+  private readonly _propriedades: PropriedadeComponente[];
+  private _ouvintes: ComponenteDiagramaOuvinte[] = [];
+  protected _htmlComponente: HTMLDivElement;
+  protected _recebeSetas: boolean = true;
+
+  get htmlComponente(): HTMLDivElement {
+    return this._htmlComponente;
+  }
+
+  set htmlComponente(novoHtmlComponente: HTMLDivElement) {
+    this._htmlComponente = novoHtmlComponente;
+  }
+
+  get propriedades(): PropriedadeComponente[] {
+    return this._propriedades;
+  }
+
+  public pegarEstiloElemento(): CSSStyleDeclaration {
+    return getComputedStyle(this._htmlComponente);
+  }
+
+  public pegarIDElemento(): number {
+    return Number(this._htmlComponente.getAttribute("data-id"));
+  }
+
+  public calcularPontoLateralComponente(lateralComponente: LateraisComponente): Ponto {
+    let estiloComponente: CSSStyleDeclaration = this.pegarEstiloElemento();
+    let x: number = 0;
+    let y: number = 0;
+
+    switch (lateralComponente) {
+      case LateraisComponente.NORTE:
+        x =
+          converterPixeisParaNumero(estiloComponente.left) +
+          converterPixeisParaNumero(estiloComponente.width) / 2;
+        y = converterPixeisParaNumero(estiloComponente.top);
+        break;
+
+      case LateraisComponente.SUL:
+        x =
+          converterPixeisParaNumero(estiloComponente.left) +
+          converterPixeisParaNumero(estiloComponente.width) / 2;
+        y =
+          converterPixeisParaNumero(estiloComponente.top) +
+          converterPixeisParaNumero(estiloComponente.height);
+        break;
+
+      case LateraisComponente.OESTE:
+        x = converterPixeisParaNumero(estiloComponente.left);
+        y =
+          converterPixeisParaNumero(estiloComponente.top) +
+          converterPixeisParaNumero(estiloComponente.height) / 2;
+        break;
+
+      case LateraisComponente.LESTE:
+        x =
+          converterPixeisParaNumero(estiloComponente.left) +
+          converterPixeisParaNumero(estiloComponente.width);
+        y =
+          converterPixeisParaNumero(estiloComponente.top) +
+          converterPixeisParaNumero(estiloComponente.height) / 2;
+        break;
+    }
+
+    return new Ponto(x, y);
+  }
+
+  adicionarOuvinte(ouvinte: ComponenteDiagramaOuvinte): void {
+    this._ouvintes.push(ouvinte);
+  }
+
+  removerOuvinte(
+    ouvinte: ComponenteDiagramaOuvinte,
+    alertar: boolean,
+  ): ComponenteDiagramaOuvinte | null {
+    let indexOuvinte: number = this._ouvintes.indexOf(ouvinte);
+
+    if (alertar) {
+      ouvinte.alertarRemovido();
+    }
+
+    if (indexOuvinte > -1) {
+      this._ouvintes.splice(indexOuvinte, 1);
+      return ouvinte;
+    }
+
+    return null;
+  }
+
+  atualizarOuvintes(): void {
+    this._ouvintes.forEach((ouvinte: ComponenteDiagramaOuvinte): void => {
+      ouvinte.atualizar(this._htmlComponente);
+    });
+  }
+
+  removerTodosOuvintes(): ComponenteDiagramaOuvinte[] {
+    let ouvintesRemovidos: ComponenteDiagramaOuvinte[] = [];
+    let ouvintesCopia: ComponenteDiagramaOuvinte[] = this._ouvintes.slice();
+    ouvintesCopia.forEach((ouvinte: ComponenteDiagramaOuvinte): void => {
+      let ouvinteRemovido: ComponenteDiagramaOuvinte | null = this.removerOuvinte(ouvinte, true);
+
+      if (ouvinteRemovido !== null) {
+        ouvintesRemovidos.push(ouvinteRemovido);
+      }
+    });
+
+    return ouvintesRemovidos;
+  }
+
+  get ouvintes(): ComponenteDiagramaOuvinte[] {
+    return this._ouvintes;
+  }
+}

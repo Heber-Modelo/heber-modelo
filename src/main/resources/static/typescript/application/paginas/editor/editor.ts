@@ -58,7 +58,7 @@ import TrocarTipoConexaoCommand, {
 import ConectarDuasEntidadesRelacionaisCommand, {
   ConectarDuasEntidadesRelacionaisCommandBuilder,
 } from "infrastructure/command/conectarDuasEntidadesRelacionaisCommand";
-import ChangeConnectionTypeEvent from "model/event/changeConnectionTypeEvent";
+import ChangeConnectionTypeEvent from "domain/event/changeConnectionTypeEvent";
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
@@ -85,18 +85,18 @@ import SelecionadorComponente from "infrastructure/selecionador/selecionadorComp
 import criarAba from "infrastructure/services/criarAba";
 import "infrastructure/variaveisConfiguracao";
 import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
-import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import LateraisComponente from "model/componente/lateraisComponente";
-import NomesComponente from "model/componente/nomesComponente";
-import TiposConexao from "model/conexao/tiposConexao";
-import converterPixeisParaNumero from "model/services/converterPixeisParaNumero";
-import calcularLateralComponente from "model/services/calcularLateralComponente";
-import Aba from "model/aba";
-import DirecoesMovimento from "model/direcoesMovimento";
-import ResponseTraducaoJSON from "model/response/responseTraducaoJSON";
-import SetaConectora from "model/setaConectora";
-import Ponto from "model/ponto";
+import DirecoesMovimento from "domain/enum/direcoesMovimento";
+import LateraisComponente from "domain/enum/lateraisComponente";
+import NomesComponente from "domain/enum/nomesComponente";
+import TiposConexao from "domain/enum/tiposConexao";
+import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import ResponseTraducaoJSON from "domain/json/responseTraducaoJSON";
+import Aba from "domain/model/aba";
+import Ponto from "domain/model/ponto";
+import SetaConectora from "domain/model/setaConectora";
+import calcularLateralComponente from "domain/services/calcularLateralComponente";
+import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */

@@ -16,10 +16,10 @@ import RepositorioComponenteFactory from "infrastructure/factory/repositorioComp
 import selecionadorComponenteFactory from "infrastructure/factory/selecionadorComponenteFactory";
 import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
-import ComponenteDiagrama from "model/componente/componenteDiagrama";
-import PropriedadeComponente from "model/propriedade/propriedadeComponente";
-import ComponenteDiagramaOuvinte from "model/componente/componenteDiagramaOuvinte";
-import AbstractComponenteConexao from "model/componente/abstractComponenteConexao";
+import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
+import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 
 class InputPropriedade {
   private readonly _elementoInput: HTMLInputElement | null;
