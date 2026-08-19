@@ -21,6 +21,8 @@ import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero
 export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
   public static readonly CLASSE_BASE_COMPONENTE: string = "componente";
   public static readonly CLASSE_ELEMENTO_SELECIONADO: string = "selected";
+  public static readonly PROPRIEDADE_ID_COMPONENTE: string = "data-id";
+  public static readonly PROPRIEDADES_IDS_OUVINTES: string = "data-ids-ouvintes";
 
   constructor(htmlComponente: HTMLDivElement, propriedades: PropriedadeComponente[] | null) {
     this._htmlComponente = htmlComponente;
@@ -94,8 +96,25 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
     return new Ponto(x, y);
   }
 
+  private atualizarIdsOuvintes(): void {
+    let ids: (number | null)[] = this._ouvintes.map(
+      (ouvinte: ComponenteDiagramaOuvinte): number | null => {
+        if (ouvinte instanceof ComponenteDiagrama) {
+          return Number(
+            ouvinte.htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE),
+          );
+        }
+
+        return null;
+      },
+    );
+
+    this._htmlComponente.setAttribute(ComponenteDiagrama.PROPRIEDADES_IDS_OUVINTES, `[${ids}]`);
+  }
+
   adicionarOuvinte(ouvinte: ComponenteDiagramaOuvinte): void {
     this._ouvintes.push(ouvinte);
+    this.atualizarIdsOuvintes();
   }
 
   removerOuvinte(
@@ -110,6 +129,8 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
 
     if (indexOuvinte > -1) {
       this._ouvintes.splice(indexOuvinte, 1);
+      this.atualizarIdsOuvintes();
+
       return ouvinte;
     }
 
@@ -132,6 +153,8 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
         ouvintesRemovidos.push(ouvinteRemovido);
       }
     });
+
+    this.atualizarIdsOuvintes();
 
     return ouvintesRemovidos;
   }
