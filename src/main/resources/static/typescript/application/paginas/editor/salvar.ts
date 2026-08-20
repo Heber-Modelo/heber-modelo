@@ -177,7 +177,7 @@ function coletarTabelasDicionariosDados(
   return dicionariosDadosJSON;
 }
 
-function salvar(event: Event): void {
+async function salvar(event: Event): Promise<void> {
   let dataCriado: Date = new Date();
   let tiposDiagrama: string[] = extrairElementosLista(seletorTipoDiagrama?.innerText);
   let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
@@ -199,6 +199,19 @@ function salvar(event: Event): void {
     relationalDescriptions: descricoesRelacionais,
     dataDictionaries: dicionariosDados,
   };
+
+  let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
+  let csrfToken: string = csrfMetaTag?.content || "";
+
+  await fetch("/salvar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": csrfToken,
+    },
+    credentials: "same-origin",
+    body: JSON.stringify(requestBody),
+  });
 
   fecharTagDetails(event.target as HTMLElement);
 }
