@@ -12,6 +12,7 @@
  */
 
 import ComponenteJSON from "domain/json/componenteJSON";
+import DescricaoRelacionalJSON from "domain/json/descricaoRelacionalJSON";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 
 const NOMES_COMPONENTES_ESPECIAIS: string[] = ["editor_descricao_relacional", "tabela_dicionario"];
@@ -47,20 +48,16 @@ function fecharTagDetails(elementoInicial: HTMLElement): void {
   elemento.open = false;
 }
 
-function salvar(event: Event): void {
-  let dataCriado: Date = new Date();
-  let tiposDiagrama: string[] = extrairElementosLista(seletorTipoDiagrama?.innerText);
-  let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
-
+function coletarDadosComponentes(componentes: NodeListOf<HTMLDivElement>): ComponenteJSON[] {
   let requestComponentes: ComponenteJSON[] = [];
 
   for (const componente of componentes) {
-    let idAba: string | null = componente.getAttribute(PROPRIEDADE_ID_ABA);
-    let idComponente: string | null = componente.getAttribute(PROPRIEDADE_ID_COMPONENTE);
+    let idAba: number = Number(componente.getAttribute(PROPRIEDADE_ID_ABA));
+    let idComponente: number = Number(componente.getAttribute(PROPRIEDADE_ID_COMPONENTE));
     let idsOuvintes: number[] = extrairElementosLista(
       componente.getAttribute(PROPRIEDADES_IDS_OUVINTES),
     ).map((id: string): number => Number(id));
-    let nomeComponente: string | null = componente.getAttribute(PROPRIEDADE_NOME_COMPONENTE);
+    let nomeComponente: string = componente.getAttribute(PROPRIEDADE_NOME_COMPONENTE) || "";
 
     if (nomeComponente && NOMES_COMPONENTES_ESPECIAIS.includes(nomeComponente)) {
       continue;
@@ -78,9 +75,9 @@ function salvar(event: Event): void {
     let width: number = converterPixeisParaNumero(estiloComponente.width);
 
     requestComponentes.push({
-      idAba: Number(idAba),
-      idComponente: Number(idComponente),
-      nomeComponente: nomeComponente || "",
+      idAba,
+      idComponente,
+      nomeComponente,
       idsOuvintes,
       recebePontosExtensores,
       recebeSetasConectoras,
@@ -92,10 +89,49 @@ function salvar(event: Event): void {
     });
   }
 
+  return requestComponentes;
+}
+
+function coletarDescricoesRelacionais(
+  editores: NodeListOf<HTMLDivElement>,
+): DescricaoRelacionalJSON[] {
+  const CLASSE_AREA_EDICAO: string = ".ql-editor";
+  let descricoesRelacionais: DescricaoRelacionalJSON[] = [];
+
+  for (const editor of editores) {
+    let idAba: number = Number(editor.getAttribute(PROPRIEDADE_ID_ABA));
+    let idComponente: number = Number(editor.getAttribute(PROPRIEDADE_ID_COMPONENTE));
+    let nomeComponente: string = editor.getAttribute(PROPRIEDADE_NOME_COMPONENTE) || "";
+    let areaEdicao: HTMLElement | null = editor.querySelector(CLASSE_AREA_EDICAO);
+    let descricaoHTML: string = areaEdicao?.innerHTML || "";
+
+    descricoesRelacionais.push({
+      idAba,
+      idComponente,
+      nomeComponente,
+      descricaoHTML,
+    });
+  }
+
+  return descricoesRelacionais;
+}
+
+function salvar(event: Event): void {
+  let dataCriado: Date = new Date();
+  let tiposDiagrama: string[] = extrairElementosLista(seletorTipoDiagrama?.innerText);
+  let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
+  let editores: NodeListOf<HTMLDivElement> = document.querySelectorAll(
+    ".elemento-editor-descricao-relacional",
+  );
+
+  let requestComponentes: ComponenteJSON[] = coletarDadosComponentes(componentes);
+  let descricoesRelacionais: DescricaoRelacionalJSON[] = coletarDescricoesRelacionais(editores);
+
   let requestBody = {
     creationDate: dataCriado,
     types: tiposDiagrama,
     components: requestComponentes,
+    relationalDescriptions: descricoesRelacionais,
   };
 
   fecharTagDetails(event.target as HTMLElement);
