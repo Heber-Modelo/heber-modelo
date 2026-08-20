@@ -13,6 +13,7 @@
 
 import ComponenteJSON from "domain/json/componenteJSON";
 import DescricaoRelacionalJSON from "domain/json/descricaoRelacionalJSON";
+import DicionarioDadosJSON from "domain/json/dicionarioDadosJSON";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 
 const NOMES_COMPONENTES_ESPECIAIS: string[] = ["editor_descricao_relacional", "tabela_dicionario"];
@@ -116,6 +117,66 @@ function coletarDescricoesRelacionais(
   return descricoesRelacionais;
 }
 
+function coletarTabelasDicionariosDados(
+  dicionarios: NodeListOf<HTMLDivElement>,
+): DicionarioDadosJSON[] {
+  let dicionariosDadosJSON: DicionarioDadosJSON[] = [];
+  let tabelas: HTMLTableElement[] = [];
+
+  for (const dicionario of dicionarios) {
+    tabelas.push(dicionario.querySelector("table") as HTMLTableElement);
+  }
+
+  for (let i: number = 0; i < tabelas.length; i++) {
+    let tbody: HTMLTableSectionElement = tabelas[i].tBodies[0];
+
+    let idAba: number = Number(dicionarios[i].getAttribute(PROPRIEDADE_ID_ABA));
+    let idComponente: number = Number(dicionarios[i].getAttribute(PROPRIEDADE_ID_COMPONENTE));
+    let nomeComponente: string = dicionarios[i].getAttribute(PROPRIEDADE_NOME_COMPONENTE) || "";
+    let nomeEntidade: string = dicionarios[i].querySelector("caption")?.innerHTML || "";
+
+    let atributos: string[] = [];
+    let descricoes: string[] = [];
+    let tipos: string[] = [];
+    let tamanhos: string[] = [];
+    let nulos: string[] = [];
+    let regras: string[] = [];
+    let chaves: string[] = [];
+    let defaults: string[] = [];
+    let unicos: string[] = [];
+
+    for (const row of tbody.rows) {
+      atributos.push(row.cells[0].children[0].innerHTML);
+      descricoes.push(row.cells[1].children[0].innerHTML);
+      tipos.push(row.cells[2].children[0].innerHTML);
+      tamanhos.push(row.cells[3].children[0].innerHTML);
+      nulos.push(row.cells[4].children[0].innerHTML);
+      regras.push(row.cells[5].children[0].innerHTML);
+      chaves.push(row.cells[6].children[0].innerHTML);
+      defaults.push(row.cells[7].children[0].innerHTML);
+      unicos.push(row.cells[8].children[0].innerHTML);
+    }
+
+    dicionariosDadosJSON.push({
+      idAba,
+      idComponente,
+      nomeComponente,
+      nomeEntidade,
+      atributos,
+      descricoes,
+      tipos,
+      tamanhos,
+      nulos,
+      regras,
+      chaves,
+      defaults,
+      unicos,
+    });
+  }
+
+  return dicionariosDadosJSON;
+}
+
 function salvar(event: Event): void {
   let dataCriado: Date = new Date();
   let tiposDiagrama: string[] = extrairElementosLista(seletorTipoDiagrama?.innerText);
@@ -123,15 +184,20 @@ function salvar(event: Event): void {
   let editores: NodeListOf<HTMLDivElement> = document.querySelectorAll(
     ".elemento-editor-descricao-relacional",
   );
+  let dicionarios: NodeListOf<HTMLDivElement> = document.querySelectorAll(
+    ".elemento-dicionario-dados",
+  );
 
   let requestComponentes: ComponenteJSON[] = coletarDadosComponentes(componentes);
   let descricoesRelacionais: DescricaoRelacionalJSON[] = coletarDescricoesRelacionais(editores);
+  let dicionariosDados: DicionarioDadosJSON[] = coletarTabelasDicionariosDados(dicionarios);
 
   let requestBody = {
     creationDate: dataCriado,
     types: tiposDiagrama,
     components: requestComponentes,
     relationalDescriptions: descricoesRelacionais,
+    dataDictionaries: dicionariosDados,
   };
 
   fecharTagDetails(event.target as HTMLElement);
