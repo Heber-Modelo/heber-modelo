@@ -15,6 +15,7 @@ enum NomesComponente {
   ATRIBUTO_DER = "atributo_der",
   AGREGACAO = "agregacao",
   CARDINALIDADE = "cardinalidade",
+  COMPONENTE = "componente",
   ENTIDADE = "entidade",
   ENTIDADE_RELACIONAL = "entidade_relacional",
   RELACIONAMENTO = "relacionamento",

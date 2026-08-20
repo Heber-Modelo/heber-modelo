@@ -123,6 +123,8 @@ componentes.forEach((componente: HTMLDivElement): void => {
   repositorioComponentes.adicionar(new ComponenteDiagrama(componente, []));
 });
 
+new CarregarCSSCommandBuilder().definirNomeArquivo(NomesComponente.COMPONENTE).build().execute();
+
 /***************************/
 /* DESSELECIONAR COMPONENTE */
 /***************************/

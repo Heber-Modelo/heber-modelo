@@ -19,6 +19,7 @@ import java.util.List;
 public class DiagramasJSON {
 
     LocalDateTime creationDate;
+    List<String> loadedCSSFiles;
     List<String> types;
 
     List<ComponenteJSON> components;
@@ -27,6 +28,10 @@ public class DiagramasJSON {
 
     public LocalDateTime getCreationDate() {
         return creationDate;
+    }
+
+    public List<String> getLoadedCSSFiles() {
+        return loadedCSSFiles;
     }
 
     public List<String> getTypes() {

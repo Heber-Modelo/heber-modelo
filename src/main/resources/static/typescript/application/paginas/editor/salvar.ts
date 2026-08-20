@@ -25,7 +25,6 @@ const PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
 const PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string = "data-recebe-pontos-extensores";
 const PROPRIEDADE_RECEBE_SETAS_CONECTORAS: string = "data-recebe-setas-conectoras";
 
-let buttonSalvarArquivo: HTMLButtonElement | null = document.querySelector("#btn-salvar-arquivo");
 let seletorTipoDiagrama: HTMLElement | null = document.querySelector("#tipos-diagrama");
 
 function extrairElementosLista(tipos: string | null | undefined): string[] {
@@ -47,6 +46,17 @@ function fecharTagDetails(elementoInicial: HTMLElement): void {
   }
 
   elemento.open = false;
+}
+
+function coletarArquivosCSS(links: NodeListOf<HTMLLinkElement>): string[] {
+  let arquivosCSSCarregados: string[] = [];
+
+  for (const link of links) {
+    let partesLink: string[] = link.href.split("/");
+    arquivosCSSCarregados.push(partesLink[partesLink.length - 1]);
+  }
+
+  return arquivosCSSCarregados;
 }
 
 function coletarDadosComponentes(componentes: NodeListOf<HTMLDivElement>): ComponenteJSON[] {
@@ -177,9 +187,16 @@ function coletarTabelasDicionariosDados(
   return dicionariosDadosJSON;
 }
 
-async function salvar(event: Event): Promise<void> {
+enum TipoArquivo {
+  JSON,
+  XML,
+}
+
+async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   let dataCriado: Date = new Date();
   let tiposDiagrama: string[] = extrairElementosLista(seletorTipoDiagrama?.innerText);
+  let linksCSSElementos: NodeListOf<HTMLLinkElement> =
+    document.head.querySelectorAll(".css-carregado");
   let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
   let editores: NodeListOf<HTMLDivElement> = document.querySelectorAll(
     ".elemento-editor-descricao-relacional",
@@ -188,32 +205,51 @@ async function salvar(event: Event): Promise<void> {
     ".elemento-dicionario-dados",
   );
 
+  let arquivosCSSCarregados: string[] = coletarArquivosCSS(linksCSSElementos);
   let requestComponentes: ComponenteJSON[] = coletarDadosComponentes(componentes);
   let descricoesRelacionais: DescricaoRelacionalJSON[] = coletarDescricoesRelacionais(editores);
   let dicionariosDados: DicionarioDadosJSON[] = coletarTabelasDicionariosDados(dicionarios);
 
   let requestBody = {
     creationDate: dataCriado,
+    loadedCSSFiles: arquivosCSSCarregados,
     types: tiposDiagrama,
     components: requestComponentes,
     relationalDescriptions: descricoesRelacionais,
     dataDictionaries: dicionariosDados,
   };
 
-  let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
-  let csrfToken: string = csrfMetaTag?.content || "";
-
-  await fetch("/salvar", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-XSRF-TOKEN": csrfToken,
-    },
-    credentials: "same-origin",
-    body: JSON.stringify(requestBody),
-  });
-
   fecharTagDetails(event.target as HTMLElement);
+
+  if (tipoArquivo === TipoArquivo.XML) {
+    let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
+    let csrfToken: string = csrfMetaTag?.content || "";
+
+    await fetch("/salvar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-XSRF-TOKEN": csrfToken,
+      },
+      credentials: "same-origin",
+      body: JSON.stringify(requestBody),
+    });
+
+    return;
+  }
+
+  let jsonData: string = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(requestBody, null, 2))}`;
+  let temporaryDownloadAnchor: HTMLAnchorElement = document.createElement("a");
+  temporaryDownloadAnchor.setAttribute("href", jsonData);
+  temporaryDownloadAnchor.setAttribute("download", "diagrama.json");
+  temporaryDownloadAnchor.style.setProperty("display", "none");
+  document.body.append(temporaryDownloadAnchor);
+  temporaryDownloadAnchor.click();
+  temporaryDownloadAnchor.remove();
 }
 
-buttonSalvarArquivo?.addEventListener("click", salvar);
+let buttonSalvarJSON: HTMLButtonElement | null = document.querySelector("#btn-salvar-json");
+let buttonSalvarXML: HTMLButtonElement | null = document.querySelector("#btn-salvar-xml");
+
+buttonSalvarJSON?.addEventListener("click", (event: MouseEvent) => salvar(event, TipoArquivo.JSON));
+buttonSalvarXML?.addEventListener("click", (event: MouseEvent) => salvar(event, TipoArquivo.XML));
