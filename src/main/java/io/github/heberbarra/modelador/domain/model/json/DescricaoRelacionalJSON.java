@@ -13,10 +13,38 @@
 
 package io.github.heberbarra.modelador.domain.model.json;
 
-public class DescricaoRelacionalJSON {
+import io.github.heberbarra.modelador.domain.model.xhtml.XHTMLConvertable;
+
+public class DescricaoRelacionalJSON implements XHTMLConvertable {
 
     int idAba;
     int idComponente;
     String nomeComponente;
     String descricaoHTML;
+
+    public DescricaoRelacionalJSON() {}
+
+    public DescricaoRelacionalJSON(int idAba, int idComponente, String nomeComponente, String descricaoHTML) {
+        this.idAba = idAba;
+        this.idComponente = idComponente;
+        this.nomeComponente = nomeComponente;
+        this.descricaoHTML = descricaoHTML;
+    }
+
+    @Override
+    public String toXHTML() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<div ");
+        builder.append("%s=\"%d\" ".formatted(PROPRIEDADE_ID_ABA, idAba));
+        builder.append("%s=\"%d\" ".formatted(PROPRIEDADE_ID_COMPONENTE, idComponente));
+        builder.append("%s=\"%s\" >".formatted(PROPRIEDADE_NOME_COMPONENTE, nomeComponente));
+
+        String descricaoFormatada = descricaoHTML.replace("<br>", "<br/>");
+
+        builder.append(descricaoFormatada);
+        builder.append("</div>");
+
+        return builder.toString();
+    }
 }

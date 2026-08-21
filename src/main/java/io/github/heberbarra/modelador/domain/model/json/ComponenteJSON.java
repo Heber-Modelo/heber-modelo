@@ -13,9 +13,11 @@
 
 package io.github.heberbarra.modelador.domain.model.json;
 
+import io.github.heberbarra.modelador.domain.model.xhtml.XHTMLConvertable;
+import java.util.Arrays;
 import java.util.List;
 
-public class ComponenteJSON {
+public class ComponenteJSON implements XHTMLConvertable {
     int idAba;
     int idComponente;
     String nomeComponente;
@@ -27,4 +29,50 @@ public class ComponenteJSON {
     double y;
     double height;
     double width;
+
+    public ComponenteJSON() {}
+
+    public ComponenteJSON(
+            int idAba,
+            int idComponente,
+            String nomeComponente,
+            List<Integer> idsOuvintes,
+            boolean recebePontosExtensores,
+            boolean recebeSetasConectoras,
+            String innerHTML,
+            double x,
+            double y,
+            double height,
+            double width) {
+        this.idAba = idAba;
+        this.idComponente = idComponente;
+        this.nomeComponente = nomeComponente;
+        this.idsOuvintes = idsOuvintes;
+        this.recebePontosExtensores = recebePontosExtensores;
+        this.recebeSetasConectoras = recebeSetasConectoras;
+        this.innerHTML = innerHTML;
+        this.x = x;
+        this.y = y;
+        this.height = height;
+        this.width = width;
+    }
+
+    @Override
+    public String toXHTML() {
+
+        return "<div " + "%s=\"%d\" ".formatted(PROPRIEDADE_ID_ABA, idAba)
+                + "%s=\"%d\" ".formatted(PROPRIEDADE_ID_COMPONENTE, idComponente)
+                + "%s=\"%s\" ".formatted(PROPRIEDADE_IDS_OUVINTES, Arrays.toString(idsOuvintes.toArray()))
+                + "%s=\"%s\" ".formatted(PROPRIEDADE_NOME_COMPONENTE, nomeComponente)
+                + "%s=\"%b\" ".formatted(PROPRIEDADE_RECEBE_PONTOS_EXTENSORES, recebePontosExtensores)
+                + "%s=\"%b\" ".formatted(PROPRIEDADE_RECEBE_SETAS_CONECTORAS, recebeSetasConectoras)
+                + "style=\""
+                + "left=%fpx ".formatted(x)
+                + "top=%fpx; ".formatted(y)
+                + "height=%fpx; ".formatted(height)
+                + "width=%fpx; ".formatted(width)
+                + "\" >"
+                + innerHTML
+                + "</div>%n".formatted();
+    }
 }

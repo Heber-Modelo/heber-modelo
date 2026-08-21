@@ -13,10 +13,11 @@
 
 package io.github.heberbarra.modelador.domain.model.json;
 
+import io.github.heberbarra.modelador.domain.model.xhtml.XHTMLConvertable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class DiagramasJSON {
+public class DiagramasJSON implements XHTMLConvertable {
 
     LocalDateTime creationDate;
     List<String> loadedCSSFiles;
@@ -26,27 +27,60 @@ public class DiagramasJSON {
     List<DescricaoRelacionalJSON> relationalDescriptions;
     List<DicionarioDadosJSON> dataDictionaries;
 
-    public LocalDateTime getCreationDate() {
-        return creationDate;
+    public DiagramasJSON() {}
+
+    public DiagramasJSON(
+            LocalDateTime creationDate,
+            List<String> loadedCSSFiles,
+            List<String> types,
+            List<ComponenteJSON> components,
+            List<DescricaoRelacionalJSON> relationalDescriptions,
+            List<DicionarioDadosJSON> dataDictionaries) {
+        this.creationDate = creationDate;
+        this.loadedCSSFiles = loadedCSSFiles;
+        this.types = types;
+        this.components = components;
+        this.relationalDescriptions = relationalDescriptions;
+        this.dataDictionaries = dataDictionaries;
     }
 
-    public List<String> getLoadedCSSFiles() {
-        return loadedCSSFiles;
-    }
+    @Override
+    public String toXHTML() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<!DOCTYPE html>");
+        builder.append("%n<html>%n<head>%n".formatted());
+        builder.append("<meta charset=\"UTF-8\" />%n".formatted());
+        builder.append(
+                "<meta name=\"viewport\" content=\"width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0\" />%n"
+                        .formatted());
+        builder.append("<meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\" />%n".formatted());
+        builder.append("</head>%n<body>%n".formatted());
 
-    public List<String> getTypes() {
-        return types;
-    }
+        builder.append("<div style=\"display: none;\" id=\"types\" >[");
+        for (int i = 0; i < this.types.size(); i++) {
+            if (i != types.size() - 1) {
+                builder.append("%s, ".formatted(types.get(i)));
+                continue;
+            }
 
-    public List<ComponenteJSON> getComponents() {
-        return components;
-    }
+            builder.append(types.get(i));
+        }
+        builder.append("]</div>%n".formatted());
 
-    public List<DescricaoRelacionalJSON> getRelationalDescriptions() {
-        return relationalDescriptions;
-    }
+        for (ComponenteJSON componenteJSON : this.components) {
+            builder.append(componenteJSON.toXHTML());
+        }
 
-    public List<DicionarioDadosJSON> getDataDictionaries() {
-        return dataDictionaries;
+        for (DescricaoRelacionalJSON relationalDescription : this.relationalDescriptions) {
+            builder.append(relationalDescription.toXHTML());
+        }
+
+        for (DicionarioDadosJSON dataDictionary : this.dataDictionaries) {
+            builder.append(dataDictionary.toXHTML());
+        }
+
+        builder.append("</body>%n</html>%n".formatted());
+
+        return builder.toString();
     }
 }
