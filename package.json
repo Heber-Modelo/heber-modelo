@@ -27,7 +27,7 @@
     "babel-plugin-module-resolver": "^5.0.3",
     "css-loader": "^7.1.4",
     "prettier": "^3.9.6",
-    "sass": "^1.102.0",
+    "sass": "^1.103.0",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.6.2",
     "typescript": "^7.0.2",
