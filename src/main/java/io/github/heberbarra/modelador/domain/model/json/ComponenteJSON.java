@@ -21,6 +21,7 @@ public class ComponenteJSON implements XHTMLConvertable {
     int idAba;
     int idComponente;
     String nomeComponente;
+    List<String> classes;
     List<Integer> idsOuvintes;
     boolean recebePontosExtensores;
     boolean recebeSetasConectoras;
@@ -36,6 +37,7 @@ public class ComponenteJSON implements XHTMLConvertable {
             int idAba,
             int idComponente,
             String nomeComponente,
+            List<String> classes,
             List<Integer> idsOuvintes,
             boolean recebePontosExtensores,
             boolean recebeSetasConectoras,
@@ -47,6 +49,7 @@ public class ComponenteJSON implements XHTMLConvertable {
         this.idAba = idAba;
         this.idComponente = idComponente;
         this.nomeComponente = nomeComponente;
+        this.classes = classes;
         this.idsOuvintes = idsOuvintes;
         this.recebePontosExtensores = recebePontosExtensores;
         this.recebeSetasConectoras = recebeSetasConectoras;
@@ -66,11 +69,12 @@ public class ComponenteJSON implements XHTMLConvertable {
                 + "%s=\"%s\" ".formatted(PROPRIEDADE_NOME_COMPONENTE, nomeComponente)
                 + "%s=\"%b\" ".formatted(PROPRIEDADE_RECEBE_PONTOS_EXTENSORES, recebePontosExtensores)
                 + "%s=\"%b\" ".formatted(PROPRIEDADE_RECEBE_SETAS_CONECTORAS, recebeSetasConectoras)
+                + "class=\"%s\" ".formatted(String.join(" ", classes))
                 + "style=\""
-                + "left=%fpx ".formatted(x)
-                + "top=%fpx; ".formatted(y)
-                + "height=%fpx; ".formatted(height)
-                + "width=%fpx; ".formatted(width)
+                + "left=%fpx ".formatted(x).replace(",", ".")
+                + "top=%fpx; ".formatted(y).replace(",", ".")
+                + "height=%fpx; ".formatted(height).replace(",", ".")
+                + "width=%fpx; ".formatted(width).replace(",", ".")
                 + "\" >"
                 + innerHTML
                 + "</div>%n".formatted();

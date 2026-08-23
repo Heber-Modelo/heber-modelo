@@ -15,6 +15,7 @@ export default interface ComponenteJSON {
   idAba: number;
   idComponente: number;
   nomeComponente: string;
+  classes: string[];
   idsOuvintes: number[];
   recebePontosExtensores: boolean;
   recebeSetasConectoras: boolean;

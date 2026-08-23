@@ -74,6 +74,11 @@ function coletarDadosComponentes(componentes: NodeListOf<HTMLDivElement>): Compo
       continue;
     }
 
+    let classes: string[] = [];
+    for (const cssClass of componente.classList) {
+      classes.push(cssClass);
+    }
+
     let recebePontosExtensores: boolean =
       componente.getAttribute(PROPRIEDADE_RECEBE_PONTOS_EXTENSORES) == "true";
     let recebeSetasConectoras: boolean =
@@ -89,6 +94,7 @@ function coletarDadosComponentes(componentes: NodeListOf<HTMLDivElement>): Compo
       idAba,
       idComponente,
       nomeComponente,
+      classes,
       idsOuvintes,
       recebePontosExtensores,
       recebeSetasConectoras,
@@ -225,7 +231,7 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
     let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
     let csrfToken: string = csrfMetaTag?.content || "";
 
-    await fetch("/salvar", {
+    let response: Response = await fetch("/salvar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -234,6 +240,18 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
       credentials: "same-origin",
       body: JSON.stringify(requestBody),
     });
+
+    let blob: Blob = await response.blob();
+    let blobURL: string = window.URL.createObjectURL(blob);
+
+    let temporaryDownloadAnchor: HTMLAnchorElement = document.createElement("a");
+    temporaryDownloadAnchor.setAttribute("href", blobURL);
+    temporaryDownloadAnchor.setAttribute("download", "diagrama.xhtml");
+    temporaryDownloadAnchor.style.setProperty("display", "none");
+    document.body.append(temporaryDownloadAnchor);
+    temporaryDownloadAnchor.click();
+    temporaryDownloadAnchor.remove();
+    URL.revokeObjectURL(blobURL);
 
     return;
   }

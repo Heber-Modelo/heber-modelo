@@ -18,6 +18,7 @@ import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.model.xhtml.XHTMLConvertable;
 import io.github.heberbarra.modelador.infrastructure.acessador.AcessadorRecursos;
 import io.github.heberbarra.modelador.infrastructure.acessador.IAcessadorRecurso;
+import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import org.jspecify.annotations.NonNull;
 
@@ -64,12 +66,22 @@ public class DiagramasJSON implements XHTMLConvertable {
     public String toXHTML() {
         StringBuilder builder = new StringBuilder();
         builder.append("<!DOCTYPE html>");
-        builder.append("%n<html>%n<head>%n".formatted());
-        builder.append("<meta charset=\"UTF-8\" />%n".formatted());
+        builder.append("%n<html xml:lang=\"en\" xmlns=\"https://www.w3.org/1999/xhtml\" >%n<head>%n".formatted());
+        builder.append(
+                "<meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml; charset=utf-8\" />%n".formatted());
         builder.append(
                 "<meta name=\"viewport\" content=\"width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0\" />%n"
                         .formatted());
         builder.append("<meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\" />%n".formatted());
+        builder.append("<title>Heber-Modelo</title>%n".formatted());
+
+        Map<String, String> variaveisPaleta = ConfiguradorFactory.build().pegarInformacoesPaleta();
+        builder.append("<style type=\"text/css\" >%n:root{".formatted());
+        for (String nomeVariavel : variaveisPaleta.keySet()) {
+            builder.append("--%s: %s;".formatted(nomeVariavel, variaveisPaleta.get(nomeVariavel)));
+        }
+        ;
+        builder.append("}%n</style>%n".formatted());
 
         for (String cssFile : this.loadedCSSFiles) {
             builder.append("<style>%s</style>%n".formatted(this.loadCSSData(cssFile)));
