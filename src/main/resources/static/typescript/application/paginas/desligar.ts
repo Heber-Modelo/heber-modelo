@@ -13,11 +13,14 @@
 
 let btnDesligar: HTMLButtonElement | null = document.querySelector("#btn-desligar");
 btnDesligar?.addEventListener("click", async (): Promise<void> => {
+  let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
+  let csrfToken: string = csrfMetaTag?.content || "";
   let tokenDesligar: string = document.cookie.split("TOKEN_DESLIGAR=")[1].split(";")[0];
 
   await fetch(`/desligar`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "X-XSRF-TOKEN": csrfToken },
+    credentials: "same-origin",
     body: JSON.stringify({
       token: tokenDesligar,
     }),
