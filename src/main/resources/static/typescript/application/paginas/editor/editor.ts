@@ -21,44 +21,13 @@ import {
   mouseDownSelecionarElemento,
 } from "application/paginas/editor/editorPropriedades";
 import "application/paginas/editor/painelLateral";
-import ColarComponenteCommand, {
-  ColarComponenteCommandBuilder,
-} from "infrastructure/command/colarComponenteCommand";
-import CopiarComponenteCommand, {
-  CopiarComponenteCommandBuilder,
-} from "infrastructure/command/copiarComponenteCommand";
-import CortarComponenteCommand, {
-  CortarComponenteCommandBuilder,
-} from "infrastructure/command/cortarComponenteCommand";
+import { CarregarCSSCommandBuilder } from "infrastructure/command/carregarCSSCommand";
 import CarregarDiagramaCommand, {
   CarregarDiagramaCommandBuilder,
 } from "infrastructure/command/carregarDiagramaCommand";
-import { CarregarCSSCommandBuilder } from "infrastructure/command/carregarCSSCommand";
-import ApagarComponenteCommand, {
-  ApagarComponenteCommandBuilder,
-} from "infrastructure/command/apagarComponenteCommand";
-import ApagarTodosComponentesCommand, {
-  ApagarTodosComponentesCommandBuilder,
-} from "infrastructure/command/apagarTodosComponentesCommand";
-import ConectarAtributoCommand, {
-  ConectarAtributoCommandBuilder,
-} from "infrastructure/command/conectarAtributoCommand";
 import ConectarComponentesCommand, {
   ConectarComponentesCommandBuilder,
 } from "infrastructure/command/conectarComponentesCommand";
-import ConectarDuasEntidadesCommand, {
-  ConectarDuasEntidadesCommandBuilder,
-} from "infrastructure/command/conectarDuasEntidadesCommand";
-import CriarComponenteCommand, {
-  CriarComponenteCommandBuilder,
-} from "infrastructure/command/criarComponenteCommand";
-import TrocarTipoConexaoCommand, {
-  TrocarTipoConexaoCommandBuilder,
-} from "infrastructure/command/trocarTipoConexaoCommand";
-import ConectarDuasEntidadesRelacionaisCommand, {
-  ConectarDuasEntidadesRelacionaisCommandBuilder,
-} from "infrastructure/command/conectarDuasEntidadesRelacionaisCommand";
-import ChangeConnectionTypeEvent from "domain/event/changeConnectionTypeEvent";
 import CommandHistoryFactory from "infrastructure/factory/commandHistoryFactory";
 import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
@@ -82,20 +51,19 @@ import RepositorioComponente from "infrastructure/repositorio/repositorioCompone
 import RepositorioTiposDiagrama from "infrastructure/repositorio/repositorioTiposDiagrama";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
-import criarAba from "infrastructure/services/criarAba";
 import "infrastructure/variaveisConfiguracao";
 import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
 import DirecoesMovimento from "domain/enum/direcoesMovimento";
 import LateraisComponente from "domain/enum/lateraisComponente";
 import NomesComponente from "domain/enum/nomesComponente";
 import TiposConexao from "domain/enum/tiposConexao";
+import ChangeConnectionTypeEvent from "domain/event/changeConnectionTypeEvent";
 import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import ResponseTraducaoJSON from "domain/json/responseTraducaoJSON";
 import Aba from "domain/model/aba";
 import Ponto from "domain/model/ponto";
 import SetaConectora from "domain/model/setaConectora";
-import calcularLateralComponente from "domain/services/calcularLateralComponente";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 
 /****************************/
@@ -180,7 +148,6 @@ function dragElement(event: MouseEvent): void {
   event.preventDefault();
   let x: number = event.pageX - offsetX;
   let y: number = event.pageY - offsetY;
-  // TODO: Calibrar o scroll automático
   window.scrollTo(x, y);
   componenteAtual.style.left = `${x}px`;
   componenteAtual.style.top = `${y}px`;
@@ -224,11 +191,14 @@ let inputsCarregarDiagrama: NodeListOf<HTMLInputElement> =
   document.querySelectorAll("input.carregar-diagrama");
 let tiposDiagrama: HTMLElement | null = document.querySelector("#tipos-diagrama");
 
-function callbackCriarComponente(event: Event): void {
+async function callbackCriarComponente(event: Event): Promise<void> {
   let btn: HTMLButtonElement = event.target as HTMLButtonElement;
   let nomeElemento: string | null = btn.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE);
 
-  let command: CriarComponenteCommand = new CriarComponenteCommandBuilder()
+  const { CriarComponenteCommandBuilder } =
+    await import("infrastructure/command/criarComponenteCommand");
+
+  let command = new CriarComponenteCommandBuilder()
     .definirDiagrama(diagrama)
     .definirFabricaComponente(fabricaComponente)
     .definirGeradorIDComponente(geradorIDComponente)
@@ -291,7 +261,7 @@ let conectarComponentesCommandBuilder: ConectarComponentesCommandBuilder =
   new ConectarComponentesCommandBuilder();
 selecionadorComponente.esconderSetasConectoras();
 
-function trocarTipoConexao(event: Event): void {
+async function trocarTipoConexao(event: Event): Promise<void> {
   let changeConnectionTypeEvent: ChangeConnectionTypeEvent = event as ChangeConnectionTypeEvent;
   let conexaoAlvo: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(
     event.target as HTMLElement,
@@ -301,7 +271,10 @@ function trocarTipoConexao(event: Event): void {
     return;
   }
 
-  let command: TrocarTipoConexaoCommand = new TrocarTipoConexaoCommandBuilder()
+  const { TrocarTipoConexaoCommandBuilder } =
+    await import("infrastructure/command/trocarTipoConexaoCommand");
+
+  let command = new TrocarTipoConexaoCommandBuilder()
     .definirConexaoAlvo(conexaoAlvo as AbstractComponenteConexao)
     .definirDiagrama(diagrama)
     .definirFabricaComponente(fabricaComponente)
@@ -347,7 +320,7 @@ function callbackInicialSetaConectora(event: MouseEvent): void {
     .definirLateralPrimeiroComponente(lateralComponente);
 }
 
-function conectarElementos(event: MouseEvent): void {
+async function conectarElementos(event: MouseEvent): Promise<void> {
   event.stopPropagation();
   event.stopImmediatePropagation();
 
@@ -365,6 +338,8 @@ function conectarElementos(event: MouseEvent): void {
   let positionX: number = event.pageX - leftElemento;
   let positionY: number = event.pageY - topElemento;
 
+  const { default: calcularLateralComponente } =
+    await import("domain/services/calcularLateralComponente");
   let lateralSegundoComponente: LateraisComponente = calcularLateralComponente(
     elementoAlvo,
     new Ponto(positionX, positionY),
@@ -388,11 +363,14 @@ function conectarElementos(event: MouseEvent): void {
       ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
     ) === NomesComponente.ENTIDADE
   ) {
-    let command: ConectarDuasEntidadesCommand = new ConectarDuasEntidadesCommandBuilder()
+    const { ConectarDuasEntidadesCommandBuilder } =
+      await import("infrastructure/command/conectarDuasEntidadesCommand");
+    let command = new ConectarDuasEntidadesCommandBuilder()
       .copyAttributes(conectarComponentesCommandBuilder)
       .build();
     commandHistory.saveAndExecuteCommand(command);
     callbackFinalSetaConectora();
+
     return;
   }
 
@@ -404,10 +382,12 @@ function conectarElementos(event: MouseEvent): void {
       ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
     ) === NomesComponente.ENTIDADE_RELACIONAL
   ) {
-    let command: ConectarDuasEntidadesRelacionaisCommand =
-      new ConectarDuasEntidadesRelacionaisCommandBuilder()
-        .copyAttributes(conectarComponentesCommandBuilder)
-        .build();
+    const { ConectarDuasEntidadesRelacionaisCommandBuilder } =
+      await import("infrastructure/command/conectarDuasEntidadesRelacionaisCommand");
+
+    let command = new ConectarDuasEntidadesRelacionaisCommandBuilder()
+      .copyAttributes(conectarComponentesCommandBuilder)
+      .build();
     commandHistory.saveAndExecuteCommand(command);
     callbackFinalSetaConectora();
     return;
@@ -485,7 +465,7 @@ function callbackMoverConectorAtributo(event: MouseEvent): void {
   placeholderAtributo.style.top = `${y}px`;
 }
 
-function callbackTerminarConexaoAtributo(event: MouseEvent): void {
+async function callbackTerminarConexaoAtributo(event: MouseEvent): Promise<void> {
   document.removeEventListener("mousemove", callbackMoverConectorAtributo);
   diagrama?.removeEventListener("click", callbackTerminarConexaoAtributo);
   placeholderAtributo.style.display = "none";
@@ -496,7 +476,10 @@ function callbackTerminarConexaoAtributo(event: MouseEvent): void {
   );
 
   if (!nomeElemento) {
-    let command: CriarComponenteCommand = new CriarComponenteCommandBuilder()
+    const { CriarComponenteCommandBuilder } =
+      await import("infrastructure/command/criarComponenteCommand");
+
+    let command = new CriarComponenteCommandBuilder()
       .definirDiagrama(diagrama)
       .definirFabricaComponente(fabricaComponente)
       .definirGeradorIDComponente(geradorIDComponente)
@@ -519,6 +502,9 @@ function callbackTerminarConexaoAtributo(event: MouseEvent): void {
     return;
   }
 
+  const { ConectarAtributoCommandBuilder } =
+    await import("infrastructure/command/conectarAtributoCommand");
+
   if (!ConectarAtributoCommandBuilder.verificarElementoPermitido(nomeElemento)) {
     return;
   }
@@ -529,7 +515,7 @@ function callbackTerminarConexaoAtributo(event: MouseEvent): void {
   let positionX: number = event.pageX - elementoDOMRect.left;
   let positionY: number = event.pageY - elementoDOMRect.top;
 
-  let command: ConectarAtributoCommand = new ConectarAtributoCommandBuilder()
+  let command = new ConectarAtributoCommandBuilder()
     .definirComponenteAlvo(componenteAlvo)
     .definirDiagrama(diagrama)
     .definirFabricaComponente(fabricaComponente)
@@ -578,8 +564,11 @@ let buttonDesfazer: HTMLDivElement | null = document.querySelector("button#desfa
 let buttonApagar: HTMLDivElement | null = document.querySelector("button#apagar");
 let buttonDeletar: HTMLDivElement | null = document.querySelector("button#deletar");
 
-buttonApagar?.addEventListener("click", (): void => {
-  let command: ApagarComponenteCommand = new ApagarComponenteCommandBuilder()
+buttonApagar?.addEventListener("click", async (): Promise<void> => {
+  const { ApagarComponenteCommandBuilder } =
+    await import("infrastructure/command/apagarComponenteCommand");
+
+  let command = new ApagarComponenteCommandBuilder()
     .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
     .definirDiagrama(diagrama)
     .definirRepositorioComponente(repositorioComponentes)
@@ -596,7 +585,10 @@ buttonDeletar?.addEventListener("click", async (): Promise<void> => {
     await fetch("/traducao/web.page.editor.confirm.delete-all")
   ).json();
   if (window.confirm(traducao.mensagem)) {
-    let command: ApagarTodosComponentesCommand = new ApagarTodosComponentesCommandBuilder()
+    const { ApagarTodosComponentesCommandBuilder } =
+      await import("infrastructure/command/apagarTodosComponentesCommand");
+
+    let command = new ApagarTodosComponentesCommandBuilder()
       .definirDiagrama(diagrama)
       .definirRepositorioComponente(repositorioComponentes)
       .build();
@@ -616,15 +608,21 @@ buttonRefazer?.addEventListener("click", (): void => {
   commandHistory.redoLastCommand();
 });
 
-buttonCopiar?.addEventListener("click", (): void => {
-  let command: CopiarComponenteCommand = new CopiarComponenteCommandBuilder()
+buttonCopiar?.addEventListener("click", async (): Promise<void> => {
+  const { CopiarComponenteCommandBuilder } =
+    await import("infrastructure/command/copiarComponenteCommand");
+
+  let command = new CopiarComponenteCommandBuilder()
     .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
     .build();
   commandHistory.saveAndExecuteCommand(command);
 });
 
-buttonColar?.addEventListener("click", (): void => {
-  let command: ColarComponenteCommand = new ColarComponenteCommandBuilder()
+buttonColar?.addEventListener("click", async (): Promise<void> => {
+  const { ColarComponenteCommandBuilder } =
+    await import("infrastructure/command/colarComponenteCommand");
+
+  let command = new ColarComponenteCommandBuilder()
     .definirDiagrama(diagrama)
     .definirFabricaComponente(fabricaComponente)
     .definirGeradorID(geradorIDComponente)
@@ -634,8 +632,11 @@ buttonColar?.addEventListener("click", (): void => {
   commandHistory.saveAndExecuteCommand(command);
 });
 
-buttonCortar?.addEventListener("click", (): void => {
-  let command: CortarComponenteCommand = new CortarComponenteCommandBuilder()
+buttonCortar?.addEventListener("click", async (): Promise<void> => {
+  const { CortarComponenteCommandBuilder } =
+    await import("infrastructure/command/cortarComponenteCommand");
+
+  let command = new CortarComponenteCommandBuilder()
     .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
     .definirRepositorioComponente(repositorioComponentes)
     .definirSelecionadorComponente(selecionadorComponente)
@@ -681,6 +682,7 @@ function fecharAba(event: MouseEvent): void {
 }
 
 buttonNovaAba?.addEventListener("click", async (): Promise<void> => {
+  const { default: criarAba } = await import("infrastructure/services/criarAba");
   let novaAba: Aba = await criarAba(geradorIDAba.pegarProximoID(), fecharAba);
 
   seletorAbas?.append(novaAba.htmlElement);
@@ -707,36 +709,50 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
 
   // Leader key bindings
   if (teclaAnterior === bindings.get("leaderKey") && event.key === bindings.get("copiarElemento")) {
-    let command: CopiarComponenteCommand = new CopiarComponenteCommandBuilder()
-      .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
-      .build();
+    import("infrastructure/command/copiarComponenteCommand").then(
+      ({ CopiarComponenteCommandBuilder }): void => {
+        let command = new CopiarComponenteCommandBuilder()
+          .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
+          .build();
 
-    commandHistory.saveAndExecuteCommand(command);
+        commandHistory.saveAndExecuteCommand(command);
+      },
+    );
+
     return;
   }
 
   if (teclaAnterior === bindings.get("leaderKey") && event.key === bindings.get("cortarElemento")) {
-    let command: CortarComponenteCommand = new CortarComponenteCommandBuilder()
-      .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
-      .definirRepositorioComponente(repositorioComponentes)
-      .definirSelecionadorComponente(selecionadorComponente)
-      .build();
+    import("infrastructure/command/cortarComponenteCommand").then(
+      ({ CortarComponenteCommandBuilder }): void => {
+        let command = new CortarComponenteCommandBuilder()
+          .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
+          .definirRepositorioComponente(repositorioComponentes)
+          .definirSelecionadorComponente(selecionadorComponente)
+          .build();
 
-    commandHistory.saveAndExecuteCommand(command);
+        commandHistory.saveAndExecuteCommand(command);
+      },
+    );
+
     return;
   }
 
   if (teclaAnterior === bindings.get("leaderKey") && event.key === bindings.get("colarElemento")) {
-    let command: ColarComponenteCommand = new ColarComponenteCommandBuilder()
-      .definirDiagrama(diagrama)
-      .definirFabricaComponente(fabricaComponente)
-      .definirGeradorID(geradorIDComponente)
-      .definirRegistradorEventos(registradorEventosElemento)
-      .definirRepositorioComponente(repositorioComponentes)
-      .build();
-    commandHistory.saveAndExecuteCommand(command);
+    import("infrastructure/command/colarComponenteCommand").then(
+      ({ ColarComponenteCommandBuilder }): void => {
+        let command = new ColarComponenteCommandBuilder()
+          .definirDiagrama(diagrama)
+          .definirFabricaComponente(fabricaComponente)
+          .definirGeradorID(geradorIDComponente)
+          .definirRegistradorEventos(registradorEventosElemento)
+          .definirRepositorioComponente(repositorioComponentes)
+          .build();
+        commandHistory.saveAndExecuteCommand(command);
 
-    return;
+        return;
+      },
+    );
   }
 
   if (
@@ -765,16 +781,20 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
 
     // Apagar elemento
     case bindings.get("apagarElemento"):
-      let command: ApagarComponenteCommand = new ApagarComponenteCommandBuilder()
-        .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
-        .definirDiagrama(diagrama)
-        .definirRepositorioComponente(repositorioComponentes)
-        .build();
-      commandHistory.saveAndExecuteCommand(command);
+      import("infrastructure/command/apagarComponenteCommand").then(
+        ({ ApagarComponenteCommandBuilder }): void => {
+          let command = new ApagarComponenteCommandBuilder()
+            .definirComponenteAlvo(selecionadorComponente.componenteSelecionado)
+            .definirDiagrama(diagrama)
+            .definirRepositorioComponente(repositorioComponentes)
+            .build();
+          commandHistory.saveAndExecuteCommand(command);
 
-      selecionadorComponente.removerSelecao();
-      limparPropriedades(abaPropriedades);
-      atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
+          selecionadorComponente.removerSelecao();
+          limparPropriedades(abaPropriedades);
+          atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
+        },
+      );
 
       break;
 
