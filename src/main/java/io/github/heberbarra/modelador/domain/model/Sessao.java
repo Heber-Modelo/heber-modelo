@@ -25,4 +25,5 @@ public class Sessao {
     public Socket getSocket() {
         return socket;
     }
+
 }

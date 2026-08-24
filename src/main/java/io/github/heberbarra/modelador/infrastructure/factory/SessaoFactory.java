@@ -19,12 +19,13 @@ import jakarta.annotation.Nullable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Optional;
 
 public class SessaoFactory {
 
     private static Sessao sessao;
 
-    public static Sessao build(Integer porta, @Nullable String ip, String password) {
+    public static Sessao build(Integer porta, @Nullable String ip) {
         if (sessao == null) {
             try {
                 Socket socket;
@@ -44,5 +45,9 @@ public class SessaoFactory {
         }
 
         return sessao;
+    }
+
+    public static Optional<Sessao> getSessao() {
+        return Optional.ofNullable(sessao);
     }
 }

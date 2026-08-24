@@ -27,6 +27,7 @@ import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
 import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
+import io.github.heberbarra.modelador.infrastructure.verificador.VerificadorSenha;
 import io.github.heberbarra.modelador.infrastructure.services.UsuarioServices;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
@@ -35,6 +36,7 @@ import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.Inet4Address;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -266,10 +268,13 @@ public class ControladorWeb {
             method = RequestMethod.POST)
     public String criarSessao(@ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
 
-        Sessao sessao = SessaoFactory.build(porta, null, senha);
+        Sessao sessao = SessaoFactory.build(porta, null);
+        VerificadorSenha verificadorSenha = new VerificadorSenha(senha);
 
         return "redirect:/login";
     }
+
+
 
     @RequestMapping(
             value = {"/entrarSessao", "/entrarSessao.html"},
@@ -279,11 +284,12 @@ public class ControladorWeb {
             @ModelAttribute("session-port") Integer porta,
             @ModelAttribute("password") String senha) {
 
-        Sessao sessao = SessaoFactory.build(porta, ip, senha);
+        Sessao sessao = SessaoFactory.build(porta, ip);
 
         try (BufferedWriter bufferedWriter =
                 new BufferedWriter(new OutputStreamWriter(sessao.getSocket().getOutputStream())); ) {
-            bufferedWriter.write(senha);
+            String localIp = Inet4Address.getLocalHost().getHostAddress();
+            bufferedWriter.write("%s%s|%s%s".formatted(VerificadorSenha.MARCADOR_IP, localIp, VerificadorSenha.MARCADOR_SENHA, senha));
             bufferedWriter.flush();
         } catch (IOException e) {
             logger.severe(TradutorWrapper.tradutor
@@ -291,8 +297,13 @@ public class ControladorWeb {
                     .formatted(e.getMessage()));
         }
 
+
+
+
+
         return "redirect:/login";
     }
+
 
     @RequestMapping({"/anexarAtividade", "/anexarAtividade.html"})
     public String anexarAtividade(ModelMap modelMap) {
