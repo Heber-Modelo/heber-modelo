@@ -1,0 +1,76 @@
+<!--
+  ~ Copyright (c) 2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+  ~
+  ~ Licensed under the Massachusetts Institute of Technology (MIT) License.
+  ~ You may obtain a copy of the license at:
+  ~
+  ~    https://choosealicense.com/licenses/mit/
+  ~
+  ~ A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+  ~ Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+  ~
+  -->
+
+<!doctype html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <th:block th:replace="~{fragments/head :: head}"></th:block>
+  <link rel="stylesheet" th:href="@{/css/criarAtividade.css}" />
+</head>
+<body>
+
+  <header th:replace="~{fragments/header :: header}"></header>
+
+  <main>
+    <form method="post" th:action="@{criarAtividade}">
+      <h1 th:text="#{web.page.create-assignment.title}"></h1>
+      <label>
+        <span class="campos-texto" th:text="#{web.page.create-assignment.label.title}"></span>
+        <input type="text" name="title" required />
+      </label>
+
+      <div class="radioButton">
+        <span class="campos-texto" th:text="#{web.page.create-assignment.label.check-type}"></span>
+        <label>
+          <span class="campos-texto" th:text="#{web.page.create-assignment.label.yes}"></span>
+          <input type="radio" name="isTest" required />
+        </label>
+        <label>
+          <span class="campos-texto" th:text="#{web.page.create-assignment.label.no}"></span>
+          <input type="radio" name="isTest" required checked/>
+        </label>
+      </div>
+
+      <label>
+        <span class="campos-texto" th:text="#{web.page.create-assignment.label.posting-date}"></span>
+        <input type="text" name="posting-date" required />
+      </label>
+
+      <label>
+        <span class="campos-texto" th:text="#{web.page.create-assignment.label.deadline}"></span>
+        <input type="text" name="deadline" required />
+      </label>
+
+      <div class="description">
+        <span class="campos-texto" th:text="#{web.page.create-assignment.label.description}"></span>
+        <input type="text" name="description" required />
+
+
+      </div>
+
+
+      <div id="botoes">
+        <button id="cancelar" type="button">
+          <a th:href="@{index.html}" th:text="#{web.page.session.button.cancel}"></a>
+        </button>
+        <button
+          th:text="#{web.page.session.button.confirm}"
+          id="confirmar"
+          type="submit"
+        ></button>
+      </div>
+      <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
+    </form>
+  </main>
+</body>
+</html>
