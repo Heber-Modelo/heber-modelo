@@ -538,6 +538,40 @@ if (divComponentes) {
   conectarAtributoObserver.observe(divComponentes, { childList: true, subtree: true });
 }
 
+/********************/
+/* IMPORTAR ARQUIVO */
+/********************/
+
+function importar(): void {
+  let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
+  let csrfToken: string = csrfMetaTag?.content || "";
+
+  let fileInput: HTMLInputElement = document.createElement("input");
+  fileInput.name = "diagramas";
+  fileInput.type = "file";
+
+  fileInput.click();
+  fileInput.addEventListener("input", async (): Promise<void> => {
+    if (fileInput.files && fileInput.files[0].name.endsWith(".xhtml")) {
+      await fetch("/importar", {
+        headers: {
+          "Content-Type": "application/xhtml+xml",
+          "X-XSRF-TOKEN": csrfToken,
+        },
+        method: "POST",
+        body: JSON.stringify(await new Response(fileInput.files[0]).text()),
+      });
+
+      return;
+    } else if (fileInput.files && fileInput.files[0].name.endsWith(".json")) {
+
+    }
+  });
+}
+
+let buttonImportar: HTMLButtonElement | null = document.querySelector("#btn-importar");
+buttonImportar?.addEventListener("click", importar);
+
 /***********/
 /* TOOLBAR */
 /***********/
