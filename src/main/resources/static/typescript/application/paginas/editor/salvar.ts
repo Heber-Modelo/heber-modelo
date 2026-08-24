@@ -195,7 +195,18 @@ function coletarTabelasDicionariosDados(
 
 enum TipoArquivo {
   JSON,
+  PDF,
   XML,
+}
+
+function downloadFile(url: string, filename: string): void {
+  let temporaryDownloadAnchor: HTMLAnchorElement = document.createElement("a");
+  temporaryDownloadAnchor.setAttribute("href", url);
+  temporaryDownloadAnchor.setAttribute("download", filename);
+  temporaryDownloadAnchor.style.setProperty("display", "none");
+  document.body.append(temporaryDownloadAnchor);
+  temporaryDownloadAnchor.click();
+  temporaryDownloadAnchor.remove();
 }
 
 async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
@@ -243,31 +254,46 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
 
     let blob: Blob = await response.blob();
     let blobURL: string = window.URL.createObjectURL(blob);
+    downloadFile(blobURL, "diagrama.xhtml");
 
-    let temporaryDownloadAnchor: HTMLAnchorElement = document.createElement("a");
-    temporaryDownloadAnchor.setAttribute("href", blobURL);
-    temporaryDownloadAnchor.setAttribute("download", "diagrama.xhtml");
-    temporaryDownloadAnchor.style.setProperty("display", "none");
-    document.body.append(temporaryDownloadAnchor);
-    temporaryDownloadAnchor.click();
-    temporaryDownloadAnchor.remove();
-    URL.revokeObjectURL(blobURL);
+    return;
+  }
+
+  if (tipoArquivo === TipoArquivo.PDF) {
+    let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
+    let csrfToken: string = csrfMetaTag?.content || "";
+
+    let response: Response = await fetch("/exportar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-XSRF-TOKEN": csrfToken,
+      },
+      credentials: "same-origin",
+      body: JSON.stringify(requestBody),
+    });
+
+    let blob: Blob = await response.blob();
+    let blobURL: string = window.URL.createObjectURL(blob);
+    downloadFile(blobURL, "diagrama.pdf");
 
     return;
   }
 
   let jsonData: string = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(requestBody, null, 2))}`;
-  let temporaryDownloadAnchor: HTMLAnchorElement = document.createElement("a");
-  temporaryDownloadAnchor.setAttribute("href", jsonData);
-  temporaryDownloadAnchor.setAttribute("download", "diagrama.json");
-  temporaryDownloadAnchor.style.setProperty("display", "none");
-  document.body.append(temporaryDownloadAnchor);
-  temporaryDownloadAnchor.click();
-  temporaryDownloadAnchor.remove();
+  downloadFile(jsonData, "diagrama.json");
 }
 
 let buttonSalvarJSON: HTMLButtonElement | null = document.querySelector("#btn-salvar-json");
 let buttonSalvarXML: HTMLButtonElement | null = document.querySelector("#btn-salvar-xml");
+let buttonExportarPDF: HTMLButtonElement | null = document.querySelector("#btn-exportar-pdf");
 
-buttonSalvarJSON?.addEventListener("click", (event: MouseEvent) => salvar(event, TipoArquivo.JSON));
-buttonSalvarXML?.addEventListener("click", (event: MouseEvent) => salvar(event, TipoArquivo.XML));
+buttonSalvarJSON?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+  salvar(event, TipoArquivo.JSON),
+);
+buttonSalvarXML?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+  salvar(event, TipoArquivo.XML),
+);
+buttonExportarPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+  salvar(event, TipoArquivo.PDF),
+);

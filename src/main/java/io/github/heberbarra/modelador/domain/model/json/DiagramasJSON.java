@@ -65,7 +65,9 @@ public class DiagramasJSON implements XHTMLConvertable {
     @Override
     public String toXHTML() {
         StringBuilder builder = new StringBuilder();
-        builder.append("<!DOCTYPE html>");
+        builder.append("<?xml version = \"1.0\" encoding = \"UTF-8\" ?>%n".formatted());
+        builder.append(
+                "<!DOCTYPE html PUBLIC \"-//WC//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
         builder.append("%n<html xml:lang=\"en\" xmlns=\"https://www.w3.org/1999/xhtml\" >%n<head>%n".formatted());
         builder.append(
                 "<meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml; charset=utf-8\" />%n".formatted());
