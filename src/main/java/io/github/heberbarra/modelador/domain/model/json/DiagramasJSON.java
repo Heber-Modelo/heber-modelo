@@ -25,6 +25,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -37,6 +39,7 @@ public class DiagramasJSON implements XHTMLConvertable {
     List<String> loadedCSSFiles;
     List<String> types;
 
+    List<AbaJSON> tabs;
     List<ComponenteJSON> components;
     List<DescricaoRelacionalJSON> relationalDescriptions;
     List<DicionarioDadosJSON> dataDictionaries;
@@ -49,6 +52,7 @@ public class DiagramasJSON implements XHTMLConvertable {
             LocalDateTime creationDate,
             List<String> loadedCSSFiles,
             List<String> types,
+            List<AbaJSON> tabs,
             List<ComponenteJSON> components,
             List<DescricaoRelacionalJSON> relationalDescriptions,
             List<DicionarioDadosJSON> dataDictionaries) {
@@ -57,6 +61,7 @@ public class DiagramasJSON implements XHTMLConvertable {
         this.creationDate = creationDate;
         this.loadedCSSFiles = loadedCSSFiles;
         this.types = types;
+        this.tabs = tabs;
         this.components = components;
         this.relationalDescriptions = relationalDescriptions;
         this.dataDictionaries = dataDictionaries;
@@ -82,7 +87,7 @@ public class DiagramasJSON implements XHTMLConvertable {
         for (String nomeVariavel : variaveisPaleta.keySet()) {
             builder.append("--%s: %s;".formatted(nomeVariavel, variaveisPaleta.get(nomeVariavel)));
         }
-        ;
+
         builder.append("}%n</style>%n".formatted());
 
         for (String cssFile : this.loadedCSSFiles) {
@@ -105,19 +110,38 @@ public class DiagramasJSON implements XHTMLConvertable {
         }
         builder.append("]</div>%n".formatted());
 
+        Map<Integer, List<String>> abas = new LinkedHashMap<>();
         for (ComponenteJSON componenteJSON : this.components) {
-            builder.append(componenteJSON.toXHTML());
+            List<String> componentes = abas.getOrDefault(componenteJSON.idAba, new ArrayList<>());
+            componentes.add(componenteJSON.toXHTML());
+            abas.put(componenteJSON.idAba, componentes);
         }
 
         for (DescricaoRelacionalJSON relationalDescription : this.relationalDescriptions) {
-            builder.append(relationalDescription.toXHTML());
+            List<String> descriptions = abas.getOrDefault(relationalDescription.idAba, new ArrayList<>());
+            descriptions.add(relationalDescription.toXHTML());
+            abas.put(relationalDescription.idAba, descriptions);
         }
 
         for (DicionarioDadosJSON dataDictionary : this.dataDictionaries) {
-            builder.append(dataDictionary.toXHTML());
+            List<String> dictionaries = abas.getOrDefault(dataDictionary.idAba, new ArrayList<>());
+            dictionaries.add(dataDictionary.toXHTML());
+            abas.put(dataDictionary.idAba, dictionaries);
         }
 
-        builder.append("</body>%n</html>%n".formatted());
+        Map<Integer, String> nomesAbas = new LinkedHashMap<>();
+        for (AbaJSON tab : tabs) {
+            nomesAbas.put(tab.id, tab.nome);
+        }
+
+        for (Integer idAba : abas.keySet()) {
+            builder.append(
+                    "<div data-indice-aba=\"%d\" data-nome-aba=\"%s\">%n".formatted(idAba, nomesAbas.get(idAba)));
+            abas.get(idAba).forEach(builder::append);
+            builder.append("</div>%n".formatted());
+        }
+
+        builder.append("</body></html>");
 
         return builder.toString();
     }

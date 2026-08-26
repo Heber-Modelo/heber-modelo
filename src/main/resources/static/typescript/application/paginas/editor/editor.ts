@@ -21,7 +21,9 @@ import {
   mouseDownSelecionarElemento,
 } from "application/paginas/editor/editorPropriedades";
 import "application/paginas/editor/painelLateral";
-import { CarregarCSSCommandBuilder } from "infrastructure/command/carregarCSSCommand";
+import CarregarCSSCommand, {
+  CarregarCSSCommandBuilder,
+} from "infrastructure/command/carregarCSSCommand";
 import CarregarDiagramaCommand, {
   CarregarDiagramaCommandBuilder,
 } from "infrastructure/command/carregarDiagramaCommand";
@@ -65,6 +67,7 @@ import Aba from "domain/model/aba";
 import Ponto from "domain/model/ponto";
 import SetaConectora from "domain/model/setaConectora";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
+import DiagramasJSON from "domain/json/diagramasJSON";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -564,7 +567,24 @@ function importar(): void {
 
       return;
     } else if (fileInput.files && fileInput.files[0].name.endsWith(".json")) {
+      let dados: DiagramasJSON = await new Response(fileInput.files[0]).json();
 
+      for (const type of dados.types) {
+        let typeSelector: HTMLInputElement | null = document.querySelector(
+          `input[value=${type.toUpperCase()}]`,
+        );
+
+        if (!typeSelector?.checked) {
+          typeSelector?.click();
+        }
+      }
+
+      for (const loadedCSSFile of dados.loadedCSSFiles) {
+        let command: CarregarCSSCommand = new CarregarCSSCommandBuilder()
+          .definirNomeArquivo(loadedCSSFile.substring(0, loadedCSSFile.length - 4))
+          .build();
+        command.execute();
+      }
     }
   });
 }
@@ -702,6 +722,22 @@ function fecharAba(event: MouseEvent): void {
 
   let idAbaAlvo: number = Number(elementoAlvo.parentElement?.getAttribute(Aba.ATRIBUTO_INDICE_ABA));
   repositorioAbas.removerPorID(idAbaAlvo);
+
+  let elementosAba: NodeListOf<HTMLDivElement> = document.querySelectorAll(
+    `div[${Aba.ATRIBUTO_INDICE_ABA}="${idAbaAlvo}"]`,
+  );
+
+  for (const elemento of elementosAba) {
+    let componenteAlvo: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(elemento);
+
+    elemento.remove();
+
+    if (!componenteAlvo) {
+      continue;
+    }
+
+    repositorioComponentes.remover(componenteAlvo);
+  }
 
   let abaSelecionada: Aba | null = selecionadorAba.abaSelecionada;
   selecionadorAba.removerSelecao();

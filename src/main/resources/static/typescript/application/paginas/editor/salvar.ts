@@ -11,8 +11,11 @@
  *
  */
 
+import TipoArquivo from "domain/enum/tipoArquivo";
 import ComponenteJSON from "domain/json/componenteJSON";
+import AbaJSON from "domain/json/abaJSON";
 import DescricaoRelacionalJSON from "domain/json/descricaoRelacionalJSON";
+import DiagramasJSON from "domain/json/diagramasJSON";
 import DicionarioDadosJSON from "domain/json/dicionarioDadosJSON";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 
@@ -46,6 +49,21 @@ function fecharTagDetails(elementoInicial: HTMLElement): void {
   }
 
   elemento.open = false;
+}
+
+function coletarAbas(elementosAbas: NodeListOf<HTMLDivElement>): AbaJSON[] {
+  let abas: AbaJSON[] = [];
+
+  for (const aba of elementosAbas) {
+    let elementoNomeAba: HTMLElement | null = aba.querySelector(".numero-aba");
+
+    let id: number = Number(aba.getAttribute(PROPRIEDADE_ID_ABA));
+    let nome: string = elementoNomeAba?.innerText || String(id);
+
+    abas.push({ id, nome });
+  }
+
+  return abas;
 }
 
 function coletarArquivosCSS(links: NodeListOf<HTMLLinkElement>): string[] {
@@ -85,10 +103,10 @@ function coletarDadosComponentes(componentes: NodeListOf<HTMLDivElement>): Compo
       componente.getAttribute(PROPRIEDADE_RECEBE_SETAS_CONECTORAS) == "true";
 
     let estiloComponente: CSSStyleDeclaration = getComputedStyle(componente);
-    let x: number = converterPixeisParaNumero(estiloComponente.left);
-    let y: number = converterPixeisParaNumero(estiloComponente.top);
-    let height: number = converterPixeisParaNumero(estiloComponente.height);
-    let width: number = converterPixeisParaNumero(estiloComponente.width);
+    let x: number = converterPixeisParaNumero(estiloComponente.left) || -1;
+    let y: number = converterPixeisParaNumero(estiloComponente.top) || -1;
+    let height: number = converterPixeisParaNumero(estiloComponente.height) || -1;
+    let width: number = converterPixeisParaNumero(estiloComponente.width) || -1;
 
     requestComponentes.push({
       idAba,
@@ -193,12 +211,6 @@ function coletarTabelasDicionariosDados(
   return dicionariosDadosJSON;
 }
 
-enum TipoArquivo {
-  JSON,
-  PDF,
-  XML,
-}
-
 function downloadFile(url: string, filename: string): void {
   let temporaryDownloadAnchor: HTMLAnchorElement = document.createElement("a");
   temporaryDownloadAnchor.setAttribute("href", url);
@@ -212,25 +224,26 @@ function downloadFile(url: string, filename: string): void {
 async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   let dataCriado: Date = new Date();
   let tiposDiagrama: string[] = extrairElementosLista(seletorTipoDiagrama?.innerText);
-  let linksCSSElementos: NodeListOf<HTMLLinkElement> =
-    document.head.querySelectorAll(".css-carregado");
-  let componentes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".componente");
-  let editores: NodeListOf<HTMLDivElement> = document.querySelectorAll(
-    ".elemento-editor-descricao-relacional",
+
+  let abas: AbaJSON[] = coletarAbas(document.querySelectorAll(".aba:not(#nova-aba)"));
+  let arquivosCSSCarregados: string[] = coletarArquivosCSS(
+    document.head.querySelectorAll("link.css-carregado"),
   );
-  let dicionarios: NodeListOf<HTMLDivElement> = document.querySelectorAll(
-    ".elemento-dicionario-dados",
+  let requestComponentes: ComponenteJSON[] = coletarDadosComponentes(
+    document.querySelectorAll("div.componente"),
+  );
+  let descricoesRelacionais: DescricaoRelacionalJSON[] = coletarDescricoesRelacionais(
+    document.querySelectorAll(".elemento-editor-descricao-relacional"),
+  );
+  let dicionariosDados: DicionarioDadosJSON[] = coletarTabelasDicionariosDados(
+    document.querySelectorAll(".elemento-dicionario-dados"),
   );
 
-  let arquivosCSSCarregados: string[] = coletarArquivosCSS(linksCSSElementos);
-  let requestComponentes: ComponenteJSON[] = coletarDadosComponentes(componentes);
-  let descricoesRelacionais: DescricaoRelacionalJSON[] = coletarDescricoesRelacionais(editores);
-  let dicionariosDados: DicionarioDadosJSON[] = coletarTabelasDicionariosDados(dicionarios);
-
-  let requestBody = {
+  let requestBody: DiagramasJSON = {
     creationDate: dataCriado,
     loadedCSSFiles: arquivosCSSCarregados,
     types: tiposDiagrama,
+    tabs: abas,
     components: requestComponentes,
     relationalDescriptions: descricoesRelacionais,
     dataDictionaries: dicionariosDados,

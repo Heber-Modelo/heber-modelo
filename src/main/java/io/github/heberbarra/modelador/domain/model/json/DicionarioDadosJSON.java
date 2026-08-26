@@ -69,10 +69,9 @@ public class DicionarioDadosJSON implements XHTMLConvertable {
     @Override
     public String toXHTML() {
 
-        String tableHeader = "<div " + "%s=\"%d\" ".formatted(PROPRIEDADE_ID_ABA, idAba)
-                + "%s=\"%d\" ".formatted(PROPRIEDADE_ID_COMPONENTE, idComponente)
-                + "%s=\"%s\" ".formatted(PROPRIEDADE_NOME_COMPONENTE, nomeComponente)
-                + ">%n<table>%n".formatted()
+        String tableHeader = "<div " + "%s=\"%d\" ".formatted(PROPRIEDADE_ID_COMPONENTE, idComponente)
+                + "%s=\"%s\" >%n".formatted(PROPRIEDADE_NOME_COMPONENTE, nomeComponente)
+                + "<table>%n".formatted()
                 + "<caption>%s</caption>%n".formatted(nomeEntidade)
                 + "<thead>%n<tr>%n".formatted()
                 + "<th scope=\"col\">%s</th>%n"
@@ -101,11 +100,10 @@ public class DicionarioDadosJSON implements XHTMLConvertable {
                 + "<th scope=\"col\">%s</th>%n"
                         .formatted(
                                 TradutorWrapper.tradutor.traduzirMensagem("element.property.default-name.unique-label"))
-                + "</tr>%n</thead>%n".formatted()
-                + "<tbody>%n".formatted();
+                + "</tr>%n</thead>%n".formatted();
 
         StringBuilder builder = createBuilder(tableHeader);
-        builder.append("</tbody>%n</table>%n</div>%n".formatted());
+        builder.append("</table>%n</div>%n".formatted());
 
         return builder.toString();
     }
@@ -113,8 +111,8 @@ public class DicionarioDadosJSON implements XHTMLConvertable {
     private @NonNull StringBuilder createBuilder(String tableHeader) {
         StringBuilder builder = new StringBuilder(tableHeader);
 
+        builder.append("<tbody>%n".formatted());
         int rowNumber = descricoes.size();
-
         for (int i = 0; i < rowNumber; i++) {
             builder.append("<tr>%n".formatted());
             builder.append("<th scope=\"row\"><p>%s</p></th>%n".formatted(atributos.get(i)));
@@ -128,6 +126,8 @@ public class DicionarioDadosJSON implements XHTMLConvertable {
             builder.append("<td><p>%s</p></td>%n".formatted(unicos.get(i)));
             builder.append("</tr>%n".formatted());
         }
+        builder.append("</tbody>%n".formatted());
+
         return builder;
     }
 }

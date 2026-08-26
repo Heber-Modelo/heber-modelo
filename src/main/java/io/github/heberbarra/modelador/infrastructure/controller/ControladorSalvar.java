@@ -72,15 +72,15 @@ public class ControladorSalvar {
         String xhtmlData = diagramas.toXHTML();
         HttpHeaders headers = new HttpHeaders();
 
+        ByteArrayResource resource = new ByteArrayResource(xhtmlData.getBytes(StandardCharsets.UTF_8));
+
         headers.setContentType(MediaType.APPLICATION_XHTML_XML);
         headers.setContentDisposition(ContentDisposition.attachment().build());
-        headers.setContentLength(xhtmlData.length());
-
-        ByteArrayResource resource = new ByteArrayResource(xhtmlData.getBytes(StandardCharsets.UTF_8));
+        headers.setContentLength(resource.contentLength());
 
         return ResponseEntity.ok()
                 .headers(headers)
-                .contentLength(xhtmlData.length())
+                .contentLength(resource.contentLength())
                 .contentType(MediaType.APPLICATION_XHTML_XML)
                 .body(resource);
     }
