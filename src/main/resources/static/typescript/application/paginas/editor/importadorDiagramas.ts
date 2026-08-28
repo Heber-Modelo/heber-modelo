@@ -14,17 +14,17 @@
 import CarregarCSSCommand, {
   CarregarCSSCommandBuilder,
 } from "infrastructure/command/carregarCSSCommand";
+import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import GeradorIDAba from "infrastructure/gerador/geradorIDAba";
+import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
+import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import AbaJSON from "domain/json/abaJSON";
 import DiagramasJSON from "domain/json/diagramasJSON";
 import Aba from "domain/model/aba";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import IRepositorioAbas from "domain/model/repositorio/iRepositorioAbas";
 import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
-import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
-import ComponenteFactory from "infrastructure/factory/componenteFactory";
-import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
-import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 
 export default class ImportadorDiagramas {
   public static readonly CLASSE_AREA_EDICAO: string = ".ql-editor";
@@ -95,6 +95,7 @@ export default class ImportadorDiagramas {
     await this.carregarAbas();
     await this.carregarComponentes();
     await this.carregarDescricoes();
+    await this.carregarDicionarioDados();
 
     this._selecionadorAba.removerSelecao();
     this._selecionadorAba.selecionarAba(this._abaPadrao);
@@ -268,6 +269,63 @@ export default class ImportadorDiagramas {
       );
       if (areaEdicao) {
         areaEdicao.innerHTML = relationalDescription.descricaoHTML;
+      }
+    }
+  }
+
+  async carregarDicionarioDados(): Promise<void> {
+    if (!this._dados || this._dados.dataDictionaries.length === 0) {
+      return;
+    }
+
+    for (const dataDictionary of this._dados.dataDictionaries) {
+      let componenteDicionario: ComponenteDiagrama = await this._fabricaComponente.criarComponente(
+        dataDictionary.nomeComponente,
+      );
+
+      this._diagrama?.append(componenteDicionario.htmlComponente);
+      this._registradorEventosElemento.registrarEventos(componenteDicionario.htmlComponente);
+      this._repositorioComponentes.adicionar(componenteDicionario);
+
+      componenteDicionario.htmlComponente.setAttribute(
+        Aba.ATRIBUTO_INDICE_ABA,
+        `${dataDictionary.idAba}`,
+      );
+      componenteDicionario.htmlComponente.setAttribute(
+        ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
+        `${dataDictionary.idComponente}`,
+      );
+
+      let botaoCriarLinha: HTMLButtonElement | null =
+        componenteDicionario.htmlComponente.querySelector(
+          "div button[onclick='criarLinha(event)']",
+        );
+      let table: HTMLTableElement | null =
+        componenteDicionario.htmlComponente.querySelector("table");
+
+      if (!table) {
+        continue;
+      }
+
+      table.caption ? (table.caption.innerText = dataDictionary.nomeEntidade) : undefined;
+
+      for (let i: number = 0; i < dataDictionary.atributos.length - 1; i++) {
+        botaoCriarLinha?.click();
+      }
+
+      let tableBody: HTMLTableSectionElement = table.tBodies[0];
+      for (let i: number = 0; i < tableBody.rows.length; i++) {
+        let row: HTMLTableRowElement = tableBody.rows[i];
+
+        row.cells[0].innerHTML = `<p contenteditable="true" spellcheck="true">${dataDictionary.atributos[i]}</p>`;
+        row.cells[1].innerHTML = `<p contenteditable="true" spellcheck="true">${dataDictionary.descricoes[i]}</p>`;
+        row.cells[2].innerHTML = `<p contenteditable="true" spellcheck="true">${dataDictionary.tipos[i]}</p>`;
+        row.cells[3].innerHTML = `<p contenteditable="true" spellcheck="true">${dataDictionary.tamanhos[i]}</p>`;
+        row.cells[4].innerHTML = `<p contenteditable="true" spellcheck="true">${dataDictionary.nulos[i]}</p>`;
+        row.cells[5].innerHTML = `<p contenteditable="true" spellcheck="true">${dataDictionary.regras[i]}</p>`;
+        row.cells[6].innerHTML = `<p contenteditable="true" spellcheck="true">${dataDictionary.chaves[i]}</p>`;
+        row.cells[7].innerHTML = `<p contenteditable="true" spellcheck="true">${dataDictionary.defaults[i]}</p>`;
+        row.cells[8].innerHTML = `<p contenteditable="true" spellcheck="true">${dataDictionary.unicos[i]}</p>`;
       }
     }
   }
