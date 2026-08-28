@@ -730,6 +730,7 @@ let importadorDiagramas: ImportadorDiagramas = new ImportadorDiagramas(
 );
 
 let fileInput: HTMLInputElement = document.createElement("input");
+fileInput.accept = ".json,.xhtml";
 fileInput.name = "diagramas";
 fileInput.type = "file";
 fileInput.addEventListener("input", async (event: InputEvent): Promise<void> => {
