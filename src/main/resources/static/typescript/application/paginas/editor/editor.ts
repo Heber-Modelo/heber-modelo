@@ -60,6 +60,8 @@ import LateraisComponente from "domain/enum/lateraisComponente";
 import NomesComponente from "domain/enum/nomesComponente";
 import TiposConexao from "domain/enum/tiposConexao";
 import ChangeConnectionTypeEvent from "domain/event/changeConnectionTypeEvent";
+import AbaJSON from "domain/json/abaJSON";
+import DiagramasJSON from "domain/json/diagramasJSON";
 import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import ResponseTraducaoJSON from "domain/json/responseTraducaoJSON";
@@ -67,7 +69,6 @@ import Aba from "domain/model/aba";
 import Ponto from "domain/model/ponto";
 import SetaConectora from "domain/model/setaConectora";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
-import DiagramasJSON from "domain/json/diagramasJSON";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -554,7 +555,9 @@ function importar(): void {
   fileInput.type = "file";
 
   fileInput.click();
-  fileInput.addEventListener("input", async (): Promise<void> => {
+  fileInput.addEventListener("input", carregarArquivoDiagramas);
+
+  async function carregarArquivoDiagramas(): Promise<void> {
     if (fileInput.files && fileInput.files[0].name.endsWith(".xhtml")) {
       await fetch("/importar", {
         headers: {
@@ -569,6 +572,9 @@ function importar(): void {
     } else if (fileInput.files && fileInput.files[0].name.endsWith(".json")) {
       let dados: DiagramasJSON = await new Response(fileInput.files[0]).json();
 
+      /******************/
+      /* CARREGAR TIPOS */
+      /******************/
       for (const type of dados.types) {
         let typeSelector: HTMLInputElement | null = document.querySelector(
           `input[value=${type.toUpperCase()}]`,
@@ -579,14 +585,110 @@ function importar(): void {
         }
       }
 
+      /*****************/
+      /* CARREGAR CSS  */
+      /*****************/
       for (const loadedCSSFile of dados.loadedCSSFiles) {
         let command: CarregarCSSCommand = new CarregarCSSCommandBuilder()
           .definirNomeArquivo(loadedCSSFile.substring(0, loadedCSSFile.length - 4))
           .build();
         command.execute();
       }
+
+      /*****************/
+      /* CARREGAR ABAS */
+      /*****************/
+      const { default: criarAba } = await import("infrastructure/services/criarAba");
+
+      repositorioAbas
+        .listar()
+        .slice(1)
+        .map((aba: Aba): void => repositorioAbas.remover(aba));
+      let tabs: AbaJSON[] = dados.tabs.filter((tab: AbaJSON): boolean => tab.id !== 1);
+
+      geradorIDAba.id = dados.tabs[dados.tabs.length - 1].id;
+
+      let numeroAbaPadrao: HTMLElement | null = abaPadrao.htmlElement.querySelector(
+        `.${Aba.CLASSE_NUMERO_ABA}`,
+      );
+
+      if (numeroAbaPadrao) {
+        numeroAbaPadrao.innerText = dados.tabs[0].nome;
+      }
+
+      for (const tab of tabs) {
+        let novaAba: Aba = await criarAba(tab.id, fecharAba);
+
+        seletorAbas?.append(novaAba.htmlElement);
+
+        let htmlElementNumeroAba: HTMLElement | null = novaAba.htmlElement.querySelector(
+          `.${Aba.CLASSE_NUMERO_ABA}`,
+        );
+
+        if (htmlElementNumeroAba) {
+          htmlElementNumeroAba.innerText = tab.nome;
+        }
+
+        repositorioAbas.adicionar(novaAba);
+
+        novaAba.htmlElement.addEventListener("click", (): void => {
+          selecionadorAba.selecionarAba(novaAba);
+        });
+      }
+
+      /************************/
+      /* CARREGAR COMPONENTES */
+      /************************/
+
+      repositorioComponentes
+        .listar()
+        .map((componente: ComponenteDiagrama): void => repositorioComponentes.remover(componente));
+
+      for (const component of dados.components) {
+        let novoComponente: ComponenteDiagrama = await fabricaComponente.criarComponente(
+          component.nomeComponente,
+        );
+        registradorEventosElemento.registrarEventos(novoComponente.htmlComponente);
+
+        if (
+          component.classes.filter((componentClass: string): void => {
+            componentClass.includes("conexao");
+          }).length > 0
+        ) {
+          registradorEventosConexao.registrarEventos(novoComponente.htmlComponente);
+        }
+
+        repositorioComponentes.adicionar(novoComponente);
+        diagrama?.append(novoComponente.htmlComponente);
+
+        novoComponente.htmlComponente.innerHTML = component.innerHTML;
+
+        novoComponente.htmlComponente.setAttribute(Aba.ATRIBUTO_INDICE_ABA, `${component.idAba}`);
+        novoComponente.htmlComponente.setAttribute(
+          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
+          `${component.idComponente}`,
+        );
+
+        if (component.height !== -1) {
+          novoComponente.htmlComponente.style.setProperty("height", `${component.height}px`);
+        }
+
+        if (component.width !== -1) {
+          novoComponente.htmlComponente.style.setProperty("width", `${component.width}px`);
+        }
+
+        if (component.rotation !== "none") {
+          novoComponente.htmlComponente.style.setProperty("rotate", `${component.rotation}`);
+        }
+
+        novoComponente.htmlComponente.style.setProperty("left", `${component.x}px`);
+        novoComponente.htmlComponente.style.setProperty("top", `${component.y}px`);
+      }
     }
-  });
+
+    selecionadorAba.removerSelecao();
+    selecionadorAba.selecionarAba(abaPadrao);
+  }
 }
 
 let buttonImportar: HTMLButtonElement | null = document.querySelector("#btn-importar");

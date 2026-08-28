@@ -25,4 +25,5 @@ export default interface ComponenteJSON {
   y: number;
   height: number;
   width: number;
+  rotation: string;
 }

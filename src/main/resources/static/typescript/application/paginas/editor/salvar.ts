@@ -107,6 +107,7 @@ function coletarDadosComponentes(componentes: NodeListOf<HTMLDivElement>): Compo
     let y: number = converterPixeisParaNumero(estiloComponente.top) || -1;
     let height: number = converterPixeisParaNumero(estiloComponente.height) || -1;
     let width: number = converterPixeisParaNumero(estiloComponente.width) || -1;
+    let rotation: string = estiloComponente.rotate;
 
     requestComponentes.push({
       idAba,
@@ -121,6 +122,7 @@ function coletarDadosComponentes(componentes: NodeListOf<HTMLDivElement>): Compo
       y,
       height,
       width,
+      rotation,
     });
   }
 

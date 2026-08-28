@@ -75,7 +75,7 @@ num terminal(na mesma pasta na qual o programa foi posto):
 java -jar heber-modelo.jar
 ```
 
-*É necessário utilizar a versão 24 do Java.
+*É necessário utilizar a versão 25 do Java.
 
 ## Compilação Manual
 
