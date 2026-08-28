@@ -27,8 +27,7 @@ import RegistradorEventosElemento from "infrastructure/registrador/registradorEv
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 
 export default class ImportadorDiagramas {
-  private _dados: DiagramasJSON | undefined;
-
+  public static readonly CLASSE_AREA_EDICAO: string = ".ql-editor";
   private readonly _abaPadrao: Aba;
   private readonly _diagrama: HTMLElement | null;
   private readonly _fabricaComponente: ComponenteFactory;
@@ -40,6 +39,7 @@ export default class ImportadorDiagramas {
   private readonly _repositorioComponentes: IRepositorioComponente;
   private readonly _selecionadorAba: SelecionadorAba;
   private readonly _seletorAbas: HTMLElement | null;
+  private _dados: DiagramasJSON | undefined;
 
   constructor(
     abaPadrao: Aba,
@@ -94,6 +94,10 @@ export default class ImportadorDiagramas {
     this.carregarArquivosCSS();
     await this.carregarAbas();
     await this.carregarComponentes();
+    await this.carregarDescricoes();
+
+    this._selecionadorAba.removerSelecao();
+    this._selecionadorAba.selecionarAba(this._abaPadrao);
   }
 
   carregarTiposDiagramas(): void {
@@ -118,11 +122,11 @@ export default class ImportadorDiagramas {
   }
 
   async carregarAbas(): Promise<void> {
-    const { default: criarAba } = await import("infrastructure/services/criarAba");
-
     if (!this._dados) {
       return;
     }
+
+    const { default: criarAba } = await import("infrastructure/services/criarAba");
 
     this._repositorioAbas
       .listar()
@@ -164,15 +168,15 @@ export default class ImportadorDiagramas {
   }
 
   async carregarComponentes(): Promise<void> {
+    if (!this._dados) {
+      return;
+    }
+
     this._repositorioComponentes
       .listar()
       .map((componente: ComponenteDiagrama): void =>
         this._repositorioComponentes.remover(componente),
       );
-
-    if (!this._dados) {
-      return;
-    }
 
     for (const component of this._dados.components) {
       let novoComponente: ComponenteDiagrama = await this._fabricaComponente.criarComponente(
@@ -214,8 +218,57 @@ export default class ImportadorDiagramas {
       novoComponente.htmlComponente.style.setProperty("left", `${component.x}px`);
       novoComponente.htmlComponente.style.setProperty("top", `${component.y}px`);
     }
+  }
 
-    this._selecionadorAba.removerSelecao();
-    this._selecionadorAba.selecionarAba(this._abaPadrao);
+  async carregarDescricoes(): Promise<void> {
+    if (!this._dados || this._dados.relationalDescriptions.length == 0) {
+      return;
+    }
+
+    const { default: Quill } = await import("quill");
+
+    for (const relationalDescription of this._dados.relationalDescriptions) {
+      let componenteEditor: ComponenteDiagrama = await this._fabricaComponente.criarComponente(
+        relationalDescription.nomeComponente,
+      );
+      this._diagrama?.append(componenteEditor.htmlComponente);
+
+      componenteEditor.htmlComponente.setAttribute(
+        Aba.ATRIBUTO_INDICE_ABA,
+        `${relationalDescription.idAba}`,
+      );
+      componenteEditor.htmlComponente.setAttribute(
+        ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
+        `${relationalDescription.idComponente}`,
+      );
+
+      this._registradorEventosElemento.registrarEventos(componenteEditor.htmlComponente);
+      this._repositorioComponentes.adicionar(componenteEditor);
+
+      let targetEditor: HTMLDivElement | null =
+        componenteEditor.htmlComponente.querySelector("div");
+
+      if (targetEditor) {
+        new Quill(targetEditor, {
+          theme: "snow",
+          formats: ["align", "bold", "color", "indent", "italic", "size", "underline"],
+          modules: {
+            toolbar: [
+              [{ size: [] }],
+              ["bold", "italic", "underline", { color: [] }],
+              [{ indent: "-1" }, { indent: "+1" }],
+              [{ align: [] }],
+            ],
+          },
+        });
+      }
+
+      let areaEdicao: HTMLElement | null | undefined = targetEditor?.querySelector(
+        ImportadorDiagramas.CLASSE_AREA_EDICAO,
+      );
+      if (areaEdicao) {
+        areaEdicao.innerHTML = relationalDescription.descricaoHTML;
+      }
+    }
   }
 }
