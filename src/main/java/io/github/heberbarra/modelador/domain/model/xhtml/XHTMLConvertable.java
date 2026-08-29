@@ -14,7 +14,7 @@
 package io.github.heberbarra.modelador.domain.model.xhtml;
 
 public interface XHTMLConvertable {
-    String PROPRIEDADE_ID_ABA = "data-id-aba";
+    String PROPRIEDADE_ID_ABA = "data-indice-aba";
     String PROPRIEDADE_ID_COMPONENTE = "data-id";
     String PROPRIEDADE_IDS_OUVINTES = "data-ids-ouvintes";
     String PROPRIEDADE_NOME_COMPONENTE = "data-nome-componente";

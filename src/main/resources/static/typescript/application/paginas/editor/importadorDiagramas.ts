@@ -81,15 +81,17 @@ export default class ImportadorDiagramas {
     if (arquivo.name.endsWith(".xhtml")) {
       response = await fetch("/importar", {
         headers: {
-          "Content-Type": "application/xhtml+xml",
+          "Content-Type": "text/xml",
           "X-XSRF-TOKEN": csrfToken,
         },
         method: "POST",
         body: JSON.stringify(await new Response(arquivo).text()),
       });
+
+      return;
     }
 
-    this._dados = response ? await response.json() : await new Response(arquivo).json();
+    this._dados = await new Response(arquivo).json();
     this.carregarTiposDiagramas();
     this.carregarArquivosCSS();
     await this.carregarAbas();

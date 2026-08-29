@@ -130,4 +130,108 @@ public class DicionarioDadosJSON implements XHTMLConvertable {
 
         return builder;
     }
+
+    public int getIdAba() {
+        return idAba;
+    }
+
+    public void setIdAba(int idAba) {
+        this.idAba = idAba;
+    }
+
+    public int getIdComponente() {
+        return idComponente;
+    }
+
+    public void setIdComponente(int idComponente) {
+        this.idComponente = idComponente;
+    }
+
+    public String getNomeComponente() {
+        return nomeComponente;
+    }
+
+    public void setNomeComponente(String nomeComponente) {
+        this.nomeComponente = nomeComponente;
+    }
+
+    public String getNomeEntidade() {
+        return nomeEntidade;
+    }
+
+    public void setNomeEntidade(String nomeEntidade) {
+        this.nomeEntidade = nomeEntidade;
+    }
+
+    public List<String> getAtributos() {
+        return atributos;
+    }
+
+    public void setAtributos(List<String> atributos) {
+        this.atributos = atributos;
+    }
+
+    public List<String> getDescricoes() {
+        return descricoes;
+    }
+
+    public void setDescricoes(List<String> descricoes) {
+        this.descricoes = descricoes;
+    }
+
+    public List<String> getTipos() {
+        return tipos;
+    }
+
+    public void setTipos(List<String> tipos) {
+        this.tipos = tipos;
+    }
+
+    public List<String> getTamanhos() {
+        return tamanhos;
+    }
+
+    public void setTamanhos(List<String> tamanhos) {
+        this.tamanhos = tamanhos;
+    }
+
+    public List<String> getNulos() {
+        return nulos;
+    }
+
+    public void setNulos(List<String> nulos) {
+        this.nulos = nulos;
+    }
+
+    public List<String> getRegras() {
+        return regras;
+    }
+
+    public void setRegras(List<String> regras) {
+        this.regras = regras;
+    }
+
+    public List<String> getChaves() {
+        return chaves;
+    }
+
+    public void setChaves(List<String> chaves) {
+        this.chaves = chaves;
+    }
+
+    public List<String> getDefaults() {
+        return defaults;
+    }
+
+    public void setDefaults(List<String> defaults) {
+        this.defaults = defaults;
+    }
+
+    public List<String> getUnicos() {
+        return unicos;
+    }
+
+    public void setUnicos(List<String> unicos) {
+        this.unicos = unicos;
+    }
 }

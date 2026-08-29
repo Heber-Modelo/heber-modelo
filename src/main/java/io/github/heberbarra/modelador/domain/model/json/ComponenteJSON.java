@@ -18,6 +18,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ComponenteJSON implements XHTMLConvertable {
+    public static final String CLASSE_BASE_COMPONENTE = "componente";
+    public static final String PROPRIEDADE_NOME_COMPONENTE = "data-nome-componente";
+
     int idAba;
     int idComponente;
     String nomeComponente;
@@ -82,5 +85,109 @@ public class ComponenteJSON implements XHTMLConvertable {
                 + "\" >"
                 + innerHTML
                 + "</div>%n".formatted();
+    }
+
+    public int getIdAba() {
+        return idAba;
+    }
+
+    public void setIdAba(int idAba) {
+        this.idAba = idAba;
+    }
+
+    public int getIdComponente() {
+        return idComponente;
+    }
+
+    public void setIdComponente(int idComponente) {
+        this.idComponente = idComponente;
+    }
+
+    public String getNomeComponente() {
+        return nomeComponente;
+    }
+
+    public void setNomeComponente(String nomeComponente) {
+        this.nomeComponente = nomeComponente;
+    }
+
+    public List<String> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<String> classes) {
+        this.classes = classes;
+    }
+
+    public List<Integer> getIdsOuvintes() {
+        return idsOuvintes;
+    }
+
+    public void setIdsOuvintes(List<Integer> idsOuvintes) {
+        this.idsOuvintes = idsOuvintes;
+    }
+
+    public boolean isRecebePontosExtensores() {
+        return recebePontosExtensores;
+    }
+
+    public void setRecebePontosExtensores(boolean recebePontosExtensores) {
+        this.recebePontosExtensores = recebePontosExtensores;
+    }
+
+    public boolean isRecebeSetasConectoras() {
+        return recebeSetasConectoras;
+    }
+
+    public void setRecebeSetasConectoras(boolean recebeSetasConectoras) {
+        this.recebeSetasConectoras = recebeSetasConectoras;
+    }
+
+    public String getInnerHTML() {
+        return innerHTML;
+    }
+
+    public void setInnerHTML(String innerHTML) {
+        this.innerHTML = innerHTML;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public String getRotate() {
+        return rotate;
+    }
+
+    public void setRotate(String rotate) {
+        this.rotate = rotate;
     }
 }

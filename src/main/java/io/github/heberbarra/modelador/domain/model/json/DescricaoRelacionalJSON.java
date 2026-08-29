@@ -47,4 +47,36 @@ public class DescricaoRelacionalJSON implements XHTMLConvertable {
 
         return builder.toString();
     }
+
+    public int getIdAba() {
+        return idAba;
+    }
+
+    public void setIdAba(int idAba) {
+        this.idAba = idAba;
+    }
+
+    public int getIdComponente() {
+        return idComponente;
+    }
+
+    public void setIdComponente(int idComponente) {
+        this.idComponente = idComponente;
+    }
+
+    public String getNomeComponente() {
+        return nomeComponente;
+    }
+
+    public void setNomeComponente(String nomeComponente) {
+        this.nomeComponente = nomeComponente;
+    }
+
+    public String getDescricaoHTML() {
+        return descricaoHTML;
+    }
+
+    public void setDescricaoHTML(String descricaoHTML) {
+        this.descricaoHTML = descricaoHTML;
+    }
 }

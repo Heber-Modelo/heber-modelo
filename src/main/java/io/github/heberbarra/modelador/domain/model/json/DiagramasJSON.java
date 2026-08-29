@@ -34,6 +34,11 @@ import org.jspecify.annotations.NonNull;
 
 public class DiagramasJSON implements XHTMLConvertable {
     private static final Logger logger = JavaLogger.obterLogger(DiagramasJSON.class.toString());
+    public static final String CREATION_DATE_ID = "creation-datetime";
+    public static final String CSS_FILES_ID = "css-files";
+    public static final String TYPES_ID = "types";
+    public static final String PROPRIEDADE_ID_ABA = "data-indice-aba";
+    public static final String PROPRIEDADE_NOME_ABA = "data-nome-aba";
     private final IAcessadorRecurso acessadorRecurso;
     LocalDateTime creationDate;
     List<String> loadedCSSFiles;
@@ -97,9 +102,21 @@ public class DiagramasJSON implements XHTMLConvertable {
         builder.append("</head>%n<body>%n".formatted());
 
         String isoDate = DateTimeFormatter.ISO_DATE_TIME.format(this.creationDate);
-        builder.append("<div style=\"display: none\" id=\"creation-datetime\">%s</div>%n".formatted(isoDate));
+        builder.append("<div style=\"display: none\" id=\"%s\">%s</div>%n".formatted(CREATION_DATE_ID, isoDate));
 
-        builder.append("<div style=\"display: none;\" id=\"types\" >[");
+        builder.append("<div style=\"display: none\" id=\"%s\" >[".formatted(CSS_FILES_ID));
+        List<String> cssFiles = this.loadedCSSFiles;
+        for (int i = 0; i < cssFiles.size(); i++) {
+            if (i != cssFiles.size() - 1) {
+                builder.append("%s, ".formatted(cssFiles.get(i)));
+                continue;
+            }
+
+            builder.append(cssFiles.get(i));
+        }
+        builder.append("]</div>");
+
+        builder.append("<div style=\"display: none;\" id=\"%s\" >[".formatted(TYPES_ID));
         for (int i = 0; i < this.types.size(); i++) {
             if (i != types.size() - 1) {
                 builder.append("%s, ".formatted(types.get(i)));
@@ -135,8 +152,8 @@ public class DiagramasJSON implements XHTMLConvertable {
         }
 
         for (Integer idAba : abas.keySet()) {
-            builder.append(
-                    "<div data-indice-aba=\"%d\" data-nome-aba=\"%s\">%n".formatted(idAba, nomesAbas.get(idAba)));
+            builder.append("<div %s=\"%d\" %s=\"%s\">%n"
+                    .formatted(PROPRIEDADE_ID_ABA, idAba, PROPRIEDADE_NOME_ABA, nomesAbas.get(idAba)));
             abas.get(idAba).forEach(builder::append);
             builder.append("</div>%n".formatted());
         }
@@ -162,5 +179,61 @@ public class DiagramasJSON implements XHTMLConvertable {
         }
 
         return builder.toString();
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public List<String> getLoadedCSSFiles() {
+        return loadedCSSFiles;
+    }
+
+    public void setLoadedCSSFiles(List<String> loadedCSSFiles) {
+        this.loadedCSSFiles = loadedCSSFiles;
+    }
+
+    public List<String> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<String> types) {
+        this.types = types;
+    }
+
+    public List<AbaJSON> getTabs() {
+        return tabs;
+    }
+
+    public void setTabs(List<AbaJSON> tabs) {
+        this.tabs = tabs;
+    }
+
+    public List<ComponenteJSON> getComponents() {
+        return components;
+    }
+
+    public void setComponents(List<ComponenteJSON> components) {
+        this.components = components;
+    }
+
+    public List<DescricaoRelacionalJSON> getRelationalDescriptions() {
+        return relationalDescriptions;
+    }
+
+    public void setRelationalDescriptions(List<DescricaoRelacionalJSON> relationalDescriptions) {
+        this.relationalDescriptions = relationalDescriptions;
+    }
+
+    public List<DicionarioDadosJSON> getDataDictionaries() {
+        return dataDictionaries;
+    }
+
+    public void setDataDictionaries(List<DicionarioDadosJSON> dataDictionaries) {
+        this.dataDictionaries = dataDictionaries;
     }
 }
