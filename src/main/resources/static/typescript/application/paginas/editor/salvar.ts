@@ -274,7 +274,7 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
     return;
   }
 
-  if (tipoArquivo === TipoArquivo.PDF) {
+  if (tipoArquivo === TipoArquivo.PDF || tipoArquivo === TipoArquivo.PRINTABLE_PDF) {
     let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
     let csrfToken: string = csrfMetaTag?.content || "";
 
@@ -290,6 +290,18 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
 
     let blob: Blob = await response.blob();
     let blobURL: string = window.URL.createObjectURL(blob);
+
+    if (tipoArquivo === TipoArquivo.PRINTABLE_PDF) {
+      let temporaryAnchor: HTMLAnchorElement = document.createElement("a");
+      temporaryAnchor.href = blobURL;
+      temporaryAnchor.target = "_blank";
+
+      document.body.append(temporaryAnchor);
+      temporaryAnchor.click();
+      temporaryAnchor.remove();
+
+      return;
+    }
     downloadFile(blobURL, "diagrama.pdf");
 
     return;
@@ -302,6 +314,7 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
 let buttonSalvarJSON: HTMLButtonElement | null = document.querySelector("#btn-salvar-json");
 let buttonSalvarXML: HTMLButtonElement | null = document.querySelector("#btn-salvar-xml");
 let buttonExportarPDF: HTMLButtonElement | null = document.querySelector("#btn-exportar-pdf");
+let buttonImprimirPDF: HTMLButtonElement | null = document.querySelector("#btn-imprimir-pdf");
 
 buttonSalvarJSON?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.JSON),
@@ -311,4 +324,8 @@ buttonSalvarXML?.addEventListener("click", (event: MouseEvent): Promise<void> =>
 );
 buttonExportarPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.PDF),
+);
+
+buttonImprimirPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+  salvar(event, TipoArquivo.PRINTABLE_PDF),
 );
