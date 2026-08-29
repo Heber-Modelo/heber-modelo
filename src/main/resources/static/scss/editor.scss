@@ -112,6 +112,22 @@ main {
   place-content: stretch;
   overflow: scroll;
   width: 95%;
+
+  div#pdf-loader-indicator {
+    align-self: center;
+    align-items: center;
+    background-color: var(--cor-fonte-alternativa);
+    color: var(--cor-letra);
+    display: flex;
+    grid-area: variaveis.$editorGridArea;
+    height: 5rem;
+    justify-self: center;
+    justify-content: center;
+    opacity: 0.8;
+    width: 15rem;
+    z-index: 20;
+  }
+
 }
 
 aside#painel-esquerdo {

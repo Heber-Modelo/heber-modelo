@@ -277,32 +277,39 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   if (tipoArquivo === TipoArquivo.PDF || tipoArquivo === TipoArquivo.PRINTABLE_PDF) {
     let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
     let csrfToken: string = csrfMetaTag?.content || "";
+    let pdfLoaderIndicator: HTMLElement | null = document.querySelector("#pdf-loader-indicator");
 
-    let response: Response = await fetch("/exportar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-XSRF-TOKEN": csrfToken,
-      },
-      credentials: "same-origin",
-      body: JSON.stringify(requestBody),
-    });
+    try {
+      pdfLoaderIndicator?.style.removeProperty("display");
 
-    let blob: Blob = await response.blob();
-    let blobURL: string = window.URL.createObjectURL(blob);
+      let response: Response = await fetch("/exportar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-XSRF-TOKEN": csrfToken,
+        },
+        credentials: "same-origin",
+        body: JSON.stringify(requestBody),
+      });
 
-    if (tipoArquivo === TipoArquivo.PRINTABLE_PDF) {
-      let temporaryAnchor: HTMLAnchorElement = document.createElement("a");
-      temporaryAnchor.href = blobURL;
-      temporaryAnchor.target = "_blank";
+      let blob: Blob = await response.blob();
+      let blobURL: string = window.URL.createObjectURL(blob);
 
-      document.body.append(temporaryAnchor);
-      temporaryAnchor.click();
-      temporaryAnchor.remove();
+      if (tipoArquivo === TipoArquivo.PRINTABLE_PDF) {
+        let temporaryAnchor: HTMLAnchorElement = document.createElement("a");
+        temporaryAnchor.href = blobURL;
+        temporaryAnchor.target = "_blank";
 
-      return;
+        document.body.append(temporaryAnchor);
+        temporaryAnchor.click();
+        temporaryAnchor.remove();
+
+        return;
+      }
+      downloadFile(blobURL, "diagrama.pdf");
+    } finally {
+      pdfLoaderIndicator?.style.setProperty("display", "none");
     }
-    downloadFile(blobURL, "diagrama.pdf");
 
     return;
   }
