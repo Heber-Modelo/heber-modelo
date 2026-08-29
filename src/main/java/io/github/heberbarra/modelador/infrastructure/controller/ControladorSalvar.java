@@ -74,9 +74,9 @@ public class ControladorSalvar {
 
         ByteArrayResource resource = new ByteArrayResource(xhtmlData.getBytes(StandardCharsets.UTF_8));
 
-        headers.setContentType(MediaType.APPLICATION_XHTML_XML);
         headers.setContentDisposition(ContentDisposition.attachment().build());
         headers.setContentLength(resource.contentLength());
+        headers.setContentType(MediaType.APPLICATION_XHTML_XML);
 
         return ResponseEntity.ok()
                 .headers(headers)

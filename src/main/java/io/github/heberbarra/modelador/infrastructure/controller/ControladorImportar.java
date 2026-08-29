@@ -27,7 +27,10 @@ import static io.github.heberbarra.modelador.domain.model.json.DiagramasJSON.TYP
 
 import io.github.heberbarra.modelador.domain.model.json.AbaJSON;
 import io.github.heberbarra.modelador.domain.model.json.ComponenteJSON;
+import io.github.heberbarra.modelador.domain.model.json.DescricaoRelacionalJSON;
 import io.github.heberbarra.modelador.domain.model.json.DiagramasJSON;
+import io.github.heberbarra.modelador.domain.model.json.DicionarioDadosJSON;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -39,6 +42,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jspecify.annotations.NonNull;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -47,6 +51,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectWriter;
 
 @RestController
 public class ControladorImportar {
@@ -67,11 +73,11 @@ public class ControladorImportar {
         Document parsedXHTML = Jsoup.parse(textoXHTML.replace("\\", ""));
 
         Optional<Element> creationDatetimeElement = Optional.ofNullable(parsedXHTML.getElementById(CREATION_DATE_ID));
-        LocalDateTime dateTime = LocalDateTime.now();
+        LocalDateTime creationDateTime = LocalDateTime.now();
 
         if (creationDatetimeElement.isPresent()) {
             String dateTimeString = creationDatetimeElement.get().text();
-            dateTime = LocalDateTime.from(DateTimeFormatter.ISO_DATE_TIME.parse(dateTimeString));
+            creationDateTime = LocalDateTime.from(DateTimeFormatter.ISO_DATE_TIME.parse(dateTimeString));
         }
 
         List<String> cssFiles = createListFromElement(Optional.ofNullable(parsedXHTML.getElementById(CSS_FILES_ID)));
@@ -136,7 +142,7 @@ public class ControladorImportar {
             String pixelsTop = partesEstilo.get(1);
             String pixelsHeight = partesEstilo.get(2);
             String pixelsWidth = partesEstilo.get(3);
-            String rotate = partesEstilo.get(4).equals("none") ? "null" : partesEstilo.get(4);
+            String rotation = partesEstilo.get(4);
 
             double x = Double.parseDouble(pixelsLeft.substring(0, pixelsLeft.length() - 2));
             double y = Double.parseDouble(pixelsTop.substring(0, pixelsTop.length() - 3));
@@ -156,21 +162,104 @@ public class ControladorImportar {
                     y,
                     height,
                     width,
-                    rotate));
+                    rotation));
         }
 
-        DiagramasJSON diagramasJSON = new DiagramasJSON();
-        diagramasJSON.setCreationDate(dateTime);
-        diagramasJSON.setLoadedCSSFiles(cssFiles);
-        diagramasJSON.setTypes(types);
-        diagramasJSON.setTabs(tabs);
-        diagramasJSON.setComponents(componentesJSON);
+        Elements relationalDescriptionElements =
+                parsedXHTML.getElementsByAttributeValue(PROPRIEDADE_NOME_COMPONENTE, "editor_descricao_relacional");
+        List<DescricaoRelacionalJSON> descricoesRelacionaisJSON = new ArrayList<>();
+
+        for (Element relationalDescriptionElement : relationalDescriptionElements) {
+            int idAba = Integer.parseInt(relationalDescriptionElement.attr(PROPRIEDADE_ID_ABA));
+            int idComponente = Integer.parseInt(relationalDescriptionElement.attr(PROPRIEDADE_ID_COMPONENTE));
+            String nomeComponente = relationalDescriptionElement.attr(PROPRIEDADE_NOME_COMPONENTE);
+            String descricaoHTML = relationalDescriptionElement.html();
+
+            descricoesRelacionaisJSON.add(
+                    new DescricaoRelacionalJSON(idAba, idComponente, nomeComponente, descricaoHTML));
+        }
+
+        Elements dataDictionariesElements =
+                parsedXHTML.getElementsByAttributeValue(PROPRIEDADE_NOME_COMPONENTE, "tabela_dicionario");
+        List<DicionarioDadosJSON> dicionariosDadosJSONS = new ArrayList<>();
+
+        for (Element dataDictionaryElement : dataDictionariesElements) {
+            int idAba = Integer.parseInt(dataDictionaryElement.attr(PROPRIEDADE_ID_ABA));
+            int idComponente = Integer.parseInt(dataDictionaryElement.attr(PROPRIEDADE_ID_COMPONENTE));
+            String nomeComponente = dataDictionaryElement.attr(PROPRIEDADE_NOME_COMPONENTE);
+
+            Optional<Element> captionElement = Optional.ofNullable(dataDictionaryElement.selectFirst("caption"));
+            String nomeEntidade = "";
+
+            if (captionElement.isPresent()) {
+                nomeEntidade = captionElement.get().text();
+            }
+
+            //noinspection DuplicatedCode
+            List<String> atributos = new ArrayList<>();
+            List<String> descricoes = new ArrayList<>();
+            List<String> tipos = new ArrayList<>();
+            List<String> tamanhos = new ArrayList<>();
+            //noinspection DuplicatedCode
+            List<String> nulos = new ArrayList<>();
+            List<String> regras = new ArrayList<>();
+            List<String> chaves = new ArrayList<>();
+            List<String> defaults = new ArrayList<>();
+            List<String> unicos = new ArrayList<>();
+
+            Elements tableRows = dataDictionaryElement.select("tbody tr");
+            for (Element row : tableRows) {
+                Elements cells = row.select("p");
+                atributos.add(cells.getFirst().text());
+                descricoes.add(cells.get(1).text());
+                tipos.add(cells.get(2).text());
+                tamanhos.add(cells.get(3).text());
+                nulos.add(cells.get(4).text());
+                regras.add(cells.get(5).text());
+                chaves.add(cells.get(6).text());
+                defaults.add(cells.get(7).text());
+                unicos.add(cells.get(8).text());
+            }
+
+            dicionariosDadosJSONS.add(new DicionarioDadosJSON(
+                    idAba,
+                    idComponente,
+                    nomeComponente,
+                    nomeEntidade,
+                    atributos,
+                    descricoes,
+                    tipos,
+                    tamanhos,
+                    nulos,
+                    regras,
+                    chaves,
+                    defaults,
+                    unicos));
+        }
+
+        DiagramasJSON diagramasJSON = new DiagramasJSON(
+                creationDateTime,
+                cssFiles,
+                types,
+                tabs,
+                componentesJSON,
+                descricoesRelacionaisJSON,
+                dicionariosDadosJSONS);
+
+        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String jsonContent = objectWriter.writeValueAsString(diagramasJSON);
 
         HttpHeaders headers = new HttpHeaders();
+        ByteArrayResource jsonResource = new ByteArrayResource(jsonContent.getBytes(StandardCharsets.UTF_8));
 
         headers.setContentDisposition(ContentDisposition.attachment().build());
+        headers.setContentLength(jsonResource.contentLength());
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return ResponseEntity.ok().headers(headers).build();
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(jsonResource.contentLength())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(jsonResource);
     }
 }

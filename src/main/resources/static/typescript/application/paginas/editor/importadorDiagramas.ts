@@ -87,11 +87,9 @@ export default class ImportadorDiagramas {
         method: "POST",
         body: JSON.stringify(await new Response(arquivo).text()),
       });
-
-      return;
     }
 
-    this._dados = await new Response(arquivo).json();
+    this._dados = response ? await response.json() : await new Response(arquivo).json();
     this.carregarTiposDiagramas();
     this.carregarArquivosCSS();
     await this.carregarAbas();

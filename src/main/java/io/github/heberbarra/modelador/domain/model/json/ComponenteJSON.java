@@ -33,7 +33,7 @@ public class ComponenteJSON implements XHTMLConvertable {
     double y;
     double height;
     double width;
-    String rotate;
+    String rotation;
 
     public ComponenteJSON() {}
 
@@ -50,7 +50,7 @@ public class ComponenteJSON implements XHTMLConvertable {
             double y,
             double height,
             double width,
-            String rotate) {
+            String rotation) {
         this.idAba = idAba;
         this.idComponente = idComponente;
         this.nomeComponente = nomeComponente;
@@ -63,7 +63,7 @@ public class ComponenteJSON implements XHTMLConvertable {
         this.y = y;
         this.height = height;
         this.width = width;
-        this.rotate = rotate;
+        this.rotation = rotation;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ComponenteJSON implements XHTMLConvertable {
                 + "top=%fpx; ".formatted(y).replace(",", ".")
                 + "height=%fpx; ".formatted(height).replace(",", ".")
                 + "width=%fpx; ".formatted(width).replace(",", ".")
-                + "rotate=%s ".formatted(rotate)
+                + "rotate=%s ".formatted(rotation)
                 + "\" >"
                 + innerHTML
                 + "</div>%n".formatted();
@@ -183,11 +183,11 @@ public class ComponenteJSON implements XHTMLConvertable {
         this.width = width;
     }
 
-    public String getRotate() {
-        return rotate;
+    public String getRotation() {
+        return rotation;
     }
 
-    public void setRotate(String rotate) {
-        this.rotate = rotate;
+    public void setRotation(String rotation) {
+        this.rotation = rotation;
     }
 }
