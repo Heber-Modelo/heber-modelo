@@ -7,6 +7,7 @@
     <script th:src="@{/javascript/application/paginas/editor/callbacksElementos.js}"></script>
     <script th:src="@{/javascript/application/paginas/editor/grade.js}"></script>
     <script th:src="@{/javascript/editor.js}" type="module" defer></script>
+    <script th:src="@{/javascript/helperAbrirNovoArquivo.js}" defer></script>
     <script th:src="@{/javascript/helperEditorDescricaoModeloRelacional.js}" defer></script>
     <script th:src="@{/javascript/helperSeletorTipoDiagrama.js}" defer></script>
     <script th:src="@{/javascript/salvar.js}" defer></script>
@@ -47,7 +48,7 @@
               <th:block th:insert="~{fragments/editor/icons/file :: svg}"></th:block>
             </summary>
             <div class="mostrar-conteudo">
-              <div class="comando">
+              <div class="comando" id="btn-abrir-novo">
                 <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.new-file}"></span>
                 <span class="atalho"></span>
               </div>

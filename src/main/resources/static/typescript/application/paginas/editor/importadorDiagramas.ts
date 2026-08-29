@@ -168,6 +168,7 @@ export default class ImportadorDiagramas {
     }
   }
 
+  // TODO: Ajustar ouvintes
   async carregarComponentes(): Promise<void> {
     if (!this._dados) {
       return;

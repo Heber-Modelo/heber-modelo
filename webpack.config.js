@@ -16,6 +16,10 @@ export default {
     cookiesBanner: path.resolve(baseDirectory, "application/paginas/cookiesBanner.ts"),
     desligar: path.resolve(baseDirectory, "application/paginas/desligar.ts"),
     editor: path.resolve(baseDirectory, "application/paginas/editor/editor.ts"),
+    helperAbrirNovoArquivo: path.resolve(
+      baseDirectory,
+      "application/paginas/editor/helperAbrirNovoArquivo",
+    ),
     helperEditorDescricaoModeloRelacional: path.resolve(
       baseDirectory,
       "application/paginas/editor/helperEditorDescricaoModeloRelacional",
