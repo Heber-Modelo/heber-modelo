@@ -77,11 +77,11 @@ public class ComponenteJSON implements XHTMLConvertable {
                 + "%s=\"%b\" ".formatted(PROPRIEDADE_RECEBE_SETAS_CONECTORAS, recebeSetasConectoras)
                 + "class=\"%s\" ".formatted(String.join(" ", classes))
                 + "style=\""
-                + "left=%fpx ".formatted(x).replace(",", ".")
-                + "top=%fpx; ".formatted(y).replace(",", ".")
-                + "height=%fpx; ".formatted(height).replace(",", ".")
-                + "width=%fpx; ".formatted(width).replace(",", ".")
-                + "rotate=%s ".formatted(rotation)
+                + "left: %fpx; ".formatted(x).replace(",", ".")
+                + "top: %fpx; ".formatted(y).replace(",", ".")
+                + "height: %fpx; ".formatted(height).replace(",", ".")
+                + "width: %fpx; ".formatted(width).replace(",", ".")
+                + "rotate: %s; ".formatted(rotation)
                 + "\" >"
                 + innerHTML
                 + "</div>%n".formatted();

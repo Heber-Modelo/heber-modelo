@@ -78,7 +78,7 @@ public class DiagramasJSON implements XHTMLConvertable {
         builder.append("<?xml version = \"1.0\" encoding = \"UTF-8\" ?>%n".formatted());
         builder.append(
                 "<!DOCTYPE html PUBLIC \"-//WC//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-        builder.append("%n<html xml:lang=\"en\" xmlns=\"https://www.w3.org/1999/xhtml\" >%n<head>%n".formatted());
+        builder.append("%n<html xml:lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" >%n<head>%n".formatted());
         builder.append(
                 "<meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml; charset=utf-8\" />%n".formatted());
         builder.append(
@@ -90,7 +90,7 @@ public class DiagramasJSON implements XHTMLConvertable {
         Map<String, String> variaveisPaleta = ConfiguradorFactory.build().pegarInformacoesPaleta();
         builder.append("<style type=\"text/css\" >%n:root{".formatted());
         for (String nomeVariavel : variaveisPaleta.keySet()) {
-            builder.append("--%s: %s;".formatted(nomeVariavel, variaveisPaleta.get(nomeVariavel)));
+            builder.append("--%s: %s;".formatted(nomeVariavel.replace("_", "-"), variaveisPaleta.get(nomeVariavel)));
         }
 
         builder.append("}%n</style>%n".formatted());

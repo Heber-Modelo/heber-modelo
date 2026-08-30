@@ -70,7 +70,7 @@ public class ControladorImportar {
 
     @PostMapping(path = "/importar", consumes = "text/xml", produces = "application/json")
     public ResponseEntity<Resource> importar(@RequestBody String textoXHTML) {
-        Document parsedXHTML = Jsoup.parse(textoXHTML.replace("\\", ""));
+        Document parsedXHTML = Jsoup.parse(textoXHTML.replace("\\\"", "\"").replace("\\n", ""));
 
         Optional<Element> creationDatetimeElement = Optional.ofNullable(parsedXHTML.getElementById(CREATION_DATE_ID));
         LocalDateTime creationDateTime = LocalDateTime.now();
@@ -90,7 +90,7 @@ public class ControladorImportar {
             tabs = tabsElements.stream()
                     .map(tabElement -> {
                         String nome = tabElement.attr(PROPRIEDADE_NOME_ABA);
-                        Integer id = Integer.parseInt(tabElement.attr(PROPRIEDADE_ID_ABA));
+                        int id = Integer.parseInt(tabElement.attr(PROPRIEDADE_ID_ABA));
 
                         return new AbaJSON(id, nome);
                     })
@@ -134,8 +134,9 @@ public class ControladorImportar {
             String innerHTML = component.html();
 
             String style = component.attr("style");
-            List<String> partesEstilo = Arrays.stream(style.split(" "))
-                    .map(parteEstilo -> parteEstilo.split("=")[1])
+            List<String> partesEstilo = Arrays.stream(
+                            style.substring(0, style.length() - 2).split(";"))
+                    .map(parteEstilo -> parteEstilo.trim().split(":")[1])
                     .toList();
 
             String pixelsLeft = partesEstilo.getFirst();
