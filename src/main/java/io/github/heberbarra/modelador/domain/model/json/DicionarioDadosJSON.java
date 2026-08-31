@@ -70,6 +70,7 @@ public class DicionarioDadosJSON implements XHTMLConvertable {
     public String toXHTML() {
 
         String tableHeader = "<div " + "%s=\"%d\" ".formatted(PROPRIEDADE_ID_COMPONENTE, idComponente)
+                + "class=\"elemento-dicionario-dados\" "
                 + "%s=\"%d\"%n ".formatted(PROPRIEDADE_ID_ABA, idAba)
                 + "%s=\"%s\" >%n".formatted(PROPRIEDADE_NOME_COMPONENTE, nomeComponente)
                 + "<table>%n".formatted()

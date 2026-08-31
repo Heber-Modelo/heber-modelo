@@ -1,0 +1,59 @@
+/*!
+ * Copyright (c) 2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+ *
+ * Licensed under the Massachusetts Institute of Technology (MIT) License.
+ * You may obtain a copy of the license at:
+ *
+ *    https://choosealicense.com/licenses/mit/
+ *
+ * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+ * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+ *
+ */
+
+@use "../variaveis";
+
+body:has(fieldset[data-nome-aba]) {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-nome-aba]:not(:has(div.numero-aba)) {
+  align-content: stretch;
+  align-items: center;
+  display: grid;
+  grid-template-areas: variaveis.$editorGridAreaString;
+  justify-content: center;
+  height: fit-content;
+  width: fit-content;
+  min-height: 100vh;
+  min-width: 95vw;
+
+  .componente {
+    z-index: 0;
+  }
+
+  .elemento-conexao-angulada, .elemento-conexao-entidade-fraca, .elemento-conexao-seta {
+    z-index: -1;
+  }
+  .elemento-entidade-relacional .atributo {
+    height: fit-content;
+    width: unset;
+  }
+
+  .elemento-entidade-relacional .nome {
+    width: unset;
+  }
+
+  .elemento-dicionario-dados {
+    background-color: transparent;
+    width: 95vw;
+  }
+
+  [data-nome-componente="editor_descricao_relacional"] {
+    height: 100vh;
+    width: 95vw;
+  }
+
+}

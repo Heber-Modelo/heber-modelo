@@ -152,10 +152,15 @@ public class DiagramasJSON implements XHTMLConvertable {
         }
 
         for (Integer idAba : abas.keySet()) {
-            builder.append("<div %s=\"%d\" %s=\"%s\">%n"
-                    .formatted(PROPRIEDADE_ID_ABA, idAba, PROPRIEDADE_NOME_ABA, nomesAbas.get(idAba)));
+            builder.append("<fieldset %s=\"%d\" %s=\"%s\">%n<legend>%s</legend>%n"
+                    .formatted(
+                            PROPRIEDADE_ID_ABA,
+                            idAba,
+                            PROPRIEDADE_NOME_ABA,
+                            nomesAbas.get(idAba),
+                            nomesAbas.get(idAba)));
             abas.get(idAba).forEach(builder::append);
-            builder.append("</div>%n".formatted());
+            builder.append("</fieldset>%n".formatted());
         }
 
         builder.append("</body></html>");
