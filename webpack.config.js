@@ -25,6 +25,7 @@ export default {
       "application/paginas/helperSeletorTipoDiagrama",
     ),
     login: path.resolve(baseDirectory, "application/paginas/login.ts"),
+    novaAtividade: path.resolve(baseDirectory, "application/paginas/novaAtividade.ts"),
   },
   output: {
     path: path.resolve(__dirname, "src/main/resources/static/javascript"),

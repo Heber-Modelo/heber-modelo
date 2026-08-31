@@ -16,6 +16,7 @@
 <head>
   <th:block th:replace="~{fragments/head :: head}"></th:block>
   <link rel="stylesheet" th:href="@{/css/criarAtividade.css}" />
+  <script th:src="@{/javascript/novaAtividade.js}" defer></script>
 </head>
 <body>
 
@@ -31,31 +32,37 @@
 
       <div class="radioButton">
         <span class="campos-texto" th:text="#{web.page.create-assignment.label.check-type}"></span>
-        <label>
-          <span class="campos-texto" th:text="#{web.page.create-assignment.label.yes}"></span>
-          <input type="radio" name="isTest" required />
-        </label>
-        <label>
-          <span class="campos-texto" th:text="#{web.page.create-assignment.label.no}"></span>
-          <input type="radio" name="isTest" required checked/>
-        </label>
+
+        <div class="opcoes-radiobutton">
+          <label>
+            <span class="campos-texto" th:text="#{web.page.create-assignment.label.yes}"></span>
+            <input type="radio" name="isTest" class="botao-radio" value="on" required />
+          </label>
+          <label>
+            <span class="campos-texto" th:text="#{web.page.create-assignment.label.no}"></span>
+            <input type="radio" name="isTest" class="botao-radio" value="off" required checked/>
+          </label>
+        </div>
       </div>
 
       <label>
         <span class="campos-texto" th:text="#{web.page.create-assignment.label.posting-date}"></span>
-        <input type="text" name="posting-date" required />
+        <input type="datetime-local" name="posting-date" required />
       </label>
 
       <label>
         <span class="campos-texto" th:text="#{web.page.create-assignment.label.deadline}"></span>
-        <input type="text" name="deadline" required />
+        <input type="datetime-local" name="deadline" required />
       </label>
 
-      <div class="description">
-        <span class="campos-texto" th:text="#{web.page.create-assignment.label.description}"></span>
-        <input type="text" name="description" required />
-
-
+      <div class="description-field">
+       <textarea
+          id="description"
+          name="descricao"
+          class="textarea-description"
+          rows="8"
+          th:placeholder="#{web.page.create-assignment.label.description}"
+       ></textarea>
       </div>
 
 

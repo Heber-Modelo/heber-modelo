@@ -13,7 +13,7 @@
 
 package io.github.heberbarra.modelador.domain.model;
 
-public class UsuarioDTO {
+public class    UsuarioDTO {
 
     public UsuarioDTO() {}
 
