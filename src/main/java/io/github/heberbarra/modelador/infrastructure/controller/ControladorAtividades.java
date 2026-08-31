@@ -14,6 +14,10 @@
 package io.github.heberbarra.modelador.infrastructure.controller;
 
 import io.github.heberbarra.modelador.domain.model.AtividadeDTO;
+import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
+import io.github.heberbarra.modelador.infrastructure.services.AtividadeServices;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,8 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ControladorAtividades {
 
+    private final AtividadeServices atividadeServices;
+
+    public ControladorAtividades(AtividadeServices atividadeServices) {
+        this.atividadeServices = atividadeServices;
+    }
+
     @PostMapping({"criarAtividade"})
     public String criarAtividade(@RequestBody AtividadeDTO atividadeDTO) {
+        this.atividadeServices.saveAtividade(atividadeDTO);
+
         return "redirect:/listagemEstudantes";
     }
 }

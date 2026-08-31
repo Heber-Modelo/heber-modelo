@@ -20,14 +20,14 @@ public class AtividadeDTO {
     public AtividadeDTO(
             String titulo, LocalDateTime datePostagem, LocalDateTime dataLimite, boolean isProva, String descricao) {
         this.titulo = titulo;
-        this.datePostagem = datePostagem;
+        this.dataPostagem = datePostagem;
         this.dataLimite = dataLimite;
         this.isProva = isProva;
         this.descricao = descricao;
     }
 
     String titulo;
-    LocalDateTime datePostagem;
+    LocalDateTime dataPostagem;
     LocalDateTime dataLimite;
     String descricao;
     boolean isProva;
@@ -40,12 +40,12 @@ public class AtividadeDTO {
         this.titulo = titulo;
     }
 
-    public LocalDateTime getDatePostagem() {
-        return datePostagem;
+    public LocalDateTime getDataPostagem() {
+        return dataPostagem;
     }
 
-    public void setDatePostagem(LocalDateTime datePostagem) {
-        this.datePostagem = datePostagem;
+    public void setDataPostagem(LocalDateTime dataPostagem) {
+        this.dataPostagem = dataPostagem;
     }
 
     public LocalDateTime getDataLimite() {
