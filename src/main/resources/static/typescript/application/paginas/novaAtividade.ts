@@ -14,23 +14,30 @@
 import "quill/dist/quill.snow.css";
 import Quill from "quill";
 
-new Quill("textarea", {
-  theme: "snow",
-  formats: ["align", "bold", "color", "indent", "italic", "size", "underline"],
-  modules: {
-    toolbar: [
-      [{ size: [] }],
-      ["bold", "italic", "underline", { color: [] }],
-      [{ indent: "-1" }, { indent: "+1" }],
-      [{ align: [] }],
-    ],
-  },
-});
+let quillEditorContainer: HTMLElement | null = document.querySelector(".description-field div");
+
+if (quillEditorContainer) {
+  new Quill(quillEditorContainer, {
+    theme: "snow",
+    formats: ["align", "bold", "color", "indent", "italic", "size", "underline"],
+    modules: {
+      toolbar: [
+        [{ size: [] }],
+        ["bold", "italic", "underline", { color: [] }],
+        [{ indent: "-1" }, { indent: "+1" }],
+        [{ align: [] }],
+      ],
+    },
+  });
+}
 
 let tituloInput: HTMLInputElement | null = document.querySelector("input[name='title']");
-let dataPostagemInput: HTMLInputElement | null = document.querySelector("input[name='posting-date']");
+let dataPostagemInput: HTMLInputElement | null = document.querySelector(
+  "input[name='posting-date']",
+);
 let dataLimiteInput: HTMLInputElement | null = document.querySelector("input[name='deadline']");
 let descricaoInput: HTMLInputElement | null = document.querySelector(".ql-editor");
-let inputsRadios: NodeListOf<HTMLInputElement> = document.querySelectorAll("input[type='checkbox']");
+let inputsRadios: NodeListOf<HTMLInputElement> =
+  document.querySelectorAll("input[type='checkbox']");
 
 await fetch("/criarAtividade", {});
