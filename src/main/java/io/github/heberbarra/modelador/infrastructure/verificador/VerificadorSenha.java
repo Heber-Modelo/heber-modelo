@@ -18,8 +18,6 @@ import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
 import io.github.heberbarra.modelador.domain.model.Sessao;
-import org.apache.tomcat.jni.Buffer;
-import org.springframework.aop.interceptor.ConcurrencyThrottleInterceptor;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -61,11 +59,25 @@ public class VerificadorSenha implements Runnable{
 
                 String[] partesLinha = linha.split("\\|");
 
-                if (linha.equals(MARCADOR_SENHA + senha)){
+                String ipRecebido = partesLinha[0].replace(MARCADOR_IP, "");
+                String senhaRecebida = partesLinha[1].replace(MARCADOR_SENHA, "");
+
+                if (partesLinha[1].equals(MARCADOR_SENHA + senha)){
                     logger.info(TradutorWrapper.tradutor.traduzirMensagem("session.password-verify.success"));
                     continue;
-                }
+                } else {
+                    String ipAluno = partesLinha[0].replace(MARCADOR_IP, "");
+                    logger.warning("senha incorreta para o IP:" + ipAluno);
 
+
+                    try (
+                            Socket socketAluno = new Socket(ipAluno, 5000);
+                            BufferedWriter writerAluno = new BufferedWriter(new OutputStreamWriter(socketAluno.getOutputStream()))
+                    ){
+                        writerAluno.write("Senha incorreta");
+                        writerAluno.flush();
+                    }
+                }
             }
 
         } catch (IOException e) {

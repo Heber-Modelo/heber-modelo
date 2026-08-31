@@ -27,6 +27,7 @@ import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
 import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
+import io.github.heberbarra.modelador.infrastructure.verificador.VerificadorLoginAluno;
 import io.github.heberbarra.modelador.infrastructure.verificador.VerificadorSenha;
 import io.github.heberbarra.modelador.infrastructure.services.UsuarioServices;
 import jakarta.annotation.PostConstruct;
@@ -270,6 +271,8 @@ public class ControladorWeb {
 
         Sessao sessao = SessaoFactory.build(porta, null);
         VerificadorSenha verificadorSenha = new VerificadorSenha(senha);
+        Thread thread = new Thread(verificadorSenha);
+        thread.start();
 
         return "redirect:/login";
     }
@@ -285,6 +288,9 @@ public class ControladorWeb {
             @ModelAttribute("password") String senha) {
 
         Sessao sessao = SessaoFactory.build(porta, ip);
+
+        Thread threadLogin = new Thread(new VerificadorLoginAluno(5000));
+        threadLogin.start();
 
         try (BufferedWriter bufferedWriter =
                 new BufferedWriter(new OutputStreamWriter(sessao.getSocket().getOutputStream())); ) {
