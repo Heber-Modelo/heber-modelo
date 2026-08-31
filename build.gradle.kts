@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.github.heberbarra"
-version = "0.0.36-SNAPSHOT"
+version = "0.1.0-ALPHA"
 
 
 repositories {
@@ -20,15 +20,15 @@ java {
 }
 
 dependencies {
-    implementation(libs.apachePDFBox) {
-        exclude("commons-logging", "commons-logging")
-    }
     implementation(libs.cdimascioDotenv)
-    implementation(libs.jakartaXML)
-    implementation(libs.jlineJansi)
     implementation(libs.hibernateCore)
     implementation(libs.heberModeloAPI)
+    implementation(libs.jakartaXML)
+    implementation(libs.jlineJansi)
+    implementation(libs.jsoup)
     implementation(libs.mysqlConnector)
+    implementation(libs.openHTMLtoPDFCore)
+    implementation(libs.openHTMLtoPDFPdfBox)
     implementation(libs.tomlj)
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-hateoas")

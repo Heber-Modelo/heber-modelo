@@ -11,7 +11,6 @@
  *
  */
 
-import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import CommandBuilderException from "domain/exception/commandBuilderException";
 import ICommand, { CommandResult } from "domain/model/command/iCommand";
 import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
@@ -33,7 +32,7 @@ export default class ApagarTodosComponentesCommand implements ICommand {
     elementos.forEach((elemento: HTMLElement): void => {
       elemento.remove();
       let idComponente: string | null = elemento.getAttribute(
-        ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+        ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
       );
 
       if (!idComponente) {

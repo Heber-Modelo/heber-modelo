@@ -11,14 +11,33 @@
  *
  */
 
-enum NomesComponente {
-  ATRIBUTO_DER = "atributo_der",
-  AGREGACAO = "agregacao",
-  CARDINALIDADE = "cardinalidade",
-  COMPONENTE = "componente",
-  ENTIDADE = "entidade",
-  ENTIDADE_RELACIONAL = "entidade_relacional",
-  RELACIONAMENTO = "relacionamento",
-}
+package io.github.heberbarra.modelador.domain.model.json;
 
-export default NomesComponente;
+public class AbaJSON {
+
+    int id;
+    String nome;
+
+    public AbaJSON() {}
+
+    public AbaJSON(int id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+}

@@ -75,7 +75,7 @@ num terminal(na mesma pasta na qual o programa foi posto):
 java -jar heber-modelo.jar
 ```
 
-*É necessário utilizar a versão 24 do Java.
+*É necessário utilizar a versão 25 do Java.
 
 ## Compilação Manual
 
@@ -123,7 +123,7 @@ uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/
 - [x] Suporte para keymaps customizados
 - [ ] Formatação automática de atributos
 - [ ] Estilos diferentes de fundo/grade
-- [ ] Exportação para PDF, SVG, PNG e XML
+- [ ] Exportação para PDF, SVG, PNG e XHTML
 - [ ] Alinhar elementos com a grade
 - [x] Auto atualização*
 

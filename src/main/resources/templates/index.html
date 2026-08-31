@@ -5,6 +5,7 @@
     <link rel="stylesheet" th:if="${desligar != null}" th:href="@{/css/desligar.css}" />
     <link rel="stylesheet" th:href="@{/css/index.css}" />
     <script th:src="@{/javascript/desligar.js}" defer></script>
+    <meta name="_csrf" th:content="${_csrf.token}" />
     <title>Heber-Modelo</title>
   </head>
   <body>

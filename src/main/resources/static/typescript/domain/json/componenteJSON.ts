@@ -4,21 +4,26 @@
  * Licensed under the Massachusetts Institute of Technology (MIT) License.
  * You may obtain a copy of the license at:
  *
- *    https://choosealicense.com/licenses/mit/
+ *   https://choosealicense.com/licenses/mit/
  *
  * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
  * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
  *
  */
 
-enum NomesComponente {
-  ATRIBUTO_DER = "atributo_der",
-  AGREGACAO = "agregacao",
-  CARDINALIDADE = "cardinalidade",
-  COMPONENTE = "componente",
-  ENTIDADE = "entidade",
-  ENTIDADE_RELACIONAL = "entidade_relacional",
-  RELACIONAMENTO = "relacionamento",
-}
+export default interface ComponenteJSON {
+  idAba: number;
+  idComponente: number;
+  nomeComponente: string;
+  classes: string[];
+  idsOuvintes: number[];
+  recebePontosExtensores: boolean;
+  recebeSetasConectoras: boolean;
+  innerHTML: string;
 
-export default NomesComponente;
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+  rotation: string;
+}
