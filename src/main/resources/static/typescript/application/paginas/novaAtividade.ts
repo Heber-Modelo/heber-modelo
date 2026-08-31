@@ -31,13 +31,42 @@ if (quillEditorContainer) {
   });
 }
 
-let tituloInput: HTMLInputElement | null = document.querySelector("input[name='title']");
-let dataPostagemInput: HTMLInputElement | null = document.querySelector(
-  "input[name='posting-date']",
-);
-let dataLimiteInput: HTMLInputElement | null = document.querySelector("input[name='deadline']");
-let descricaoInput: HTMLInputElement | null = document.querySelector(".ql-editor");
-let inputsRadios: NodeListOf<HTMLInputElement> =
-  document.querySelectorAll("input[type='checkbox']");
 
-await fetch("/criarAtividade", {});
+
+let formCriarAtividade: HTMLFormElement | null = document.querySelector("form")
+formCriarAtividade?.addEventListener("submit", novaAtividade);
+
+async function novaAtividade(event: SubmitEvent){
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+  let tituloInput: HTMLInputElement | null = document.querySelector("input[name='title']");
+  let dataPostagemInput: HTMLInputElement | null = document.querySelector(
+    "input[name='posting-date']",
+  );
+  let dataLimiteInput: HTMLInputElement | null = document.querySelector("input[name='deadline']");
+  let descricaoInput: HTMLDivElement | null = document.querySelector(".ql-editor");
+  let inputRadioYes: HTMLInputElement | null =
+    document.querySelector("input.botao-radio[value='on']");
+
+  let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
+  let csrfToken: string = csrfMetaTag?.content || "";
+
+  await fetch("/criarAtividade", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": csrfToken,
+    },
+    credentials: "same-origin",
+    body: JSON.stringify({
+      titulo: tituloInput?.value,
+      dataPostagem: dataPostagemInput?.value,
+      dataLimite: dataLimiteInput?.value,
+      descricao: descricaoInput?.innerHTML,
+      isProva: inputRadioYes?.checked
+    }),
+  });
+
+}
+
