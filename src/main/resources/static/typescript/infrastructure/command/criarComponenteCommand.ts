@@ -63,7 +63,7 @@ export default class CriarComponenteCommand implements ICommand {
         this._carregarCSSCommand.execute();
         this._registradorEventosElemento.registrarEventos(componente.htmlComponente);
         componente.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
         );
         componente.htmlComponente.setAttribute(

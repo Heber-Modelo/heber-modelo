@@ -11,14 +11,18 @@
  *
  */
 
-enum NomesComponente {
-  ATRIBUTO_DER = "atributo_der",
-  AGREGACAO = "agregacao",
-  CARDINALIDADE = "cardinalidade",
-  COMPONENTE = "componente",
-  ENTIDADE = "entidade",
-  ENTIDADE_RELACIONAL = "entidade_relacional",
-  RELACIONAMENTO = "relacionamento",
-}
+import AbaJSON from "domain/json/abaJSON";
+import ComponenteJSON from "domain/json/componenteJSON";
+import DescricaoRelacionalJSON from "domain/json/descricaoRelacionalJSON";
+import DicionarioDadosJSON from "domain/json/dicionarioDadosJSON";
 
-export default NomesComponente;
+export default interface DiagramasJSON {
+  creationDate: Date;
+  loadedCSSFiles: string[];
+  types: string[];
+
+  tabs: AbaJSON[];
+  components: ComponenteJSON[];
+  relationalDescriptions: DescricaoRelacionalJSON[];
+  dataDictionaries: DicionarioDadosJSON[];
+}

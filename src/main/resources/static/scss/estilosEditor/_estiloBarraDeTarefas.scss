@@ -26,6 +26,7 @@
   position: fixed;
   top: 5rem;
   width: 100%;
+  z-index: 2;
 
   button, summary{
     background-color: unset;
@@ -44,8 +45,8 @@
   }
 
   .menu-opcoes{
-    position: relative;
     display: inline-block;
+    position: relative;
   }
 
   summary {
@@ -143,7 +144,6 @@
   details[open] > summary::before{
     content: "";
     position: fixed;
-    z-index: 11;
     top: 0;
     left: 0;
     width: 100%;

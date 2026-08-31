@@ -4,17 +4,20 @@
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <th:block th:insert="~{fragments/bindings :: script}"></th:block>
     <link rel="stylesheet" th:href="@{/css/editor.css}" />
-    <script th:src="@{/javascript/editor.js}" type="module" defer></script>
     <script th:src="@{/javascript/application/paginas/editor/callbacksElementos.js}"></script>
     <script th:src="@{/javascript/application/paginas/editor/grade.js}"></script>
-    <script th:src="@{/javascript/application/paginas/editor/salvar.js}" defer></script>
+    <script th:src="@{/javascript/editor.js}" type="module" defer></script>
+    <script th:src="@{/javascript/helperAbrirNovoArquivo.js}" defer></script>
     <script th:src="@{/javascript/helperEditorDescricaoModeloRelacional.js}" defer></script>
     <script th:src="@{/javascript/helperSeletorTipoDiagrama.js}" defer></script>
+    <script th:src="@{/javascript/salvar.js}" defer></script>
     <script>
       configurarGrade("--espessura-grade", "[(${espessuraGrade})]");
       configurarGrade("--tamanho-quadrado-grade", "[(${tamanhoQuadradoGrade})]");
       incrementoMovimentacao = Number("[(${incrementoMovimentacaoElemento})]");
     </script>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_headerName" th:content="${_csrf.headerName}" />
     <title th:text="#{web.page.editor.title}"></title>
   </head>
   <body>
@@ -45,30 +48,34 @@
               <th:block th:insert="~{fragments/editor/icons/file :: svg}"></th:block>
             </summary>
             <div class="mostrar-conteudo">
-              <div class="comando">
+              <div class="comando" id="btn-abrir-novo">
                 <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.new-file}"></span>
-                <span class="atalho">Ctrl+N</span>
+                <span class="atalho"></span>
               </div>
-              <div class="comando">
+              <div class="comando" id="btn-importar">
                 <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.open-file}"></span>
-                <span class="atalho">Ctrl+O</span>
+                <span class="atalho"></span>
               </div>
               <hr />
-              <div class="comando">
+              <div class="comando" id="btn-salvar-json">
                 <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.save-file}"></span>
-                <span class="atalho">Ctrl+S</span>
+                <span class="atalho">JSON</span>
               </div>
-              <div class="comando">
+              <div class="comando" id="btn-salvar-xml">
+                <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.save-file}"></span>
+                <span class="atalho">XML</span>
+              </div>
+              <div class="comando" id="btn-exportar-pdf">
                 <span
                   class="itens-menu"
                   th:text="#{web.page.editor.toolbar.item.export-file}"
                 ></span>
-                <span class="atalho">Ctrl+E</span>
+                <span class="atalho">PDF</span>
               </div>
               <hr />
-              <div class="comando">
+              <div class="comando" id="btn-imprimir-pdf">
                 <span class="itens-menu">Imprimir</span>
-                <span class="atalho">Ctrl+P</span>
+                <span class="atalho"></span>
               </div>
             </div>
           </details>
@@ -148,6 +155,11 @@
       </section>
     </aside>
     <main>
+      <div
+        id="pdf-loader-indicator"
+        style="display: none"
+        th:text="#{web.page.editor.generating-pdf}"
+      ></div>
       <div
         class="info-diagrama"
         id="tipos-diagrama"

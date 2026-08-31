@@ -54,7 +54,8 @@ export default class RepositorioAbas implements IRepositorioAbas {
   removerPorID(id: number): void {
     for (let i: number = 0; i < this._abas.length; i++) {
       if (this._abas[i].id === id) {
-        this._abas.splice(i, 1);
+        let abaRemovida: Aba[] = this._abas.splice(i, 1);
+        abaRemovida[0].htmlElement.remove();
       }
     }
   }

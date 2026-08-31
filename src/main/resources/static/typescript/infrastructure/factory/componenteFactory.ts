@@ -18,11 +18,12 @@ import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 
 export default class ComponenteFactory {
-  public static PROPRIEDADE_ID_ABA: string = "data-indice-aba";
-  public static PROPRIEDADE_ID_COMPONENTE: string = "data-id";
-  public static PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
-  public static PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string = "data-recebe-pontos-extensores";
-  public static PROPRIEDADE_RECEBE_SETAS_CONECTORAS: string = "data-recebe-setas-conectoras";
+  public static readonly PROPRIEDADE_ID_ABA: string = "data-indice-aba";
+  public static readonly PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
+  public static readonly PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string =
+    "data-recebe-pontos-extensores";
+  public static readonly PROPRIEDADE_RECEBE_SETAS_CONECTORAS: string =
+    "data-recebe-setas-conectoras";
 
   private async pegarJSON(nomeComponente: string): Promise<ValoresJSONComponente> {
     return await fetch(`/elementos/${nomeComponente.toLowerCase()}.json`).then(

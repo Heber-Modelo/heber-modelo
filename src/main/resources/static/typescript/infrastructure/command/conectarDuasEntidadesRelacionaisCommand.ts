@@ -105,6 +105,15 @@ export default class ConectarDuasEntidadesRelacionaisCommand implements ICommand
     this._fabricaComponente
       .criarComponente(this._tipoConexao)
       .then(async (componente: ComponenteDiagrama): Promise<void> => {
+        componente.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          String(this._selecionadorAba.abaSelecionada?.id),
+        );
+        componente.htmlComponente.setAttribute(
+          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
+          String(this._geradorIDComponente.pegarProximoID()),
+        );
+
         this._componenteConexao = this._fabricaConexao.criarConexao(
           this._tipoConexao,
           componente.htmlComponente,
@@ -118,14 +127,6 @@ export default class ConectarDuasEntidadesRelacionaisCommand implements ICommand
         );
 
         this._registradorEventosConexao.registrarEventos(this._componenteConexao.htmlComponente);
-        this._componenteConexao.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
-          String(this._selecionadorAba.abaSelecionada?.id),
-        );
-        this._componenteConexao.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
 
         this._repositorioComponente.adicionar(this._componenteConexao);
         this._diagrama.append(this._componenteConexao.htmlComponente);
@@ -134,6 +135,15 @@ export default class ConectarDuasEntidadesRelacionaisCommand implements ICommand
           await this._fabricaComponente.criarComponente(NomesComponente.CARDINALIDADE);
 
         this._diagrama.append(primeiraCardinalidade.htmlComponente);
+
+        primeiraCardinalidade.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          String(this._selecionadorAba.abaSelecionada?.id),
+        );
+        primeiraCardinalidade.htmlComponente.setAttribute(
+          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
+          String(this._geradorIDComponente.pegarProximoID()),
+        );
 
         this._primeiroComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
           primeiraCardinalidade.htmlComponente,
@@ -144,14 +154,6 @@ export default class ConectarDuasEntidadesRelacionaisCommand implements ICommand
           this._lateralPrimeiroComponente,
         );
 
-        this._primeiroComponenteCardinalidade.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
-          String(this._selecionadorAba.abaSelecionada?.id),
-        );
-        this._primeiroComponenteCardinalidade.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
         this._registradorEventosElemento.registrarEventos(
           this._primeiroComponenteCardinalidade.htmlComponente,
         );
@@ -160,6 +162,15 @@ export default class ConectarDuasEntidadesRelacionaisCommand implements ICommand
         let segundaCardinalidade: ComponenteDiagrama =
           await this._fabricaComponente.criarComponente(NomesComponente.CARDINALIDADE);
         this._diagrama.append(segundaCardinalidade.htmlComponente);
+
+        segundaCardinalidade.htmlComponente.setAttribute(
+          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          String(this._selecionadorAba.abaSelecionada?.id),
+        );
+        segundaCardinalidade.htmlComponente.setAttribute(
+          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
+          String(this._geradorIDComponente.pegarProximoID()),
+        );
 
         this._segundoComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
           segundaCardinalidade.htmlComponente,
@@ -170,14 +181,6 @@ export default class ConectarDuasEntidadesRelacionaisCommand implements ICommand
           this._lateralSegundoComponente,
         );
 
-        this._segundoComponenteCardinalidade.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
-          String(this._selecionadorAba.abaSelecionada?.id),
-        );
-        this._segundoComponenteCardinalidade.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
         this._registradorEventosElemento.registrarEventos(
           this._segundoComponenteCardinalidade.htmlComponente,
         );

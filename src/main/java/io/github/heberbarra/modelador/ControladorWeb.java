@@ -206,6 +206,14 @@ public class ControladorWeb {
         return "cadastro";
     }
 
+    @GetMapping({"/criarAtividade", "/criarAtividade.html"})
+    public String criarAtividade(ModelMap modelMap) {
+        InjetorAtributos.injetarPaleta(modelMap);
+        InjetorAtributos.injetarTituloPagina(modelMap, "create-assignment");
+
+        return "criarAtividade";
+    }
+
     @PostMapping({"/cadastro", "/cadastro.html"})
     public String cadastro(@ModelAttribute("usuario") UsuarioDTO usuarioDTO) {
 

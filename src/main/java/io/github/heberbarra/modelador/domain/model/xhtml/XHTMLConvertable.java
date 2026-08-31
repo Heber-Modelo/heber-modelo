@@ -11,14 +11,15 @@
  *
  */
 
-enum NomesComponente {
-  ATRIBUTO_DER = "atributo_der",
-  AGREGACAO = "agregacao",
-  CARDINALIDADE = "cardinalidade",
-  COMPONENTE = "componente",
-  ENTIDADE = "entidade",
-  ENTIDADE_RELACIONAL = "entidade_relacional",
-  RELACIONAMENTO = "relacionamento",
-}
+package io.github.heberbarra.modelador.domain.model.xhtml;
 
-export default NomesComponente;
+public interface XHTMLConvertable {
+    String PROPRIEDADE_ID_ABA = "data-indice-aba";
+    String PROPRIEDADE_ID_COMPONENTE = "data-id";
+    String PROPRIEDADE_IDS_OUVINTES = "data-ids-ouvintes";
+    String PROPRIEDADE_NOME_COMPONENTE = "data-nome-componente";
+    String PROPRIEDADE_RECEBE_PONTOS_EXTENSORES = "data-recebe-pontos-extensores";
+    String PROPRIEDADE_RECEBE_SETAS_CONECTORAS = "data-recebe-setas-conectoras";
+
+    String toXHTML();
+}
