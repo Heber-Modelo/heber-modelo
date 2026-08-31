@@ -29,6 +29,7 @@ export default {
       "application/paginas/helperSeletorTipoDiagrama",
     ),
     login: path.resolve(baseDirectory, "application/paginas/login.ts"),
+    novaAtividade: path.resolve(baseDirectory, "application/paginas/novaAtividade.ts"),
     salvar: path.resolve(baseDirectory, "application/paginas/editor/salvar.ts"),
   },
   output: {

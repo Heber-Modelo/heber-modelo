@@ -1,0 +1,152 @@
+@charset "UTF-8";
+
+/*!
+ * Copyright (c) 2026. Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+ *
+ * Licensed under the Massachusetts Institute of Technology (MIT) License.
+ * You may obtain a copy of the license at:
+ *
+ *    https://choosealicense.com/licenses/mit/
+ *
+ * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+ * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+ *
+ */
+
+@use "estiloComum";
+@use "estiloHeader";
+@use "estiloFooter";
+@use "variaveis";
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 70%;
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .radioButton{
+    display: flex;
+    flex-direction: row;
+    height: 2.5rem;
+    column-gap: 1rem;
+    width: 60%;
+    align-items: center;
+
+    .opcoes-radiobutton{
+      display: flex;
+      flex-direction: row;
+      column-gap: 0.5rem;
+
+      .botao-radio{
+        appearance: none;
+        border-radius: 100%;
+        cursor: pointer;
+        height: 2rem;
+        position: relative;
+      }
+
+      .botao-radio:checked{
+        border-color: var(--cor-botao);
+      }
+
+      .botao-radio:checked:after{
+        content: "";
+        position: absolute;
+        height: 1rem;
+        width: 1rem;
+
+        background-color: var(--cor-botao);
+        border-radius: 100%;
+
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+    }
+
+}
+
+  label {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    gap: 0.5rem;
+
+    input {
+      width: 100%;
+      height: 2.5rem;
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      border: var(--cor-borda) solid variaveis.$tamanhoBordaInput;
+      border-radius: variaveis.$borderRadiusInput;
+      background-color: var(--cor-fundo-input);
+    }
+
+    input:focus{
+      outline: 0.2rem solid var(--cor-botao);
+      background-color: var(--cor-fundo-input-focus);
+    }
+  }
+
+  .description-field{
+    margin-top: 1rem;
+    width: 60%;
+  }
+
+  .textarea-description{
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    border: var(--cor-borda) solid variaveis.$tamanhoBordaInput;
+    border-radius: variaveis.$borderRadiusInput;
+    background-color: var(--cor-fundo-input);
+  }
+
+  .textarea-description:focus{
+    outline: 0.2rem solid var(--cor-botao);
+    background-color: var(--cor-fundo-input-focus);
+  }
+
+  .textarea-description::placeholder{
+    color: var(--cor-fonte-alternativa);
+    opacity: 60%;
+  }
+
+  #botoes {
+    display: flex;
+    gap: 3rem;
+    width: 80%;
+    justify-content: center;
+
+    button {
+      margin-top: 2.5rem;
+      align-items: center;
+      display: flex;
+      height: 3.5rem;
+      justify-content: center;
+    }
+  }
+  .campos-texto {
+    font-size: 1.1rem;
+  }
+
+  .texto-ajuda{
+    font-size: 1.1rem;
+  }
+
+  small {
+    align-self: center;
+  }
+}
