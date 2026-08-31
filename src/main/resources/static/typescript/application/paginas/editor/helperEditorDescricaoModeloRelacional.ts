@@ -12,13 +12,12 @@
  */
 
 import "quill/dist/quill.snow.css";
-import Quill from "quill";
 
 let diagrama: HTMLElement | null = document.querySelector("main");
 
 const editorMutationObserver: MutationObserver = new MutationObserver(ativarEditorModeloRelacional);
 
-function ativarEditorModeloRelacional(): void {
+async function ativarEditorModeloRelacional(): Promise<void> {
   let targetEditor: HTMLElement | null = document.querySelector(
     ".elemento-editor-descricao-relacional:not(:has(div.ql-snow)) div",
   );
@@ -27,7 +26,10 @@ function ativarEditorModeloRelacional(): void {
     return;
   }
 
+  const { default: Quill } = await import("quill");
+
   editorMutationObserver.disconnect();
+
   new Quill(targetEditor, {
     theme: "snow",
     formats: ["align", "bold", "color", "indent", "italic", "size", "underline"],

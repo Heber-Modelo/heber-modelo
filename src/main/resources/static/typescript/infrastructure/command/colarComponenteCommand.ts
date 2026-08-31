@@ -64,7 +64,7 @@ export default class ColarComponenteCommand implements ICommand {
         }
 
         ultimoElemento.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorID.pegarProximoID()),
         );
       }, 200);

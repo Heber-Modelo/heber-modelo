@@ -16,6 +16,10 @@ export default {
     cookiesBanner: path.resolve(baseDirectory, "application/paginas/cookiesBanner.ts"),
     desligar: path.resolve(baseDirectory, "application/paginas/desligar.ts"),
     editor: path.resolve(baseDirectory, "application/paginas/editor/editor.ts"),
+    helperAbrirNovoArquivo: path.resolve(
+      baseDirectory,
+      "application/paginas/editor/helperAbrirNovoArquivo",
+    ),
     helperEditorDescricaoModeloRelacional: path.resolve(
       baseDirectory,
       "application/paginas/editor/helperEditorDescricaoModeloRelacional",
@@ -25,6 +29,7 @@ export default {
       "application/paginas/helperSeletorTipoDiagrama",
     ),
     login: path.resolve(baseDirectory, "application/paginas/login.ts"),
+    salvar: path.resolve(baseDirectory, "application/paginas/editor/salvar.ts"),
   },
   output: {
     path: path.resolve(__dirname, "src/main/resources/static/javascript"),

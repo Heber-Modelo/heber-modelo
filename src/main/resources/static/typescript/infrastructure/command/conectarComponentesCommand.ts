@@ -112,7 +112,7 @@ export default class ConectarComponentesCommand implements ICommand {
           String(this._selecionadorAba.abaSelecionada?.id),
         );
         this._componenteConexao.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
         );
         this._registradorEventosConexao.registrarEventos(this._componenteConexao.htmlComponente);
@@ -146,7 +146,7 @@ export default class ConectarComponentesCommand implements ICommand {
         this._registradorEventosElemento.registrarEventos(componente.htmlComponente);
         this._repositorioComponente.adicionar(componente);
         componente.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_COMPONENTE,
+          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
           String(this._geradorIDComponente.pegarProximoID()),
         );
 
