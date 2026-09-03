@@ -488,6 +488,7 @@ async function callbackTerminarConexaoAtributo(event: MouseEvent): Promise<void>
       .definirNomeElemento(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE)
       .definirRegistradorEventosElemento(registradorEventosElemento)
       .definirRepositorioComponentes(repositorioComponentes)
+      .definirSelecionadorAba(selecionadorAba)
       .build();
 
     commandHistory.saveAndExecuteCommand(command);

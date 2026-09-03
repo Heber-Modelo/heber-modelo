@@ -160,6 +160,7 @@ export default class ConectarAtributoCommand implements ICommand {
         .definirRegistradorEventosConexao(this._registradorEventosConexao)
         .definirRegistradorEventosElemento(this._registradorEventosElemento)
         .definirRepositorioComponentes(this._repositorioComponentes)
+        .definirSelecionadorAba(this._selecionadorAba)
         .definirTipoConexao(this._tipoConexao)
         .build();
 
