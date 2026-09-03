@@ -171,7 +171,7 @@ public class ControladorWeb {
             return;
         }
 
-        String nomeSistemaOperacional = System.getProperty("os.name");
+        String nomeSistemaOperacional = System.getProperty("os.name").toLowerCase();
         Runtime runtime = Runtime.getRuntime();
 
         if (nomeSistemaOperacional.contains("mac")) {

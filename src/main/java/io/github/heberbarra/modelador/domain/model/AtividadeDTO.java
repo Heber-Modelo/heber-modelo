@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 
 public class AtividadeDTO {
 
-    public AtividadeDTO(String titulo, LocalDateTime datePostagem, LocalDateTime dataLimite, boolean isProva, String descricao) {
+    public AtividadeDTO(
+            String titulo, LocalDateTime datePostagem, LocalDateTime dataLimite, boolean isProva, String descricao) {
         this.titulo = titulo;
         this.datePostagem = datePostagem;
         this.dataLimite = dataLimite;
