@@ -14,6 +14,7 @@ export default {
       "application/paginas/editor/callbacksElementos.ts",
     ),
     cookiesBanner: path.resolve(baseDirectory, "application/paginas/cookiesBanner.ts"),
+    criarAtividade: path.resolve(baseDirectory, "application/paginas/criarAtividade.ts"),
     desligar: path.resolve(baseDirectory, "application/paginas/desligar.ts"),
     editor: path.resolve(baseDirectory, "application/paginas/editor/editor.ts"),
     helperAbrirNovoArquivo: path.resolve(
@@ -29,8 +30,8 @@ export default {
       "application/paginas/helperSeletorTipoDiagrama",
     ),
     login: path.resolve(baseDirectory, "application/paginas/login.ts"),
-    novaAtividade: path.resolve(baseDirectory, "application/paginas/novaAtividade.ts"),
     salvar: path.resolve(baseDirectory, "application/paginas/editor/salvar.ts"),
+    quill: "quill",
   },
   output: {
     path: path.resolve(__dirname, "src/main/resources/static/javascript"),
