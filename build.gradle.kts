@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.github.heberbarra"
-version = "0.1.1-ALPHA"
+version = "0.1.2-ALPHA"
 
 
 repositories {
