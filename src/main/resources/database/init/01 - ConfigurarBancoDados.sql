@@ -17,6 +17,10 @@ CREATE TABLE IF NOT EXISTS tbUsuario (
 CREATE TABLE IF NOT EXISTS tbAtividade (
     codigo_atividade TINYINT AUTO_INCREMENT,
     nome_atividade VARCHAR(100) NOT NULL,
+    descricao_atividade TEXT NOT NULL,
+    is_prova_atividade BOOL NOT NULL,
+    data_postagem_atividade DATETIME NOT NULL,
+    data_limite_atividade DATETIME NOT NULL,
     matricula_usuario NUMERIC(11),
     CONSTRAINT pk_tbAtividade PRIMARY KEY (codigo_atividade),
     CONSTRAINT fk_tbUsuariotbAtividade FOREIGN KEY (matricula_usuario) REFERENCES tbUsuario(matricula_usuario)
