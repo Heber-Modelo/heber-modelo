@@ -26,7 +26,30 @@ async function ativarEditorModeloRelacional(): Promise<void> {
     return;
   }
 
-  const { default: Quill } = await import("quill");
+  const { default: Quill } = await import("quill/core");
+  const { default: Toolbar } = await import("quill/modules/toolbar");
+  const { default: Snow } = await import("quill/themes/snow");
+
+  const { default: Bold } = await import("quill/formats/bold");
+  const { default: Indent } = await import("quill/formats/indent");
+  const { default: Italic } = await import("quill/formats/italic");
+  const { default: Underline } = await import("quill/formats/underline");
+
+  const { AlignStyle } = await import("quill/formats/align");
+  const { ColorStyle } = await import("quill/formats/color");
+  const { SizeStyle } = await import("quill/formats/size");
+
+  Quill.register({
+    "modules/toolbar": Toolbar,
+    "themes/snow": Snow,
+    "formats/align": AlignStyle,
+    "formats/bold": Bold,
+    "formats/color": ColorStyle,
+    "formats/indent": Indent,
+    "formats/italic": Italic,
+    "formats/size": SizeStyle,
+    "formats/underline": Underline,
+  });
 
   editorMutationObserver.disconnect();
 
