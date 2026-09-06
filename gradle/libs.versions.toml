@@ -8,7 +8,7 @@ heberModeloAPI = { module = "io.github.heberbarra:heber-modelo-api", version = "
 hibernateCore = { module = "org.hibernate.orm:hibernate-core", version = "7.4.6.Final" }
 jakartaXML = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.5" }
 jlineJansi = { module = "org.jline:jansi", version = "4.4.0" }
-jsoup = { module = "org.jsoup:jsoup", version = "1.23.1" }
+jsoup = { module = "org.jsoup:jsoup", version = "1.23.2" }
 mysqlConnector = { module = "com.mysql:mysql-connector-j", version = "26.7.0" }
 openHTMLtoPDFCore = { module = "com.openhtmltopdf:openhtmltopdf-core", version = "1.0.10" }
 openHTMLtoPDFPdfBox = { module = "com.openhtmltopdf:openhtmltopdf-pdfbox", version = "1.0.10" }
