@@ -27,8 +27,6 @@ dependencies {
     implementation(libs.jlineJansi)
     implementation(libs.jsoup)
     implementation(libs.mysqlConnector)
-    implementation(libs.openHTMLtoPDFCore)
-    implementation(libs.openHTMLtoPDFPdfBox)
     implementation(libs.tomlj)
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-hateoas")

@@ -11,6 +11,8 @@
  *
  */
 
+import { toPng } from "html-to-image";
+import jsPDF from "jspdf";
 import TipoArquivo from "domain/enum/tipoArquivo";
 import ComponenteJSON from "domain/json/componenteJSON";
 import AbaJSON from "domain/json/abaJSON";
@@ -253,20 +255,26 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
 
   fecharTagDetails(event.target as HTMLElement);
 
+  if (tipoArquivo === TipoArquivo.JSON) {
+    let jsonData: string = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(requestBody, null, 2))}`;
+    downloadFile(jsonData, "diagrama.json");
+    return;
+  }
+
+  let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
+  let csrfToken: string = csrfMetaTag?.content || "";
+
+  let response: Response = await fetch("/salvar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": csrfToken,
+    },
+    credentials: "same-origin",
+    body: JSON.stringify(requestBody),
+  });
+
   if (tipoArquivo === TipoArquivo.XML) {
-    let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
-    let csrfToken: string = csrfMetaTag?.content || "";
-
-    let response: Response = await fetch("/salvar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-XSRF-TOKEN": csrfToken,
-      },
-      credentials: "same-origin",
-      body: JSON.stringify(requestBody),
-    });
-
     let blob: Blob = await response.blob();
     let blobURL: string = window.URL.createObjectURL(blob);
     downloadFile(blobURL, "diagrama.xhtml");
@@ -274,48 +282,31 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
     return;
   }
 
-  if (tipoArquivo === TipoArquivo.PDF || tipoArquivo === TipoArquivo.PRINTABLE_PDF) {
-    let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
-    let csrfToken: string = csrfMetaTag?.content || "";
-    let pdfLoaderIndicator: HTMLElement | null = document.querySelector("#pdf-loader-indicator");
+  let xhtml: string = await response.text();
+  let xhtmlWrapperElement: HTMLElement = document.createElement("div");
+  document.body.append(xhtmlWrapperElement);
+  xhtmlWrapperElement.innerHTML = xhtml.split("<body>")[1].split("</body>")[0];
+  let paginasXHTML: NodeListOf<HTMLElement> = xhtmlWrapperElement.querySelectorAll(
+    "fieldset[data-indice-aba]",
+  );
 
-    try {
-      pdfLoaderIndicator?.style.removeProperty("display");
+  const pdfDocument = new jsPDF("landscape", "mm", [1920, 1080]);
+  let pdfHeight: number = pdfDocument.internal.pageSize.getHeight();
+  let pdfWidth: number = pdfDocument.internal.pageSize.getWidth();
 
-      let response: Response = await fetch("/exportar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-XSRF-TOKEN": csrfToken,
-        },
-        credentials: "same-origin",
-        body: JSON.stringify(requestBody),
-      });
+  for (let i: number = 0; i < paginasXHTML.length; i++) {
+    let xhtmlImage: string = await toPng(paginasXHTML.item(i), { quality: 1 });
 
-      let blob: Blob = await response.blob();
-      let blobURL: string = window.URL.createObjectURL(blob);
+    pdfDocument.addImage(xhtmlImage, "PNG", 0, 0, pdfWidth, pdfHeight);
 
-      if (tipoArquivo === TipoArquivo.PRINTABLE_PDF) {
-        let temporaryAnchor: HTMLAnchorElement = document.createElement("a");
-        temporaryAnchor.href = blobURL;
-        temporaryAnchor.target = "_blank";
-
-        document.body.append(temporaryAnchor);
-        temporaryAnchor.click();
-        temporaryAnchor.remove();
-
-        return;
-      }
-      downloadFile(blobURL, "diagrama.pdf");
-    } finally {
-      pdfLoaderIndicator?.style.setProperty("display", "none");
+    if (i !== paginasXHTML.length - 1) {
+      pdfDocument.addPage();
     }
-
-    return;
   }
 
-  let jsonData: string = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(requestBody, null, 2))}`;
-  downloadFile(jsonData, "diagrama.json");
+  pdfDocument.save("diagramas.pdf");
+
+  xhtmlWrapperElement.remove();
 }
 
 let buttonSalvarJSON: HTMLButtonElement | null = document.querySelector("#btn-salvar-json");
