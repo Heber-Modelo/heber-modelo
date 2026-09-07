@@ -253,20 +253,26 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
 
   fecharTagDetails(event.target as HTMLElement);
 
+  if (tipoArquivo === TipoArquivo.JSON) {
+    let jsonData: string = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(requestBody, null, 2))}`;
+    downloadFile(jsonData, "diagrama.json");
+    return;
+  }
+
+  let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
+  let csrfToken: string = csrfMetaTag?.content || "";
+
+  let response: Response = await fetch("/salvar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": csrfToken,
+    },
+    credentials: "same-origin",
+    body: JSON.stringify(requestBody),
+  });
+
   if (tipoArquivo === TipoArquivo.XML) {
-    let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
-    let csrfToken: string = csrfMetaTag?.content || "";
-
-    let response: Response = await fetch("/salvar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-XSRF-TOKEN": csrfToken,
-      },
-      credentials: "same-origin",
-      body: JSON.stringify(requestBody),
-    });
-
     let blob: Blob = await response.blob();
     let blobURL: string = window.URL.createObjectURL(blob);
     downloadFile(blobURL, "diagrama.xhtml");
@@ -274,54 +280,76 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
     return;
   }
 
-  if (tipoArquivo === TipoArquivo.PDF || tipoArquivo === TipoArquivo.PRINTABLE_PDF) {
-    let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
-    let csrfToken: string = csrfMetaTag?.content || "";
-    let pdfLoaderIndicator: HTMLElement | null = document.querySelector("#pdf-loader-indicator");
+  let xhtml: string = await response.text();
+  let xhtmlWrapperElement: HTMLElement = document.createElement("div");
+  document.body.append(xhtmlWrapperElement);
+  xhtmlWrapperElement.innerHTML = xhtml.split("<body>")[1].split("</body>")[0];
+  let paginasXHTML: NodeListOf<HTMLElement> = xhtmlWrapperElement.querySelectorAll(
+    "fieldset[data-indice-aba]",
+  );
+  let nomesAbas: string[] = paginasXHTML
+    .values()
+    .map((pagina: HTMLElement): string => pagina.querySelector("legend")?.innerText || "")
+    .toArray();
 
-    try {
-      pdfLoaderIndicator?.style.removeProperty("display");
+  if (tipoArquivo === TipoArquivo.SVG) {
+    let { toSvg } = await import("html-to-image");
 
-      let response: Response = await fetch("/exportar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-XSRF-TOKEN": csrfToken,
-        },
-        credentials: "same-origin",
-        body: JSON.stringify(requestBody),
-      });
+    let images: string[] = await Promise.all(
+      paginasXHTML
+        .values()
+        .map(async (pagina: HTMLElement): Promise<string> => toSvg(pagina, { quality: 1 }))
+        .toArray(),
+    );
 
-      let blob: Blob = await response.blob();
-      let blobURL: string = window.URL.createObjectURL(blob);
-
-      if (tipoArquivo === TipoArquivo.PRINTABLE_PDF) {
-        let temporaryAnchor: HTMLAnchorElement = document.createElement("a");
-        temporaryAnchor.href = blobURL;
-        temporaryAnchor.target = "_blank";
-
-        document.body.append(temporaryAnchor);
-        temporaryAnchor.click();
-        temporaryAnchor.remove();
-
-        return;
-      }
-      downloadFile(blobURL, "diagrama.pdf");
-    } finally {
-      pdfLoaderIndicator?.style.setProperty("display", "none");
+    for (let i: number = 0; i < images.length; i++) {
+      downloadFile(images[i], `diagramas-${i + 1}-${nomesAbas[i]}.svg`);
     }
+
+    xhtmlWrapperElement.remove();
+    return;
+  }
+
+  let { default: jsPDF } = await import("jspdf");
+  let { toPng } = await import("html-to-image");
+
+  let images: string[] = await Promise.all(
+    paginasXHTML
+      .values()
+      .map(async (pagina: HTMLElement): Promise<string> => toPng(pagina, { quality: 1 }))
+      .toArray(),
+  );
+  xhtmlWrapperElement.remove();
+
+  if (tipoArquivo === TipoArquivo.PDF) {
+    const pdfDocument = new jsPDF("landscape", "mm", [1920, 1080]);
+    let pdfHeight: number = pdfDocument.internal.pageSize.getHeight();
+    let pdfWidth: number = pdfDocument.internal.pageSize.getWidth();
+
+    for (let i: number = 0; i < images.length; i++) {
+      pdfDocument.addImage(images[i], "PNG", 0, 0, pdfWidth, pdfHeight);
+
+      if (i !== images.length - 1) {
+        pdfDocument.addPage();
+      }
+    }
+
+    pdfDocument.save("diagramas.pdf").autoPrint({ variant: "javascript" });
+    pdfDocument.close();
 
     return;
   }
 
-  let jsonData: string = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(requestBody, null, 2))}`;
-  downloadFile(jsonData, "diagrama.json");
+  for (let i: number = 0; i < images.length; i++) {
+    downloadFile(images[i], `diagramas-${i + 1}-${nomesAbas[i]}.png`);
+  }
 }
 
 let buttonSalvarJSON: HTMLButtonElement | null = document.querySelector("#btn-salvar-json");
 let buttonSalvarXML: HTMLButtonElement | null = document.querySelector("#btn-salvar-xml");
 let buttonExportarPDF: HTMLButtonElement | null = document.querySelector("#btn-exportar-pdf");
-let buttonImprimirPDF: HTMLButtonElement | null = document.querySelector("#btn-imprimir-pdf");
+let buttonExportarPNG: HTMLButtonElement | null = document.querySelector("#btn-exportar-png");
+let buttonExportarSVG: HTMLButtonElement | null = document.querySelector("#btn-exportar-svg");
 
 buttonSalvarJSON?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.JSON),
@@ -333,6 +361,10 @@ buttonExportarPDF?.addEventListener("click", (event: MouseEvent): Promise<void> 
   salvar(event, TipoArquivo.PDF),
 );
 
-buttonImprimirPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
-  salvar(event, TipoArquivo.PRINTABLE_PDF),
+buttonExportarPNG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+  salvar(event, TipoArquivo.PNG),
+);
+
+buttonExportarSVG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+  salvar(event, TipoArquivo.SVG),
 );

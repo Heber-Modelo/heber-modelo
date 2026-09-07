@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.github.heberbarra"
-version = "0.1.2-ALPHA"
+version = "0.2.0-ALPHA"
 
 
 repositories {
@@ -27,8 +27,6 @@ dependencies {
     implementation(libs.jlineJansi)
     implementation(libs.jsoup)
     implementation(libs.mysqlConnector)
-    implementation(libs.openHTMLtoPDFCore)
-    implementation(libs.openHTMLtoPDFPdfBox)
     implementation(libs.tomlj)
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-hateoas")
