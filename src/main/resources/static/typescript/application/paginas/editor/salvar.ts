@@ -290,29 +290,47 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
     "fieldset[data-indice-aba]",
   );
 
-  const pdfDocument = new jsPDF("landscape", "mm", [1920, 1080]);
-  let pdfHeight: number = pdfDocument.internal.pageSize.getHeight();
-  let pdfWidth: number = pdfDocument.internal.pageSize.getWidth();
+  let nomesAbas: string[] = paginasXHTML
+    .values()
+    .map((pagina: HTMLElement): string => pagina.querySelector("legend")?.innerText || "")
+    .toArray();
+  let images: string[] = await Promise.all(
+    paginasXHTML
+      .values()
+      .map(async (pagina: HTMLElement): Promise<string> => toPng(pagina, { quality: 1 }))
+      .toArray(),
+  );
+  xhtmlWrapperElement.remove();
 
-  for (let i: number = 0; i < paginasXHTML.length; i++) {
-    let xhtmlImage: string = await toPng(paginasXHTML.item(i), { quality: 1 });
+  if (tipoArquivo === TipoArquivo.PDF || tipoArquivo === TipoArquivo.PRINTABLE_PDF) {
+    const pdfDocument = new jsPDF("landscape", "mm", [1920, 1080]);
+    let pdfHeight: number = pdfDocument.internal.pageSize.getHeight();
+    let pdfWidth: number = pdfDocument.internal.pageSize.getWidth();
 
-    pdfDocument.addImage(xhtmlImage, "PNG", 0, 0, pdfWidth, pdfHeight);
+    for (let i: number = 0; i < images.length; i++) {
+      pdfDocument.addImage(images[i], "PNG", 0, 0, pdfWidth, pdfHeight);
 
-    if (i !== paginasXHTML.length - 1) {
-      pdfDocument.addPage();
+      if (i !== images.length - 1) {
+        pdfDocument.addPage();
+      }
     }
+
+    pdfDocument.save("diagramas.pdf").autoPrint({ variant: "javascript" });
+    pdfDocument.close();
+
+    return;
   }
 
-  pdfDocument.save("diagramas.pdf");
-
-  xhtmlWrapperElement.remove();
+  for (let i: number = 0; i < images.length; i++) {
+    downloadFile(images[i], `diagramas-${i + 1}-${nomesAbas[i]}.png`);
+  }
 }
 
 let buttonSalvarJSON: HTMLButtonElement | null = document.querySelector("#btn-salvar-json");
 let buttonSalvarXML: HTMLButtonElement | null = document.querySelector("#btn-salvar-xml");
 let buttonExportarPDF: HTMLButtonElement | null = document.querySelector("#btn-exportar-pdf");
 let buttonImprimirPDF: HTMLButtonElement | null = document.querySelector("#btn-imprimir-pdf");
+let buttonExportarPNG: HTMLButtonElement | null = document.querySelector("#btn-exportar-png");
 
 buttonSalvarJSON?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.JSON),
@@ -326,4 +344,8 @@ buttonExportarPDF?.addEventListener("click", (event: MouseEvent): Promise<void> 
 
 buttonImprimirPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.PRINTABLE_PDF),
+);
+
+buttonExportarPNG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+  salvar(event, TipoArquivo.PNG),
 );
