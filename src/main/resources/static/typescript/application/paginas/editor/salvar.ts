@@ -321,7 +321,7 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   );
   xhtmlWrapperElement.remove();
 
-  if (tipoArquivo === TipoArquivo.PDF || tipoArquivo === TipoArquivo.PRINTABLE_PDF) {
+  if (tipoArquivo === TipoArquivo.PDF) {
     const pdfDocument = new jsPDF("landscape", "mm", [1920, 1080]);
     let pdfHeight: number = pdfDocument.internal.pageSize.getHeight();
     let pdfWidth: number = pdfDocument.internal.pageSize.getWidth();
@@ -348,7 +348,6 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
 let buttonSalvarJSON: HTMLButtonElement | null = document.querySelector("#btn-salvar-json");
 let buttonSalvarXML: HTMLButtonElement | null = document.querySelector("#btn-salvar-xml");
 let buttonExportarPDF: HTMLButtonElement | null = document.querySelector("#btn-exportar-pdf");
-let buttonImprimirPDF: HTMLButtonElement | null = document.querySelector("#btn-imprimir-pdf");
 let buttonExportarPNG: HTMLButtonElement | null = document.querySelector("#btn-exportar-png");
 let buttonExportarSVG: HTMLButtonElement | null = document.querySelector("#btn-exportar-svg");
 
@@ -360,10 +359,6 @@ buttonSalvarXML?.addEventListener("click", (event: MouseEvent): Promise<void> =>
 );
 buttonExportarPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.PDF),
-);
-
-buttonImprimirPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
-  salvar(event, TipoArquivo.PRINTABLE_PDF),
 );
 
 buttonExportarPNG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
