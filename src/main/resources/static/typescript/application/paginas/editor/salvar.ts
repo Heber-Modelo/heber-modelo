@@ -11,8 +11,6 @@
  *
  */
 
-import { toPng } from "html-to-image";
-import jsPDF from "jspdf";
 import TipoArquivo from "domain/enum/tipoArquivo";
 import ComponenteJSON from "domain/json/componenteJSON";
 import AbaJSON from "domain/json/abaJSON";
@@ -289,11 +287,32 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   let paginasXHTML: NodeListOf<HTMLElement> = xhtmlWrapperElement.querySelectorAll(
     "fieldset[data-indice-aba]",
   );
-
   let nomesAbas: string[] = paginasXHTML
     .values()
     .map((pagina: HTMLElement): string => pagina.querySelector("legend")?.innerText || "")
     .toArray();
+
+  if (tipoArquivo === TipoArquivo.SVG) {
+    let { toSvg } = await import("html-to-image");
+
+    let images: string[] = await Promise.all(
+      paginasXHTML
+        .values()
+        .map(async (pagina: HTMLElement): Promise<string> => toSvg(pagina, { quality: 1 }))
+        .toArray(),
+    );
+
+    for (let i: number = 0; i < images.length; i++) {
+      downloadFile(images[i], `diagramas-${i + 1}-${nomesAbas[i]}.svg`);
+    }
+
+    xhtmlWrapperElement.remove();
+    return;
+  }
+
+  let { default: jsPDF } = await import("jspdf");
+  let { toPng } = await import("html-to-image");
+
   let images: string[] = await Promise.all(
     paginasXHTML
       .values()
@@ -331,6 +350,7 @@ let buttonSalvarXML: HTMLButtonElement | null = document.querySelector("#btn-sal
 let buttonExportarPDF: HTMLButtonElement | null = document.querySelector("#btn-exportar-pdf");
 let buttonImprimirPDF: HTMLButtonElement | null = document.querySelector("#btn-imprimir-pdf");
 let buttonExportarPNG: HTMLButtonElement | null = document.querySelector("#btn-exportar-png");
+let buttonExportarSVG: HTMLButtonElement | null = document.querySelector("#btn-exportar-svg");
 
 buttonSalvarJSON?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.JSON),
@@ -348,4 +368,8 @@ buttonImprimirPDF?.addEventListener("click", (event: MouseEvent): Promise<void> 
 
 buttonExportarPNG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.PNG),
+);
+
+buttonExportarSVG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+  salvar(event, TipoArquivo.SVG),
 );

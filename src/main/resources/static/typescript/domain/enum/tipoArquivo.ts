@@ -16,6 +16,7 @@ enum TipoArquivo {
   PDF,
   PRINTABLE_PDF,
   PNG,
+  SVG,
   XML,
 }
 
