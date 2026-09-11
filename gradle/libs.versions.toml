@@ -4,7 +4,7 @@ springdependency = { id = "io.spring.dependency-management", version = "1.1.7" }
 springboot = { id = "org.springframework.boot", version = "4.1.1" }
 [libraries]
 cdimascioDotenv = { module = "io.github.cdimascio:dotenv-java", version = "3.2.0" }
-heberModeloAPI = { module = "io.github.heberbarra:heber-modelo-api", version = "0.0.13-SNAP" }
+heberModeloAPI = { module = "io.github.heberbarra:heber-modelo-api", version = "0.1.0-ALPHA" }
 hibernateCore = { module = "org.hibernate.orm:hibernate-core", version = "7.4.7.Final" }
 jakartaXML = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.5" }
 jlineJansi = { module = "org.jline:jansi", version = "4.4.2" }
