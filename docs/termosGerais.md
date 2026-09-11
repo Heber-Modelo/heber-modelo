@@ -2,7 +2,7 @@
 
 Os serviços do Heber-Modelo são fornecidas pelas pessoas físicas com os
 seguintes nomes: Heber Ferreira Barra, inscrito no CPF sob o n.º 127.XXX.XXX-60,
-Matheus de Assis de Paula, inscrito no CPF sob o n.º 143.XXX.XXX-61, Matheus Jun
+João Gabriel de Cristo, inscrito no CPF sob o n.º 128.XXX.XXX-89, Matheus Jun
 Alves Matuda, inscrito no CPF sob o n.º 802.XXX.XXX-84, titulares da propriedade
 intelectual, sobre software, website, aplicativos, conteúdos e demais ativos
 relacionados à plataforma Heber-Modelo.

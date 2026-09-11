@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2026 Heber Ferreira Barra, Matheus de Assis de Paula, Matheus Jun Alves Matuda.
+ * Copyright (C) 2026 Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
  *
  * Licensed under the Massachusetts Institute of Technology (MIT) License.
  * You may obtain a copy of the license at:
