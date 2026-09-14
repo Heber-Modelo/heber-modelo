@@ -45,4 +45,8 @@ public class SessaoFactory {
 
         return sessao;
     }
+
+    public static Sessao getSessao() {
+        return sessao;
+    }
 }
