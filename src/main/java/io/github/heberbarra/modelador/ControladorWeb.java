@@ -20,13 +20,9 @@ import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.NovoDiagramaDTO;
-import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
 import io.github.heberbarra.modelador.infrastructure.configurador.WatcherConfiguracao;
 import io.github.heberbarra.modelador.infrastructure.controller.ControladorDesligar;
-import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
-import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
-import io.github.heberbarra.modelador.infrastructure.services.UsuarioServices;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,23 +33,17 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @EnableAsync
 @Controller
@@ -64,12 +54,9 @@ public class ControladorWeb {
     private static final Logger logger = JavaLogger.obterLogger(ControladorWeb.class.getName());
     private static final IConfigurador configurador = ConfiguradorFactory.build();
     private final TaskExecutor taskExecutor;
-    private final UsuarioServices usuarioServices;
 
-    public ControladorWeb(
-            @Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor, UsuarioServices usuarioServices) {
+    public ControladorWeb(@Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor) {
         this.taskExecutor = taskExecutor;
-        this.usuarioServices = usuarioServices;
     }
 
     @PostConstruct
@@ -155,54 +142,6 @@ public class ControladorWeb {
         return "index";
     }
 
-    @GetMapping({"/cadastro", "/cadastro.html"})
-    public String cadastro(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "register");
-        InjetorAtributos.injetarPaleta(modelMap);
-        modelMap.addAttribute("usuario", new UsuarioDTO());
-
-        return "cadastro";
-    }
-
-    @PostMapping({"/cadastro", "/cadastro.html"})
-    public String cadastro(@ModelAttribute("usuario") UsuarioDTO usuarioDTO) {
-
-        usuarioDTO.setTipo(DataSourceBuilder.getTipoUsuario());
-        usuarioDTO.setNome(usuarioDTO.getNome().trim());
-        usuarioDTO.setEmail(usuarioDTO.getEmail().trim());
-        usuarioDTO.setSenha(usuarioDTO.getSenha().trim());
-        usuarioDTO.setConfirmarSenha(usuarioDTO.getConfirmarSenha().trim());
-
-        if (usuarioServices.findUserByMatricula(usuarioDTO.getMatricula()) != null
-                || usuarioServices.findUserByNome(usuarioDTO.getNome()) != null
-                || usuarioServices.findUserByEmail(usuarioDTO.getEmail()) != null) {
-            return "redirect:/cadastro.html?exists";
-        }
-
-        if (!usuarioDTO.getSenha().equals(usuarioDTO.getConfirmarSenha())) {
-            return "redirect:cadastro.html?mismatch";
-        }
-
-        Pattern regexEmail = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
-        if (!regexEmail.matcher(usuarioDTO.getEmail()).matches()) {
-            return "redirect:/cadastro.html?invalidEmail";
-        }
-
-        usuarioServices.saveUsuario(usuarioDTO);
-        return "redirect:/login.html?cadastroSuccess";
-    }
-
-    @RequestMapping({"/login", "/login.html"})
-    public String login(@AuthenticationPrincipal UserDetails userDetails, ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "login");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        if (userDetails == null) return "login";
-
-        return "redirect:/";
-    }
-
     @RequestMapping({"/listagemEstudantes", "/listagemEstudantes.html"})
     public String listagemEstudantes(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "students-list");
@@ -211,25 +150,7 @@ public class ControladorWeb {
         return "listagemEstudantes";
     }
 
-    @RequestMapping({"/redefinir", "/redefinir.html"})
-    public String redefinirSenha(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "reset-password");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        return "redefinir";
-    }
-
-    @RequestMapping({"solicitar", "solicitar.html"})
-    public String solicitarNovaSenha(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "request-password-change");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        return "solicitar";
-    }
-
-    @RequestMapping(
-            value = {"/editor", "/editor.html"},
-            method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping({"/editor", "/editor.html"})
     public String editor(ModelMap modelMap, @ModelAttribute("novoDiagramaDTO") NovoDiagramaDTO novoDiagramaDTO) {
         InjetorAtributos.injetarTituloPagina(modelMap, "editor");
         InjetorAtributos.injetarPaleta(modelMap);
@@ -275,17 +196,6 @@ public class ControladorWeb {
         modelMap.addAttribute(GruposDiagrama.MISC.toString(), ListadorTiposDiagrama.pegarDiagramasOutros());
 
         return "novo";
-    }
-
-    @RequestMapping({"/perfil", "/perfil.html"})
-    public String perfil(@AuthenticationPrincipal UserDetails userDetails, ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "profile");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        Usuario usuario = usuarioServices.findUserByNome(userDetails.getUsername());
-        modelMap.addAttribute("usuario", usuario);
-
-        return "perfil";
     }
 
     @RequestMapping({"/privacidade", "/privacidade.html"})
