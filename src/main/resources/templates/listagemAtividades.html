@@ -20,7 +20,6 @@
   -->
     <header th:replace="~{fragments/header :: header}"></header>
     <main>
-
       <div class="atividades">
 
           <div th:each="atividade : ${atividades}" class="label-atividade">
@@ -31,32 +30,27 @@
 
             <span th:text="#{web.page.create-assignment.label.deadline} + ' ' + ${atividade.getDataLimite()}"></span>
           </div>
-
       </div>
-
-        <div class="botoes">
-          <button>
-            <a
-              th:href="@{listagemEstudantes.html}"
-              th:text="#{web.page.assignments-list.label.back}"
-            ></a>
-          </button>
-          <button>
-            <a
-              th:href="@{listagemAtividadesCorrecao.html}"
-              th:text="#{web.page.assignments-list.label.feedback-list}"
-            ></a>
-          </button>
-          <button>
-            <a
-              th:href="@{anexarAtividade.html}"
-              th:text="#{web.page.assignments-list.label.attach}"
-            ></a>
-          </button>
-        </div>
-
-
-
+      <div class="botoes">
+        <button>
+          <a
+            th:href="@{listagemEstudantes.html}"
+            th:text="#{web.page.assignments-list.label.back}"
+          ></a>
+        </button>
+        <button>
+          <a
+            th:href="@{listagemAtividadesCorrecao.html}"
+            th:text="#{web.page.assignments-list.label.feedback-list}"
+          ></a>
+        </button>
+        <button>
+          <a
+            th:href="@{criarAtividade.html}"
+            th:text="#{web.page.assignments-list.label.attach}"
+          ></a>
+        </button>
+      </div>
     </main>
   </body>
 </html>

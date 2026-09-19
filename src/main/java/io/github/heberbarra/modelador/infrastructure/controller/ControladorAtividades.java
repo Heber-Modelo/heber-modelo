@@ -13,7 +13,7 @@
 
 package io.github.heberbarra.modelador.infrastructure.controller;
 
-import io.github.heberbarra.modelador.ControladorWeb;
+import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.AtividadeDTO;
 import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
@@ -23,10 +23,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @Controller
@@ -41,6 +41,14 @@ public class ControladorAtividades {
         this.atividadeServices = atividadeServices;
     }
 
+    @GetMapping({"/criarAtividade", "/criarAtividade.html"})
+    public String criarAtividade(ModelMap modelMap) {
+        InjetorAtributos.injetarPaleta(modelMap);
+        InjetorAtributos.injetarTituloPagina(modelMap, "create-assignment");
+
+        return "criarAtividade";
+    }
+
     @PostMapping({"criarAtividade"})
     public ResponseEntity<HttpStatus> criarAtividade(@RequestBody AtividadeDTO atividadeDTO) {
         this.atividadeServices.saveAtividade(atividadeDTO);
@@ -51,12 +59,20 @@ public class ControladorAtividades {
 
     @RequestMapping({"/listagemAtividades", "/listagemAtividades.html"})
     public String listagemAtividades(ModelMap modelMap) {
-        ControladorWeb.InjetorAtributos.injetarTituloPagina(modelMap, "assignments-list");
-        ControladorWeb.InjetorAtributos.injetarPaleta(modelMap);
+        InjetorAtributos.injetarTituloPagina(modelMap, "assignments-list");
+        InjetorAtributos.injetarPaleta(modelMap);
 
         List<Atividade> atividades = this.atividadeRepositorio.findAll();
         modelMap.addAttribute("atividades", atividades.stream().map(AtividadeMapper::atividadeToDTO).toList());
 
         return "listagemAtividades";
+    }
+
+    @RequestMapping({"/listagemAtividadesCorrecao", "/listagemAtividadesCorrecao.html"})
+    public String listagemAtividadesParaCorrecao(ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "assignments-feedback-list");
+        InjetorAtributos.injetarPaleta(modelMap);
+
+        return "listagemAtividadesCorrecao";
     }
 }
