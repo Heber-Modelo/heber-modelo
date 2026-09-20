@@ -39,13 +39,11 @@ public class RoteadorSessao implements Roteador {
     public Map<String, Object> objetosAlvoFuncionalidades;
     public Sessao sessao;
     private final int porta;
-    private final String senha;
 
-    public RoteadorSessao(int porta, String senha) {
+    public RoteadorSessao(int porta) {
         this.funcionalidadesRegistradas = new HashMap<>();
         this.objetosAlvoFuncionalidades = new HashMap<>();
         this.porta = porta;
-        this.senha = senha;
     }
 
     public void registrarFuncionalidade(String header, @Nullable Object objetoAlvo, Method funcionalidade) {
@@ -55,7 +53,7 @@ public class RoteadorSessao implements Roteador {
 
     @Override
     public void run() {
-        this.sessao = SessaoFactory.build(porta, null, senha);
+        this.sessao = SessaoFactory.build(porta, null);
 
         String argumentos;
         String header = null;
@@ -64,15 +62,20 @@ public class RoteadorSessao implements Roteador {
         String[] partesLinha;
 
         try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(this.sessao.getSocket().getInputStream()));
+                        new InputStreamReader(this.sessao.socket().getInputStream()));
                 BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(this.sessao.getSocket().getOutputStream()))) {
+                        new OutputStreamWriter(this.sessao.socket().getOutputStream()))) {
             while (true) {
                 linha = reader.readLine();
+
+                if (linha == null) {
+                    continue;
+                }
+
                 partesLinha = linha.split(SEPARADOR_MENSAGEM);
                 header = partesLinha[POSICAO_HEADER];
                 ip = partesLinha[POSICAO_IP];
-                argumentos = Arrays.stream(partesLinha).skip(0).skip(1).collect(Collectors.joining());
+                argumentos = Arrays.stream(partesLinha).skip(2).collect(Collectors.joining());
 
                 if (Objects.equals(linha, ENCERRAR_ROUTER)) {
                     return;
@@ -89,6 +92,7 @@ public class RoteadorSessao implements Roteador {
 
                 Object resultado = funcionalidade.invoke(objetoAlvo, argumentos);
                 writer.write("%s;%s;%s%n".formatted(header, ip, resultado));
+                writer.flush();
             }
         } catch (IOException e) {
             logger.warning(TradutorWrapper.tradutor

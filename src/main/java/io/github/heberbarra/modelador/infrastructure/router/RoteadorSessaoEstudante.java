@@ -34,24 +34,39 @@ public class RoteadorSessaoEstudante implements Roteador {
     private final int porta;
     private final String ip;
     private final String senha;
+    private EstadosRoteadorSessaoEstudante estadoRoteadorSessaoEstudante;
 
     public RoteadorSessaoEstudante(int porta, String ip, String senha) {
         this.porta = porta;
         this.ip = ip;
         this.senha = senha;
+        this.estadoRoteadorSessaoEstudante = EstadosRoteadorSessaoEstudante.ESPERANDO;
+    }
+
+    public enum EstadosRoteadorSessaoEstudante {
+        AUTORIZADO,
+        BLOQUEADO,
+        ESPERANDO
     }
 
     @Override
+    @SuppressWarnings("resource")
     public void run() {
-        this.sessao = SessaoFactory.build(this.porta, this.ip, this.senha);
+        this.sessao = SessaoFactory.build(this.porta, this.ip);
 
         try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(this.sessao.getSocket().getInputStream()));
+                        new InputStreamReader(this.sessao.socket().getInputStream()));
                 BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(this.sessao.getSocket().getOutputStream()))) {
+                        new OutputStreamWriter(this.sessao.socket().getOutputStream()))) {
             writer.write("%s;%s;%s%n".formatted(VERIFICADOR_SENHA_HEADER, ip, senha));
-            Thread.sleep(200);
-            String resposta = reader.readLine();
+            writer.flush();
+
+            String resposta;
+            while ((resposta = reader.readLine()) == null) {
+                //noinspection BusyWait
+                Thread.sleep(200);
+            }
+
             String[] partesResposta = resposta.split(SEPARADOR_MENSAGEM);
             String header = partesResposta[POSICAO_HEADER];
             String ip = partesResposta[POSICAO_IP];
@@ -59,13 +74,14 @@ public class RoteadorSessaoEstudante implements Roteador {
             if (Objects.equals(VERIFICADOR_SENHA_HEADER, header)
                     && Objects.equals(this.ip, ip)
                     && !(Boolean.parseBoolean(partesResposta[2]))) {
-                sessao.getSocket().close();
-                logger.warning("Senha incorreta! Sessão desconectada");
+                this.estadoRoteadorSessaoEstudante = EstadosRoteadorSessaoEstudante.BLOQUEADO;
+                logger.warning(TradutorWrapper.tradutor.traduzirMensagem("error.session.connection.failure"));
 
                 return;
             }
 
-            logger.info("Senha correta!");
+            this.estadoRoteadorSessaoEstudante = EstadosRoteadorSessaoEstudante.AUTORIZADO;
+            logger.info(TradutorWrapper.tradutor.traduzirMensagem("session.connection.success"));
         } catch (IOException e) {
             logger.severe(TradutorWrapper.tradutor
                     .traduzirMensagem("error.session.read")
@@ -75,5 +91,9 @@ public class RoteadorSessaoEstudante implements Roteador {
                     .traduzirMensagem("error.session.router.interrupted")
                     .formatted(e.getMessage()));
         }
+    }
+
+    public EstadosRoteadorSessaoEstudante getEstadoRoteadorSessaoEstudante() {
+        return estadoRoteadorSessaoEstudante;
     }
 }

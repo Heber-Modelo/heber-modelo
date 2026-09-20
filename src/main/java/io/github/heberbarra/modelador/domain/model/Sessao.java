@@ -15,14 +15,4 @@ package io.github.heberbarra.modelador.domain.model;
 
 import java.net.Socket;
 
-public class Sessao {
-    private Socket socket;
-
-    public Sessao(Socket socket) {
-        this.socket = socket;
-    }
-
-    public Socket getSocket() {
-        return socket;
-    }
-}
+public record Sessao(Socket socket) {}

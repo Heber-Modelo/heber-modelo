@@ -13,6 +13,8 @@
 
 package io.github.heberbarra.modelador.infrastructure.verificador;
 
+import java.util.Objects;
+
 public class VerificadorSenha {
     public static final String VERIFICADOR_SENHA_HEADER = "VERIFICAR-SENHA";
     private final String senha;
@@ -21,8 +23,7 @@ public class VerificadorSenha {
         this.senha = senha;
     }
 
-    public boolean verificar(String dados) {
-
-        return false;
+    public boolean verificar(String senha) {
+        return Objects.equals(this.senha, senha);
     }
 }

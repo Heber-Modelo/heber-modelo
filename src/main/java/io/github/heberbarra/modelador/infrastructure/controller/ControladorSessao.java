@@ -14,14 +14,19 @@
 package io.github.heberbarra.modelador.infrastructure.controller;
 
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
+import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.router.Roteador;
 import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
+import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessao;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante;
+import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante.EstadosRoteadorSessaoEstudante;
 import io.github.heberbarra.modelador.infrastructure.verificador.VerificadorSenha;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.SpringApplicationShutdownHandlers;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -67,9 +72,9 @@ public class ControladorSessao {
     }
 
     @PostMapping({"/criarSessao", "/criarSessao.html"})
-    public void criarSessao(@ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
+    public String criarSessao(@ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
 
-        RoteadorSessao roteadorSessao = new RoteadorSessao(porta, senha);
+        RoteadorSessao roteadorSessao = new RoteadorSessao(porta);
         VerificadorSenha verificadorSenha = new VerificadorSenha(senha);
 
         try {
@@ -80,18 +85,42 @@ public class ControladorSessao {
             this.roteador = roteadorSessao;
             taskExecutor.execute(this.roteador);
         } catch (NoSuchMethodException e) {
-            logger.severe(e.getMessage());
+            logger.severe(TradutorWrapper.tradutor
+                    .traduzirMensagem("error.session.method.not-found")
+                    .formatted(e.getMessage()));
         }
+
+        return "redirect:/login";
     }
 
     @PostMapping({"/entrarSessao", "/entrarSessao.html"})
-    public void entrarSessao(
+    public String entrarSessao(
             @ModelAttribute("ip") String ip,
             @ModelAttribute("session-port") Integer porta,
             @ModelAttribute("password") String senha) {
 
-        this.roteador = new RoteadorSessaoEstudante(porta, ip, senha);
+        RoteadorSessaoEstudante roteadorSessaoEstudante = new RoteadorSessaoEstudante(porta, ip, senha);
+        this.roteador = roteadorSessaoEstudante;
         taskExecutor.execute(this.roteador);
+
+        try {
+            while (roteadorSessaoEstudante
+                    .getEstadoRoteadorSessaoEstudante()
+                    .equals(EstadosRoteadorSessaoEstudante.ESPERANDO)) {
+                //noinspection BusyWait
+                Thread.sleep(200);
+            }
+        } catch (InterruptedException e) {
+            logger.warning(e.getMessage());
+        }
+
+        if (roteadorSessaoEstudante
+                .getEstadoRoteadorSessaoEstudante()
+                .equals(EstadosRoteadorSessaoEstudante.BLOQUEADO)) {
+            return "redirect:/entrarSessao";
+        } else {
+            return "redirect:/login";
+        }
     }
 
     @RequestMapping({"/configurarSessao", "/configurarSessao.html"})
@@ -100,5 +129,10 @@ public class ControladorSessao {
         InjetorAtributos.injetarPaleta(modelMap);
 
         return "configurarSessao";
+    }
+
+    @EventListener(SpringApplicationShutdownHandlers.class)
+    private void finalizarSessao() {
+        SessaoFactory.closeSocket();
     }
 }
