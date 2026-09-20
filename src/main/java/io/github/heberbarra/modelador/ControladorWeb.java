@@ -191,9 +191,9 @@ public class ControladorWeb {
         InjetorAtributos.injetarTituloPagina(modelMap, "new-diagram");
         InjetorAtributos.injetarPaleta(modelMap);
         modelMap.addAttribute("novoDiagramaDTO", new NovoDiagramaDTO());
-        modelMap.addAttribute(GruposDiagrama.UML.toString(), ListadorTiposDiagrama.pegarDiagramasUML());
-        modelMap.addAttribute(GruposDiagrama.DATABASE.toString(), ListadorTiposDiagrama.pegarDiagramasBancoDados());
-        modelMap.addAttribute(GruposDiagrama.MISC.toString(), ListadorTiposDiagrama.pegarDiagramasOutros());
+        modelMap.addAttribute("diagramasUML", ListadorTiposDiagrama.pegarDiagramasUML());
+        modelMap.addAttribute("diagramasBD", ListadorTiposDiagrama.pegarDiagramasBancoDados());
+        modelMap.addAttribute("diagramasOutro", ListadorTiposDiagrama.pegarDiagramasOutros());
 
         return "novo";
     }
