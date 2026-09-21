@@ -4,6 +4,8 @@
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <link rel="stylesheet" th:href="@{/css/listagemEstudantes.css}" />
     <title th:text="#{web.page.students-list.title}"></title>
+    <script th:src="@{/javascript/listagemEstudantes.js}" defer></script>
+    <meta name="_csrf" th:content="${_csrf.token}" />
   </head>
   <body>
     <!--
@@ -66,8 +68,8 @@
         </a>
       </div>
       <div>
-        <button>
-          <a th:href="@{index.html}" th:text="#{web.page.students-list.label.close-session}"></a>
+        <button id="encerrarSessao">
+          <a th:text="#{web.page.students-list.label.close-session}"></a>
         </button>
         <button>
           <a

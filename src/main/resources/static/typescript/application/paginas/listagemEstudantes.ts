@@ -11,9 +11,18 @@
  *
  */
 
-async function logout(): Promise<void> {
-  let csrfTokenMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name='_csrf']");
+async function encerrarSessao(): Promise<void> {
+  let csrfTokenMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
   let csrfToken: string = csrfTokenMetaTag?.content || "";
+
+  await fetch("/encerrarSessao", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": csrfToken
+    },
+    credentials: "same-origin"
+  });
 
   await fetch("/logout", {
     method: "POST",
@@ -21,11 +30,11 @@ async function logout(): Promise<void> {
       "Content-Type": "application/json",
       "X-XSRF-TOKEN": csrfToken
     },
-    credentials: "same-origin",
+    credentials: "same-origin"
   });
 
-  window.location.reload();
+  window.location.href = "/";
 }
 
-const logoutButton: HTMLButtonElement | null = document.querySelector("#logout");
-logoutButton?.addEventListener("click", logout);
+const encerrarSessaoButton: HTMLButtonElement | null = document.querySelector("#encerrarSessao");
+encerrarSessaoButton?.addEventListener("click", encerrarSessao);

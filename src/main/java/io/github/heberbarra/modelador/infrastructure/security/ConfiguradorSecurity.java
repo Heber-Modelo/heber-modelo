@@ -39,6 +39,7 @@ public class ConfiguradorSecurity {
                 .requestMatchers(
                         "/criarAtividade",
                         "/criarAtividade.html",
+                        "/encerrarSessao",
                         "/listagemAtividades",
                         "/listagemAtividades.html",
                         "/listagemEstudantes",

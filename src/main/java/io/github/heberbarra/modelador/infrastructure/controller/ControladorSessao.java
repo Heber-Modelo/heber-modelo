@@ -28,6 +28,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplicationShutdownHandlers;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -132,7 +134,10 @@ public class ControladorSessao {
     }
 
     @EventListener(SpringApplicationShutdownHandlers.class)
-    private void finalizarSessao() {
+    @PostMapping("/encerrarSessao")
+    private ResponseEntity<HttpStatus> finalizarSessao() {
         SessaoFactory.closeSocket();
+
+        return ResponseEntity.ok().build();
     }
 }
