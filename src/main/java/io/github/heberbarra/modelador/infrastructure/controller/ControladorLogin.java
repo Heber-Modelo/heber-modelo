@@ -13,6 +13,7 @@
 
 package io.github.heberbarra.modelador.infrastructure.controller;
 
+import io.github.heberbarra.modelador.domain.exception.UsuarioNotFoundException;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
 import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -84,12 +86,38 @@ public class ControladorLogin {
         return "redirect:/";
     }
 
-    @RequestMapping({"/perfil", "/perfil.html"})
+    @RequestMapping({"perfil", "perfil.html"})
     public String perfil(@AuthenticationPrincipal UserDetails userDetails, ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "profile");
         InjetorAtributos.injetarPaleta(modelMap);
 
-        Usuario usuario = usuarioServices.findUserByNome(userDetails.getUsername());
+        modelMap.addAttribute("usuario", usuarioServices.findUserByNome(userDetails.getUsername()));
+
+        return "perfil";
+    }
+
+    @RequestMapping({"/perfil/{matricula}", "/perfil.html/{matricula}"})
+    public String perfil(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable("matricula") Long matricula,
+            ModelMap modelMap) {
+        InjetorAtributos.injetarTituloPagina(modelMap, "profile");
+        InjetorAtributos.injetarPaleta(modelMap);
+
+        if (userDetails == null) {
+            return "redirect:/";
+        }
+
+        if (!DataSourceBuilder.isProfessor()) {
+            return "redirect:/perfil";
+        }
+
+        Usuario usuario = usuarioServices.findUserByMatricula(matricula);
+
+        if (usuario == null) {
+            throw new UsuarioNotFoundException(matricula);
+        }
+
         modelMap.addAttribute("usuario", usuario);
 
         return "perfil";

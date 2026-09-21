@@ -39,39 +39,31 @@
     <main>
       <h2 th:text="#{web.page.students-list.label.professors}"></h2>
       <hr />
-      <div class="user-data">
+      <div
+        class="user-data"
+        th:each="professor : ${professors}"
+        th:title="${professor.getMatricula()}"
+      >
         <a
-          th:href="@{perfil.html}"
+          th:href="'perfil/' + ${professor.getMatricula()}"
           th:insert="~{fragments/listagemEstudantes/icons/profile :: svg}"
         ></a>
-        <span>PLACEHOLDER</span>
-        <a><th:block th:replace="~{fragments/listagemEstudantes/icons/email :: svg}"></th:block></a>
+        <span th:text="${professor.getNome()}"></span>
+        <a th:href="'mailto:' + ${professor.getEmail()}">
+          <th:block th:replace="~{fragments/listagemEstudantes/icons/email :: svg}"></th:block>
+        </a>
       </div>
       <h2 th:text="#{web.page.students-list.label.students}"></h2>
       <hr />
-      <div class="user-data">
+      <div class="user-data" th:each="student : ${students}" th:title="${student.getMatricula()}">
         <a
-          th:href="@{perfil.html}"
+          th:href="'perfil/' + ${student.getMatricula()}"
           th:insert="~{fragments/listagemEstudantes/icons/profile :: svg}"
         ></a>
-        <span>PLACEHOLDER</span>
-        <a><th:block th:replace="~{fragments/listagemEstudantes/icons/email :: svg}"></th:block></a>
-      </div>
-      <div class="user-data">
-        <a
-          th:href="@{perfil.html}"
-          th:insert="~{fragments/listagemEstudantes/icons/profile :: svg}"
-        ></a>
-        <span>PLACEHOLDER</span>
-        <a><th:block th:replace="~{fragments/listagemEstudantes/icons/email :: svg}"></th:block></a>
-      </div>
-      <div class="user-data">
-        <a
-          th:href="@{perfil.html}"
-          th:insert="~{fragments/listagemEstudantes/icons/profile :: svg}"
-        ></a>
-        <span>PLACEHOLDER</span>
-        <a><th:block th:replace="~{fragments/listagemEstudantes/icons/email :: svg}"></th:block></a>
+        <span th:text="${student.getNome()}"></span>
+        <a th:href="'mailto:' + ${student.getEmail()}">
+          <th:block th:replace="~{fragments/listagemEstudantes/icons/email :: svg}"></th:block>
+        </a>
       </div>
       <div>
         <button>

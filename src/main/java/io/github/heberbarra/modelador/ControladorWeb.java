@@ -20,9 +20,13 @@ import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.NovoDiagramaDTO;
+import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
+import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.configurador.WatcherConfiguracao;
 import io.github.heberbarra.modelador.infrastructure.controller.ControladorDesligar;
+import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
 import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
+import io.github.heberbarra.modelador.infrastructure.mapper.UsuarioMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,6 +34,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -39,6 +44,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
@@ -54,9 +61,12 @@ public class ControladorWeb {
     private static final Logger logger = JavaLogger.obterLogger(ControladorWeb.class.getName());
     private static final IConfigurador configurador = ConfiguradorFactory.build();
     private final TaskExecutor taskExecutor;
+    private final IUsuarioRepositorio usuarioRepositorio;
 
-    public ControladorWeb(@Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor) {
+    public ControladorWeb(
+            @Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor, IUsuarioRepositorio usuarioRepositorio) {
         this.taskExecutor = taskExecutor;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @PostConstruct
@@ -131,7 +141,13 @@ public class ControladorWeb {
     }
 
     @RequestMapping({"/", "/index", "/index.html", "home", "home.html"})
-    public String index(ModelMap modelMap, HttpServletResponse response) {
+    public String index(
+            @AuthenticationPrincipal UserDetails userDetails, ModelMap modelMap, HttpServletResponse response) {
+
+        if (userDetails != null && DataSourceBuilder.isProfessor()) {
+            return "redirect:/listagemEstudantes";
+        }
+
         InjetorAtributos.injetarTituloPagina(modelMap, "home");
         InjetorAtributos.injetarPaleta(modelMap);
         Cookie cookieTokenDesligar = new Cookie("TOKEN_DESLIGAR", ControladorDesligar.TOKEN_SECRETO);
@@ -143,9 +159,28 @@ public class ControladorWeb {
     }
 
     @RequestMapping({"/listagemEstudantes", "/listagemEstudantes.html"})
-    public String listagemEstudantes(ModelMap modelMap) {
+    public String listagemEstudantes(@AuthenticationPrincipal UserDetails userDetails, ModelMap modelMap) {
+
+        if (userDetails == null || !(DataSourceBuilder.isProfessor())) {
+            return "redirect:/";
+        }
+
         InjetorAtributos.injetarTituloPagina(modelMap, "students-list");
         InjetorAtributos.injetarPaleta(modelMap);
+
+        List<UsuarioDTO> usuariosDTOs = usuarioRepositorio.findAll().stream()
+                .map(UsuarioMapper::usuarioToDTO)
+                .toList();
+        modelMap.addAttribute(
+                "professors",
+                usuariosDTOs.stream()
+                        .filter(usuarioDTO -> usuarioDTO.getTipo().equals("P"))
+                        .toList());
+        modelMap.addAttribute(
+                "students",
+                usuariosDTOs.stream()
+                        .filter(usuarioDTO -> usuarioDTO.getTipo().equals("E"))
+                        .toList());
 
         return "listagemEstudantes";
     }
