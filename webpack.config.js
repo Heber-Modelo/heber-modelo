@@ -29,6 +29,7 @@ export default {
       baseDirectory,
       "application/paginas/helperSeletorTipoDiagrama",
     ),
+    index: path.resolve(baseDirectory, "application/paginas/index.ts"),
     login: path.resolve(baseDirectory, "application/paginas/login.ts"),
     salvar: path.resolve(baseDirectory, "application/paginas/editor/salvar.ts"),
     quill: "quill",

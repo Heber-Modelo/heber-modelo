@@ -97,10 +97,7 @@ public class ControladorLogin {
     }
 
     @RequestMapping("/perfil/{matricula}")
-    public String perfil(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable("matricula") Long matricula,
-            ModelMap modelMap) {
+    public String perfil(@PathVariable("matricula") Long matricula, ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "profile");
         InjetorAtributos.injetarPaleta(modelMap);
 
