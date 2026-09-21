@@ -148,9 +148,12 @@ public class ControladorWeb {
 
         Optional<String> currentUserAuthority = Optional.empty();
         if (userDetails != null
-                && userDetails.getAuthorities().stream().findFirst().isPresent()) {
-            currentUserAuthority = Optional.ofNullable(
-                    userDetails.getAuthorities().stream().findFirst().get().getAuthority());
+                && userDetails.getAuthorities().stream().skip(1).findFirst().isPresent()) {
+            currentUserAuthority = Optional.ofNullable(userDetails.getAuthorities().stream()
+                    .skip(1)
+                    .findFirst()
+                    .get()
+                    .getAuthority());
         }
 
         if (currentUserAuthority.isPresent() && currentUserAuthority.get().equals(NOME_AUTORIDADE_PROFESSOR)) {
