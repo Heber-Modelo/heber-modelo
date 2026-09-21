@@ -40,6 +40,10 @@ public class ControladorLogin {
 
     @GetMapping({"/cadastro", "/cadastro.html"})
     public String cadastro(ModelMap modelMap) {
+        if (ControladorSessao.isSessaoInativa()) {
+            return "redirect:/entrarSessao";
+        }
+
         InjetorAtributos.injetarTituloPagina(modelMap, "register");
         InjetorAtributos.injetarPaleta(modelMap);
         modelMap.addAttribute("usuario", new UsuarioDTO());
@@ -78,6 +82,10 @@ public class ControladorLogin {
 
     @RequestMapping({"/login", "/login.html"})
     public String login(@AuthenticationPrincipal UserDetails userDetails, ModelMap modelMap) {
+        if (ControladorSessao.isSessaoInativa()) {
+            return "redirect:/entrarSessao";
+        }
+
         InjetorAtributos.injetarTituloPagina(modelMap, "login");
         InjetorAtributos.injetarPaleta(modelMap);
 

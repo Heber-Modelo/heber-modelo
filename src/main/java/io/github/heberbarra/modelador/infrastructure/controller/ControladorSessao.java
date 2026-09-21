@@ -13,6 +13,9 @@
 
 package io.github.heberbarra.modelador.infrastructure.controller;
 
+import static io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante.EstadosRoteadorSessaoEstudante.BLOQUEADO;
+import static io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante.EstadosRoteadorSessaoEstudante.ESPERANDO;
+
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
@@ -21,7 +24,6 @@ import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
 import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessao;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante;
-import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante.EstadosRoteadorSessaoEstudante;
 import io.github.heberbarra.modelador.infrastructure.verificador.VerificadorSenha;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,8 +42,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ControladorSessao {
     private static final Logger logger = JavaLogger.obterLogger(ControladorSessao.class.getName());
+    private static Roteador roteador;
     private final TaskExecutor taskExecutor;
-    private Roteador roteador;
 
     public ControladorSessao(@Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor) {
         this.taskExecutor = taskExecutor;
@@ -84,8 +86,8 @@ public class ControladorSessao {
                     VerificadorSenha.VERIFICADOR_SENHA_HEADER,
                     verificadorSenha,
                     VerificadorSenha.class.getMethod("verificar", String.class));
-            this.roteador = roteadorSessao;
-            taskExecutor.execute(this.roteador);
+            roteador = roteadorSessao;
+            taskExecutor.execute(roteador);
         } catch (NoSuchMethodException e) {
             logger.severe(TradutorWrapper.tradutor
                     .traduzirMensagem("error.session.method.not-found")
@@ -102,13 +104,11 @@ public class ControladorSessao {
             @ModelAttribute("password") String senha) {
 
         RoteadorSessaoEstudante roteadorSessaoEstudante = new RoteadorSessaoEstudante(porta, ip, senha);
-        this.roteador = roteadorSessaoEstudante;
-        taskExecutor.execute(this.roteador);
+        roteador = roteadorSessaoEstudante;
+        taskExecutor.execute(roteador);
 
         try {
-            while (roteadorSessaoEstudante
-                    .getEstadoRoteadorSessaoEstudante()
-                    .equals(EstadosRoteadorSessaoEstudante.ESPERANDO)) {
+            while (roteadorSessaoEstudante.getEstadoRoteadorSessaoEstudante().equals(ESPERANDO)) {
                 //noinspection BusyWait
                 Thread.sleep(200);
             }
@@ -116,9 +116,9 @@ public class ControladorSessao {
             logger.warning(e.getMessage());
         }
 
-        if (roteadorSessaoEstudante
-                .getEstadoRoteadorSessaoEstudante()
-                .equals(EstadosRoteadorSessaoEstudante.BLOQUEADO)) {
+        if (roteadorSessaoEstudante.getEstadoRoteadorSessaoEstudante().equals(BLOQUEADO)) {
+            roteador = null;
+
             return "redirect:/entrarSessao";
         } else {
             return "redirect:/login";
@@ -139,5 +139,9 @@ public class ControladorSessao {
         SessaoFactory.closeSocket();
 
         return ResponseEntity.ok().build();
+    }
+
+    public static boolean isSessaoInativa() {
+        return roteador == null;
     }
 }
