@@ -93,7 +93,7 @@ async function criarAtividade(event: SubmitEvent) {
   });
 
  if (response.ok){
-   window.location.href = "listagemEstudantes";
+   window.location.href = "listagemAtividades";
    return;
  }
 

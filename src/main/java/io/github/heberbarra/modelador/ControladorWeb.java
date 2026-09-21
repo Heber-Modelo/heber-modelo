@@ -320,13 +320,6 @@ public class ControladorWeb {
         return "anexarAtividade";
     }
 
-    @RequestMapping({"/listagemAtividades", "/listagemAtividades.html"})
-    public String listagemAtividades(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "assignments-list");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        return "listagemAtividades";
-    }
 
     @RequestMapping({"/listagemAtividadesCorrecao", "/listagemAtividadesCorrecao.html"})
     public String listagemAtividadesParaCorrecao(ModelMap modelMap) {
