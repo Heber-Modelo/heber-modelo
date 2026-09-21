@@ -52,7 +52,9 @@
       </div>
       <div th:if="${username}">
         <a href="/logout">
-          <button></button>
+          <button>
+            <th:block th:replace="~{fragments/index/icons/logout :: svg}"></th:block>
+          </button>
         </a>
         <p th:text="#{web.page.home.menu.4}"></p>
       </div>
