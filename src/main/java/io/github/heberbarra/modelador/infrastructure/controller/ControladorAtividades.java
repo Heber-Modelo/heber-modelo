@@ -49,13 +49,12 @@ public class ControladorAtividades {
         return "criarAtividade";
     }
 
-    @PostMapping({"criarAtividade"})
+    @PostMapping("/criarAtividade")
     public ResponseEntity<HttpStatus> criarAtividade(@RequestBody AtividadeDTO atividadeDTO) {
         this.atividadeServices.saveAtividade(atividadeDTO);
 
         return ResponseEntity.ok().build();
     }
-
 
     @RequestMapping({"/listagemAtividades", "/listagemAtividades.html"})
     public String listagemAtividades(ModelMap modelMap) {

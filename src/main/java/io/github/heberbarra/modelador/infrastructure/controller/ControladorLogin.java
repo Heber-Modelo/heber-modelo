@@ -96,17 +96,13 @@ public class ControladorLogin {
         return "perfil";
     }
 
-    @RequestMapping({"/perfil/{matricula}", "/perfil.html/{matricula}"})
+    @RequestMapping("/perfil/{matricula}")
     public String perfil(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("matricula") Long matricula,
             ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "profile");
         InjetorAtributos.injetarPaleta(modelMap);
-
-        if (userDetails == null) {
-            return "redirect:/";
-        }
 
         if (!DataSourceBuilder.isProfessor()) {
             return "redirect:/perfil";

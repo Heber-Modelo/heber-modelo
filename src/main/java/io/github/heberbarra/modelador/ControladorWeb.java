@@ -13,6 +13,10 @@
 
 package io.github.heberbarra.modelador;
 
+import static io.github.heberbarra.modelador.infrastructure.controller.ControladorDesligar.TOKEN_SECRETO;
+import static io.github.heberbarra.modelador.infrastructure.services.UsuarioDetailsService.NOME_AUTORIDADE_PROFESSOR;
+import static java.awt.Desktop.Action.BROWSE;
+
 import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama;
 import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama.GruposDiagrama;
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
@@ -23,8 +27,6 @@ import io.github.heberbarra.modelador.domain.model.NovoDiagramaDTO;
 import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
 import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.configurador.WatcherConfiguracao;
-import io.github.heberbarra.modelador.infrastructure.controller.ControladorDesligar;
-import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
 import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
 import io.github.heberbarra.modelador.infrastructure.mapper.UsuarioMapper;
 import jakarta.annotation.PostConstruct;
@@ -121,7 +123,7 @@ public class ControladorWeb {
             return;
         }
 
-        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(BROWSE)) {
             Desktop.getDesktop().browse(uriPrograma);
             return;
         }
@@ -144,13 +146,20 @@ public class ControladorWeb {
     public String index(
             @AuthenticationPrincipal UserDetails userDetails, ModelMap modelMap, HttpServletResponse response) {
 
-        if (userDetails != null && DataSourceBuilder.isProfessor()) {
+        Optional<String> currentUserAuthority = Optional.empty();
+        if (userDetails != null
+                && userDetails.getAuthorities().stream().findFirst().isPresent()) {
+            currentUserAuthority = Optional.ofNullable(
+                    userDetails.getAuthorities().stream().findFirst().get().getAuthority());
+        }
+
+        if (currentUserAuthority.isPresent() && currentUserAuthority.get().equals(NOME_AUTORIDADE_PROFESSOR)) {
             return "redirect:/listagemEstudantes";
         }
 
         InjetorAtributos.injetarTituloPagina(modelMap, "home");
         InjetorAtributos.injetarPaleta(modelMap);
-        Cookie cookieTokenDesligar = new Cookie("TOKEN_DESLIGAR", ControladorDesligar.TOKEN_SECRETO);
+        Cookie cookieTokenDesligar = new Cookie("TOKEN_DESLIGAR", TOKEN_SECRETO);
         modelMap.addAttribute("desligar", "");
         cookieTokenDesligar.setSecure(true);
         response.addCookie(cookieTokenDesligar);
@@ -159,12 +168,7 @@ public class ControladorWeb {
     }
 
     @RequestMapping({"/listagemEstudantes", "/listagemEstudantes.html"})
-    public String listagemEstudantes(@AuthenticationPrincipal UserDetails userDetails, ModelMap modelMap) {
-
-        if (userDetails == null || !(DataSourceBuilder.isProfessor())) {
-            return "redirect:/";
-        }
-
+    public String listagemEstudantes(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "students-list");
         InjetorAtributos.injetarPaleta(modelMap);
 
