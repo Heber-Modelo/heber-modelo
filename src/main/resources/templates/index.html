@@ -23,6 +23,7 @@
       -->
     <header>
       <h1>Heber-Modelo</h1>
+      <h2 th:text="${username}"></h2>
     </header>
     <main>
       <div>
@@ -33,7 +34,7 @@
         </a>
         <p th:text="#{web.page.home.menu.1}"></p>
       </div>
-      <div>
+      <div th:if="${username == null}">
         <a href="entrarSessao.html">
           <button>
             <th:block th:replace="~{fragments/index/icons/sessao :: svg}"></th:block>
@@ -48,6 +49,12 @@
           </button>
         </a>
         <p th:text="#{web.page.home.menu.3}"></p>
+      </div>
+      <div th:if="${username}">
+        <a href="/logout">
+          <button></button>
+        </a>
+        <p th:text="#{web.page.home.menu.4}"></p>
       </div>
     </main>
     <div th:replace="~{fragments/cookiesBanner :: #cookies-banner}"></div>

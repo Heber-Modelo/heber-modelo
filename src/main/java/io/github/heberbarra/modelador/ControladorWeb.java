@@ -159,8 +159,13 @@ public class ControladorWeb {
 
         InjetorAtributos.injetarTituloPagina(modelMap, "home");
         InjetorAtributos.injetarPaleta(modelMap);
-        Cookie cookieTokenDesligar = new Cookie("TOKEN_DESLIGAR", TOKEN_SECRETO);
         modelMap.addAttribute("desligar", "");
+
+        if (userDetails != null) {
+            modelMap.addAttribute("username", userDetails.getUsername());
+        }
+
+        Cookie cookieTokenDesligar = new Cookie("TOKEN_DESLIGAR", TOKEN_SECRETO);
         cookieTokenDesligar.setSecure(true);
         response.addCookie(cookieTokenDesligar);
 
