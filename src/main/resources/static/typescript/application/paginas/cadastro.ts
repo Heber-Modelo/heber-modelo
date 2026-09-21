@@ -11,14 +11,19 @@
  *
  */
 
-let inputSenha: HTMLInputElement | null = document.querySelector("input[name='senha']");
-let inputConfirmarSenha: HTMLInputElement | null = document.querySelector(
+const inputSenha: HTMLInputElement | null = document.querySelector("input[name='senha']");
+const inputConfirmarSenha: HTMLInputElement | null = document.querySelector(
   "input[name='confirmarSenha']",
 );
-let btnEnviar: HTMLButtonElement | null = document.querySelector("form button#btn-enviar");
-let btnEnviarVerdadeiro: HTMLButtonElement | null = document.querySelector(
+const btnCancelar: HTMLButtonElement | null = document.querySelector("button#btn-cancelar");
+const btnEnviar: HTMLButtonElement | null = document.querySelector("form button#btn-enviar");
+const btnEnviarVerdadeiro: HTMLButtonElement | null = document.querySelector(
   "form button#btn-enviar-verdadeiro",
 );
+
+btnCancelar?.addEventListener("click", (): void => {
+  window.location.href = "/login";
+});
 
 btnEnviar?.addEventListener("click", (): void => {
   if (inputSenha == null || inputConfirmarSenha == null) return;
