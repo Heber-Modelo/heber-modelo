@@ -13,35 +13,33 @@
 
 package io.github.heberbarra.modelador;
 
+import static io.github.heberbarra.modelador.infrastructure.controller.ControladorDesligar.TOKEN_SECRETO;
+import static io.github.heberbarra.modelador.infrastructure.services.UsuarioDetailsService.NOME_AUTORIDADE_PROFESSOR;
+import static java.awt.Desktop.Action.BROWSE;
+
 import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama;
 import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama.GruposDiagrama;
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
+import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.NovoDiagramaDTO;
-import io.github.heberbarra.modelador.domain.model.Sessao;
 import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
+import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.configurador.WatcherConfiguracao;
-import io.github.heberbarra.modelador.infrastructure.controller.ControladorDesligar;
-import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
-import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
-import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
-import io.github.heberbarra.modelador.infrastructure.services.UsuarioServices;
+import io.github.heberbarra.modelador.infrastructure.mapper.UsuarioMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import java.awt.Desktop;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -53,12 +51,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.tomlj.TomlTable;
 
 @EnableAsync
 @Controller
@@ -69,49 +63,12 @@ public class ControladorWeb {
     private static final Logger logger = JavaLogger.obterLogger(ControladorWeb.class.getName());
     private static final IConfigurador configurador = ConfiguradorFactory.build();
     private final TaskExecutor taskExecutor;
-    private final UsuarioServices usuarioServices;
+    private final IUsuarioRepositorio usuarioRepositorio;
 
     public ControladorWeb(
-            @Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor, UsuarioServices usuarioServices) {
+            @Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor, IUsuarioRepositorio usuarioRepositorio) {
         this.taskExecutor = taskExecutor;
-        this.usuarioServices = usuarioServices;
-    }
-
-    public static class InjetorAtributos {
-
-        public static void injetarBindings(ModelMap modelMap) {
-            TomlTable tabelaBindings = configurador
-                    .getLeitorConfiguracao()
-                    .getInformacoesConfiguracoes()
-                    .getTable("bindings");
-
-            if (tabelaBindings == null) return;
-
-            for (String nomeBindings : tabelaBindings.dottedKeySet()) {
-                modelMap.addAttribute(nomeBindings, tabelaBindings.get(nomeBindings));
-            }
-        }
-
-        public static void injetarPaleta(ModelMap modelMap) {
-            Map<String, String> variaveisPaleta = configurador.pegarInformacoesPaleta();
-            StringBuilder stringBuilder = new StringBuilder(":root{%n".formatted());
-
-            for (String variavel : variaveisPaleta.keySet()) {
-                stringBuilder.append(
-                        "    --%s: %s;%n".formatted(variavel.replace("_", "-"), variaveisPaleta.get(variavel)));
-            }
-
-            stringBuilder.append("  }%n".formatted());
-            modelMap.addAttribute("paleta", stringBuilder.toString());
-        }
-
-        public static void injetarTituloPagina(ModelMap modelMap, String nomePagina) {
-            String titulo = TradutorWrapper.tradutor.traduzirMensagem("web.page.%s.title".formatted(nomePagina));
-            String nomePrograma = Principal.NOME_PROGRAMA.replace("-", " ");
-            String sufixo = titulo.isBlank() ? "" : " - " + titulo;
-
-            modelMap.addAttribute("programa", nomePrograma + sufixo);
-        }
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @PostConstruct
@@ -166,7 +123,7 @@ public class ControladorWeb {
             return;
         }
 
-        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(BROWSE)) {
             Desktop.getDesktop().browse(uriPrograma);
             return;
         }
@@ -186,144 +143,36 @@ public class ControladorWeb {
     }
 
     @RequestMapping({"/", "/index", "/index.html", "home", "home.html"})
-    public String index(ModelMap modelMap, HttpServletResponse response) {
+    public String index(
+            @AuthenticationPrincipal UserDetails userDetails, ModelMap modelMap, HttpServletResponse response) {
+
+        Optional<String> currentUserAuthority = Optional.empty();
+        if (userDetails != null
+                && userDetails.getAuthorities().stream().skip(1).findFirst().isPresent()) {
+            currentUserAuthority = Optional.ofNullable(userDetails.getAuthorities().stream()
+                    .skip(1)
+                    .findFirst()
+                    .get()
+                    .getAuthority());
+        }
+
+        if (currentUserAuthority.isPresent() && currentUserAuthority.get().equals(NOME_AUTORIDADE_PROFESSOR)) {
+            return "redirect:/listagemEstudantes";
+        }
+
         InjetorAtributos.injetarTituloPagina(modelMap, "home");
         InjetorAtributos.injetarPaleta(modelMap);
-        Cookie cookieTokenDesligar = new Cookie("TOKEN_DESLIGAR", ControladorDesligar.TOKEN_SECRETO);
         modelMap.addAttribute("desligar", "");
+
+        if (userDetails != null) {
+            modelMap.addAttribute("username", userDetails.getUsername());
+        }
+
+        Cookie cookieTokenDesligar = new Cookie("TOKEN_DESLIGAR", TOKEN_SECRETO);
         cookieTokenDesligar.setSecure(true);
         response.addCookie(cookieTokenDesligar);
 
         return "index";
-    }
-
-    @GetMapping({"/cadastro", "/cadastro.html"})
-    public String cadastro(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "register");
-        InjetorAtributos.injetarPaleta(modelMap);
-        modelMap.addAttribute("usuario", new UsuarioDTO());
-
-        return "cadastro";
-    }
-
-    @GetMapping({"/criarAtividade", "/criarAtividade.html"})
-    public String criarAtividade(ModelMap modelMap) {
-        InjetorAtributos.injetarPaleta(modelMap);
-        InjetorAtributos.injetarTituloPagina(modelMap, "create-assignment");
-
-        return "criarAtividade";
-    }
-
-    @PostMapping({"/cadastro", "/cadastro.html"})
-    public String cadastro(@ModelAttribute("usuario") UsuarioDTO usuarioDTO) {
-
-        usuarioDTO.setTipo(DataSourceBuilder.getTipoUsuario());
-        usuarioDTO.setNome(usuarioDTO.getNome().trim());
-        usuarioDTO.setEmail(usuarioDTO.getEmail().trim());
-        usuarioDTO.setSenha(usuarioDTO.getSenha().trim());
-        usuarioDTO.setConfirmarSenha(usuarioDTO.getConfirmarSenha().trim());
-
-        if (usuarioServices.findUserByMatricula(usuarioDTO.getMatricula()) != null
-                || usuarioServices.findUserByNome(usuarioDTO.getNome()) != null
-                || usuarioServices.findUserByEmail(usuarioDTO.getEmail()) != null) {
-            return "redirect:/cadastro.html?exists";
-        }
-
-        if (!usuarioDTO.getSenha().equals(usuarioDTO.getConfirmarSenha())) {
-            return "redirect:cadastro.html?mismatch";
-        }
-
-        Pattern regexEmail = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
-        if (!regexEmail.matcher(usuarioDTO.getEmail()).matches()) {
-            return "redirect:/cadastro.html?invalidEmail";
-        }
-
-        usuarioServices.saveUsuario(usuarioDTO);
-        return "redirect:/login.html?cadastroSuccess";
-    }
-
-    @RequestMapping({"/login", "/login.html"})
-    public String login(@AuthenticationPrincipal UserDetails userDetails, ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "login");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        if (userDetails == null) return "login";
-
-        return "redirect:/";
-    }
-
-    @RequestMapping({"/criarSessao", "/criarSessao.html"})
-    public String criarSessao(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "session-create");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        return "criarSessao";
-    }
-
-    @RequestMapping({"/entrarSessao", "/entrarSessao.html"})
-    public String entrarSessao(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "session-enter");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        return "entrarSessao";
-    }
-
-    @RequestMapping(
-            value = {"/criarSessao", "/criarSessao.html"},
-            method = RequestMethod.POST)
-    public String criarSessao(@ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
-
-        Sessao sessao = SessaoFactory.build(porta, null, senha);
-
-        return "redirect:/login";
-    }
-
-    @RequestMapping(
-            value = {"/entrarSessao", "/entrarSessao.html"},
-            method = RequestMethod.POST)
-    public String entrarSessao(
-            @ModelAttribute("ip") String ip,
-            @ModelAttribute("session-port") Integer porta,
-            @ModelAttribute("password") String senha) {
-
-        Sessao sessao = SessaoFactory.build(porta, ip, senha);
-
-        try (BufferedWriter bufferedWriter =
-                new BufferedWriter(new OutputStreamWriter(sessao.getSocket().getOutputStream())); ) {
-            bufferedWriter.write(senha);
-            bufferedWriter.flush();
-        } catch (IOException e) {
-            logger.severe(TradutorWrapper.tradutor
-                    .traduzirMensagem("error.session.send-message")
-                    .formatted(e.getMessage()));
-        }
-
-        return "redirect:/login";
-    }
-
-    @RequestMapping({"/anexarAtividade", "/anexarAtividade.html"})
-    public String anexarAtividade(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "assignment");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        return "anexarAtividade";
-    }
-
-    @RequestMapping({"/listagemAtividades", "/listagemAtividades.html"})
-    public String listagemAtividades(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "assignments-list");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        return "listagemAtividades";
-    }
-
-    @RequestMapping({"/listagemAtividadesCorrecao", "/listagemAtividadesCorrecao.html"})
-    public String listagemAtividadesParaCorrecao(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "assignments-feedback-list");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        return "listagemAtividadesCorrecao";
     }
 
     @RequestMapping({"/listagemEstudantes", "/listagemEstudantes.html"})
@@ -331,36 +180,24 @@ public class ControladorWeb {
         InjetorAtributos.injetarTituloPagina(modelMap, "students-list");
         InjetorAtributos.injetarPaleta(modelMap);
 
+        List<UsuarioDTO> usuariosDTOs = usuarioRepositorio.findAll().stream()
+                .map(UsuarioMapper::usuarioToDTO)
+                .toList();
+        modelMap.addAttribute(
+                "professors",
+                usuariosDTOs.stream()
+                        .filter(usuarioDTO -> usuarioDTO.getTipo().equals("P"))
+                        .toList());
+        modelMap.addAttribute(
+                "students",
+                usuariosDTOs.stream()
+                        .filter(usuarioDTO -> usuarioDTO.getTipo().equals("E"))
+                        .toList());
+
         return "listagemEstudantes";
     }
 
-    @RequestMapping({"/configurarSessao", "/configurarSessao.html"})
-    public String configurarSessao(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "session-configuration");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        return "configurarSessao";
-    }
-
-    @RequestMapping({"/redefinir", "/redefinir.html"})
-    public String redefinirSenha(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "reset-password");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        return "redefinir";
-    }
-
-    @RequestMapping({"solicitar", "solicitar.html"})
-    public String solicitarNovaSenha(ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "request-password-change");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        return "solicitar";
-    }
-
-    @RequestMapping(
-            value = {"/editor", "/editor.html"},
-            method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping({"/editor", "/editor.html"})
     public String editor(ModelMap modelMap, @ModelAttribute("novoDiagramaDTO") NovoDiagramaDTO novoDiagramaDTO) {
         InjetorAtributos.injetarTituloPagina(modelMap, "editor");
         InjetorAtributos.injetarPaleta(modelMap);
@@ -401,22 +238,11 @@ public class ControladorWeb {
         InjetorAtributos.injetarTituloPagina(modelMap, "new-diagram");
         InjetorAtributos.injetarPaleta(modelMap);
         modelMap.addAttribute("novoDiagramaDTO", new NovoDiagramaDTO());
-        modelMap.addAttribute(GruposDiagrama.UML.toString(), ListadorTiposDiagrama.pegarDiagramasUML());
-        modelMap.addAttribute(GruposDiagrama.DATABASE.toString(), ListadorTiposDiagrama.pegarDiagramasBancoDados());
-        modelMap.addAttribute(GruposDiagrama.MISC.toString(), ListadorTiposDiagrama.pegarDiagramasOutros());
+        modelMap.addAttribute("diagramasUML", ListadorTiposDiagrama.pegarDiagramasUML());
+        modelMap.addAttribute("diagramasBD", ListadorTiposDiagrama.pegarDiagramasBancoDados());
+        modelMap.addAttribute("diagramasOutro", ListadorTiposDiagrama.pegarDiagramasOutros());
 
         return "novo";
-    }
-
-    @RequestMapping({"/perfil", "/perfil.html"})
-    public String perfil(@AuthenticationPrincipal UserDetails userDetails, ModelMap modelMap) {
-        InjetorAtributos.injetarTituloPagina(modelMap, "profile");
-        InjetorAtributos.injetarPaleta(modelMap);
-
-        Usuario usuario = usuarioServices.findUserByNome(userDetails.getUsername());
-        modelMap.addAttribute("usuario", usuario);
-
-        return "perfil";
     }
 
     @RequestMapping({"/privacidade", "/privacidade.html"})

@@ -11,8 +11,11 @@
  *
  */
 
-package io.github.heberbarra.modelador.domain.model;
+package io.github.heberbarra.modelador.domain.router;
 
-import java.net.Socket;
-
-public record Sessao(Socket socket) {}
+public interface Roteador extends Runnable {
+    String ENCERRAR_ROUTER = "ENCERRAR";
+    String SEPARADOR_MENSAGEM = ";";
+    int POSICAO_HEADER = 0;
+    int POSICAO_IP = 1;
+}

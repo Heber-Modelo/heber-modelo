@@ -11,8 +11,19 @@
  *
  */
 
-package io.github.heberbarra.modelador.domain.model;
+package io.github.heberbarra.modelador.infrastructure.verificador;
 
-import java.net.Socket;
+import java.util.Objects;
 
-public record Sessao(Socket socket) {}
+public class VerificadorSenha {
+    public static final String VERIFICADOR_SENHA_HEADER = "VERIFICAR-SENHA";
+    private final String senha;
+
+    public VerificadorSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public boolean verificar(String senha) {
+        return Objects.equals(this.senha, senha);
+    }
+}

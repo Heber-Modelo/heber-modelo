@@ -79,6 +79,23 @@ form {
       justify-content: center;
     }
   }
+
+  #botoes-cadastro {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 3rem;
+    width: 80%;
+    justify-content: center;
+
+    button {
+      margin-top: 2.5rem;
+      align-items: center;
+      display: flex;
+      height: 3.5rem;
+      justify-content: center;
+    }
+  }
+
   .campos-texto{
     font-size: 1.5rem;
   }

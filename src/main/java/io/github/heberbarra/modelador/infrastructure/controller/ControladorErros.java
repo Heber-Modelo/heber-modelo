@@ -13,7 +13,7 @@
 
 package io.github.heberbarra.modelador.infrastructure.controller;
 
-import io.github.heberbarra.modelador.ControladorWeb;
+import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.webmvc.error.ErrorController;
@@ -28,7 +28,7 @@ public class ControladorErros implements ErrorController {
     public String handleError(HttpServletRequest request, ModelMap modelMap) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         Object errorMessage = request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
-        ControladorWeb.InjetorAtributos.injetarPaleta(modelMap);
+        InjetorAtributos.injetarPaleta(modelMap);
         modelMap.addAttribute("status", status);
         modelMap.addAttribute("error", errorMessage);
 

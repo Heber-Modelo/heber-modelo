@@ -29,6 +29,14 @@
     url("/fonts/Cookie/Cookie-Regular.ttf") format("truetype");
 }
 
+//noinspection CSSUnkownTarget
+@font-face {
+  font-family: "Pompiere";
+  src:
+    local("Pompiere"),
+    url("/fonts/Pompiere/Pompiere-Regular.ttf") format("truetype");
+}
+
 body {
   background-color: var(--cor-fundo);
   min-width: 100vw;

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <title th:text="#{web.page.assignments-list.title}"></title>
@@ -20,7 +20,18 @@
   -->
     <header th:replace="~{fragments/header :: header}"></header>
     <main>
-      <div>
+      <div class="atividades">
+
+          <div th:each="atividade : ${atividades}" class="label-atividade">
+            <div class="icon-title">
+              <th:block th:replace="~{fragments/assignment/icons/assignment_icon :: svg}"></th:block>
+              <span th:text="${atividade.getTitulo()}"></span>
+            </div>
+
+            <span th:text="#{web.page.create-assignment.label.deadline} + ' ' + ${atividade.getDataLimite()}"></span>
+          </div>
+      </div>
+      <div class="botoes">
         <button>
           <a
             th:href="@{listagemEstudantes.html}"
@@ -35,7 +46,7 @@
         </button>
         <button>
           <a
-            th:href="@{anexarAtividade.html}"
+            th:href="@{criarAtividade.html}"
             th:text="#{web.page.assignments-list.label.attach}"
           ></a>
         </button>

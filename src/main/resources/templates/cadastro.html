@@ -29,7 +29,7 @@
         </label>
         <label>
           <span class="campos-texto" th:text="#{web.page.register.label.student-id}"></span>
-          <input type="number" name="matricula" required />
+          <input type="text" name="matricula" required />
         </label>
         <div
           class="aviso"
@@ -53,13 +53,19 @@
           <span class="campos-texto" th:text="#{web.page.register.label.confirm-password}"></span>
           <input type="password" name="confirmarSenha" required />
         </label>
-        <button th:text="#{web.page.register.label.submit}" type="button" id="btn-enviar"></button>
-        <button type="submit" id="btn-enviar-verdadeiro" style="display: none"></button>
-        <button
-          th:text="#{web.page.register.label.cancel}"
-          type="button"
-          id="btn-cancelar"
-        ></button>
+        <div id="botoes">
+          <button
+            th:text="#{web.page.register.label.cancel}"
+            type="button"
+            id="btn-cancelar"
+          ></button>
+          <button
+            th:text="#{web.page.register.label.confirm}"
+            type="button"
+            id="btn-enviar"
+          ></button>
+          <button type="submit" id="btn-enviar-verdadeiro" style="display: none"></button>
+        </div>
         <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
       </form>
       <div th:replace="~{fragments/cookiesBanner.html :: #cookies-banner}"></div>

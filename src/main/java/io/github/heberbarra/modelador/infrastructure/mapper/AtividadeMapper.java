@@ -11,8 +11,15 @@
  *
  */
 
-package io.github.heberbarra.modelador.domain.model;
+package io.github.heberbarra.modelador.infrastructure.mapper;
 
-import java.net.Socket;
+import io.github.heberbarra.modelador.domain.model.AtividadeDTO;
+import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 
-public record Sessao(Socket socket) {}
+public class AtividadeMapper {
+
+    public static AtividadeDTO atividadeToDTO(Atividade atividade){
+        return new AtividadeDTO(atividade.getNome(), atividade.getDataPostagem(), atividade.getDataLimite(), atividade.isProva(), atividade.getDescricao());
+    }
+
+}

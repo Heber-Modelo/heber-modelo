@@ -25,7 +25,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tbAtividade")
+@Table(name = "tb_atividade")
 public class Atividade {
 
     @Id

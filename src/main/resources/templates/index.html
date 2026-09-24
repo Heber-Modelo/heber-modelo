@@ -5,6 +5,7 @@
     <link rel="stylesheet" th:if="${desligar != null}" th:href="@{/css/desligar.css}" />
     <link rel="stylesheet" th:href="@{/css/index.css}" />
     <script th:src="@{/javascript/desligar.js}" defer></script>
+    <script th:src="@{/javascript/index.js}" defer></script>
     <meta name="_csrf" th:content="${_csrf.token}" />
     <title>Heber-Modelo</title>
   </head>
@@ -23,6 +24,7 @@
       -->
     <header>
       <h1>Heber-Modelo</h1>
+      <h2 th:text="${username}"></h2>
     </header>
     <main>
       <div>
@@ -33,7 +35,7 @@
         </a>
         <p th:text="#{web.page.home.menu.1}"></p>
       </div>
-      <div>
+      <div th:if="${username == null}">
         <a href="entrarSessao.html">
           <button>
             <th:block th:replace="~{fragments/index/icons/sessao :: svg}"></th:block>
@@ -48,6 +50,14 @@
           </button>
         </a>
         <p th:text="#{web.page.home.menu.3}"></p>
+      </div>
+      <div th:if="${username}">
+        <a>
+          <button id="logout">
+            <th:block th:replace="~{fragments/index/icons/logout :: svg}"></th:block>
+          </button>
+        </a>
+        <p th:text="#{web.page.home.menu.4}"></p>
       </div>
     </main>
     <div th:replace="~{fragments/cookiesBanner :: #cookies-banner}"></div>

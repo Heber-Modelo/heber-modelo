@@ -33,12 +33,20 @@ public class ConfiguradorSecurity {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
-        httpSecurity.csrf(csrf -> {
-            csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-        });
+        httpSecurity.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()));
 
         httpSecurity.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/usuarios", "/usuarios/**")
+                .requestMatchers(
+                        "/criarAtividade",
+                        "/criarAtividade.html",
+                        "/encerrarSessao",
+                        "/listagemAtividades",
+                        "/listagemAtividades.html",
+                        "/listagemEstudantes",
+                        "/listagemEstudantes.html",
+                        "/perfil/{matricula}",
+                        "/usuarios",
+                        "/usuarios/**")
                 .hasAuthority("PROFESSOR")
                 .requestMatchers("/perfil", "/perfil.html")
                 .authenticated()

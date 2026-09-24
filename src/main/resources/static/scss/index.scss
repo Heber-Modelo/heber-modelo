@@ -13,7 +13,7 @@
  *
  */
 
-main{
+main {
   display: flex;
   flex-direction: row;
   padding-left: 5rem;
@@ -52,11 +52,16 @@ div {
 
 
 header {
-  display: flex;
   align-items: center;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-}
 
+  h2 {
+    font-family: "Pompiere", serif;
+  }
+
+}
 
 .svg-color-fill {
   color: var(--cor-botao);

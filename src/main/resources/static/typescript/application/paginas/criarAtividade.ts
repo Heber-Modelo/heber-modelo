@@ -76,7 +76,7 @@ async function criarAtividade(event: SubmitEvent) {
   let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
   let csrfToken: string = csrfMetaTag?.content || "";
 
-  await fetch("/criarAtividade", {
+ let response: Response = await fetch("/criarAtividade", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -91,4 +91,12 @@ async function criarAtividade(event: SubmitEvent) {
       isProva: inputRadioYes?.checked,
     }),
   });
+
+ if (response.ok){
+   window.location.href = "listagemAtividades";
+   return;
+ }
+
+ window.alert("A Atividade não pode ser postada. Corrija os erros.")
+
 }

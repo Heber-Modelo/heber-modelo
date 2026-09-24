@@ -18,6 +18,7 @@ import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,7 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class UsuarioDetailsService implements UserDetailsService {
-
+    public static final String NOME_AUTORIDADE_ESTUDANTE = "ESTUDANTE";
+    public static final String NOME_AUTORIDADE_PROFESSOR = "PROFESSOR";
     private final IUsuarioRepositorio repositorio;
 
     public UsuarioDetailsService(IUsuarioRepositorio repositorio) {
@@ -37,7 +39,8 @@ public class UsuarioDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String identification) throws UsernameNotFoundException {
+    public @NullMarked UserDetails loadUserByUsername(String identification)
+            throws NumberFormatException, UsernameNotFoundException {
         Optional<Usuario> optionalUsuario = repositorio.findUsuarioByNome(identification);
 
         if (optionalUsuario.isEmpty()) {
@@ -45,26 +48,22 @@ public class UsuarioDetailsService implements UserDetailsService {
         }
 
         if (optionalUsuario.isEmpty()) {
-            try {
-                long matricula = Long.parseLong(identification);
-                optionalUsuario = repositorio.findUsuarioByMatricula(matricula);
-            } catch (NumberFormatException e) {
-                return null;
-            }
+            long matricula = Long.parseLong(identification);
+            optionalUsuario = repositorio.findUsuarioByMatricula(matricula);
         }
 
         if (optionalUsuario.isEmpty()) {
-            return null;
+            throw new UsernameNotFoundException(identification);
         }
 
         Usuario usuario = optionalUsuario.get();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
         if (usuario.getTipo().equals("P")) {
-            authorities.add(new SimpleGrantedAuthority("PROFESSOR"));
+            authorities.add(new SimpleGrantedAuthority(NOME_AUTORIDADE_PROFESSOR));
         }
 
-        authorities.add(new SimpleGrantedAuthority("ESTUDANTE"));
+        authorities.add(new SimpleGrantedAuthority(NOME_AUTORIDADE_ESTUDANTE));
         return new User(usuario.getNome(), usuario.getSenha(), authorities);
     }
 }

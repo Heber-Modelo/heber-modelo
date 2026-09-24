@@ -13,36 +13,53 @@
 
 package io.github.heberbarra.modelador.infrastructure.factory;
 
-import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
+import io.github.heberbarra.modelador.application.logging.JavaLogger;
+import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.model.Sessao;
 import jakarta.annotation.Nullable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 public class SessaoFactory {
-
+    private static final Logger logger = JavaLogger.obterLogger(SessaoFactory.class.getName());
     private static Sessao sessao;
 
-    public static Sessao build(Integer porta, @Nullable String ip, String password) {
+    public static Sessao build(Integer porta, @Nullable String ip) {
         if (sessao == null) {
             try {
                 Socket socket;
                 if (ip != null) {
-                    IConfigurador configurador = ConfiguradorFactory.build();
                     socket = new Socket(ip, porta);
-
                 } else {
+                    @SuppressWarnings("resource")
                     ServerSocket serverSocket = new ServerSocket(porta);
                     socket = serverSocket.accept();
                 }
 
                 sessao = new Sessao(socket);
+                logger.info(TradutorWrapper.tradutor.traduzirMensagem("session.create.success"));
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                logger.warning(TradutorWrapper.tradutor
+                        .traduzirMensagem("error.session.create.failure")
+                        .formatted(e.getMessage()));
             }
         }
 
         return sessao;
+    }
+
+    public static void closeSocket() {
+        if (sessao != null) {
+            try {
+                sessao.socket().close();
+                sessao = null;
+            } catch (IOException e) {
+                logger.warning(TradutorWrapper.tradutor
+                        .traduzirMensagem("error.session.terminate")
+                        .formatted(e.getMessage()));
+            }
+        }
     }
 }
