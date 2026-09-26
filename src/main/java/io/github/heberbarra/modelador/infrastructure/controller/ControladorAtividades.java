@@ -19,6 +19,7 @@ import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import io.github.heberbarra.modelador.infrastructure.mapper.AtividadeMapper;
 import io.github.heberbarra.modelador.infrastructure.services.AtividadeServices;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,14 +28,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import java.util.List;
 
 @Controller
 public class ControladorAtividades {
 
     private final IAtividadeRepositorio atividadeRepositorio;
     private final AtividadeServices atividadeServices;
-
 
     public ControladorAtividades(IAtividadeRepositorio atividadeRepositorio, AtividadeServices atividadeServices) {
         this.atividadeRepositorio = atividadeRepositorio;
@@ -62,7 +61,9 @@ public class ControladorAtividades {
         InjetorAtributos.injetarPaleta(modelMap);
 
         List<Atividade> atividades = this.atividadeRepositorio.findAll();
-        modelMap.addAttribute("atividades", atividades.stream().map(AtividadeMapper::atividadeToDTO).toList());
+        modelMap.addAttribute(
+                "atividades",
+                atividades.stream().map(AtividadeMapper::atividadeToDTO).toList());
 
         return "listagemAtividades";
     }

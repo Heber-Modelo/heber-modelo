@@ -19,18 +19,18 @@ async function encerrarSessao(): Promise<void> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-XSRF-TOKEN": csrfToken
+      "X-XSRF-TOKEN": csrfToken,
     },
-    credentials: "same-origin"
+    credentials: "same-origin",
   });
 
   await fetch("/logout", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-XSRF-TOKEN": csrfToken
+      "X-XSRF-TOKEN": csrfToken,
     },
-    credentials: "same-origin"
+    credentials: "same-origin",
   });
 
   window.location.href = "/";
@@ -38,3 +38,19 @@ async function encerrarSessao(): Promise<void> {
 
 const encerrarSessaoButton: HTMLButtonElement | null = document.querySelector("#encerrarSessao");
 encerrarSessaoButton?.addEventListener("click", encerrarSessao);
+
+let awaitIndicatorWrapper: HTMLElement | null = document.querySelector("#await-indicator-wrapper");
+
+async function verificarEstadoSessao(): Promise<void> {
+  let estado: string = await (await fetch("/verificarEstadoSessao")).text();
+
+  if (estado === "AUTORIZADO") {
+    awaitIndicatorWrapper?.remove();
+    return;
+  }
+
+  awaitIndicatorWrapper?.style.removeProperty("display");
+  setTimeout(verificarEstadoSessao, 500);
+}
+
+(async (): Promise<void> => await verificarEstadoSessao())();

@@ -73,6 +73,29 @@ main {
   max-width: 60%;
 }
 
+#await-indicator-wrapper {
+  align-items: center;
+  background-color: var(--cor-fonte-alternativa);
+  color: var(--cor-letra);
+  display: flex;
+  font-size: 2.5rem;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  opacity: 0.8;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+
+  #await-indicator {
+    height: 15%;
+    width: 70%;
+  }
+
+}
+
 h2 {
   font-size: 4rem;
   width: 100%;

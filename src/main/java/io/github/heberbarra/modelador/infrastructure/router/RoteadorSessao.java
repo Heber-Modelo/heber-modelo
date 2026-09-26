@@ -35,15 +35,18 @@ import org.jspecify.annotations.Nullable;
 
 public class RoteadorSessao implements Roteador {
     private static final Logger logger = JavaLogger.obterLogger(RoteadorSessao.class.getName());
-    public Map<String, Method> funcionalidadesRegistradas;
-    public Map<String, Object> objetosAlvoFuncionalidades;
-    public Sessao sessao;
+    private final Map<String, Method> funcionalidadesRegistradas;
+    private final Map<String, Object> objetosAlvoFuncionalidades;
     private final int porta;
+    private EstadosRoteador estado;
+    private Sessao sessao;
 
     public RoteadorSessao(int porta) {
         this.funcionalidadesRegistradas = new HashMap<>();
         this.objetosAlvoFuncionalidades = new HashMap<>();
         this.porta = porta;
+
+        this.estado = EstadosRoteador.ESPERANDO;
     }
 
     public void registrarFuncionalidade(String header, @Nullable Object objetoAlvo, Method funcionalidade) {
@@ -54,6 +57,7 @@ public class RoteadorSessao implements Roteador {
     @Override
     public void run() {
         this.sessao = SessaoFactory.build(porta, null);
+        this.estado = EstadosRoteador.AUTORIZADO;
 
         String argumentos;
         String header = null;
@@ -111,5 +115,14 @@ public class RoteadorSessao implements Roteador {
                     .traduzirMensagem("error.session.router.invocation")
                     .formatted(header, e.getMessage()));
         }
+    }
+
+    @Override
+    public EstadosRoteador getEstado() {
+        return estado;
+    }
+
+    public Sessao getSessao() {
+        return sessao;
     }
 }

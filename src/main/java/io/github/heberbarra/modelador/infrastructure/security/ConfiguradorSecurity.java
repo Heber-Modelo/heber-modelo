@@ -37,6 +37,8 @@ public class ConfiguradorSecurity {
 
         httpSecurity.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(
+                        "/configurarSessao",
+                        "/configurarSessao.html",
                         "/criarAtividade",
                         "/criarAtividade.html",
                         "/encerrarSessao",
