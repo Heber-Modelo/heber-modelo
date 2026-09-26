@@ -17,12 +17,14 @@ public class AbaJSON {
 
     int id;
     String nome;
+    String nomeDiagramaAba;
 
     public AbaJSON() {}
 
-    public AbaJSON(int id, String nome) {
+    public AbaJSON(int id, String nome, String nomeDiagramaAba) {
         this.id = id;
         this.nome = nome;
+        this.nomeDiagramaAba = nomeDiagramaAba;
     }
 
     public int getId() {
@@ -39,5 +41,13 @@ public class AbaJSON {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getNomeDiagramaAba() {
+        return nomeDiagramaAba;
+    }
+
+    public void setNomeDiagramaAba(String nomeDiagramaAba) {
+        this.nomeDiagramaAba = nomeDiagramaAba;
     }
 }

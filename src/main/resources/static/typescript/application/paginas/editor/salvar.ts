@@ -25,6 +25,7 @@ const PROPRIEDADE_ID_ABA: string = "data-indice-aba";
 const PROPRIEDADE_ID_COMPONENTE: string = "data-id";
 const PROPRIEDADES_IDS_OUVINTES: string = "data-ids-ouvintes";
 const PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
+const PROPRIEDADE_NOME_DIAGRAMA_ABA: string = "data-nome-diagrama-aba";
 const PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string = "data-recebe-pontos-extensores";
 const PROPRIEDADE_RECEBE_SETAS_CONECTORAS: string = "data-recebe-setas-conectoras";
 
@@ -59,8 +60,9 @@ function coletarAbas(elementosAbas: NodeListOf<HTMLDivElement>): AbaJSON[] {
 
     let id: number = Number(aba.getAttribute(PROPRIEDADE_ID_ABA));
     let nome: string = elementoNomeAba?.innerText || String(id);
+    let nomeDiagramaAba: string = aba.getAttribute(PROPRIEDADE_NOME_DIAGRAMA_ABA) || "";
 
-    abas.push({ id, nome });
+    abas.push({ id, nome, nomeDiagramaAba });
   }
 
   return abas;

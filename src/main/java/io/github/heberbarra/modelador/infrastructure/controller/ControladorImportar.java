@@ -23,6 +23,7 @@ import static io.github.heberbarra.modelador.domain.model.json.DiagramasJSON.CRE
 import static io.github.heberbarra.modelador.domain.model.json.DiagramasJSON.CSS_FILES_ID;
 import static io.github.heberbarra.modelador.domain.model.json.DiagramasJSON.PROPRIEDADE_ID_ABA;
 import static io.github.heberbarra.modelador.domain.model.json.DiagramasJSON.PROPRIEDADE_NOME_ABA;
+import static io.github.heberbarra.modelador.domain.model.json.DiagramasJSON.PROPRIEDADE_NOME_DIAGRAMA_ABA;
 import static io.github.heberbarra.modelador.domain.model.json.DiagramasJSON.TYPES_ID;
 
 import io.github.heberbarra.modelador.domain.model.json.AbaJSON;
@@ -91,8 +92,9 @@ public class ControladorImportar {
                     .map(tabElement -> {
                         String nome = tabElement.attr(PROPRIEDADE_NOME_ABA);
                         int id = Integer.parseInt(tabElement.attr(PROPRIEDADE_ID_ABA));
+                        String nomeDiagramaAba = tabElement.attr(PROPRIEDADE_NOME_DIAGRAMA_ABA);
 
-                        return new AbaJSON(id, nome);
+                        return new AbaJSON(id, nome, nomeDiagramaAba);
                     })
                     .toList();
         }
