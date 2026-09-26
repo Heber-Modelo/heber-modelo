@@ -13,19 +13,22 @@
 
 package io.github.heberbarra.modelador.infrastructure.controller;
 
-import static io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante.EstadosRoteadorSessaoEstudante.BLOQUEADO;
-import static io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante.EstadosRoteadorSessaoEstudante.ESPERANDO;
+import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.BLOQUEADO;
+import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.ESPERANDO;
 
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
+import io.github.heberbarra.modelador.domain.model.ConfiguracaoSessao;
 import io.github.heberbarra.modelador.domain.router.Roteador;
 import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
 import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessao;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante;
 import io.github.heberbarra.modelador.infrastructure.verificador.VerificadorSenha;
+import java.util.Optional;
 import java.util.logging.Logger;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplicationShutdownHandlers;
 import org.springframework.context.event.EventListener;
@@ -38,6 +41,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ControladorSessao {
@@ -108,7 +112,7 @@ public class ControladorSessao {
         taskExecutor.execute(roteador);
 
         try {
-            while (roteadorSessaoEstudante.getEstadoRoteadorSessaoEstudante().equals(ESPERANDO)) {
+            while (roteadorSessaoEstudante.getEstado().equals(ESPERANDO)) {
                 //noinspection BusyWait
                 Thread.sleep(200);
             }
@@ -116,7 +120,7 @@ public class ControladorSessao {
             logger.warning(e.getMessage());
         }
 
-        if (roteadorSessaoEstudante.getEstadoRoteadorSessaoEstudante().equals(BLOQUEADO)) {
+        if (roteadorSessaoEstudante.getEstado().equals(BLOQUEADO)) {
             roteador = null;
 
             return "redirect:/entrarSessao";
@@ -130,7 +134,20 @@ public class ControladorSessao {
         InjetorAtributos.injetarTituloPagina(modelMap, "session-configuration");
         InjetorAtributos.injetarPaleta(modelMap);
 
+        ConfiguracaoSessao configuracaoSessao = SessaoFactory.getSessao().configuracaoSessao();
+        modelMap.addAttribute("configuracao", configuracaoSessao);
+
         return "configurarSessao";
+    }
+
+    @GetMapping("/verificarEstadoSessao")
+    @ResponseBody
+    public @Nullable ResponseEntity<String> verificarEstadoSessao() {
+        Optional<String> estadoRoteador = roteador == null
+                ? Optional.empty()
+                : Optional.of(roteador.getEstado().toString().replace("\"", ""));
+
+        return ResponseEntity.of(estadoRoteador);
     }
 
     @EventListener(SpringApplicationShutdownHandlers.class)

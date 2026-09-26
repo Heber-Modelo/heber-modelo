@@ -34,19 +34,13 @@ public class RoteadorSessaoEstudante implements Roteador {
     private final int porta;
     private final String ip;
     private final String senha;
-    private EstadosRoteadorSessaoEstudante estadoRoteadorSessaoEstudante;
+    private EstadosRoteador estadoRoteadorSessaoEstudante;
 
     public RoteadorSessaoEstudante(int porta, String ip, String senha) {
         this.porta = porta;
         this.ip = ip;
         this.senha = senha;
-        this.estadoRoteadorSessaoEstudante = EstadosRoteadorSessaoEstudante.ESPERANDO;
-    }
-
-    public enum EstadosRoteadorSessaoEstudante {
-        AUTORIZADO,
-        BLOQUEADO,
-        ESPERANDO
+        this.estadoRoteadorSessaoEstudante = EstadosRoteador.ESPERANDO;
     }
 
     @Override
@@ -74,13 +68,13 @@ public class RoteadorSessaoEstudante implements Roteador {
             if (Objects.equals(VERIFICADOR_SENHA_HEADER, header)
                     && Objects.equals(this.ip, ip)
                     && !(Boolean.parseBoolean(partesResposta[2]))) {
-                this.estadoRoteadorSessaoEstudante = EstadosRoteadorSessaoEstudante.BLOQUEADO;
+                this.estadoRoteadorSessaoEstudante = EstadosRoteador.BLOQUEADO;
                 logger.warning(TradutorWrapper.tradutor.traduzirMensagem("error.session.connection.failure"));
 
                 return;
             }
 
-            this.estadoRoteadorSessaoEstudante = EstadosRoteadorSessaoEstudante.AUTORIZADO;
+            this.estadoRoteadorSessaoEstudante = EstadosRoteador.AUTORIZADO;
             logger.info(TradutorWrapper.tradutor.traduzirMensagem("session.connection.success"));
         } catch (IOException e) {
             logger.severe(TradutorWrapper.tradutor
@@ -93,7 +87,8 @@ public class RoteadorSessaoEstudante implements Roteador {
         }
     }
 
-    public EstadosRoteadorSessaoEstudante getEstadoRoteadorSessaoEstudante() {
+    @Override
+    public EstadosRoteador getEstado() {
         return estadoRoteadorSessaoEstudante;
     }
 }

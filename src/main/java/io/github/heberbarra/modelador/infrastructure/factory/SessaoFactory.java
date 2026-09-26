@@ -15,6 +15,7 @@ package io.github.heberbarra.modelador.infrastructure.factory;
 
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
+import io.github.heberbarra.modelador.domain.model.ConfiguracaoSessao;
 import io.github.heberbarra.modelador.domain.model.Sessao;
 import jakarta.annotation.Nullable;
 import java.io.IOException;
@@ -24,26 +25,31 @@ import java.util.logging.Logger;
 
 public class SessaoFactory {
     private static final Logger logger = JavaLogger.obterLogger(SessaoFactory.class.getName());
-    private static Sessao sessao;
+    private static final Object SYNCHRONIZER = new Object();
+    private static volatile Sessao sessao = null;
 
     public static Sessao build(Integer porta, @Nullable String ip) {
         if (sessao == null) {
-            try {
-                Socket socket;
-                if (ip != null) {
-                    socket = new Socket(ip, porta);
-                } else {
-                    @SuppressWarnings("resource")
-                    ServerSocket serverSocket = new ServerSocket(porta);
-                    socket = serverSocket.accept();
-                }
+            synchronized (SYNCHRONIZER) {
+                try {
+                    Socket socket;
+                    if (ip != null) {
+                        socket = new Socket(ip, porta);
+                        logger.info(TradutorWrapper.tradutor
+                                .traduzirMensagem("session.create.success")
+                                .formatted(porta));
+                    } else {
+                        @SuppressWarnings("resource")
+                        ServerSocket serverSocket = new ServerSocket(porta);
+                        socket = serverSocket.accept();
+                    }
 
-                sessao = new Sessao(socket);
-                logger.info(TradutorWrapper.tradutor.traduzirMensagem("session.create.success"));
-            } catch (IOException e) {
-                logger.warning(TradutorWrapper.tradutor
-                        .traduzirMensagem("error.session.create.failure")
-                        .formatted(e.getMessage()));
+                    sessao = new Sessao(new ConfiguracaoSessao(), socket);
+                } catch (IOException e) {
+                    logger.warning(TradutorWrapper.tradutor
+                            .traduzirMensagem("error.session.create.failure")
+                            .formatted(e.getMessage()));
+                }
             }
         }
 
@@ -61,5 +67,9 @@ public class SessaoFactory {
                         .formatted(e.getMessage()));
             }
         }
+    }
+
+    public static Sessao getSessao() {
+        return sessao;
     }
 }

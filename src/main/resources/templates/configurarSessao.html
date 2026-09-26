@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <title th:text="#{web.page.session-configuration.title}"></title>
@@ -20,20 +20,23 @@
   -->
     <header th:replace="~{fragments/header :: header}"></header>
     <main>
-      <div>
-        <button>
-          <a
-            th:href="@{listagemEstudantes.html}"
-            th:text="#{web.page.session-configuration.label.cancel}"
-          ></a>
-        </button>
-        <button>
-          <a
-            th:href="@{listagemEstudantes.html}"
-            th:text="#{web.page.session-configuration.label.save}"
-          ></a>
-        </button>
-      </div>
+      <form>
+        <div th:each="atributo : ${configuracao.getAtributos()}">
+          <label>
+            <span th:text="#{${atributo.getChaveI18N()}}"></span>
+            <input th:name="${atributo.getNome()}" th:value="${atributo.getValor()}" required />
+          </label>
+        </div>
+        <div>
+          <button type="button">
+            <a
+              th:href="@{listagemEstudantes.html}"
+              th:text="#{web.page.session-configuration.label.cancel}"
+            ></a>
+          </button>
+          <button type="submit" th:text="#{web.page.session-configuration.label.save}"></button>
+        </div>
+      </form>
     </main>
   </body>
 </html>

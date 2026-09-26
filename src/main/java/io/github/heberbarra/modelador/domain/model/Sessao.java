@@ -15,4 +15,4 @@ package io.github.heberbarra.modelador.domain.model;
 
 import java.net.Socket;
 
-public record Sessao(Socket socket) {}
+public record Sessao(ConfiguracaoSessao configuracaoSessao, Socket socket) {}

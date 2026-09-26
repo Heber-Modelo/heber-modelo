@@ -39,6 +39,9 @@
       </div>
     </header>
     <main>
+      <div id="await-indicator-wrapper" style="display: none">
+        <div id="await-indicator" th:text="#{session.waiting.connections}"></div>
+      </div>
       <h2 th:text="#{web.page.students-list.label.professors}"></h2>
       <hr />
       <div

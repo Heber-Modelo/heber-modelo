@@ -1,6 +1,4 @@
-@charset "UTF-8";
-
-/*!
+/*
  * Copyright (c) 2026. Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
  *
  * Licensed under the Massachusetts Institute of Technology (MIT) License.
@@ -13,21 +11,19 @@
  *
  */
 
-main {
-  align-self: center;
-  justify-self: center;
-  justify-content: end;
-  max-width: 60%;
+package io.github.heberbarra.modelador.domain.model;
 
-  form {
-    width: 100%;
-  }
+import java.util.List;
 
-}
+public class ConfiguracaoSessao {
 
-div:has(button) {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
+    private final List<AtributoConfiguracaoSessao<?>> atributos;
+
+    public ConfiguracaoSessao() {
+        atributos = List.of();
+    }
+
+    public List<AtributoConfiguracaoSessao<?>> getAtributos() {
+        return atributos;
+    }
 }
