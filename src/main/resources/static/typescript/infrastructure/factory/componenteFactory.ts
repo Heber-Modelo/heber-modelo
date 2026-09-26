@@ -19,6 +19,7 @@ import PropriedadeComponente from "domain/model/propriedade/propriedadeComponent
 
 export default class ComponenteFactory {
   public static readonly PROPRIEDADE_ID_ABA: string = "data-indice-aba";
+  public static readonly PROPRIEDADE_CHAVE_I18N_DIAGRAMA: string = "data-chave-i18n-diagrama";
   public static readonly PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
   public static readonly PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string =
     "data-recebe-pontos-extensores";

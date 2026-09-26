@@ -60,6 +60,7 @@ export default class CarregarDiagramaCommand implements ICommand {
   }
 
   private async criarBotaoElemento(
+    chaveI18NDiagrama: string,
     nomeDiagrama: string,
     nomeElemento: string,
     tipoElemento: string,
@@ -70,6 +71,7 @@ export default class CarregarDiagramaCommand implements ICommand {
     let textoSimboloSvg: string = await responseSimbolo.text();
     botao.classList.add("btn-criar-elemento");
     botao.setAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA, nomeDiagrama);
+    botao.setAttribute(ComponenteFactory.PROPRIEDADE_CHAVE_I18N_DIAGRAMA, chaveI18NDiagrama);
     botao.setAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE, tipoElemento);
     botao.title = nomeElemento;
     botao.innerHTML = `${textoSimboloSvg} <h3>${nomeElemento.toUpperCase()}</h3>`;
@@ -77,7 +79,7 @@ export default class CarregarDiagramaCommand implements ICommand {
     if (exigeAbaExclusiva) {
       botao.addEventListener("click", (event: MouseEvent): void => {
         criarAba(this._geradorIDAba.pegarProximoID(), this._callbackFecharAba).then(
-          (novaAba: Aba): void => {
+          async (novaAba: Aba): Promise<void> => {
             this._repositorioAbas.adicionar(novaAba);
             this._selecionadorAba.selecionarAba(novaAba);
 
@@ -86,6 +88,14 @@ export default class CarregarDiagramaCommand implements ICommand {
             novaAba.htmlElement.addEventListener("click", (): void => {
               this._selecionadorAba.selecionarAba(novaAba);
             });
+
+            let nomeNovaAba: HTMLElement | null = novaAba.htmlElement.querySelector(
+              `.${Aba.CLASSE_NUMERO_ABA}`,
+            );
+
+            if (nomeNovaAba) {
+              nomeNovaAba.innerText = `${novaAba.id} - ${await traduzirChaveI18n(chaveI18NDiagrama)}`;
+            }
           },
         );
         setTimeout((): void => this._callbackCriarComponente(event), 200);
@@ -122,6 +132,7 @@ export default class CarregarDiagramaCommand implements ICommand {
 
           this._fieldSetElementos.append(
             await this.criarBotaoElemento(
+              diagramaJSON.chaveI18N,
               diagramaJSON.nome,
               nomeElemento,
               tipoElemento.tipo,

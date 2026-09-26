@@ -54,6 +54,7 @@ import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import "infrastructure/variaveisConfiguracao";
 import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import DirecoesMovimento from "domain/enum/direcoesMovimento";
 import LateraisComponente from "domain/enum/lateraisComponente";
 import NomesComponente from "domain/enum/nomesComponente";
@@ -195,6 +196,9 @@ let tiposDiagrama: HTMLElement | null = document.querySelector("#tipos-diagrama"
 
 async function callbackCriarComponente(event: Event): Promise<void> {
   let btn: HTMLButtonElement = event.target as HTMLButtonElement;
+  let chaveI18NDiagrama: string | null = btn.getAttribute(
+    ComponenteFactory.PROPRIEDADE_CHAVE_I18N_DIAGRAMA,
+  );
   let nomeDiagrama: string | null = btn.getAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA);
   let nomeElemento: string | null = btn.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE);
 
@@ -202,11 +206,18 @@ async function callbackCriarComponente(event: Event): Promise<void> {
     selecionadorAba.abaSelecionada?.htmlElement.getAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA);
 
   if (utilizarAbasExclusivas) {
-    if (nomeDiagrama && nomeAbaAtual === null) {
+    if (nomeDiagrama && (nomeAbaAtual === null || nomeAbaAtual === undefined)) {
       selecionadorAba.abaSelecionada?.htmlElement.setAttribute(
         Aba.ATRIBUTO_NOME_DIAGRAMA_ABA,
         nomeDiagrama,
       );
+
+      let nomeAba: HTMLElement | null | undefined =
+        selecionadorAba.abaSelecionada?.htmlElement.querySelector(`.${Aba.CLASSE_NUMERO_ABA}`);
+
+      if (chaveI18NDiagrama && nomeAba) {
+        nomeAba.innerText = `${selecionadorAba.abaSelecionada?.id} - ${await traduzirChaveI18n(chaveI18NDiagrama)}`;
+      }
     } else if (nomeDiagrama && nomeAbaAtual !== nomeDiagrama) {
       await criarNovaAba();
       let abas: Aba[] = repositorioAbas.listar();
@@ -214,6 +225,14 @@ async function callbackCriarComponente(event: Event): Promise<void> {
       let ultimaAba: Aba = abas[indiceUltimaAba];
       selecionadorAba.selecionarAba(ultimaAba);
       ultimaAba.htmlElement.setAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA, nomeDiagrama);
+
+      let nomeAba: HTMLElement | null = ultimaAba.htmlElement.querySelector(
+        `.${Aba.CLASSE_NUMERO_ABA}`,
+      );
+
+      if (chaveI18NDiagrama && nomeAba) {
+        nomeAba.innerText = `${ultimaAba.id} - ${await traduzirChaveI18n(chaveI18NDiagrama)}`;
+      }
     }
   }
 
