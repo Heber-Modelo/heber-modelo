@@ -195,7 +195,27 @@ let tiposDiagrama: HTMLElement | null = document.querySelector("#tipos-diagrama"
 
 async function callbackCriarComponente(event: Event): Promise<void> {
   let btn: HTMLButtonElement = event.target as HTMLButtonElement;
+  let nomeDiagrama: string | null = btn.getAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA);
   let nomeElemento: string | null = btn.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE);
+
+  let nomeAbaAtual: string | null | undefined =
+    selecionadorAba.abaSelecionada?.htmlElement.getAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA);
+
+  if (utilizarAbasExclusivas) {
+    if (nomeDiagrama && nomeAbaAtual === null) {
+      selecionadorAba.abaSelecionada?.htmlElement.setAttribute(
+        Aba.ATRIBUTO_NOME_DIAGRAMA_ABA,
+        nomeDiagrama,
+      );
+    } else if (nomeDiagrama && nomeAbaAtual !== nomeDiagrama) {
+      await criarNovaAba();
+      let abas: Aba[] = repositorioAbas.listar();
+      let indiceUltimaAba: number = abas.length - 1;
+      let ultimaAba: Aba = abas[indiceUltimaAba];
+      selecionadorAba.selecionarAba(ultimaAba);
+      ultimaAba.htmlElement.setAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA, nomeDiagrama);
+    }
+  }
 
   const { CriarComponenteCommandBuilder } =
     await import("infrastructure/command/criarComponenteCommand");
@@ -700,7 +720,7 @@ function fecharAba(event: MouseEvent): void {
   selecionadorAba.selecionarAba(proximaAba);
 }
 
-buttonNovaAba?.addEventListener("click", async (): Promise<void> => {
+async function criarNovaAba(): Promise<void> {
   const { default: criarAba } = await import("infrastructure/services/criarAba");
   let novaAba: Aba = await criarAba(geradorIDAba.pegarProximoID(), fecharAba);
 
@@ -711,7 +731,9 @@ buttonNovaAba?.addEventListener("click", async (): Promise<void> => {
   novaAba.htmlElement.addEventListener("click", (): void => {
     selecionadorAba.selecionarAba(novaAba);
   });
-});
+}
+
+buttonNovaAba?.addEventListener("click", criarNovaAba);
 
 /********************/
 /* IMPORTAR ARQUIVO */

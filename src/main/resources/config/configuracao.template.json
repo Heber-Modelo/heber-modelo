@@ -168,6 +168,12 @@
       "atributo": "modoAvancadoEditorPropriedades",
       "tipo": "Boolean",
       "valorPadrao": false
+    },
+    {
+      "categoria": "editor",
+      "atributo": "abasExclusivas",
+      "tipo": "Boolean",
+      "valorPadrao": true
     }
   ]
 }

@@ -15,6 +15,7 @@
       configurarGrade("--espessura-grade", "[(${espessuraGrade})]");
       configurarGrade("--tamanho-quadrado-grade", "[(${tamanhoQuadradoGrade})]");
       incrementoMovimentacao = Number("[(${incrementoMovimentacaoElemento})]");
+      utilizarAbasExclusivas = "[(${abasExclusivas})]" === "true";
     </script>
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_headerName" th:content="${_csrf.headerName}" />

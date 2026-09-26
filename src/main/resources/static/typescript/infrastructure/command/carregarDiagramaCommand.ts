@@ -60,6 +60,7 @@ export default class CarregarDiagramaCommand implements ICommand {
   }
 
   private async criarBotaoElemento(
+    nomeDiagrama: string,
     nomeElemento: string,
     tipoElemento: string,
     exigeAbaExclusiva: boolean,
@@ -68,6 +69,7 @@ export default class CarregarDiagramaCommand implements ICommand {
     let responseSimbolo: Response = await fetch(`elementos/simbolos/${tipoElemento}.svg`);
     let textoSimboloSvg: string = await responseSimbolo.text();
     botao.classList.add("btn-criar-elemento");
+    botao.setAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA, nomeDiagrama);
     botao.setAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE, tipoElemento);
     botao.title = nomeElemento;
     botao.innerHTML = `${textoSimboloSvg} <h3>${nomeElemento.toUpperCase()}</h3>`;
@@ -120,6 +122,7 @@ export default class CarregarDiagramaCommand implements ICommand {
 
           this._fieldSetElementos.append(
             await this.criarBotaoElemento(
+              diagramaJSON.nome,
               nomeElemento,
               tipoElemento.tipo,
               diagramaJSON.exigeAbaExclusiva,

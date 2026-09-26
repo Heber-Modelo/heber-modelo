@@ -229,6 +229,11 @@ public class ControladorWeb {
                 configurador
                         .pegarValorConfiguracao("editor", "incrementoMovimentacaoElemento", long.class)
                         .orElse(0L));
+        modelMap.addAttribute(
+                "abasExclusivas",
+                configurador
+                        .pegarValorConfiguracao("editor", "abasExclusivas", boolean.class)
+                        .orElse(true));
 
         return "editor";
     }
