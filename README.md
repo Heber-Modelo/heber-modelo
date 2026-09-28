@@ -60,8 +60,8 @@ programa, caso não existam.
 
 ### Arquivos de configurações:
 
-* Configuracoes.toml
-* Paleta.toml
+* config.toml
+* paleta.toml
 
 # Instalação
 
