@@ -8,6 +8,7 @@ const baseDirectory = path.resolve(__dirname, "src/main/resources/static/typescr
 export default {
   devtool: "inline-source-map",
   entry: {
+    atividade: path.resolve(baseDirectory, "application/paginas/atividade.ts"),
     cadastro: path.resolve(baseDirectory, "application/paginas/cadastro.ts"),
     callbacksElementos: path.resolve(
       baseDirectory,

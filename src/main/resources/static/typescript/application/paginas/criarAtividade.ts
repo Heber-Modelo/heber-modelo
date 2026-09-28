@@ -12,6 +12,7 @@
  */
 
 import "quill/dist/quill.snow.css";
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import("quill/core").then(async ({ default: Quill }): Promise<void> => {
   let quillEditorContainer: HTMLElement | null = document.querySelector(".description-field div");
 
@@ -59,7 +60,7 @@ import("quill/core").then(async ({ default: Quill }): Promise<void> => {
 let formCriarAtividade: HTMLFormElement | null = document.querySelector("form");
 formCriarAtividade?.addEventListener("submit", criarAtividade);
 
-async function criarAtividade(event: SubmitEvent) {
+async function criarAtividade(event: SubmitEvent): Promise<void> {
   event.preventDefault();
   event.stopPropagation();
   event.stopImmediatePropagation();
@@ -76,7 +77,7 @@ async function criarAtividade(event: SubmitEvent) {
   let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
   let csrfToken: string = csrfMetaTag?.content || "";
 
- let response: Response = await fetch("/criarAtividade", {
+  let response: Response = await fetch("/criarAtividade", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -92,11 +93,10 @@ async function criarAtividade(event: SubmitEvent) {
     }),
   });
 
- if (response.ok){
-   window.location.href = "listagemAtividades";
-   return;
- }
+  if (response.ok) {
+    window.location.href = "listagemAtividades";
+    return;
+  }
 
- window.alert("A Atividade não pode ser postada. Corrija os erros.")
-
+  window.alert(await traduzirChaveI18n("web.page.create-assignment.failure"));
 }

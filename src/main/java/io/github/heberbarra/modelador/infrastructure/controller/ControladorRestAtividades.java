@@ -20,6 +20,7 @@ import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,13 +55,13 @@ public class ControladorRestAtividades {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/atividade")
-    public ResponseEntity<HttpStatus> excluirAtividade(AtividadeDTO atividadeDTO) {
+    @DeleteMapping("/atividade/{codigo}")
+    public ResponseEntity<HttpStatus> excluirAtividade(@PathVariable("codigo") int codigoAtividade) {
 
         try {
             Atividade atividade = this.atividadeRepositorio
-                    .findAtividadeByCodigo(atividadeDTO.getCodigo())
-                    .orElseThrow(() -> new AtividadeNotFoundException(atividadeDTO.getCodigo()));
+                    .findAtividadeByCodigo(codigoAtividade)
+                    .orElseThrow(() -> new AtividadeNotFoundException(codigoAtividade));
             this.atividadeRepositorio.delete(atividade);
         } catch (AtividadeNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
