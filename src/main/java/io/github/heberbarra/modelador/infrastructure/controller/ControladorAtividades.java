@@ -13,6 +13,7 @@
 
 package io.github.heberbarra.modelador.infrastructure.controller;
 
+import io.github.heberbarra.modelador.domain.exception.AtividadeNotFoundException;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.AtividadeDTO;
 import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
@@ -25,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +40,19 @@ public class ControladorAtividades {
     public ControladorAtividades(IAtividadeRepositorio atividadeRepositorio, AtividadeServices atividadeServices) {
         this.atividadeRepositorio = atividadeRepositorio;
         this.atividadeServices = atividadeServices;
+    }
+
+    @RequestMapping("/atividade/{codigo_atividade}")
+    public String atividade(ModelMap modelMap, @PathVariable("codigo_atividade") int codigoAtividade) {
+        InjetorAtributos.injetarPaleta(modelMap);
+        InjetorAtributos.injetarTituloPagina(modelMap, "assignment");
+
+        AtividadeDTO atividade = AtividadeMapper.atividadeToDTO(this.atividadeRepositorio
+                .findAtividadeByCodigo(codigoAtividade)
+                .orElseThrow(() -> new AtividadeNotFoundException(codigoAtividade)));
+        modelMap.addAttribute("assignment", atividade);
+
+        return "atividade";
     }
 
     @GetMapping({"/criarAtividade", "/criarAtividade.html"})
@@ -61,9 +76,10 @@ public class ControladorAtividades {
         InjetorAtributos.injetarPaleta(modelMap);
 
         List<Atividade> atividades = this.atividadeRepositorio.findAll();
-        modelMap.addAttribute(
-                "atividades",
-                atividades.stream().map(AtividadeMapper::atividadeToDTO).toList());
+        List<AtividadeDTO> atividadeDTOS =
+                atividades.stream().map(AtividadeMapper::atividadeToDTO).toList();
+
+        modelMap.addAttribute("atividades", atividadeDTOS);
 
         return "listagemAtividades";
     }

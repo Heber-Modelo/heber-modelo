@@ -26,11 +26,20 @@ public class AtividadeDTO {
         this.descricao = descricao;
     }
 
+    int codigo;
     String titulo;
     LocalDateTime dataPostagem;
     LocalDateTime dataLimite;
     String descricao;
     boolean isProva;
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
 
     public String getTitulo() {
         return titulo;

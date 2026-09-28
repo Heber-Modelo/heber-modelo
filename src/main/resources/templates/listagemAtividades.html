@@ -21,16 +21,13 @@
     <header th:replace="~{fragments/header :: header}"></header>
     <main>
       <div class="atividades">
-        <div th:each="atividade : ${atividades}" class="label-atividade">
+        <a th:each="atividade : ${atividades}" th:href="'atividade/' + ${atividade.getCodigo()}" class="label-atividade">
           <div class="icon-title">
             <th:block th:replace="~{fragments/assignment/icons/assignment_icon :: svg}"></th:block>
             <span th:text="${atividade.getTitulo()}"></span>
           </div>
-
-          <span
-            th:text="#{web.page.create-assignment.label.deadline} + ' ' + ${atividade.getDataLimite()}"
-          ></span>
-        </div>
+          <span th:text="#{web.page.assignment.label.deadline} + ' ' + ${atividade.getDataLimite()}"></span>
+        </a>
       </div>
 
       <div class="botoes">

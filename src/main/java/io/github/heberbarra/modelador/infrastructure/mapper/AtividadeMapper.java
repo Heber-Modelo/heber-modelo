@@ -19,11 +19,15 @@ import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 public class AtividadeMapper {
 
     public static AtividadeDTO atividadeToDTO(Atividade atividade) {
-        return new AtividadeDTO(
+        AtividadeDTO atividadeDTO = new AtividadeDTO(
                 atividade.getNome(),
                 atividade.getDataPostagem(),
                 atividade.getDataLimite(),
                 atividade.isProva(),
                 atividade.getDescricao());
+
+        atividadeDTO.setCodigo(atividade.getCodigo());
+
+        return atividadeDTO;
     }
 }

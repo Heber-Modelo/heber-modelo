@@ -29,12 +29,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ControladorUsuarios {
+public class ControladorRestUsuarios {
 
     private final IUsuarioRepositorio repositorio;
     private final UsuarioModelAssembler assembler;
 
-    public ControladorUsuarios(IUsuarioRepositorio repositorio, UsuarioModelAssembler assembler) {
+    public ControladorRestUsuarios(IUsuarioRepositorio repositorio, UsuarioModelAssembler assembler) {
         this.repositorio = repositorio;
         this.assembler = assembler;
     }
@@ -45,7 +45,7 @@ public class ControladorUsuarios {
                 repositorio.findAll().stream().map(assembler::toModel).toList();
 
         return CollectionModel.of(
-                usuarios, linkTo(methodOn(ControladorUsuarios.class).all()).withSelfRel());
+                usuarios, linkTo(methodOn(ControladorRestUsuarios.class).all()).withSelfRel());
     }
 
     @GetMapping("/usuarios/{matricula}")

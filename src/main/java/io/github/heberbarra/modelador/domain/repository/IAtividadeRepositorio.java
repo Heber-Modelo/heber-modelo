@@ -16,14 +16,15 @@ package io.github.heberbarra.modelador.domain.repository;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import java.util.List;
+import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IAtividadeRepositorio extends JpaRepository<@NonNull Atividade, @NonNull Integer> {
 
-    Atividade getAtividadeByCodigo(int codigo);
+    Optional<Atividade> findAtividadeByCodigo(int codigo);
 
-    Atividade getAtividadeByNome(String nome);
+    Optional<Atividade> findAtividadeByNome(String nome);
 
     List<Atividade> searchAtividadesByNomeContaining(String nome);
 
