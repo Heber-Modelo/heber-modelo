@@ -49,7 +49,7 @@ public class ControladorRestUsuarios {
     }
 
     @GetMapping("/usuarios/{matricula}")
-    public EntityModel<@NonNull Usuario> one(@PathVariable Long matricula) {
+    public EntityModel<@NonNull Usuario> one(@PathVariable String matricula) {
         Usuario usuario = repositorio
                 .findUsuarioByMatricula(matricula)
                 .orElseThrow(() -> new UsuarioNotFoundException(matricula));

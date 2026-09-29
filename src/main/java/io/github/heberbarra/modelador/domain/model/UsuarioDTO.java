@@ -17,7 +17,7 @@ public class UsuarioDTO {
 
     public UsuarioDTO() {}
 
-    public UsuarioDTO(long matricula, String nome, String email, String senha, String confirmarSenha, String tipo) {
+    public UsuarioDTO(String matricula, String nome, String email, String senha, String confirmarSenha, String tipo) {
         this.matricula = matricula;
         this.nome = nome;
         this.email = email;
@@ -26,18 +26,18 @@ public class UsuarioDTO {
         this.tipo = tipo;
     }
 
-    private long matricula;
+    private String matricula;
     private String nome;
     private String email;
     private String senha;
     private String confirmarSenha;
     private String tipo;
 
-    public long getMatricula() {
+    public String getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(long matricula) {
+    public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
 

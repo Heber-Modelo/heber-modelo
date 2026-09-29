@@ -14,7 +14,6 @@
 package io.github.heberbarra.modelador.domain.repository;
 
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
-import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import java.util.List;
 import java.util.Optional;
 import org.jspecify.annotations.NonNull;
@@ -27,6 +26,4 @@ public interface IAtividadeRepositorio extends JpaRepository<@NonNull Atividade,
     Optional<Atividade> findAtividadeByNome(String nome);
 
     List<Atividade> searchAtividadesByNomeContaining(String nome);
-
-    List<Atividade> getAtividadesByUsuario(Usuario usuario);
 }

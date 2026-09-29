@@ -48,8 +48,7 @@ public class UsuarioDetailsService implements UserDetailsService {
         }
 
         if (optionalUsuario.isEmpty()) {
-            long matricula = Long.parseLong(identification);
-            optionalUsuario = repositorio.findUsuarioByMatricula(matricula);
+            optionalUsuario = repositorio.findUsuarioByMatricula(identification);
         }
 
         if (optionalUsuario.isEmpty()) {

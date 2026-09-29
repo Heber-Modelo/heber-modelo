@@ -20,7 +20,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IUsuarioRepositorio extends JpaRepository<@NonNull Usuario, @NonNull Long> {
 
-    Optional<Usuario> findUsuarioByMatricula(long matricula);
+    Optional<Usuario> findUsuarioByMatricula(String matricula);
 
     Optional<Usuario> findUsuarioByNome(String nome);
 

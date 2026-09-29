@@ -44,7 +44,7 @@ public class UsuarioServices {
         IUsuarioRepositorio.save(usuario);
     }
 
-    public Usuario findUserByMatricula(long matricula) {
+    public Usuario findUserByMatricula(String matricula) {
         return IUsuarioRepositorio.findUsuarioByMatricula(matricula).orElse(null);
     }
 

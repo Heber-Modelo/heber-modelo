@@ -40,8 +40,8 @@ public class Feedback {
     private Atividade atividade;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "matricula_professor")
-    private Usuario usuario;
+    @JoinColumn(name = "matricula_estudante")
+    private Usuario estudante;
 
     public int getCodigo() {
         return codigo;
