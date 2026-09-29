@@ -4,6 +4,9 @@
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <meta name="_csrf" th:content="${_csrf.token}" />
     <script th:src="@{/javascript/atividade.js}" defer></script>
+    <link rel="stylesheet" th:href="@{/css/atividade.css}" />
+    <link rel="stylesheet" th:href="@{/css/criarAtividade.css}" />
+    <title th:text="#{web.page.assignment.title}"></title>
   </head>
   <body>
     <!--
@@ -20,47 +23,81 @@
 -->
     <header th:replace="~{fragments/header :: header}"></header>
     <main>
-      <h1 th:text="${assignment.getTitulo()}"></h1>
-      <label>
-        <b th:text="#{web.page.assignment.label.publication-date}"></b>
-        <input type="datetime-local" th:value="${assignment.getDataPostagem()}" />
-      </label>
-      <label>
-        <b th:text="#{web.page.assignment.label.deadline}"></b>
-        <input type="datetime-local" th:value="${assignment.getDataLimite()}" />
-      </label>
-      <div class="opcoes-radiobutton">
-        <span class="campos-texto" th:text="#{web.page.create-assignment.label.check-type}"></span>
+      <form>
         <label>
-          <span class="campos-texto" th:text="#{web.page.assignment.label.yes}"></span>
-          <input
-            type="radio"
-            name="isTest"
-            class="botao-radio"
-            value="on"
-            required
-            th:checked="${assignment.isProva()}"
-          />
+          <span class="campos-texto" th:text="#{web.page.assignment.label.title}"></span>
+          <input type="text" name="title" th:value="${assignment.getTitulo()}" />
         </label>
-        <label>
-          <span class="campos-texto" th:text="#{web.page.assignment.label.no}"></span>
-          <input
-            type="radio"
-            name="isTest"
-            class="botao-radio"
-            value="off"
-            required
-            th:checked="${!assignment.isProva()}"
-          />
-        </label>
-      </div>
-      <p id="assignment-description" th:text="${assignment.getDescricao()}"></p>
+        <div class="date-row">
+          <label>
+            <span
+              class="campos-texto"
+              th:text="#{web.page.assignment.label.publication-date}"
+            ></span>
+            <input
+              type="datetime-local"
+              name="posting-date"
+              th:value="${assignment.getDataPostagem()}"
+            />
+          </label>
+          <label>
+            <span class="campos-texto" th:text="#{web.page.assignment.label.deadline}"></span>
+            <input type="datetime-local" name="deadline" th:value="${assignment.getDataLimite()}" />
+          </label>
+        </div>
+        <div class="radioButton">
+          <span
+            class="campos-texto"
+            th:text="#{web.page.create-assignment.label.check-type}"
+          ></span>
+          <div class="opcoes-radiobutton">
+            <label>
+              <span class="campos-texto" th:text="#{web.page.assignment.label.yes}"></span>
+              <input
+                type="radio"
+                name="isTest"
+                class="botao-radio"
+                value="on"
+                required
+                th:checked="${assignment.isProva()}"
+              />
+            </label>
+            <label>
+              <span class="campos-texto" th:text="#{web.page.assignment.label.no}"></span>
+              <input
+                type="radio"
+                name="isTest"
+                class="botao-radio"
+                value="off"
+                required
+                th:checked="${!assignment.isProva()}"
+              />
+            </label>
+          </div>
+        </div>
+        <div class="description-field">
+          <div></div>
+        </div>
+        <p
+          id="assignment-description"
+          style="display: none"
+          th:text="${assignment.getDescricao()}"
+        ></p>
+      </form>
       <div id="botoes">
-        <button>
+        <button type="button">
           <a href="/listagemAtividades" th:text="#{web.page.assignment.label.back}"></a>
         </button>
-        <button id="delete-assignment" th:text="#{web.page.assignment.label.delete}"></button>
-        <button id="save-assignment" th:text="#{web.page.assignment.label.save}"></button>
+        <button
+          type="button"
+          id="delete-assignment"
+          th:text="#{web.page.assignment.label.delete}"
+        ></button>
+        <button
+          type="submit"
+          id="save-assignment"
+          th:text="#{web.page.assignment.label.save}"
+        ></button>
       </div>
     </main>
   </body>

@@ -11,12 +11,13 @@
  *
  */
 
+// noinspection DuplicatedCode
 import "quill/dist/quill.snow.css";
 import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import("quill/core").then(async ({ default: Quill }): Promise<void> => {
+  // noinspection DuplicatedCode
   let quillEditorContainer: HTMLElement | null = document.querySelector(".description-field div");
 
-  // noinspection DuplicatedCode
   const { default: Toolbar } = await import("quill/modules/toolbar");
   const { default: Snow } = await import("quill/themes/snow");
 
@@ -64,6 +65,7 @@ async function criarAtividade(event: SubmitEvent): Promise<void> {
   event.preventDefault();
   event.stopPropagation();
   event.stopImmediatePropagation();
+
   let tituloInput: HTMLInputElement | null = document.querySelector("input[name='title']");
   let dataPostagemInput: HTMLInputElement | null = document.querySelector(
     "input[name='posting-date']",

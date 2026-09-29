@@ -4,6 +4,7 @@
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <title th:text="#{web.page.assignments-list.title}"></title>
     <link rel="stylesheet" th:href="@{/css/listagemAtividades.css}" />
+    <title th:text="#{web.page.assignments-list.title}"></title>
   </head>
   <body>
     <!--
@@ -21,12 +22,19 @@
     <header th:replace="~{fragments/header :: header}"></header>
     <main>
       <div class="atividades">
-        <a th:each="atividade : ${atividades}" th:href="'atividade/' + ${atividade.getCodigo()}" class="label-atividade">
+        <a
+          th:each="atividade : ${atividades}"
+          th:href="'atividade/' + ${atividade.getCodigo()}"
+          class="label-atividade"
+        >
           <div class="icon-title">
             <th:block th:replace="~{fragments/assignment/icons/assignment_icon :: svg}"></th:block>
             <span th:text="${atividade.getTitulo()}"></span>
           </div>
-          <span th:text="#{web.page.assignment.label.deadline} + ' ' + ${atividade.getDataLimite()}"></span>
+          <label>
+            <span th:text="#{web.page.assignment.label.deadline}"></span>
+            <input type="datetime-local" th:value="${atividade.getDataLimite()}" readonly />
+          </label>
         </a>
       </div>
 

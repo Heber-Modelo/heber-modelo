@@ -21,7 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -33,13 +34,14 @@ public class ControladorRestAtividades {
         this.atividadeRepositorio = atividadeRepositorio;
     }
 
-    @PutMapping("/atividade")
-    public ResponseEntity<HttpStatus> atualizarAtividade(AtividadeDTO atividadeDTO) {
+    @PostMapping("/atividade/{codigo}")
+    public ResponseEntity<HttpStatus> atualizarAtividade(
+            @RequestBody AtividadeDTO atividadeDTO, @PathVariable("codigo") int codigoAtividade) {
 
         try {
             Atividade atividade = this.atividadeRepositorio
-                    .findAtividadeByCodigo(atividadeDTO.getCodigo())
-                    .orElseThrow(() -> new AtividadeNotFoundException(atividadeDTO.getCodigo()));
+                    .findAtividadeByCodigo(codigoAtividade)
+                    .orElseThrow(() -> new AtividadeNotFoundException(codigoAtividade));
 
             atividade.setNome(atividadeDTO.getTitulo());
             atividade.setDescricao(atividadeDTO.getDescricao());

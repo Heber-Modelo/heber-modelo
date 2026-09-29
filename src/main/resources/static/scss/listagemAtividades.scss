@@ -73,6 +73,21 @@ div:has(button) {
     color: var(--cor-letra);
   }
 
+  label {
+    pointer-events: none;
+    
+    span {
+      padding: 0;
+    }
+
+    input {
+      background-color: unset;
+      color: var(--cor-letra);
+      font-size: 1.5rem;
+      text-decoration: none;
+    }
+  }
+
   svg{
     max-height: 4rem;
     max-width: 2.5rem;
