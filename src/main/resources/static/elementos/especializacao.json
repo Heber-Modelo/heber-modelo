@@ -4,5 +4,12 @@
   "classesElemento": ["elemento-especializacao"],
   "recebePontoExtensor": true,
   "recebeSetaConectora": true,
-  "propriedades": []
+  "propriedades": [
+    {
+      "chaveI18nLabel": "element.property.rotation.label",
+      "classeElemento": "elemento-especializacao",
+      "nomePropriedade": "style.rotate",
+      "sufixo": "deg"
+    }
+  ]
 }

@@ -15,6 +15,7 @@ import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 import PropriedadeInnerText from "domain/model/propriedade/propriedadeInnerText";
 import PropriedadeSelecionavel from "domain/model/propriedade/propriedadeSelecionavel";
+import PropriedadeEstiloComponente from "domain/model/propriedade/propriedadeEstiloComponente";
 
 export default class PropriedadeFactory {
   public criarPropriedade(
@@ -28,6 +29,14 @@ export default class PropriedadeFactory {
   ): PropriedadeComponente | null {
     if (nomePropriedade === "innerText") {
       return new PropriedadeInnerText(componente, sufixo, label, classeElemento);
+    } else if (nomePropriedade.startsWith("style")) {
+      return new PropriedadeEstiloComponente(
+        nomePropriedade.split(".")[1],
+        componente,
+        sufixo,
+        label,
+        classeElemento,
+      );
     } else if (valoresPermitidos) {
       return new PropriedadeSelecionavel(
         nomePropriedade,
