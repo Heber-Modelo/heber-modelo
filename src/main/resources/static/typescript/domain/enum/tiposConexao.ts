@@ -14,7 +14,6 @@
 enum TiposConexao {
   CONEXAO_ANGULADA = "conexao_angulada",
   CONEXAO_ENTIDADE_FRACA = "conexao_entidade_fraca",
-  CONEXAO_RETA = "conexao_reta",
   CONEXAO_SETA = "conexao_seta",
 }
 
