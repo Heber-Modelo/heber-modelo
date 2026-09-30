@@ -28,7 +28,7 @@ $estiloBordaPainel: var(--cor-borda) solid 0.1rem;
 body {
   display: grid;
   grid-template-columns: 20% 60% 20%;
-  grid-template-rows: 5rem calc(100% - 9.5rem) 4.5em;
+  grid-template-rows: 5rem 4.5rem calc(100% - 9.5rem);
   max-width: 100vw;
   overflow: hidden;
 
@@ -95,7 +95,7 @@ main {
   display: grid;
   grid-template-areas: variaveis.$editorGridAreaString;
   grid-column: 2;
-  grid-row: 2 / 3;
+  grid-row: 3 / 4;
   height: 95%;
   justify-self: center;
   place-content: stretch;
@@ -216,7 +216,7 @@ aside.hidden {
   button.btn-mostrar {
     position: fixed;
     display: block;
-    top: 6rem;
+    top: 12rem;
   }
 
   &#painel-esquerdo button.btn-mostrar {
@@ -347,8 +347,6 @@ fieldset#conexoes-basicas {
     width: 100%;
   }
 }
-
-
 
 .file {
   font-size: 1.2rem;
