@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS `tb_atividade` (
 CREATE TABLE IF NOT EXISTS `tb_feedback` (
     codigo_feedback INT AUTO_INCREMENT,
     descricao_feedback TEXT NOT NULL,
-    codigo_atividade TINYINT,
+    codigo_atividade INT,
+    imagem_atividade LONGBLOB,
     matricula_professor VARCHAR(20),
     matricula_estudante VARCHAR(20),
     CONSTRAINT pk_tb_feedback PRIMARY KEY (codigo_feedback),
