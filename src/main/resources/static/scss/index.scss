@@ -66,3 +66,15 @@ header {
 .svg-color-fill {
   color: var(--cor-botao);
 }
+
+.svg-color-stroke {
+  color: var(--cor-botao);
+  stroke: var(--cor-letra);
+}
+
+svg:hover {
+  .svg-color-fill, .svg-color-stroke {
+    color: var(--cor-botao-hover);
+  }
+}
+
