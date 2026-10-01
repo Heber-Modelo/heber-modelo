@@ -33,6 +33,10 @@ export default {
     index: path.resolve(baseDirectory, "application/paginas/index.ts"),
     listagemEstudantes: path.resolve(baseDirectory, "application/paginas/listagemEstudantes.ts"),
     login: path.resolve(baseDirectory, "application/paginas/login.ts"),
+    mostrarAtividades: path.resolve(
+      baseDirectory,
+      "application/paginas/editor/mostrarAtividades.ts",
+    ),
     salvar: path.resolve(baseDirectory, "application/paginas/editor/salvar.ts"),
     quill: "quill",
   },

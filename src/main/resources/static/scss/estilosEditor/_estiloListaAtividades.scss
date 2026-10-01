@@ -31,17 +31,18 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    overflow-y: scroll;
     width: 75%;
 
     details[open] > summary {
       border-radius: 1rem 1rem 0 0;
     }
 
-    p {
+    details[open] > p {
       border: 0.1rem solid var(--cor-borda);
       border-top: none;
       border-radius: 0 0 1rem 1rem;
-      padding: 0.2rem;
+      padding: 0.5rem;
     }
 
     summary {
