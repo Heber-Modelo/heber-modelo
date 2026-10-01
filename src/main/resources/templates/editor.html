@@ -40,18 +40,68 @@
           <th:block th:insert="~{fragments/common/icons/home.html}"></th:block>
         </a>
       </button>
-
-      <details class="file">
-        <summary id="file">File</summary>
+      <details class="header-item" id="file">
+        <summary>File</summary>
       </details>
-
-      <details class="edit">
-        <summary id="edit">Edit</summary>
+      <details class="header-item" id="edit">
+        <summary>Edit</summary>
       </details>
-
+      <details class="header-item" id="assignments" th:if="${mostrarAtividades}">
+        <summary th:text="#{web.page.editor.assignments.title}"></summary>
+      </details>
       <h1 th:text="${programa}"></h1>
     </header>
-
+    <section id="atividades" th:if="${mostrarAtividades}">
+      <button
+        type="button"
+        id="clean-selection-button"
+        th:text="#{web.page.editor.assignments.clean-selection.label}"
+      ></button>
+      <button
+        type="button"
+        id="close-button"
+        th:text="#{web.page.editor.assignments.close.label}"
+      ></button>
+      <h2 th:text="#{web.page.editor.assignments.title}" id="assignments-title"></h2>
+      <div id="assignments-list">
+        <details th:each="atividade : ${atividades}">
+          <summary>
+            <span th:text="${atividade.getTitulo()}"></span>
+            <label class="publication-date">
+              <span th:text="#{web.page.assignment.label.publication-date}"></span>
+              <input type="datetime-local" th:value="${atividade.getDataPostagem()}" />
+            </label>
+            <label class="deadline">
+              <span th:text="#{web.page.assignment.label.deadline}"></span>
+              <input type="datetime-local" th:value="${atividade.getDataLimite()}" />
+            </label>
+            <label class="is-selected">
+              <span th:text="#{web.page.editor.assignments.selected.label}"></span>
+              <input name="selected-assignment" type="radio" />
+            </label>
+          </summary>
+          <p class="assignment-description" th:text="${atividade.getDescricao()}"></p>
+        </details>
+      </div>
+      <h2 th:text="#{web.page.editor.assignments.tests.title}" id="tests-title"></h2>
+      <div id="tests-list">
+        <details th:each="prova : ${provas}">
+          <summary>
+            <span th:text="${prova.getTitulo()}"></span>
+            <label class="publication-date">
+              <span th:text="#{web.page.assignment.label.publication-date}"></span>
+              <input type="datetime-local" th:value="${prova.getDataPostagem()}" />
+            </label>
+            <label class="deadline">
+              <span th:text="#{web.page.assignment.label.deadline}"></span>
+              <input type="datetime-local" th:value="${prova.getDataLimite()}" />
+            </label>
+          </summary>
+          <p class="assignment-description" th:text="${prova.getDescricao()}"></p>
+          <button type="button" th:text="#{web.page.editor.assignments.begin-test.label}"></button>
+        </details>
+      </div>
+    </section>
     <aside id="painel-esquerdo">
       <button type="button" class="btn-painel-esquerdo btn-esconder">&lt;</button>
       <button type="button" class="btn-painel-esquerdo btn-mostrar">&gt;</button>
@@ -119,7 +169,6 @@
       <div id="seta-placeholder" style="display: none; position: absolute">X</div>
     </main>
     <div th:replace="~{fragments/cookiesBanner :: #cookies-banner}"></div>
-
     <footer>
       <div>
         <div class="aba" data-indice-aba="1">

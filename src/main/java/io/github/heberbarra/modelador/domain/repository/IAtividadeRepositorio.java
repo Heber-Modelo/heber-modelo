@@ -14,6 +14,7 @@
 package io.github.heberbarra.modelador.domain.repository;
 
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.jspecify.annotations.NonNull;
@@ -24,6 +25,8 @@ public interface IAtividadeRepositorio extends JpaRepository<@NonNull Atividade,
     Optional<Atividade> findAtividadeByCodigo(int codigo);
 
     Optional<Atividade> findAtividadeByNome(String nome);
+
+    List<Atividade> findAllByDataPostagemBefore(LocalDateTime dataPostagem);
 
     List<Atividade> searchAtividadesByNomeContaining(String nome);
 }

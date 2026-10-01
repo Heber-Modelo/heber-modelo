@@ -18,16 +18,20 @@ import static io.github.heberbarra.modelador.infrastructure.services.UsuarioDeta
 import static java.awt.Desktop.Action.BROWSE;
 
 import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama;
-import io.github.heberbarra.modelador.application.diagrama.ListadorTiposDiagrama.GruposDiagrama;
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
+import io.github.heberbarra.modelador.domain.model.AtividadeDTO;
 import io.github.heberbarra.modelador.domain.model.NovoDiagramaDTO;
 import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
+import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
 import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.configurador.WatcherConfiguracao;
+import io.github.heberbarra.modelador.infrastructure.controller.ControladorSessao;
+import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
+import io.github.heberbarra.modelador.infrastructure.mapper.AtividadeMapper;
 import io.github.heberbarra.modelador.infrastructure.mapper.UsuarioMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
@@ -36,6 +40,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Handler;
@@ -63,11 +68,15 @@ public class ControladorWeb {
     private static final Logger logger = JavaLogger.obterLogger(ControladorWeb.class.getName());
     private static final IConfigurador configurador = ConfiguradorFactory.build();
     private final TaskExecutor taskExecutor;
+    private final IAtividadeRepositorio atividadeRepositorio;
     private final IUsuarioRepositorio usuarioRepositorio;
 
     public ControladorWeb(
-            @Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor, IUsuarioRepositorio usuarioRepositorio) {
+            @Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor,
+            IAtividadeRepositorio atividadeRepositorio,
+            IUsuarioRepositorio usuarioRepositorio) {
         this.taskExecutor = taskExecutor;
+        this.atividadeRepositorio = atividadeRepositorio;
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
@@ -203,9 +212,9 @@ public class ControladorWeb {
         InjetorAtributos.injetarPaleta(modelMap);
         InjetorAtributos.injetarBindings(modelMap);
         modelMap.addAttribute("novoDiagramaDTO", novoDiagramaDTO);
-        modelMap.addAttribute(GruposDiagrama.UML.toString(), ListadorTiposDiagrama.pegarDiagramasUML());
-        modelMap.addAttribute(GruposDiagrama.DATABASE.toString(), ListadorTiposDiagrama.pegarDiagramasBancoDados());
-        modelMap.addAttribute(GruposDiagrama.MISC.toString(), ListadorTiposDiagrama.pegarDiagramasOutros());
+        modelMap.addAttribute("diagramasUML", ListadorTiposDiagrama.pegarDiagramasUML());
+        modelMap.addAttribute("diagramasBD", ListadorTiposDiagrama.pegarDiagramasBancoDados());
+        modelMap.addAttribute("diagramasOutros", ListadorTiposDiagrama.pegarDiagramasOutros());
 
         Optional<Boolean> exibirGrade = configurador.pegarValorConfiguracao("grade", "exibir", boolean.class);
         if (exibirGrade.isPresent() && exibirGrade.get()) {
@@ -234,6 +243,23 @@ public class ControladorWeb {
                 configurador
                         .pegarValorConfiguracao("editor", "abasExclusivas", boolean.class)
                         .orElse(true));
+
+        if (!ControladorSessao.isSessaoInativa()) {
+            List<Atividade> atividades = this.atividadeRepositorio.findAllByDataPostagemBefore(LocalDateTime.now());
+
+            List<AtividadeDTO> provasDTOS = atividades.stream()
+                    .filter(Atividade::isProva)
+                    .map(AtividadeMapper::atividadeToDTO)
+                    .toList();
+            List<AtividadeDTO> atividadesDTOS = atividades.stream()
+                    .filter((Atividade atividade) -> !atividade.isProva())
+                    .map(AtividadeMapper::atividadeToDTO)
+                    .toList();
+
+            modelMap.addAttribute("mostrarAtividades", true);
+            modelMap.addAttribute("provas", provasDTOS);
+            modelMap.addAttribute("atividades", atividadesDTOS);
+        }
 
         return "editor";
     }

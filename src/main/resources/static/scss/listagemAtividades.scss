@@ -22,7 +22,6 @@ main {
     text-decoration: none;
   }
 
-
   .listagem-atividades {
     display: flex;
     flex-direction: column;
@@ -75,6 +74,7 @@ div:has(button) {
 
   label {
     pointer-events: none;
+    width: 40%;
 
     span {
       padding: 0;

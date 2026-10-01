@@ -785,6 +785,46 @@ buttonImportar?.addEventListener("click", (): void => {
   fileInput.click();
 });
 
+/**********************/
+/* MOSTRAR ATIVIDADES */
+/**********************/
+
+let assignmentsContainer: HTMLElement | null = document.querySelector("#atividades");
+let assignmentsDetailsTag: HTMLDetailsElement | null = document.querySelector("#assignments");
+let btnFecharAssignments: HTMLButtonElement | null = document.querySelector("#close-button");
+let btnLimparSelecaoAssignments: HTMLButtonElement | null =
+  document.querySelector("#clean-selection-button");
+
+function fecharAssignmentsContainer(event: MouseEvent): void {
+  let targetElement: HTMLElement = event.target as HTMLElement;
+
+  if (targetElement.tagName !== "SECTION" && !assignmentsContainer?.contains(targetElement)) {
+    assignmentsContainer?.style.removeProperty("display");
+    document.body.removeEventListener("click", fecharAssignmentsContainer);
+  }
+}
+
+assignmentsDetailsTag?.addEventListener("click", (event: MouseEvent): void => {
+  event.preventDefault();
+  assignmentsContainer?.style.setProperty("display", "grid");
+  setTimeout((): void => {
+    document.body.addEventListener("click", fecharAssignmentsContainer);
+  }, 200);
+});
+
+btnFecharAssignments?.addEventListener("click", (): void => {
+  assignmentsContainer?.style.removeProperty("display");
+});
+
+btnLimparSelecaoAssignments?.addEventListener("click", (): void => {
+  let inputsRadioAssignments: NodeListOf<HTMLInputElement> = document.querySelectorAll(
+    "input[name=selected-assignment]",
+  );
+  inputsRadioAssignments.forEach((inputRadio: HTMLInputElement): void => {
+    inputRadio.checked = false;
+  });
+});
+
 /***********************/
 /* BINDINGS DO USUÁRIO */
 /***********************/
