@@ -78,7 +78,7 @@
             </label>
             <label class="is-selected">
               <span th:text="#{web.page.editor.assignments.selected.label}"></span>
-              <input name="selected-assignment" type="radio" />
+              <input name="selected-assignment" type="radio" th:value="${atividade.getCodigo()}" />
             </label>
           </summary>
           <p class="assignment-description" th:text="${atividade.getDescricao()}"></p>
