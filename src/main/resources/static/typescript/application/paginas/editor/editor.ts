@@ -634,7 +634,7 @@ buttonDeletar?.addEventListener("click", async (): Promise<void> => {
       .definirDiagrama(diagrama)
       .definirRepositorioComponente(repositorioComponentes)
       .build();
-    commandHistory.saveAndExecuteCommand(command);
+    command.execute();
 
     selecionadorComponente.removerSelecao();
     limparPropriedades(abaPropriedades);
