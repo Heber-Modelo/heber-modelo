@@ -24,7 +24,10 @@ A short and simple permissive license with conditions only requiring preservatio
 Licensed works, modifications, and larger works may be distributed under different terms and without source code.
 -->
   <body>
-    <header th:replace="~{fragments/header :: header}"></header>
+    <header>
+      <!--/*@thymesVar id="programa" type="java.util.String"*/-->
+      <h1 th:text="${programa}"></h1>
+    </header>
     <main>
       <h2>SEÇÃO 1 - INFORMAÇÕES GERAIS</h2>
       <p>

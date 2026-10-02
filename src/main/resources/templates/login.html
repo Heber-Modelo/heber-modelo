@@ -19,7 +19,10 @@ https://choosealicense.com/licenses/mit/
 A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
 Licensed works, modifications, and larger works may be distributed under different terms and without source code.
 -->
-    <header th:replace="~{fragments/header :: header}"></header>
+    <header>
+      <!--/*@thymesVar id="programa" type="java.util.String"*/-->
+      <h1 th:text="${programa}"></h1>
+    </header>
     <main>
       <div
         class="info"
@@ -41,7 +44,7 @@ Licensed works, modifications, and larger works may be distributed under differe
             class="texto-ajuda"
           ></a>
         </label>
-        <button th:text="#{web.page.login.continue}" id="continuar"></button>
+        <button type="submit" th:text="#{web.page.login.continue}" id="continuar"></button>
         <small>
           <span class="texto-ajuda">
             <th:block th:text="#{web.page.login.register.1}"></th:block>&nbsp;<a
@@ -57,6 +60,7 @@ Licensed works, modifications, and larger works may be distributed under differe
             <a
               href="privacidade.html"
               th:text="#{web.page.login.privacy-notice.2}"
+              target="_blank"
               id="politica"
             ></a>
             .
