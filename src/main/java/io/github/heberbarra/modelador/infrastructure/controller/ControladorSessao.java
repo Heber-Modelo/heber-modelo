@@ -26,9 +26,10 @@ import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessao;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante;
 import io.github.heberbarra.modelador.infrastructure.verificador.VerificadorSenha;
-import java.util.Optional;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.ServerSocket;
 import java.util.logging.Logger;
-import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplicationShutdownHandlers;
 import org.springframework.context.event.EventListener;
@@ -41,11 +42,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ControladorSessao {
     private static final Logger logger = JavaLogger.obterLogger(ControladorSessao.class.getName());
+    private static ConfiguracaoSessao configuracaoSessao;
     private static Roteador roteador;
     private final TaskExecutor taskExecutor;
 
@@ -82,21 +83,32 @@ public class ControladorSessao {
     @PostMapping({"/criarSessao", "/criarSessao.html"})
     public String criarSessao(@ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
 
-        RoteadorSessao roteadorSessao = new RoteadorSessao(porta);
-        VerificadorSenha verificadorSenha = new VerificadorSenha(senha);
+        taskExecutor.execute(() -> {
+            RoteadorSessao roteadorSessao;
+            VerificadorSenha verificadorSenha = new VerificadorSenha(senha);
+            configuracaoSessao = new ConfiguracaoSessao();
 
-        try {
-            roteadorSessao.registrarFuncionalidade(
-                    VerificadorSenha.VERIFICADOR_SENHA_HEADER,
-                    verificadorSenha,
-                    VerificadorSenha.class.getMethod("verificar", String.class));
-            roteador = roteadorSessao;
-            taskExecutor.execute(roteador);
-        } catch (NoSuchMethodException e) {
-            logger.severe(TradutorWrapper.tradutor
-                    .traduzirMensagem("error.session.method.not-found")
-                    .formatted(e.getMessage()));
-        }
+            Method verificar;
+            try (ServerSocket serverSocket = new ServerSocket(porta)) {
+                verificar = VerificadorSenha.class.getMethod("verificar", String.class);
+
+                //noinspection InfiniteLoopStatement
+                while (true) {
+                    roteadorSessao = new RoteadorSessao(serverSocket.accept());
+                    roteadorSessao.registrarFuncionalidade(
+                            VerificadorSenha.VERIFICADOR_SENHA_HEADER, verificadorSenha, verificar);
+                    taskExecutor.execute(roteadorSessao);
+                }
+            } catch (NoSuchMethodException e) {
+                logger.severe(TradutorWrapper.tradutor
+                        .traduzirMensagem("error.session.method.not-found")
+                        .formatted(e.getMessage()));
+            } catch (IOException e) {
+                logger.severe(TradutorWrapper.tradutor
+                        .traduzirMensagem("error.session.create.failure")
+                        .formatted(e.getMessage()));
+            }
+        });
 
         return "redirect:/login";
     }
@@ -134,20 +146,9 @@ public class ControladorSessao {
         InjetorAtributos.injetarTituloPagina(modelMap, "session-configuration");
         InjetorAtributos.injetarPaleta(modelMap);
 
-        ConfiguracaoSessao configuracaoSessao = SessaoFactory.getSessao().configuracaoSessao();
         modelMap.addAttribute("configuracao", configuracaoSessao);
 
         return "configurarSessao";
-    }
-
-    @GetMapping("/verificarEstadoSessao")
-    @ResponseBody
-    public @Nullable ResponseEntity<String> verificarEstadoSessao() {
-        Optional<String> estadoRoteador = roteador == null
-                ? Optional.empty()
-                : Optional.of(roteador.getEstado().toString().replace("\"", ""));
-
-        return ResponseEntity.of(estadoRoteador);
     }
 
     @EventListener(SpringApplicationShutdownHandlers.class)
@@ -159,6 +160,6 @@ public class ControladorSessao {
     }
 
     public static boolean isSessaoInativa() {
-        return roteador == null;
+        return roteador == null && configuracaoSessao == null;
     }
 }

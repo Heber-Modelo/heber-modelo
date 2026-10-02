@@ -15,9 +15,7 @@ package io.github.heberbarra.modelador.infrastructure.router;
 
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
-import io.github.heberbarra.modelador.domain.model.Sessao;
 import io.github.heberbarra.modelador.domain.router.Roteador;
-import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -25,6 +23,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.Socket;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,14 +36,13 @@ public class RoteadorSessao implements Roteador {
     private static final Logger logger = JavaLogger.obterLogger(RoteadorSessao.class.getName());
     private final Map<String, Method> funcionalidadesRegistradas;
     private final Map<String, Object> objetosAlvoFuncionalidades;
-    private final int porta;
+    private final Socket socket;
     private EstadosRoteador estado;
-    private Sessao sessao;
 
-    public RoteadorSessao(int porta) {
+    public RoteadorSessao(Socket socket) {
         this.funcionalidadesRegistradas = new HashMap<>();
         this.objetosAlvoFuncionalidades = new HashMap<>();
-        this.porta = porta;
+        this.socket = socket;
 
         this.estado = EstadosRoteador.ESPERANDO;
     }
@@ -56,7 +54,6 @@ public class RoteadorSessao implements Roteador {
 
     @Override
     public void run() {
-        this.sessao = SessaoFactory.build(porta, null);
         this.estado = EstadosRoteador.AUTORIZADO;
 
         String argumentos;
@@ -65,10 +62,8 @@ public class RoteadorSessao implements Roteador {
         String linha;
         String[] partesLinha;
 
-        try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(this.sessao.socket().getInputStream()));
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(this.sessao.socket().getOutputStream()))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
             while (true) {
                 linha = reader.readLine();
 
@@ -120,9 +115,5 @@ public class RoteadorSessao implements Roteador {
     @Override
     public EstadosRoteador getEstado() {
         return estado;
-    }
-
-    public Sessao getSessao() {
-        return sessao;
     }
 }

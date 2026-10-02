@@ -38,19 +38,3 @@ async function encerrarSessao(): Promise<void> {
 
 const encerrarSessaoButton: HTMLButtonElement | null = document.querySelector("#encerrarSessao");
 encerrarSessaoButton?.addEventListener("click", encerrarSessao);
-
-let awaitIndicatorWrapper: HTMLElement | null = document.querySelector("#await-indicator-wrapper");
-
-async function verificarEstadoSessao(): Promise<void> {
-  let estado: string = await (await fetch("/verificarEstadoSessao")).text();
-
-  if (estado === "AUTORIZADO") {
-    awaitIndicatorWrapper?.remove();
-    return;
-  }
-
-  awaitIndicatorWrapper?.style.removeProperty("display");
-  setTimeout(verificarEstadoSessao, 500);
-}
-
-(async (): Promise<void> => await verificarEstadoSessao())();

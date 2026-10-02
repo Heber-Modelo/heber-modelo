@@ -17,7 +17,6 @@ import static io.github.heberbarra.modelador.infrastructure.verificador.Verifica
 
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
-import io.github.heberbarra.modelador.domain.model.Sessao;
 import io.github.heberbarra.modelador.domain.router.Roteador;
 import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
 import java.io.BufferedReader;
@@ -25,12 +24,13 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.Socket;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 public class RoteadorSessaoEstudante implements Roteador {
     private static final Logger logger = JavaLogger.obterLogger(RoteadorSessaoEstudante.class.getName());
-    public Sessao sessao;
+    public Socket socket;
     private final int porta;
     private final String ip;
     private final String senha;
@@ -44,14 +44,11 @@ public class RoteadorSessaoEstudante implements Roteador {
     }
 
     @Override
-    @SuppressWarnings("resource")
     public void run() {
-        this.sessao = SessaoFactory.build(this.porta, this.ip);
+        socket = SessaoFactory.build(this.porta, this.ip);
 
-        try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(this.sessao.socket().getInputStream()));
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(this.sessao.socket().getOutputStream()))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
             writer.write("%s;%s;%s%n".formatted(VERIFICADOR_SENHA_HEADER, ip, senha));
             writer.flush();
 

@@ -15,61 +15,46 @@ package io.github.heberbarra.modelador.infrastructure.factory;
 
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
-import io.github.heberbarra.modelador.domain.model.ConfiguracaoSessao;
-import io.github.heberbarra.modelador.domain.model.Sessao;
-import jakarta.annotation.Nullable;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
 public class SessaoFactory {
     private static final Logger logger = JavaLogger.obterLogger(SessaoFactory.class.getName());
     private static final Object SYNCHRONIZER = new Object();
-    private static volatile Sessao sessao = null;
+    private static volatile Socket socket = null;
 
-    public static Sessao build(Integer porta, @Nullable String ip) {
-        if (sessao == null) {
+    public static Socket build(Integer porta, String ip) {
+        if (socket == null) {
             synchronized (SYNCHRONIZER) {
-                try {
-                    Socket socket;
-                    if (ip != null) {
+                if (socket == null) {
+                    try {
                         socket = new Socket(ip, porta);
                         logger.info(TradutorWrapper.tradutor
                                 .traduzirMensagem("session.create.success")
                                 .formatted(porta));
-                    } else {
-                        @SuppressWarnings("resource")
-                        ServerSocket serverSocket = new ServerSocket(porta);
-                        socket = serverSocket.accept();
+                    } catch (IOException e) {
+                        logger.warning(TradutorWrapper.tradutor
+                                .traduzirMensagem("error.session.create.failure")
+                                .formatted(e.getMessage()));
                     }
-
-                    sessao = new Sessao(new ConfiguracaoSessao(), socket);
-                } catch (IOException e) {
-                    logger.warning(TradutorWrapper.tradutor
-                            .traduzirMensagem("error.session.create.failure")
-                            .formatted(e.getMessage()));
                 }
             }
         }
 
-        return sessao;
+        return socket;
     }
 
     public static void closeSocket() {
-        if (sessao != null) {
+        if (socket != null) {
             try {
-                sessao.socket().close();
-                sessao = null;
+                socket.close();
+                socket = null;
             } catch (IOException e) {
                 logger.warning(TradutorWrapper.tradutor
                         .traduzirMensagem("error.session.terminate")
                         .formatted(e.getMessage()));
             }
         }
-    }
-
-    public static Sessao getSessao() {
-        return sessao;
     }
 }
