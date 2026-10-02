@@ -11,19 +11,20 @@
  *
  */
 
-let email: HTMLInputElement | null = document.querySelector("input[name='email']");
-let senha: HTMLInputElement | null = document.querySelector("input[name='senha']");
-let continuar: HTMLInputElement | null = document.querySelector("#continuar");
+let inputEmailLogin: HTMLInputElement | null = document.querySelector("input[name='email']");
+let inputSenhaLogin: HTMLInputElement | null = document.querySelector("input[name='senha']");
+let btnContinuar: HTMLButtonElement | null = document.querySelector("#continuar");
 
 function checkInputs(): void {
-  if (continuar == null) {
+  if (btnContinuar == null) {
     return;
   }
 
-  continuar.disabled = senha?.value.trim().length == 0 && email?.value.trim().length == 0;
+  btnContinuar.disabled =
+    inputSenhaLogin?.value.trim().length == 0 && inputEmailLogin?.value.trim().length == 0;
 }
 
-email?.addEventListener("input", checkInputs);
-senha?.addEventListener("input", checkInputs);
+inputEmailLogin?.addEventListener("input", checkInputs);
+inputSenhaLogin?.addEventListener("input", checkInputs);
 
 checkInputs();
