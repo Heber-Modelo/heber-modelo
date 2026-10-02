@@ -45,6 +45,10 @@ public class SessaoFactory {
         return socket;
     }
 
+    public static synchronized void reiniciarFactory() {
+        socket = null;
+    }
+
     public static void closeSocket() {
         if (socket != null) {
             try {

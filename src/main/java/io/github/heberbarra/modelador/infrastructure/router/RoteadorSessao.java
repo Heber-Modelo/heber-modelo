@@ -58,7 +58,6 @@ public class RoteadorSessao implements Roteador {
 
         String argumentos;
         String header = null;
-        String ip;
         String linha;
         String[] partesLinha;
 
@@ -73,8 +72,7 @@ public class RoteadorSessao implements Roteador {
 
                 partesLinha = linha.split(SEPARADOR_MENSAGEM);
                 header = partesLinha[POSICAO_HEADER];
-                ip = partesLinha[POSICAO_IP];
-                argumentos = Arrays.stream(partesLinha).skip(2).collect(Collectors.joining());
+                argumentos = Arrays.stream(partesLinha).skip(1).collect(Collectors.joining());
 
                 if (Objects.equals(linha, ENCERRAR_ROUTER)) {
                     return;
@@ -90,7 +88,7 @@ public class RoteadorSessao implements Roteador {
                 }
 
                 Object resultado = funcionalidade.invoke(objetoAlvo, argumentos);
-                writer.write("%s;%s;%s%n".formatted(header, ip, resultado));
+                writer.write("%s;%s%n".formatted(header, resultado));
                 writer.flush();
             }
         } catch (IOException e) {

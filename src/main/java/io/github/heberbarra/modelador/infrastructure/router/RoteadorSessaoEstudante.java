@@ -45,11 +45,12 @@ public class RoteadorSessaoEstudante implements Roteador {
 
     @Override
     public void run() {
+        SessaoFactory.reiniciarFactory();
         socket = SessaoFactory.build(this.porta, this.ip);
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
-            writer.write("%s;%s;%s%n".formatted(VERIFICADOR_SENHA_HEADER, ip, senha));
+            writer.write("%s;%s;%n".formatted(VERIFICADOR_SENHA_HEADER, senha));
             writer.flush();
 
             String resposta;
@@ -60,11 +61,8 @@ public class RoteadorSessaoEstudante implements Roteador {
 
             String[] partesResposta = resposta.split(SEPARADOR_MENSAGEM);
             String header = partesResposta[POSICAO_HEADER];
-            String ip = partesResposta[POSICAO_IP];
 
-            if (Objects.equals(VERIFICADOR_SENHA_HEADER, header)
-                    && Objects.equals(this.ip, ip)
-                    && !(Boolean.parseBoolean(partesResposta[2]))) {
+            if (Objects.equals(VERIFICADOR_SENHA_HEADER, header) && !(Boolean.parseBoolean(partesResposta[1]))) {
                 this.estadoRoteadorSessaoEstudante = EstadosRoteador.BLOQUEADO;
                 logger.warning(TradutorWrapper.tradutor.traduzirMensagem("error.session.connection.failure"));
 
