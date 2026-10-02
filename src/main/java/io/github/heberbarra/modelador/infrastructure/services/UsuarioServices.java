@@ -13,7 +13,7 @@
 
 package io.github.heberbarra.modelador.infrastructure.services;
 
-import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
+import io.github.heberbarra.modelador.domain.model.dto.UsuarioDTO;
 import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import org.springframework.security.crypto.password.PasswordEncoder;

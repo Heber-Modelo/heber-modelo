@@ -13,7 +13,7 @@
 
 package io.github.heberbarra.modelador.infrastructure.mapper;
 
-import io.github.heberbarra.modelador.domain.model.AtividadeDTO;
+import io.github.heberbarra.modelador.domain.model.dto.AtividadeDTO;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 
 public class AtividadeMapper {

@@ -11,7 +11,7 @@
  *
  */
 
-package io.github.heberbarra.modelador.domain.model;
+package io.github.heberbarra.modelador.domain.model.dto;
 
 import java.time.LocalDateTime;
 

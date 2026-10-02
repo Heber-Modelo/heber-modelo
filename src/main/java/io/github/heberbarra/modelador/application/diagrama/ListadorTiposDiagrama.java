@@ -13,7 +13,7 @@
 
 package io.github.heberbarra.modelador.application.diagrama;
 
-import io.github.heberbarra.modelador.domain.model.TipoDiagramaDTO;
+import io.github.heberbarra.modelador.domain.model.dto.TipoDiagramaDTO;
 import java.util.List;
 
 public class ListadorTiposDiagrama {

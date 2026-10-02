@@ -15,7 +15,7 @@ package io.github.heberbarra.modelador.infrastructure.controller;
 
 import io.github.heberbarra.modelador.domain.exception.UsuarioNotFoundException;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
-import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
+import io.github.heberbarra.modelador.domain.model.dto.UsuarioDTO;
 import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import io.github.heberbarra.modelador.infrastructure.services.UsuarioServices;

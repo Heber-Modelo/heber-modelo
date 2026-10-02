@@ -14,7 +14,7 @@
 package io.github.heberbarra.modelador.infrastructure.controller;
 
 import io.github.heberbarra.modelador.domain.exception.AtividadeNotFoundException;
-import io.github.heberbarra.modelador.domain.model.AtividadeDTO;
+import io.github.heberbarra.modelador.domain.model.dto.AtividadeDTO;
 import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import org.springframework.http.HttpStatus;
