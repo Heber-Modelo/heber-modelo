@@ -3,7 +3,7 @@
   <head>
     <!--suppress HtmlUnknownTag -->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
-    <link rel="stylesheet" th:href="@{/css/solicitar.css}" />
+    <link rel="stylesheet" th:href="@{/css/formulario.css}" />
     <title th:text="#{web.page.request-password-change.title}"></title>
   </head>
   <!--
@@ -18,13 +18,16 @@ A short and simple permissive license with conditions only requiring preservatio
 Licensed works, modifications, and larger works may be distributed under different terms and without source code.
 -->
   <body>
-    <header th:replace="~{fragments/header :: header}"></header>
+    <header>
+      <!--/*@thymesVar id="programa" type="java.util.String"*/-->
+      <h1 th:text="${programa}"></h1>
+    </header>
     <main>
-      <form action="" method="post">
+      <form action="/solicitar" method="post">
         <label>
           <th:block th:text="#{web.page.request-password-change.label.id}"></th:block>:
           <input
-            type="number"
+            type="text"
             name="matricula"
             th:placeholder="#{web.page.request-password-change.placeholder.id}"
             required
@@ -44,18 +47,26 @@ Licensed works, modifications, and larger works may be distributed under differe
           <textarea
             name="justificativa"
             th:placeholder="#{web.page.request-password-change.placeholder.reason}"
+            draggable="false"
             required
           ></textarea>
         </label>
-        <button
-          th:text="#{web.page.request-password-change.label.button.continue}"
-          id="continuar"
-        ></button>
+        <div id="botoes">
+          <button type="button">
+            <a href="/login" th:text="#{web.page.register.label.cancel}"></a>
+          </button>
+          <button
+            type="submit"
+            th:text="#{web.page.request-password-change.label.button.continue}"
+            id="continuar"
+          ></button>
+        </div>
         <span>
           <th:block th:text="#{web.page.request-password-change.privacy-notice.1}"></th:block>
           <a
             href="privacidade.html"
             th:text="#{web.page.request-password-change.privacy-notice.2}"
+            target="_blank"
             id="politica"
           ></a>
         </span>

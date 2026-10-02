@@ -63,6 +63,13 @@ form {
       outline: 0.2rem solid var(--cor-botao);
       background-color: var(--cor-fundo-input-focus);
     }
+
+    textarea[name=justificativa] {
+      font-size: 1.5rem;
+      padding: 0.5rem 1rem;
+      resize: none;
+    }
+
   }
 
   #botoes {
