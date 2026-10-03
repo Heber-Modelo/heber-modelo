@@ -138,6 +138,10 @@ public class ControladorLogin {
 
     @GetMapping({"/redefinir", "/redefinir.html"})
     public String redefinirSenha(ModelMap modelMap) {
+        if (ControladorSessao.isSessaoInativa()) {
+            return "redirect:/entrarSessao";
+        }
+
         InjetorAtributos.injetarTituloPagina(modelMap, "reset-password");
         InjetorAtributos.injetarPaleta(modelMap);
 
@@ -146,6 +150,10 @@ public class ControladorLogin {
 
     @GetMapping({"/solicitar", "/solicitar.html"})
     public String solicitarNovaSenha(ModelMap modelMap) {
+        if (ControladorSessao.isSessaoInativa()) {
+            return "redirect:/entrarSessao";
+        }
+
         if (DataSourceBuilder.isProfessor()) {
             return "redirect:/redefinir";
         }
