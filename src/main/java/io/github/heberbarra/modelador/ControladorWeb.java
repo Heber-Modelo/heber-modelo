@@ -14,6 +14,7 @@
 package io.github.heberbarra.modelador;
 
 import static io.github.heberbarra.modelador.infrastructure.controller.ControladorDesligar.TOKEN_SECRETO;
+import static io.github.heberbarra.modelador.infrastructure.controller.ControladorSessao.TOKEN_TROCAR_SENHA;
 import static io.github.heberbarra.modelador.infrastructure.services.UsuarioDetailsService.NOME_AUTORIDADE_PROFESSOR;
 import static java.awt.Desktop.Action.BROWSE;
 
@@ -64,7 +65,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @SpringBootApplication
 @Service
 public class ControladorWeb {
-
     private static final Logger logger = JavaLogger.obterLogger(ControladorWeb.class.getName());
     private static final IConfigurador configurador = ConfiguradorFactory.build();
     private final TaskExecutor taskExecutor;
@@ -202,6 +202,7 @@ public class ControladorWeb {
                 usuariosDTOs.stream()
                         .filter(usuarioDTO -> usuarioDTO.getTipo().equals("E"))
                         .toList());
+        modelMap.addAttribute("tokenTrocarSenha", TOKEN_TROCAR_SENHA);
 
         return "listagemEstudantes";
     }

@@ -13,7 +13,11 @@
 
 package io.github.heberbarra.modelador.infrastructure.router;
 
+import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.AUTORIZADO;
+import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.BLOQUEADO;
+import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.ESPERANDO;
 import static io.github.heberbarra.modelador.infrastructure.verificador.VerificadorSenha.VERIFICADOR_SENHA_HEADER;
+import static io.github.heberbarra.modelador.infrastructure.verificador.VerificadorTokenTrocarSenha.VERIFICAR_TOKEN_TROCAR_SENHA_HEADER;
 
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
@@ -34,13 +38,17 @@ public class RoteadorSessaoEstudante implements Roteador {
     private final int porta;
     private final String ip;
     private final String senha;
-    private EstadosRoteador estadoRoteadorSessaoEstudante;
+    private static volatile String dados;
+    private static volatile String headerDados;
+    private EstadosRoteador estadoRoteador;
+    private volatile EstadosRoteador estadoTrocarSenha;
 
     public RoteadorSessaoEstudante(int porta, String ip, String senha) {
         this.porta = porta;
         this.ip = ip;
         this.senha = senha;
-        this.estadoRoteadorSessaoEstudante = EstadosRoteador.ESPERANDO;
+        this.estadoRoteador = ESPERANDO;
+        this.estadoTrocarSenha = ESPERANDO;
     }
 
     @Override
@@ -63,14 +71,42 @@ public class RoteadorSessaoEstudante implements Roteador {
             String header = partesResposta[POSICAO_HEADER];
 
             if (Objects.equals(VERIFICADOR_SENHA_HEADER, header) && !(Boolean.parseBoolean(partesResposta[1]))) {
-                this.estadoRoteadorSessaoEstudante = EstadosRoteador.BLOQUEADO;
+                this.estadoRoteador = BLOQUEADO;
                 logger.warning(TradutorWrapper.tradutor.traduzirMensagem("error.session.connection.failure"));
 
                 return;
             }
 
-            this.estadoRoteadorSessaoEstudante = EstadosRoteador.AUTORIZADO;
+            this.estadoRoteador = AUTORIZADO;
             logger.info(TradutorWrapper.tradutor.traduzirMensagem("session.connection.success"));
+
+            //noinspection InfiniteLoopStatement
+            while (true) {
+                if (headerDados == null) {
+                    //noinspection BusyWait
+                    Thread.sleep(200);
+                    continue;
+                }
+
+                writer.write("%s;%s;%n".formatted(headerDados, dados));
+                writer.flush();
+
+                headerDados = null;
+                dados = null;
+
+                while ((resposta = reader.readLine()) == null) {
+                    //noinspection BusyWait
+                    Thread.sleep(200);
+                }
+
+                partesResposta = resposta.split(SEPARADOR_MENSAGEM);
+                header = partesResposta[POSICAO_HEADER];
+
+                if (Objects.equals(VERIFICAR_TOKEN_TROCAR_SENHA_HEADER, header)) {
+                    this.estadoTrocarSenha = Boolean.parseBoolean(partesResposta[1]) ? AUTORIZADO : BLOQUEADO;
+                }
+            }
+
         } catch (IOException e) {
             logger.severe(TradutorWrapper.tradutor
                     .traduzirMensagem("error.session.read")
@@ -84,6 +120,22 @@ public class RoteadorSessaoEstudante implements Roteador {
 
     @Override
     public EstadosRoteador getEstado() {
-        return estadoRoteadorSessaoEstudante;
+        return estadoRoteador;
+    }
+
+    public EstadosRoteador getEstadoTrocarSenha() {
+        return estadoTrocarSenha;
+    }
+
+    public void setEstadoTrocarSenha(EstadosRoteador estadoTrocarSenha) {
+        this.estadoTrocarSenha = estadoTrocarSenha;
+    }
+
+    public static void setDados(String dados) {
+        RoteadorSessaoEstudante.dados = dados;
+    }
+
+    public static void setHeaderDados(String headerDados) {
+        RoteadorSessaoEstudante.headerDados = headerDados;
     }
 }

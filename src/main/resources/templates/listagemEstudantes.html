@@ -28,7 +28,7 @@
       </button>
       <h1 th:text="${programa}"></h1>
       <div id="opcoes-botoes">
-        <button>
+        <button th:title="${tokenTrocarSenha}">
           <th:block th:replace="~{fragments/listagemEstudantes/icons/notify :: svg}"></th:block>
         </button>
         <button>

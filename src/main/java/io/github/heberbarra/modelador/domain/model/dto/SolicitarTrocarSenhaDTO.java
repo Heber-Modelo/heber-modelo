@@ -11,18 +11,23 @@
  *
  */
 
-package io.github.heberbarra.modelador.domain.router;
+package io.github.heberbarra.modelador.domain.model.dto;
 
-public interface Roteador extends Runnable {
-    String ENCERRAR_ROUTER = "ENCERRAR";
-    String SEPARADOR_MENSAGEM = ";";
-    int POSICAO_HEADER = 0;
+public class SolicitarTrocarSenhaDTO {
 
-    enum EstadosRoteador {
-        AUTORIZADO,
-        BLOQUEADO,
-        ESPERANDO
+    private String token;
+
+    public SolicitarTrocarSenhaDTO() {}
+
+    public SolicitarTrocarSenhaDTO(String token) {
+        this.token = token;
     }
 
-    EstadosRoteador getEstado();
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

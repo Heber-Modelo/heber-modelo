@@ -15,9 +15,12 @@ package io.github.heberbarra.modelador.infrastructure.controller;
 
 import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.BLOQUEADO;
 import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.ESPERANDO;
+import static io.github.heberbarra.modelador.infrastructure.verificador.VerificadorSenha.VERIFICADOR_SENHA_HEADER;
+import static io.github.heberbarra.modelador.infrastructure.verificador.VerificadorTokenTrocarSenha.VERIFICAR_TOKEN_TROCAR_SENHA_HEADER;
 
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
+import io.github.heberbarra.modelador.application.usecase.gerar.GeradorToken;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.ConfiguracaoSessao;
 import io.github.heberbarra.modelador.domain.router.Roteador;
@@ -26,6 +29,7 @@ import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessao;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante;
 import io.github.heberbarra.modelador.infrastructure.verificador.VerificadorSenha;
+import io.github.heberbarra.modelador.infrastructure.verificador.VerificadorTokenTrocarSenha;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.ServerSocket;
@@ -45,10 +49,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ControladorSessao {
+    public static final String TOKEN_TROCAR_SENHA;
     private static final Logger logger = JavaLogger.obterLogger(ControladorSessao.class.getName());
     private static ConfiguracaoSessao configuracaoSessao;
     private static Roteador roteador;
     private final TaskExecutor taskExecutor;
+
+    static {
+        GeradorToken geradorToken = new GeradorToken();
+        geradorToken.gerarToken();
+        TOKEN_TROCAR_SENHA = geradorToken.getToken().substring(0, 6);
+    }
 
     public ControladorSessao(@Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor) {
         this.taskExecutor = taskExecutor;
@@ -86,17 +97,22 @@ public class ControladorSessao {
         taskExecutor.execute(() -> {
             RoteadorSessao roteadorSessao;
             VerificadorSenha verificadorSenha = new VerificadorSenha(senha);
+            VerificadorTokenTrocarSenha verificadorTokenTrocarSenha =
+                    new VerificadorTokenTrocarSenha(TOKEN_TROCAR_SENHA);
             configuracaoSessao = new ConfiguracaoSessao();
 
-            Method verificar;
+            Method verificarSenha;
+            Method verificarToken;
             try (ServerSocket serverSocket = new ServerSocket(porta)) {
-                verificar = VerificadorSenha.class.getMethod("verificar", String.class);
+                verificarSenha = VerificadorSenha.class.getMethod("verificar", String.class);
+                verificarToken = VerificadorTokenTrocarSenha.class.getMethod("verificar", String.class);
 
                 //noinspection InfiniteLoopStatement
                 while (true) {
                     roteadorSessao = new RoteadorSessao(serverSocket.accept());
+                    roteadorSessao.registrarFuncionalidade(VERIFICADOR_SENHA_HEADER, verificadorSenha, verificarSenha);
                     roteadorSessao.registrarFuncionalidade(
-                            VerificadorSenha.VERIFICADOR_SENHA_HEADER, verificadorSenha, verificar);
+                            VERIFICAR_TOKEN_TROCAR_SENHA_HEADER, verificadorTokenTrocarSenha, verificarToken);
                     taskExecutor.execute(roteadorSessao);
                 }
             } catch (NoSuchMethodException e) {
@@ -157,6 +173,10 @@ public class ControladorSessao {
         SessaoFactory.closeSocket();
 
         return ResponseEntity.ok().build();
+    }
+
+    public static Roteador getRoteador() {
+        return roteador;
     }
 
     public static boolean isSessaoInativa() {

@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright (c) 2026. Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
  *
  * Licensed under the Massachusetts Institute of Technology (MIT) License.
@@ -11,18 +11,35 @@
  *
  */
 
-package io.github.heberbarra.modelador.domain.router;
+form {
+  gap: 3rem;
 
-public interface Roteador extends Runnable {
-    String ENCERRAR_ROUTER = "ENCERRAR";
-    String SEPARADOR_MENSAGEM = ";";
-    int POSICAO_HEADER = 0;
+  div#botoes button {
+    margin-top: 0;
+    width: 30%;
+  }
 
-    enum EstadosRoteador {
-        AUTORIZADO,
-        BLOQUEADO,
-        ESPERANDO
+  h2 {
+    font-size: 2.5rem;
+  }
+
+}
+
+div#digitos-token {
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+
+  label {
+    height: 7rem;
+    width: 7rem;
+
+    input {
+      text-align: center;
+      height: 100%;
+      width: 100%;
     }
 
-    EstadosRoteador getEstado();
+  }
+
 }

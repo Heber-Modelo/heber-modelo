@@ -11,18 +11,19 @@
  *
  */
 
-package io.github.heberbarra.modelador.domain.router;
+package io.github.heberbarra.modelador.infrastructure.verificador;
 
-public interface Roteador extends Runnable {
-    String ENCERRAR_ROUTER = "ENCERRAR";
-    String SEPARADOR_MENSAGEM = ";";
-    int POSICAO_HEADER = 0;
+import java.util.Objects;
 
-    enum EstadosRoteador {
-        AUTORIZADO,
-        BLOQUEADO,
-        ESPERANDO
+public class VerificadorTokenTrocarSenha {
+    public static final String VERIFICAR_TOKEN_TROCAR_SENHA_HEADER = "VERIFICAR-TOKEN-TROCAR-SENHA";
+    private final String tokenCorreto;
+
+    public VerificadorTokenTrocarSenha(String tokenCorreto) {
+        this.tokenCorreto = tokenCorreto;
     }
 
-    EstadosRoteador getEstado();
+    public boolean verificar(String token) {
+        return Objects.equals(tokenCorreto, token);
+    }
 }
