@@ -59,6 +59,15 @@ header {
 
   h2 {
     font-family: "Pompiere", serif;
+
+    a {
+      color: var(--cor-letra);
+    }
+
+    a:hover {
+      color: var(--cor-botao-hover);
+    }
+
   }
 
 }
