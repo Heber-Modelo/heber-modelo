@@ -18,6 +18,7 @@ import DescricaoRelacionalJSON from "domain/json/descricaoRelacionalJSON";
 import DiagramasJSON from "domain/json/diagramasJSON";
 import DicionarioDadosJSON from "domain/json/dicionarioDadosJSON";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 
 const NOMES_COMPONENTES_ESPECIAIS: string[] = ["editor_descricao_relacional", "tabela_dicionario"];
 
@@ -253,7 +254,9 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
     dataDictionaries: dicionariosDados,
   };
 
-  fecharTagDetails(event.target as HTMLElement);
+  if (tipoArquivo !== TipoArquivo.BANCO) {
+    fecharTagDetails(event.target as HTMLElement);
+  }
 
   if (tipoArquivo === TipoArquivo.JSON) {
     let jsonData: string = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(requestBody, null, 2))}`;
@@ -323,6 +326,31 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   );
   xhtmlWrapperElement.remove();
 
+  if (tipoArquivo === TipoArquivo.BANCO) {
+    let codigoAtividadeInput: HTMLInputElement | null = document.querySelector("#codigo-atividade");
+    let codigoAtividade: string | undefined = codigoAtividadeInput?.value;
+
+    if (codigoAtividade === undefined || codigoAtividade.length === 0) {
+      window.alert(await traduzirChaveI18n("web.page.editor.selected-assignment.no-selection"));
+      return;
+    }
+
+    await fetch("/enviarAtividade", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-XSRF-TOKEN": csrfToken,
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        codigoAtividade: Number(codigoAtividade),
+        imagens: images,
+      }),
+    });
+
+    return;
+  }
+
   if (tipoArquivo === TipoArquivo.PDF) {
     const pdfDocument = new jsPDF("landscape", "mm", [1920, 1080]);
     let pdfHeight: number = pdfDocument.internal.pageSize.getHeight();
@@ -352,6 +380,8 @@ let buttonSalvarXML: HTMLButtonElement | null = document.querySelector("#btn-sal
 let buttonExportarPDF: HTMLButtonElement | null = document.querySelector("#btn-exportar-pdf");
 let buttonExportarPNG: HTMLButtonElement | null = document.querySelector("#btn-exportar-png");
 let buttonExportarSVG: HTMLButtonElement | null = document.querySelector("#btn-exportar-svg");
+let buttonEnviarAtividade: HTMLButtonElement | null =
+  document.querySelector("#btn-enviar-atividade");
 
 buttonSalvarJSON?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.JSON),
@@ -369,4 +399,8 @@ buttonExportarPNG?.addEventListener("click", (event: MouseEvent): Promise<void> 
 
 buttonExportarSVG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.SVG),
+);
+
+buttonEnviarAtividade?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+  salvar(event, TipoArquivo.BANCO),
 );

@@ -14,11 +14,20 @@
 package io.github.heberbarra.modelador.infrastructure.controller;
 
 import io.github.heberbarra.modelador.domain.exception.AtividadeNotFoundException;
+import io.github.heberbarra.modelador.domain.exception.UsuarioNotFoundException;
 import io.github.heberbarra.modelador.domain.model.dto.AtividadeDTO;
+import io.github.heberbarra.modelador.domain.model.dto.EnviarAtividadeDTO;
 import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
+import io.github.heberbarra.modelador.domain.repository.IFeedbackRepositorio;
+import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
+import io.github.heberbarra.modelador.infrastructure.entity.Feedback;
+import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
+import java.nio.charset.StandardCharsets;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,9 +38,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class ControladorRestAtividades {
 
     private final IAtividadeRepositorio atividadeRepositorio;
+    private final IFeedbackRepositorio feedbackRepositorio;
+    private final IUsuarioRepositorio usuarioRepositorio;
 
-    public ControladorRestAtividades(IAtividadeRepositorio atividadeRepositorio) {
+    public ControladorRestAtividades(
+            IAtividadeRepositorio atividadeRepositorio,
+            IFeedbackRepositorio feedbackRepositorio,
+            IUsuarioRepositorio usuarioRepositorio) {
         this.atividadeRepositorio = atividadeRepositorio;
+        this.feedbackRepositorio = feedbackRepositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @PostMapping("/atividade/{codigo}")
@@ -52,6 +68,29 @@ public class ControladorRestAtividades {
             this.atividadeRepositorio.saveAndFlush(atividade);
         } catch (AtividadeNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/enviarAtividade")
+    public ResponseEntity<HttpStatus> enviarAtividade(
+            @AuthenticationPrincipal UserDetails userDetails, @RequestBody EnviarAtividadeDTO enviarAtividadeDTO) {
+        Atividade atividade = atividadeRepositorio
+                .findAtividadeByCodigo(enviarAtividadeDTO.getCodigoAtividade())
+                .orElseThrow(() -> new AtividadeNotFoundException(enviarAtividadeDTO.getCodigoAtividade()));
+        Usuario estudante = usuarioRepositorio
+                .findUsuarioByNome(userDetails.getUsername())
+                .orElseThrow(() -> new UsuarioNotFoundException(userDetails.getUsername()));
+
+        Feedback novoFeedback;
+        for (String imagem : enviarAtividadeDTO.getImagens()) {
+            novoFeedback = new Feedback();
+            novoFeedback.setAtividade(atividade);
+            novoFeedback.setEstudante(estudante);
+            novoFeedback.setImagemAtividade(imagem.getBytes(StandardCharsets.UTF_8));
+
+            feedbackRepositorio.save(novoFeedback);
         }
 
         return ResponseEntity.ok().build();

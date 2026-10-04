@@ -22,6 +22,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "tb_feedback")
@@ -32,16 +34,25 @@ public class Feedback {
     @Column(name = "codigo_feedback")
     private int codigo;
 
-    @Column(name = "descricao_feedback", nullable = false)
+    @Column(name = "descricao_feedback")
     private String descricao;
+
+    @Column(name = "imagem_atividade")
+    private byte[] imagemAtividade;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "codigo_atividade")
     private Atividade atividade;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "matricula_estudante")
     private Usuario estudante;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "matricula_professor")
+    private Usuario professor;
 
     public int getCodigo() {
         return codigo;
@@ -57,5 +68,37 @@ public class Feedback {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public byte[] getImagemAtividade() {
+        return imagemAtividade;
+    }
+
+    public void setImagemAtividade(byte[] imagemAtividade) {
+        this.imagemAtividade = imagemAtividade;
+    }
+
+    public Atividade getAtividade() {
+        return atividade;
+    }
+
+    public void setAtividade(Atividade atividade) {
+        this.atividade = atividade;
+    }
+
+    public Usuario getEstudante() {
+        return estudante;
+    }
+
+    public void setEstudante(Usuario estudante) {
+        this.estudante = estudante;
+    }
+
+    public Usuario getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Usuario matriculaProfessor) {
+        this.professor = matriculaProfessor;
     }
 }

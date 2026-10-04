@@ -11,13 +11,10 @@
  *
  */
 
-enum TipoArquivo {
-  BANCO,
-  JSON,
-  PDF,
-  PNG,
-  SVG,
-  XML,
-}
+package io.github.heberbarra.modelador.domain.model.dto;
 
-export default TipoArquivo;
+public class FeedbackDTO {
+
+    private int codigoAtividade;
+    private String matriculaUsuario;
+}

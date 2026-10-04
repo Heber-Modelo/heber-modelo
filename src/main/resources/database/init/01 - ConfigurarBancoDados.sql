@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `tb_atividade` (
 
 CREATE TABLE IF NOT EXISTS `tb_feedback` (
     codigo_feedback INT AUTO_INCREMENT,
-    descricao_feedback TEXT NOT NULL,
+    descricao_feedback TEXT,
     codigo_atividade INT,
     imagem_atividade LONGBLOB,
     matricula_professor VARCHAR(20),
