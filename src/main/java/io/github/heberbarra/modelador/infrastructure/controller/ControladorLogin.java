@@ -20,18 +20,22 @@ import static io.github.heberbarra.modelador.infrastructure.verificador.Verifica
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.domain.exception.UsuarioNotFoundException;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
+import io.github.heberbarra.modelador.domain.model.dto.RedefinirSenhaDTO;
 import io.github.heberbarra.modelador.domain.model.dto.SolicitarTrocarSenhaDTO;
 import io.github.heberbarra.modelador.domain.model.dto.UsuarioDTO;
+import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante;
 import io.github.heberbarra.modelador.infrastructure.services.UsuarioServices;
+import java.util.Objects;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,9 +48,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ControladorLogin {
     private static final Logger logger = JavaLogger.obterLogger(ControladorLogin.class.getName());
+    private final PasswordEncoder passwordEncoder;
+    private final IUsuarioRepositorio usuarioRepositorio;
     private final UsuarioServices usuarioServices;
 
-    public ControladorLogin(UsuarioServices usuarioServices) {
+    public ControladorLogin(
+            PasswordEncoder passwordEncoder, IUsuarioRepositorio usuarioRepositorio, UsuarioServices usuarioServices) {
+        this.passwordEncoder = passwordEncoder;
+        this.usuarioRepositorio = usuarioRepositorio;
         this.usuarioServices = usuarioServices;
     }
 
@@ -100,6 +109,7 @@ public class ControladorLogin {
 
         InjetorAtributos.injetarTituloPagina(modelMap, "login");
         InjetorAtributos.injetarPaleta(modelMap);
+        modelMap.addAttribute("isProfessor", DataSourceBuilder.isProfessor());
 
         if (userDetails == null) return "login";
 
@@ -144,8 +154,35 @@ public class ControladorLogin {
 
         InjetorAtributos.injetarTituloPagina(modelMap, "reset-password");
         InjetorAtributos.injetarPaleta(modelMap);
+        modelMap.addAttribute("usuario", new RedefinirSenhaDTO());
 
         return "redefinir";
+    }
+
+    @PostMapping("/redefinir")
+    public String redefinirSenha(@ModelAttribute("usuario") RedefinirSenhaDTO redefinirSenhaDTO) {
+        Usuario usuario = usuarioServices.findUserByNome(redefinirSenhaDTO.getUsername());
+
+        if (usuario == null) {
+            usuario = usuarioServices.findUserByEmail(redefinirSenhaDTO.getUsername());
+        }
+
+        if (usuario == null) {
+            usuario = usuarioServices.findUserByMatricula(redefinirSenhaDTO.getUsername());
+        }
+
+        if (usuario == null) {
+            return "redirect:/redefinir?userNotFound";
+        }
+
+        if (!Objects.equals(redefinirSenhaDTO.getSenhaNova(), redefinirSenhaDTO.getConfirmarSenha())) {
+            return "redirect:/redefinir?mismatch";
+        }
+
+        usuario.setSenha(passwordEncoder.encode(redefinirSenhaDTO.getSenhaNova()));
+        usuarioRepositorio.save(usuario);
+
+        return "redirect:/login?passwordChangeSuccess";
     }
 
     @GetMapping({"/solicitar", "/solicitar.html"})

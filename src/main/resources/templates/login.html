@@ -29,6 +29,11 @@ Licensed works, modifications, and larger works may be distributed under differe
         th:text="#{web.page.login.registration-success}"
         th:if="${param.cadastroSuccess}"
       ></div>
+      <div
+        class="info"
+        th:text="#{web.page.login.password-change-success}"
+        th:if="${param.passwordChangeSuccess}"
+      ></div>
       <div class="aviso" th:text="#{web.page.login.error}" th:if="${param.error}"></div>
       <form action="login" method="post">
         <label>
@@ -40,7 +45,7 @@ Licensed works, modifications, and larger works may be distributed under differe
           <input type="password" name="password" required />
           <a
             href="solicitar.html"
-            th:text="#{web.page.login.request-new-password}"
+            th:text="${isProfessor} ? #{web.page.login.change-password} : #{web.page.login.request-new-password}"
             class="texto-ajuda"
           ></a>
         </label>
