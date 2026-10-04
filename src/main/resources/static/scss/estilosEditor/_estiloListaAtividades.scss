@@ -128,3 +128,18 @@
   }
 
 }
+
+#atividade-selecionada {
+
+  input {
+    background-color: unset;
+    color: var(--cor-fonte-alternativa);
+    font-size: 1rem;
+  }
+
+  p#descricao-atividade {
+    text-align: left;
+    width: 100%;
+  }
+
+}

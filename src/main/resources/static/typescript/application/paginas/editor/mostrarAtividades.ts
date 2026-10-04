@@ -16,35 +16,17 @@ let assignmentsDetailsTag: HTMLDetailsElement | null = document.querySelector("#
 let btnFecharAssignments: HTMLButtonElement | null = document.querySelector("#close-button");
 let btnLimparSelecaoAssignments: HTMLButtonElement | null =
   document.querySelector("#clean-selection-button");
-
-function fecharAssignmentsContainer(event: MouseEvent): void {
-  let targetElement: HTMLElement = event.target as HTMLElement;
-
-  if (targetElement.tagName !== "SECTION" && !assignmentsContainer?.contains(targetElement)) {
-    assignmentsContainer?.style.removeProperty("display");
-    document.body.removeEventListener("click", fecharAssignmentsContainer);
-  }
-}
+let inputsRadioAssignments: NodeListOf<HTMLInputElement> = document.querySelectorAll(
+  "input[name=selected-assignment]",
+);
 
 assignmentsDetailsTag?.addEventListener("click", (event: MouseEvent): void => {
   event.preventDefault();
   assignmentsContainer?.style.setProperty("display", "grid");
-  setTimeout((): void => {
-    document.body.addEventListener("click", fecharAssignmentsContainer);
-  }, 200);
 });
 
 btnFecharAssignments?.addEventListener("click", (): void => {
   assignmentsContainer?.style.removeProperty("display");
-});
-
-btnLimparSelecaoAssignments?.addEventListener("click", (): void => {
-  let inputsRadioAssignments: NodeListOf<HTMLInputElement> = document.querySelectorAll(
-    "input[name=selected-assignment]",
-  );
-  inputsRadioAssignments.forEach((inputRadio: HTMLInputElement): void => {
-    inputRadio.checked = false;
-  });
 });
 
 if (assignmentsDetailsTag) {
@@ -56,3 +38,74 @@ if (assignmentsDetailsTag) {
       .replaceAll("&gt;", ">");
   });
 }
+
+/************************/
+/* SELECIONAR ATIVIDADE */
+/************************/
+
+let atividadeSelecionadaWrapper: HTMLElement | null =
+  document.querySelector("#atividade-selecionada");
+let tituloWrapper: HTMLElement | undefined | null =
+  atividadeSelecionadaWrapper?.querySelector("#titulo-atividade");
+let codigoWrapper: HTMLInputElement | undefined | null =
+  atividadeSelecionadaWrapper?.querySelector("#codigo-atividade");
+let dataEntregaWrapper: HTMLInputElement | undefined | null =
+  atividadeSelecionadaWrapper?.querySelector("#data-entrega-atividade");
+let descricaoWrapper: HTMLElement | undefined | null =
+  atividadeSelecionadaWrapper?.querySelector("#descricao-atividade");
+
+atividadeSelecionadaWrapper?.style.setProperty("display", "none");
+
+inputsRadioAssignments.forEach((inputRadioAssignment: HTMLInputElement): void => {
+  inputRadioAssignment.addEventListener("input", (event: InputEvent): void => {
+    atividadeSelecionadaWrapper?.style.removeProperty("display");
+    let inputTarget: HTMLInputElement = event.target as HTMLInputElement;
+    let detailsTag: HTMLDetailsElement = inputTarget.parentElement?.parentElement
+      ?.parentElement as HTMLDetailsElement;
+
+    let titleElement: HTMLSpanElement | null = detailsTag.querySelector(".title");
+    let deadlineElement: HTMLInputElement | null = detailsTag.querySelector(".deadline input");
+    let descriptionElement: HTMLParagraphElement | null =
+      detailsTag.querySelector(".assignment-description");
+
+    if (tituloWrapper && titleElement) {
+      tituloWrapper.innerText = titleElement.innerText;
+    }
+
+    if (codigoWrapper) {
+      codigoWrapper.value = inputTarget.value;
+    }
+
+    if (dataEntregaWrapper && deadlineElement) {
+      dataEntregaWrapper.value = deadlineElement.value;
+    }
+
+    if (descricaoWrapper && descriptionElement) {
+      descricaoWrapper.innerHTML = descriptionElement.innerHTML;
+    }
+  });
+});
+
+btnLimparSelecaoAssignments?.addEventListener("click", (): void => {
+  inputsRadioAssignments.forEach((inputRadio: HTMLInputElement): void => {
+    inputRadio.checked = false;
+  });
+
+  if (tituloWrapper) {
+    tituloWrapper.innerText = "";
+  }
+
+  if (codigoWrapper) {
+    codigoWrapper.value = "";
+  }
+
+  if (dataEntregaWrapper) {
+    dataEntregaWrapper.value = "";
+  }
+
+  if (descricaoWrapper) {
+    descricaoWrapper.innerHTML = "";
+  }
+
+  atividadeSelecionadaWrapper?.style.setProperty("display", "none");
+});
