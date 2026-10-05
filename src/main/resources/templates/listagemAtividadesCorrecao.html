@@ -20,14 +20,50 @@
   -->
     <header th:replace="~{fragments/header :: header}"></header>
     <main>
-      <div>
-        <button>
-          <a
-            th:href="@{listagemAtividades.html}"
-            th:text="#{web.page.assignments-feedback-list.label.back}"
-          ></a>
-        </button>
-      </div>
+      <details id="atividades-pendentes">
+        <summary>
+          <th:block
+            th:text="#{web.page.assignments-feedback-list.pending-assignments.title}"
+          ></th:block>
+        </summary>
+        <div class="atividade pendente" th:each="atividadePendente : ${atividadesPendentes}">
+          <a th:href="'/feedback/editar/' + ${atividadePendente.getCodigoFeedback()}">
+            <span class="titulo">
+              <th:block th:text="${atividadePendente.getTituloAtividade()}"></th:block>
+            </span>
+            <span class="estudante">
+              <th:block
+                th:text="${atividadePendente.getMatriculaEstudante()} + ' - ' + ${atividadePendente.getNomeEstudante()}"
+              ></th:block>
+            </span>
+          </a>
+        </div>
+      </details>
+      <details id="atividades-corrigidas">
+        <summary>
+          <th:block
+            th:text="#{web.page.assignments-feedback-list.graded-assignments.title}"
+          ></th:block>
+        </summary>
+        <div class="atividade corrigida" th:each="atividadeCorrigida : ${atividadesCorrigidas}">
+          <a th:href="'/editar/feedback/' + ${atividadeCorrigida.getCodigoFeedback()}">
+            <span class="titulo">
+              <th:block th:text="${atividadeCorrigida.getTituloAtividade()}"></th:block>
+            </span>
+            <span class="estudante">
+              <th:block
+                th:text="${atividadeCorrigida.getMatriculaEstudante()} + ' - ' + ${atividadeCorrigida.getNomeEstudante()}"
+              ></th:block>
+            </span>
+          </a>
+        </div>
+      </details>
+      <button>
+        <a
+          th:href="@{listagemAtividades.html}"
+          th:text="#{web.page.assignments-feedback-list.label.back}"
+        ></a>
+      </button>
     </main>
   </body>
 </html>

@@ -16,9 +16,13 @@ package io.github.heberbarra.modelador.infrastructure.controller;
 import io.github.heberbarra.modelador.domain.exception.AtividadeNotFoundException;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.dto.AtividadeDTO;
+import io.github.heberbarra.modelador.domain.model.dto.AtividadeFeedbackDTO;
 import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
+import io.github.heberbarra.modelador.domain.repository.IFeedbackRepositorio;
+import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import io.github.heberbarra.modelador.infrastructure.mapper.AtividadeMapper;
+import io.github.heberbarra.modelador.infrastructure.mapper.FeedbackMapper;
 import io.github.heberbarra.modelador.infrastructure.services.AtividadeServices;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -36,10 +40,18 @@ public class ControladorAtividades {
 
     private final IAtividadeRepositorio atividadeRepositorio;
     private final AtividadeServices atividadeServices;
+    private final IFeedbackRepositorio feedbackRepositorio;
+    private final IUsuarioRepositorio usuarioRepositorio;
 
-    public ControladorAtividades(IAtividadeRepositorio atividadeRepositorio, AtividadeServices atividadeServices) {
+    public ControladorAtividades(
+            IAtividadeRepositorio atividadeRepositorio,
+            AtividadeServices atividadeServices,
+            IFeedbackRepositorio feedbackRepositorio,
+            IUsuarioRepositorio usuarioRepositorio) {
         this.atividadeRepositorio = atividadeRepositorio;
         this.atividadeServices = atividadeServices;
+        this.feedbackRepositorio = feedbackRepositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @RequestMapping("/atividade/{codigo_atividade}")
@@ -88,6 +100,18 @@ public class ControladorAtividades {
     public String listagemAtividadesParaCorrecao(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "assignments-feedback-list");
         InjetorAtributos.injetarPaleta(modelMap);
+
+        List<AtividadeFeedbackDTO> atividadesPendentes =
+                feedbackRepositorio.getFeedbacksByDescricaoNullOrderByAtividade().stream()
+                        .map(FeedbackMapper::feedbackToAtividadeFeedbackDTO)
+                        .toList();
+        List<AtividadeFeedbackDTO> atividadesCorrigidas =
+                feedbackRepositorio.getFeedbacksByDescricaoNotNullOrderByAtividade().stream()
+                        .map(FeedbackMapper::feedbackToAtividadeFeedbackDTO)
+                        .toList();
+
+        modelMap.addAttribute("atividadesPendentes", atividadesPendentes);
+        modelMap.addAttribute("atividadesCorrigidas", atividadesCorrigidas);
 
         return "listagemAtividadesCorrecao";
     }

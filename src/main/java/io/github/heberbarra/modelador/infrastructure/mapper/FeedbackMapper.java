@@ -13,7 +13,9 @@
 
 package io.github.heberbarra.modelador.infrastructure.mapper;
 
+import io.github.heberbarra.modelador.domain.model.dto.AtividadeFeedbackDTO;
 import io.github.heberbarra.modelador.domain.model.dto.FeedbackDTO;
+import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import io.github.heberbarra.modelador.infrastructure.entity.Feedback;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import java.util.Optional;
@@ -35,5 +37,17 @@ public class FeedbackMapper {
                 feedback.getImagemAtividade(),
                 feedback.getEstudante().getMatricula(),
                 matriculaProfessor);
+    }
+
+    public static AtividadeFeedbackDTO feedbackToAtividadeFeedbackDTO(Feedback feedback) {
+        Atividade atividade = feedback.getAtividade();
+        Usuario estudante = feedback.getEstudante();
+
+        return new AtividadeFeedbackDTO(
+                feedback.getCodigo(),
+                estudante.getMatricula(),
+                estudante.getNome(),
+                feedback.getAtividade().getNome(),
+                feedback.getDataCriacao());
     }
 }

@@ -46,6 +46,8 @@ public class ConfiguradorSecurity {
                         "/encerrarSessao",
                         "/listagemAtividades",
                         "/listagemAtividades.html",
+                        "/listagemAtividadesCorrecao",
+                        "/listagemAtividadesCorrecao.html",
                         "/listagemEstudantes",
                         "/listagemEstudantes.html",
                         "/perfil/{matricula}",

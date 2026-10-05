@@ -24,4 +24,8 @@ public interface IFeedbackRepositorio extends JpaRepository<@NonNull Feedback, @
     Feedback getFeedbackByCodigo(int codigo);
 
     List<Feedback> getFeedbacksByAtividade(Atividade atividade);
+
+    List<Feedback> getFeedbacksByDescricaoNullOrderByAtividade();
+
+    List<Feedback> getFeedbacksByDescricaoNotNullOrderByAtividade();
 }
