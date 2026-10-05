@@ -41,15 +41,77 @@
           <th:block th:insert="~{fragments/common/icons/home.html}"></th:block>
         </a>
       </button>
-      <details class="header-item" id="file">
-        <summary>File</summary>
-      </details>
-      <details class="header-item" id="edit">
-        <summary>Edit</summary>
-      </details>
       <details class="header-item" id="assignments" th:if="${mostrarAtividades}">
         <summary th:text="#{web.page.editor.assignments.title}"></summary>
       </details>
+      <input type="radio" name="toolbar-menu" id="menu-fechado" checked />
+      <div class="menu file">
+        <input type="radio" name="toolbar-menu" id="file-menu" />
+        <label for="file-menu" class="menu-titulo menu-abrir">
+          <span th:text="#{web.page.editor.file}"></span>
+        </label>
+        <label for="menu-fechado" class="menu-titulo menu-fechar">
+          <span th:text="#{web.page.editor.file}"></span>
+        </label>
+        <div class="mostrar">
+          <span th:text="#{web.page.editor.toolbar.item.new-file}" id="novo"></span>
+          <span th:text="#{web.page.editor.toolbar.item.open-file}" id="abrir"></span>
+          <input type="radio" name="file-submenu" id="submenu-fechado" checked />
+          <div class="submenu">
+            <input type="radio" name="file-submenu" id="submenu-salvar" />
+            <label for="submenu-salvar" class="submenu-titulo submenu-abrir">
+              <span th:text="#{web.page.editor.toolbar.item.save-file}"></span>
+              <span class="seta">›</span>
+            </label>
+            <label for="submenu-fechado" class="submenu-titulo submenu-fechar">
+              <span th:text="#{web.page.editor.toolbar.item.save-file}"></span>
+              <span class="seta">›</span>
+            </label>
+            <div class="submenu-mostrar">
+              <span>XML</span>
+              <span>JSON</span>
+              <span>TXT</span>
+            </div>
+          </div>
+          <div class="submenu">
+            <input type="radio" name="file-submenu" id="submenu-exportar" />
+            <label for="submenu-exportar" class="submenu-titulo submenu-abrir">
+              <span th:text="#{web.page.editor.toolbar.item.export-file}"></span>
+              <span class="seta">›</span>
+            </label>
+            <label for="submenu-fechado" class="submenu-titulo submenu-fechar">
+              <span th:text="#{web.page.editor.toolbar.item.export-file}"></span>
+              <span class="seta">›</span>
+            </label>
+            <div class="submenu-mostrar">
+              <span>PNG</span>
+              <span>PDF</span>
+              <span>SVG</span>
+            </div>
+          </div>
+          <span th:text="#{web.page.editor.toolbar.item.print-file}" id="imprimir"></span>
+          <span th:text="#{web.page.editor.toolbar.item.import-file}" id="importar"></span>
+        </div>
+      </div>
+      <div class="menu edit">
+        <input type="radio" name="toolbar-menu" id="edit-menu" />
+        <label for="edit-menu" class="menu-titulo menu-abrir">
+          <span th:text="#{web.page.editor.edit}"></span>
+        </label>
+        <label for="menu-fechado" class="menu-titulo menu-fechar">
+          <span th:text="#{web.page.editor.edit}"></span>
+        </label>
+        <div class="mostrar">
+          <span th:text="#{web.page.editor.toolbar.copy}" id="copiar"></span>
+          <span th:text="#{web.page.editor.toolbar.paste}" id="colar"></span>
+          <span th:text="#{web.page.editor.toolbar.cut}" id="cortar"></span>
+          <span th:text="#{web.page.editor.toolbar.undo}" id="desfazer"></span>
+          <span th:text="#{web.page.editor.toolbar.redo}" id="refazer"></span>
+          <span th:text="#{web.page.editor.toolbar.erase}" id="apagar"></span>
+          <span th:text="#{web.page.editor.toolbar.delete}" id="deletar"></span>
+        </div>
+      </div>
+      <label for="menu-fechado" class="fechar-fora"></label>
       <h1 th:text="${programa}"></h1>
     </header>
     <section id="atividades" th:if="${mostrarAtividades}">

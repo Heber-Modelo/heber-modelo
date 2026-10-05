@@ -584,29 +584,15 @@ if (divComponentes) {
 /* TOOLBAR */
 /***********/
 
-let toolbarButton: HTMLButtonElement | null = document.querySelector("#barra-de-tarefas-button");
-let toolbar: HTMLDetailsElement | null = document.querySelector("details:has(.barra-de-tarefas)");
+let spanButtonCopiar: HTMLSpanElement | null = document.querySelector("#copiar");
+let spanButtonColar: HTMLSpanElement | null = document.querySelector("#colar");
+let spanButtonCortar: HTMLSpanElement | null = document.querySelector("#cortar");
+let spanButtonDesfazer: HTMLSpanElement | null = document.querySelector("#desfazer");
+let spanButtonRefazer: HTMLSpanElement | null = document.querySelector("#refazer");
+let spanButtonApagar: HTMLSpanElement | null = document.querySelector("#apagar");
+let spanButtonDeletar: HTMLSpanElement | null = document.querySelector("#deletar");
 
-toolbarButton?.addEventListener("click", (): void => {
-  if (toolbar) {
-    toolbar.open = !toolbar.open;
-
-    let larguraBody: number = document.body.getBoundingClientRect().width;
-    let larguraDivToolbar: number = larguraBody * 0.6;
-
-    toolbar.querySelector("div")?.style.setProperty("width", `${larguraDivToolbar}px`);
-  }
-});
-
-let buttonCopiar: HTMLDivElement | null = document.querySelector("button#copiar");
-let buttonColar: HTMLDivElement | null = document.querySelector("button#colar");
-let buttonCortar: HTMLDivElement | null = document.querySelector("button#cortar");
-let buttonRefazer: HTMLDivElement | null = document.querySelector("button#refazer");
-let buttonDesfazer: HTMLDivElement | null = document.querySelector("button#desfazer");
-let buttonApagar: HTMLDivElement | null = document.querySelector("button#apagar");
-let buttonDeletar: HTMLDivElement | null = document.querySelector("button#deletar");
-
-buttonApagar?.addEventListener("click", async (): Promise<void> => {
+spanButtonApagar?.addEventListener("click", async (): Promise<void> => {
   const { ApagarComponenteCommandBuilder } =
     await import("infrastructure/command/apagarComponenteCommand");
 
@@ -622,7 +608,7 @@ buttonApagar?.addEventListener("click", async (): Promise<void> => {
   atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
 });
 
-buttonDeletar?.addEventListener("click", async (): Promise<void> => {
+spanButtonDeletar?.addEventListener("click", async (): Promise<void> => {
   let traducao: ResponseTraducaoJSON = await (
     await fetch("/traducao/web.page.editor.confirm.delete-all")
   ).json();
@@ -642,15 +628,15 @@ buttonDeletar?.addEventListener("click", async (): Promise<void> => {
   }
 });
 
-buttonDesfazer?.addEventListener("click", (): void => {
+spanButtonDesfazer?.addEventListener("click", (): void => {
   commandHistory.undoLastCommand();
 });
 
-buttonRefazer?.addEventListener("click", (): void => {
+spanButtonRefazer?.addEventListener("click", (): void => {
   commandHistory.redoLastCommand();
 });
 
-buttonCopiar?.addEventListener("click", async (): Promise<void> => {
+spanButtonCopiar?.addEventListener("click", async (): Promise<void> => {
   const { CopiarComponenteCommandBuilder } =
     await import("infrastructure/command/copiarComponenteCommand");
 
@@ -660,7 +646,7 @@ buttonCopiar?.addEventListener("click", async (): Promise<void> => {
   commandHistory.saveAndExecuteCommand(command);
 });
 
-buttonColar?.addEventListener("click", async (): Promise<void> => {
+spanButtonColar?.addEventListener("click", async (): Promise<void> => {
   const { ColarComponenteCommandBuilder } =
     await import("infrastructure/command/colarComponenteCommand");
 
@@ -674,7 +660,7 @@ buttonColar?.addEventListener("click", async (): Promise<void> => {
   commandHistory.saveAndExecuteCommand(command);
 });
 
-buttonCortar?.addEventListener("click", async (): Promise<void> => {
+spanButtonCortar?.addEventListener("click", async (): Promise<void> => {
   const { CortarComponenteCommandBuilder } =
     await import("infrastructure/command/cortarComponenteCommand");
 
