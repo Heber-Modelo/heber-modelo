@@ -83,7 +83,7 @@ async function deletarAtividade(): Promise<void> {
     });
 
     if (response.ok) {
-      window.location.href = "listagemAtividades";
+      window.location.href = "/listagemAtividades";
     }
   }
 }
