@@ -424,6 +424,7 @@ fieldset#conexoes-basicas {
 
 .file {
   grid-column: 2;
+  grid-row: 1;
   align-content: center;
   justify-items: center;
 }
@@ -442,6 +443,7 @@ fieldset#conexoes-basicas {
 
 .edit {
   grid-column: 3;
+  grid-row: 1;
   align-content: center;
   justify-items: start;
 }

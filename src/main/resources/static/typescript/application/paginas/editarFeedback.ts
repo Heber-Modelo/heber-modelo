@@ -12,6 +12,7 @@
  */
 
 import "quill/dist/quill.snow.css";
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import("quill/core").then(async ({ default: Quill }): Promise<void> => {
   let quillEditorContainer: HTMLElement | null = document.querySelector(
     "#feedback-description div",
@@ -66,3 +67,37 @@ import("quill/core").then(async ({ default: Quill }): Promise<void> => {
     }
   }
 });
+
+async function salvarFeedback(): Promise<void> {
+  let csrfMetaElement: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
+  let csrfToken: string = csrfMetaElement?.content || "";
+
+  let partesURL: string[] = window.location.href.split("/")
+  let codigoFeedback: number = Number(partesURL[partesURL.length - 1]);
+
+  let quillEditor: HTMLElement | null = document.querySelector("div.ql-editor");
+  let descricaoFeedback: string | undefined = quillEditor?.innerText;
+
+  let response: Response = await fetch("/atualizarFeedback", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": csrfToken
+    },
+    credentials: "same-origin",
+    body: JSON.stringify({
+      codigoFeedback: codigoFeedback,
+      descricaoFeedback: descricaoFeedback
+    })
+  })
+
+  if (response.ok) {
+    window.location.href = "/listagemAtividadesCorrecao";
+    return;
+  }
+
+  window.alert(await traduzirChaveI18n("web.page.edit-feedback.update-failure"));
+}
+
+let buttonSalvar: HTMLButtonElement | null = document.querySelector("button#salvar");
+buttonSalvar?.addEventListener("click", salvarFeedback)

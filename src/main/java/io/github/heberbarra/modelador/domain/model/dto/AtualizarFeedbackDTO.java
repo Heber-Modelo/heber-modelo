@@ -1,0 +1,43 @@
+/*
+ * Copyright (c) 2026. Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
+ *
+ * Licensed under the Massachusetts Institute of Technology (MIT) License.
+ * You may obtain a copy of the license at:
+ *
+ *    https://choosealicense.com/licenses/mit/
+ *
+ * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+ * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+ *
+ */
+
+package io.github.heberbarra.modelador.domain.model.dto;
+
+public class AtualizarFeedbackDTO {
+
+    private int codigoFeedback;
+    private String descricaoFeedback;
+
+    public AtualizarFeedbackDTO() {}
+
+    public AtualizarFeedbackDTO(int codigoFeedback, String descricaoFeedback) {
+        this.codigoFeedback = codigoFeedback;
+        this.descricaoFeedback = descricaoFeedback;
+    }
+
+    public int getCodigoFeedback() {
+        return codigoFeedback;
+    }
+
+    public void setCodigoFeedback(int codigoFeedback) {
+        this.codigoFeedback = codigoFeedback;
+    }
+
+    public String getDescricaoFeedback() {
+        return descricaoFeedback;
+    }
+
+    public void setDescricaoFeedback(String descricaoFeedback) {
+        this.descricaoFeedback = descricaoFeedback;
+    }
+}

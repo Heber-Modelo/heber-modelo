@@ -14,8 +14,10 @@
 package io.github.heberbarra.modelador.infrastructure.controller;
 
 import io.github.heberbarra.modelador.domain.exception.AtividadeNotFoundException;
+import io.github.heberbarra.modelador.domain.exception.FeedbackNotFoundException;
 import io.github.heberbarra.modelador.domain.exception.UsuarioNotFoundException;
 import io.github.heberbarra.modelador.domain.model.dto.AtividadeDTO;
+import io.github.heberbarra.modelador.domain.model.dto.AtualizarFeedbackDTO;
 import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
 import io.github.heberbarra.modelador.domain.repository.IFeedbackRepositorio;
 import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
@@ -70,6 +72,24 @@ public class ControladorRestAtividades {
         } catch (AtividadeNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/atualizarFeedback")
+    public ResponseEntity<HttpStatus> atualizarFeedback(
+            @AuthenticationPrincipal UserDetails userDetails, @RequestBody AtualizarFeedbackDTO atualizarFeedbackDTO) {
+        Feedback feedback = feedbackRepositorio
+                .findByCodigo(atualizarFeedbackDTO.getCodigoFeedback())
+                .orElseThrow(() -> new FeedbackNotFoundException(atualizarFeedbackDTO.getCodigoFeedback()));
+        Usuario professor = usuarioRepositorio
+                .findUsuarioByNome(userDetails.getUsername())
+                .orElseThrow(() -> new UsuarioNotFoundException(userDetails.getUsername()));
+
+        feedback.setDescricao(atualizarFeedbackDTO.getDescricaoFeedback());
+        feedback.setProfessor(professor);
+
+        feedbackRepositorio.save(feedback);
 
         return ResponseEntity.ok().build();
     }

@@ -333,7 +333,7 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
 
     let formData: FormData = new FormData();
     formData.append("codigoAtividade", codigoAtividade);
-    images.forEach((image: string): void => {
+    images.map((image: string): string => image.substring(image.indexOf(",") + 1)).forEach((image: string): void => {
       formData.append("imagens", image);
     });
 

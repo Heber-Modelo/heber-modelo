@@ -13,12 +13,13 @@
 
 body {
   grid-template-rows: unset;
+  overflow-x: hidden;
   overflow-y: scroll;
 }
 
 main {
   justify-content: unset;
-  padding: 1rem;
+  padding: 1rem 0;
 
   h3 {
     text-align: left;

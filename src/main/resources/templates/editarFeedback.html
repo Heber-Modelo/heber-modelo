@@ -11,7 +11,7 @@
     <header th:replace="~{/fragments/header :: header}"></header>
     <main>
       <h2 th:text="${feedback.getAtividade().getNome()}"></h2>
-      <img th:src="${feedback.getImagemAtividade()}" alt="" />
+      <img th:src="'data:image/png;base64,' + ${feedback.getImagemAtividade()}" alt="" />
       <div>
         <span id="estudante">
           <th:block
@@ -30,7 +30,7 @@
       <div id="feedback-description-placeholder">
         <th:block th:text="${feedback.getDescricao()}"></th:block>
       </div>
-      <button type="button" th:text="#{web.page.edit-feedback.save}"></button>
+      <button id="salvar" type="button" th:text="#{web.page.edit-feedback.save}"></button>
     </main>
   </body>
 </html>
