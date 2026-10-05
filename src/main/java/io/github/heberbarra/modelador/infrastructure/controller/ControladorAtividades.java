@@ -14,13 +14,14 @@
 package io.github.heberbarra.modelador.infrastructure.controller;
 
 import io.github.heberbarra.modelador.domain.exception.AtividadeNotFoundException;
+import io.github.heberbarra.modelador.domain.exception.FeedbackNotFoundException;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.dto.AtividadeDTO;
 import io.github.heberbarra.modelador.domain.model.dto.AtividadeFeedbackDTO;
 import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
 import io.github.heberbarra.modelador.domain.repository.IFeedbackRepositorio;
-import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
+import io.github.heberbarra.modelador.infrastructure.entity.Feedback;
 import io.github.heberbarra.modelador.infrastructure.mapper.AtividadeMapper;
 import io.github.heberbarra.modelador.infrastructure.mapper.FeedbackMapper;
 import io.github.heberbarra.modelador.infrastructure.services.AtividadeServices;
@@ -41,17 +42,14 @@ public class ControladorAtividades {
     private final IAtividadeRepositorio atividadeRepositorio;
     private final AtividadeServices atividadeServices;
     private final IFeedbackRepositorio feedbackRepositorio;
-    private final IUsuarioRepositorio usuarioRepositorio;
 
     public ControladorAtividades(
             IAtividadeRepositorio atividadeRepositorio,
             AtividadeServices atividadeServices,
-            IFeedbackRepositorio feedbackRepositorio,
-            IUsuarioRepositorio usuarioRepositorio) {
+            IFeedbackRepositorio feedbackRepositorio) {
         this.atividadeRepositorio = atividadeRepositorio;
         this.atividadeServices = atividadeServices;
         this.feedbackRepositorio = feedbackRepositorio;
-        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @RequestMapping("/atividade/{codigo_atividade}")
@@ -80,6 +78,19 @@ public class ControladorAtividades {
         this.atividadeServices.saveAtividade(atividadeDTO);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/feedback/editar/{codigo}")
+    public String editarFeedback(ModelMap modelMap, @PathVariable("codigo") int codigoFeedback) {
+        InjetorAtributos.injetarPaleta(modelMap);
+        InjetorAtributos.injetarTituloPagina(modelMap, "edit-feedback");
+
+        Feedback feedback = feedbackRepositorio
+                .findByCodigo(codigoFeedback)
+                .orElseThrow(() -> new FeedbackNotFoundException(codigoFeedback));
+        modelMap.addAttribute("feedback", feedback);
+
+        return "editarFeedback";
     }
 
     @RequestMapping({"/listagemAtividades", "/listagemAtividades.html"})

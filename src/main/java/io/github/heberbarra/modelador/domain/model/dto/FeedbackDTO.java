@@ -18,7 +18,7 @@ public class FeedbackDTO {
     private int codigo;
     private String descricao;
     private int codigoAtividade;
-    private byte[] imagemAtividade;
+    private String imagemAtividade;
     private String matriculaEstudante;
     private String matriculaProfessor;
 
@@ -28,7 +28,7 @@ public class FeedbackDTO {
             int codigo,
             String descricao,
             int codigoAtividade,
-            byte[] imagemAtividade,
+            String imagemAtividade,
             String matriculaEstudante,
             String matriculaProfessor) {
         this.codigo = codigo;
@@ -63,11 +63,11 @@ public class FeedbackDTO {
         this.codigoAtividade = codigoAtividade;
     }
 
-    public byte[] getImagemAtividade() {
+    public String getImagemAtividade() {
         return imagemAtividade;
     }
 
-    public void setImagemAtividade(byte[] imagemAtividade) {
+    public void setImagemAtividade(String imagemAtividade) {
         this.imagemAtividade = imagemAtividade;
     }
 

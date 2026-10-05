@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `tb_feedback` (
     data_criacao DATETIME NOT NULL,
     descricao_feedback TEXT,
     codigo_atividade INT,
-    imagem_atividade LONGBLOB,
+    imagem_atividade LONGTEXT,
     matricula_professor VARCHAR(20),
     matricula_estudante VARCHAR(20),
     CONSTRAINT pk_tb_feedback PRIMARY KEY (codigo_feedback),

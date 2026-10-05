@@ -53,3 +53,6 @@ server:
     include-exception: true
     include-message: always
     include-binding-errors: always
+  tomcat:
+    max-http-form-post-size: 10MB
+    max-swallow-size: 10MB

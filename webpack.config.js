@@ -17,6 +17,7 @@ export default {
     cookiesBanner: path.resolve(baseDirectory, "application/paginas/cookiesBanner.ts"),
     criarAtividade: path.resolve(baseDirectory, "application/paginas/criarAtividade.ts"),
     desligar: path.resolve(baseDirectory, "application/paginas/desligar.ts"),
+    editarFeedback: path.resolve(baseDirectory, "application/paginas/editarFeedback.ts"),
     editor: path.resolve(baseDirectory, "application/paginas/editor/editor.ts"),
     helperAbrirNovoArquivo: path.resolve(
       baseDirectory,

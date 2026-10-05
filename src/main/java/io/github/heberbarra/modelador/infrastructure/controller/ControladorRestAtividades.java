@@ -16,15 +16,14 @@ package io.github.heberbarra.modelador.infrastructure.controller;
 import io.github.heberbarra.modelador.domain.exception.AtividadeNotFoundException;
 import io.github.heberbarra.modelador.domain.exception.UsuarioNotFoundException;
 import io.github.heberbarra.modelador.domain.model.dto.AtividadeDTO;
-import io.github.heberbarra.modelador.domain.model.dto.EnviarAtividadeDTO;
 import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
 import io.github.heberbarra.modelador.domain.repository.IFeedbackRepositorio;
 import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import io.github.heberbarra.modelador.infrastructure.entity.Feedback;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,6 +32,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -76,22 +76,24 @@ public class ControladorRestAtividades {
 
     @PostMapping("/enviarAtividade")
     public ResponseEntity<HttpStatus> enviarAtividade(
-            @AuthenticationPrincipal UserDetails userDetails, @RequestBody EnviarAtividadeDTO enviarAtividadeDTO) {
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam("codigoAtividade") int codigoAtividade,
+            @RequestParam("imagens") List<String> imagens) {
         Atividade atividade = atividadeRepositorio
-                .findAtividadeByCodigo(enviarAtividadeDTO.getCodigoAtividade())
-                .orElseThrow(() -> new AtividadeNotFoundException(enviarAtividadeDTO.getCodigoAtividade()));
+                .findAtividadeByCodigo(codigoAtividade)
+                .orElseThrow(() -> new AtividadeNotFoundException(codigoAtividade));
         Usuario estudante = usuarioRepositorio
                 .findUsuarioByNome(userDetails.getUsername())
                 .orElseThrow(() -> new UsuarioNotFoundException(userDetails.getUsername()));
 
         Feedback novoFeedback;
         LocalDateTime momentoAtual = LocalDateTime.now();
-        for (String imagem : enviarAtividadeDTO.getImagens()) {
+        for (String dataURL : imagens) {
             novoFeedback = new Feedback();
             novoFeedback.setDataCriacao(momentoAtual);
             novoFeedback.setAtividade(atividade);
             novoFeedback.setEstudante(estudante);
-            novoFeedback.setImagemAtividade(imagem.getBytes(StandardCharsets.UTF_8));
+            novoFeedback.setImagemAtividade(dataURL);
 
             feedbackRepositorio.save(novoFeedback);
         }

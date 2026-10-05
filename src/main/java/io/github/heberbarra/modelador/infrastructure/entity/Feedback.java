@@ -42,7 +42,7 @@ public class Feedback {
     private String descricao;
 
     @Column(name = "imagem_atividade")
-    private byte[] imagemAtividade;
+    private String imagemAtividade;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "codigo_atividade")
@@ -82,11 +82,11 @@ public class Feedback {
         this.descricao = descricao;
     }
 
-    public byte[] getImagemAtividade() {
+    public String getImagemAtividade() {
         return imagemAtividade;
     }
 
-    public void setImagemAtividade(byte[] imagemAtividade) {
+    public void setImagemAtividade(String imagemAtividade) {
         this.imagemAtividade = imagemAtividade;
     }
 

@@ -335,17 +335,19 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
       return;
     }
 
+    let formData: FormData = new FormData();
+    formData.append("codigoAtividade", codigoAtividade);
+    images.forEach((image: string): void => {
+      formData.append("imagens", image);
+    });
+
     await fetch("/enviarAtividade", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         "X-XSRF-TOKEN": csrfToken,
       },
       credentials: "same-origin",
-      body: JSON.stringify({
-        codigoAtividade: Number(codigoAtividade),
-        imagens: images,
-      }),
+      body: formData,
     });
 
     return;

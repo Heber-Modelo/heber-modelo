@@ -27,7 +27,10 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
-
+server:
+  tomcat:
+    max-http-form-post-size: 10MB
+    max-swallow-size: 10MB
 
 logging:
   charset:
