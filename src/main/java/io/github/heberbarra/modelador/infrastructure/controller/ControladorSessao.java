@@ -15,6 +15,7 @@ package io.github.heberbarra.modelador.infrastructure.controller;
 
 import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.BLOQUEADO;
 import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.ESPERANDO;
+import static io.github.heberbarra.modelador.infrastructure.acessador.AcessadorSegundosTimeoutTeste.ACESSADOR_SEGUNDOS_TIMEOUT_TESTE_HEADER;
 import static io.github.heberbarra.modelador.infrastructure.verificador.VerificadorSenha.VERIFICADOR_SENHA_HEADER;
 import static io.github.heberbarra.modelador.infrastructure.verificador.VerificadorTokenTrocarSenha.VERIFICAR_TOKEN_TROCAR_SENHA_HEADER;
 
@@ -25,6 +26,7 @@ import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.ConfiguracaoSessao;
 import io.github.heberbarra.modelador.domain.router.Roteador;
+import io.github.heberbarra.modelador.infrastructure.acessador.AcessadorSegundosTimeoutTeste;
 import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
 import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
 import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
@@ -47,6 +49,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ControladorSessao {
@@ -96,24 +99,31 @@ public class ControladorSessao {
     public String criarSessao(@ModelAttribute("session-port") Integer porta, @ModelAttribute("password") String senha) {
 
         taskExecutor.execute(() -> {
-            RoteadorSessao roteadorSessao;
-            VerificadorSenha verificadorSenha = new VerificadorSenha(senha);
-            VerificadorTokenTrocarSenha verificadorTokenTrocarSenha =
-                    new VerificadorTokenTrocarSenha(TOKEN_TROCAR_SENHA);
             IConfigurador configurador = ConfiguradorFactory.build();
             configuracaoSessao = new ConfiguracaoSessao(configurador
                     .pegarValorConfiguracao("prova", "limiteSegundosSemFoco", Long.class)
                     .orElseGet(() -> 5l));
 
+            AcessadorSegundosTimeoutTeste acessadorSegundosTimeoutTeste =
+                    new AcessadorSegundosTimeoutTeste(configuracaoSessao);
+            RoteadorSessao roteadorSessao;
+            VerificadorSenha verificadorSenha = new VerificadorSenha(senha);
+            VerificadorTokenTrocarSenha verificadorTokenTrocarSenha =
+                    new VerificadorTokenTrocarSenha(TOKEN_TROCAR_SENHA);
+
+            Method getSegundosTimeout;
             Method verificarSenha;
             Method verificarToken;
             try (ServerSocket serverSocket = new ServerSocket(porta)) {
+                getSegundosTimeout = AcessadorSegundosTimeoutTeste.class.getMethod("getSegundosTimeout");
                 verificarSenha = VerificadorSenha.class.getMethod("verificar", String.class);
                 verificarToken = VerificadorTokenTrocarSenha.class.getMethod("verificar", String.class);
 
                 //noinspection InfiniteLoopStatement
                 while (true) {
                     roteadorSessao = new RoteadorSessao(serverSocket.accept());
+                    roteadorSessao.registrarFuncionalidade(
+                            ACESSADOR_SEGUNDOS_TIMEOUT_TESTE_HEADER, acessadorSegundosTimeoutTeste, getSegundosTimeout);
                     roteadorSessao.registrarFuncionalidade(VERIFICADOR_SENHA_HEADER, verificadorSenha, verificarSenha);
                     roteadorSessao.registrarFuncionalidade(
                             VERIFICAR_TOKEN_TROCAR_SENHA_HEADER, verificadorTokenTrocarSenha, verificarToken);
@@ -176,6 +186,27 @@ public class ControladorSessao {
         ControladorSessao.configuracaoSessao.setSecondsTimeout(configuracaoSessao.getSecondsTimeout());
 
         return "redirect:/listagemEstudantes";
+    }
+
+    @RequestMapping("/tempoLimiteSegundosTimeout")
+    public ResponseEntity<Long> requisitarTempoLimiteSegundosTimeout() {
+        if (roteador instanceof RoteadorSessaoEstudante roteadorSessaoEstudante) {
+            RoteadorSessaoEstudante.setDados("");
+            RoteadorSessaoEstudante.setHeaderDados(ACESSADOR_SEGUNDOS_TIMEOUT_TESTE_HEADER);
+
+            while (roteadorSessaoEstudante.getSegundosTimeout() == null) {
+                try {
+                    //noinspection BusyWait
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            return ResponseEntity.ok(roteadorSessaoEstudante.getSegundosTimeout());
+        } else {
+            return ResponseEntity.ok(0L);
+        }
     }
 
     @EventListener(SpringApplicationShutdownHandlers.class)

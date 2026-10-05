@@ -87,7 +87,13 @@ public class RoteadorSessao implements Roteador {
                     continue;
                 }
 
-                Object resultado = funcionalidade.invoke(objetoAlvo, argumentos);
+                Object resultado;
+                if (argumentos.isBlank()) {
+                    resultado = funcionalidade.invoke(objetoAlvo);
+                } else {
+                    resultado = funcionalidade.invoke(objetoAlvo, argumentos);
+                }
+
                 writer.write("%s;%s%n".formatted(header, resultado));
                 writer.flush();
             }

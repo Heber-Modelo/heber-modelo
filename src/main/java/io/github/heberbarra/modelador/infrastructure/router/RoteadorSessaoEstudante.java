@@ -16,6 +16,7 @@ package io.github.heberbarra.modelador.infrastructure.router;
 import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.AUTORIZADO;
 import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.BLOQUEADO;
 import static io.github.heberbarra.modelador.domain.router.Roteador.EstadosRoteador.ESPERANDO;
+import static io.github.heberbarra.modelador.infrastructure.acessador.AcessadorSegundosTimeoutTeste.ACESSADOR_SEGUNDOS_TIMEOUT_TESTE_HEADER;
 import static io.github.heberbarra.modelador.infrastructure.verificador.VerificadorSenha.VERIFICADOR_SENHA_HEADER;
 import static io.github.heberbarra.modelador.infrastructure.verificador.VerificadorTokenTrocarSenha.VERIFICAR_TOKEN_TROCAR_SENHA_HEADER;
 
@@ -42,6 +43,7 @@ public class RoteadorSessaoEstudante implements Roteador {
     private static volatile String headerDados;
     private EstadosRoteador estadoRoteador;
     private volatile EstadosRoteador estadoTrocarSenha;
+    private volatile Long segundosTimeout;
 
     public RoteadorSessaoEstudante(int porta, String ip, String senha) {
         this.porta = porta;
@@ -102,6 +104,10 @@ public class RoteadorSessaoEstudante implements Roteador {
                 partesResposta = resposta.split(SEPARADOR_MENSAGEM);
                 header = partesResposta[POSICAO_HEADER];
 
+                if (Objects.equals(ACESSADOR_SEGUNDOS_TIMEOUT_TESTE_HEADER, header)) {
+                    segundosTimeout = Long.parseLong(partesResposta[1]);
+                }
+
                 if (Objects.equals(VERIFICAR_TOKEN_TROCAR_SENHA_HEADER, header)) {
                     this.estadoTrocarSenha = Boolean.parseBoolean(partesResposta[1]) ? AUTORIZADO : BLOQUEADO;
                 }
@@ -129,6 +135,10 @@ public class RoteadorSessaoEstudante implements Roteador {
 
     public void setEstadoTrocarSenha(EstadosRoteador estadoTrocarSenha) {
         this.estadoTrocarSenha = estadoTrocarSenha;
+    }
+
+    public Long getSegundosTimeout() {
+        return segundosTimeout;
     }
 
     public static void setDados(String dados) {

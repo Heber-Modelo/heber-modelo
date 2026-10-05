@@ -144,6 +144,16 @@ buttonsIniciarProva.forEach((buttonIniciarProva: HTMLButtonElement): void => {
     detailsAssignments?.remove();
     sectionAtividade?.remove();
 
+    let csrfMetaTag: HTMLMetaElement | null = document.head.querySelector("meta[name=_csrf]");
+    let csrfToken: string = csrfMetaTag?.content || "";
+
+    let response: Response = await fetch("/tempoLimiteSegundosTimeout", {
+      method: "GET",
+      headers: {
+        "X-XSRF-TOKEN": csrfToken
+      }
+    })
+
     window.alert(await traduzirChaveI18n("web.page.editor.started-test"));
   })
 });
