@@ -49,7 +49,12 @@ main {
 
   div#feedback-description {
     height: 10rem;
+    margin-bottom: 2rem;
     width: 60%;
+  }
+
+  div#feedback-description-placeholder {
+    display: none;
   }
 
 }

@@ -29,8 +29,8 @@ spring:
 
 server:
   tomcat:
-    max-http-form-post-size: 10MB
-    max-swallow-size: 10MB
+    max-http-form-post-size: 30MB
+    max-swallow-size: 30MB
 
 logging:
   charset:
