@@ -22,6 +22,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -33,6 +34,9 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo_feedback")
     private int codigo;
+
+    @Column(name = "data_criacao", nullable = false)
+    private LocalDateTime dataCriacao;
 
     @Column(name = "descricao_feedback")
     private String descricao;
@@ -60,6 +64,14 @@ public class Feedback {
 
     public void setCodigo(int codigo) {
         this.codigo = codigo;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
 
     public String getDescricao() {

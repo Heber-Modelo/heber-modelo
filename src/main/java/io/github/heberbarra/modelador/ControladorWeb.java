@@ -255,9 +255,11 @@ public class ControladorWeb {
 
         if (!ControladorSessao.isSessaoInativa()) {
             List<Atividade> atividades = this.atividadeRepositorio.findAllByDataPostagemBefore(LocalDateTime.now());
+            LocalDateTime momentoAtual = LocalDateTime.now();
 
             List<AtividadeDTO> provasDTOS = atividades.stream()
                     .filter(Atividade::isProva)
+                    .filter((Atividade atividade) -> atividade.getDataLimite().isBefore(momentoAtual))
                     .map(AtividadeMapper::atividadeToDTO)
                     .toList();
             List<AtividadeDTO> atividadesDTOS = atividades.stream()

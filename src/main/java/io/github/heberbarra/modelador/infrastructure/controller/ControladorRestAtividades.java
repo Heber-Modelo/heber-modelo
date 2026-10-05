@@ -24,6 +24,7 @@ import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import io.github.heberbarra.modelador.infrastructure.entity.Feedback;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -84,8 +85,10 @@ public class ControladorRestAtividades {
                 .orElseThrow(() -> new UsuarioNotFoundException(userDetails.getUsername()));
 
         Feedback novoFeedback;
+        LocalDateTime momentoAtual = LocalDateTime.now();
         for (String imagem : enviarAtividadeDTO.getImagens()) {
             novoFeedback = new Feedback();
+            novoFeedback.setDataCriacao(momentoAtual);
             novoFeedback.setAtividade(atividade);
             novoFeedback.setEstudante(estudante);
             novoFeedback.setImagemAtividade(imagem.getBytes(StandardCharsets.UTF_8));
