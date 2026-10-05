@@ -558,15 +558,6 @@ header:has(#edit-menu:checked) .fechar-fora {
   color: var(--cor-letra);
 }
 
-
-.submenu-titulo .seta {
-  margin-left: 2rem;
-  flex-shrink: 0;
-
-  font-size: 1.4rem;
-  line-height: 1;
-}
-
 .submenu-fechar {
   display: none;
 }

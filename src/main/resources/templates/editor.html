@@ -68,9 +68,14 @@
               <span class="seta">›</span>
             </label>
             <div class="submenu-mostrar">
-              <span>XML</span>
-              <span>JSON</span>
-              <span>TXT</span>
+              <span
+                th:text="#{web.page.editor.toolbar.save.file-type.xml}"
+                id="save-type-xml"
+              ></span>
+              <span
+                th:text="#{web.page.editor.toolbar.save.file-type.json}"
+                id="save-type-json"
+              ></span>
             </div>
           </div>
           <div class="submenu">
@@ -84,13 +89,20 @@
               <span class="seta">›</span>
             </label>
             <div class="submenu-mostrar">
-              <span>PNG</span>
-              <span>PDF</span>
-              <span>SVG</span>
+              <span
+                th:text="#{web.page.editor.toolbar.export.file-type.png}"
+                id="export-type-png"
+              ></span>
+              <span
+                th:text="#{web.page.editor.toolbar.export.file-type.pdf}"
+                id="export-type-pdf"
+              ></span>
+              <span
+                th:text="#{web.page.editor.toolbar.export.file-type.svg}"
+                id="export-type-svg"
+              ></span>
             </div>
           </div>
-          <span th:text="#{web.page.editor.toolbar.item.print-file}" id="imprimir"></span>
-          <span th:text="#{web.page.editor.toolbar.item.import-file}" id="importar"></span>
         </div>
       </div>
       <div class="menu edit">

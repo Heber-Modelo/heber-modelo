@@ -766,8 +766,8 @@ fileInput.addEventListener("input", async (event: InputEvent): Promise<void> => 
   await importadorDiagramas.carregarArquivo(event);
 });
 
-let buttonImportar: HTMLButtonElement | null = document.querySelector("#btn-importar");
-buttonImportar?.addEventListener("click", (): void => {
+let spanButtonImportar: HTMLSpanElement | null = document.querySelector("#abrir");
+spanButtonImportar?.addEventListener("click", (): void => {
   fileInput.click();
 });
 

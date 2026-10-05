@@ -254,10 +254,6 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
     dataDictionaries: dicionariosDados,
   };
 
-  if (tipoArquivo !== TipoArquivo.BANCO) {
-    fecharTagDetails(event.target as HTMLElement);
-  }
-
   if (tipoArquivo === TipoArquivo.JSON) {
     let jsonData: string = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(requestBody, null, 2))}`;
     downloadFile(jsonData, "diagrama.json");
@@ -377,29 +373,29 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   }
 }
 
-let buttonSalvarJSON: HTMLButtonElement | null = document.querySelector("#btn-salvar-json");
-let buttonSalvarXML: HTMLButtonElement | null = document.querySelector("#btn-salvar-xml");
-let buttonExportarPDF: HTMLButtonElement | null = document.querySelector("#btn-exportar-pdf");
-let buttonExportarPNG: HTMLButtonElement | null = document.querySelector("#btn-exportar-png");
-let buttonExportarSVG: HTMLButtonElement | null = document.querySelector("#btn-exportar-svg");
+let spanButtonSalvarJSON: HTMLSpanElement | null = document.querySelector("#save-type-json");
+let spanButtonSalvarXML: HTMLSpanElement | null = document.querySelector("#save-type-xml");
+let spanButtonExportarPDF: HTMLSpanElement | null = document.querySelector("#export-type-pdf");
+let spanButtonExportarPNG: HTMLSpanElement | null = document.querySelector("#export-type-png");
+let spanButtonExportarSVG: HTMLSpanElement | null = document.querySelector("#export-type-svg");
 let buttonEnviarAtividade: HTMLButtonElement | null =
   document.querySelector("#btn-enviar-atividade");
 
-buttonSalvarJSON?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+spanButtonSalvarJSON?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.JSON),
 );
-buttonSalvarXML?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+spanButtonSalvarXML?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.XML),
 );
-buttonExportarPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+spanButtonExportarPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.PDF),
 );
 
-buttonExportarPNG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+spanButtonExportarPNG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.PNG),
 );
 
-buttonExportarSVG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+spanButtonExportarSVG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.SVG),
 );
 
