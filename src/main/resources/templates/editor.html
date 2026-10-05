@@ -64,7 +64,7 @@
         th:text="#{web.page.editor.assignments.close.label}"
       ></button>
       <h2 th:text="#{web.page.editor.assignments.title}" id="assignments-title"></h2>
-      <div id="assignments-list">
+      <div id="assignments-list" th:if="${!atividades.isEmpty()}">
         <details th:each="atividade : ${atividades}">
           <summary>
             <span class="title" th:text="${atividade.getTitulo()}"></span>
@@ -82,10 +82,16 @@
             </label>
           </summary>
           <p class="assignment-description" th:text="${atividade.getDescricao()}"></p>
+          <div class="feedbacks-list" th:if="${feedbacks.get(atividade.getCodigo())}">
+            <h3 th:text="#{web.page.editor.assignments.feedbacks.label}"></h3>
+            <div th:each="feedback : ${feedbacks.get(atividade.getCodigo())}">
+              <p th:text="${feedback.getDescricao()}"></p>
+            </div>
+          </div>
         </details>
       </div>
       <h2 th:text="#{web.page.editor.assignments.tests.title}" id="tests-title"></h2>
-      <div id="tests-list">
+      <div id="tests-list" th:if="${!provas.isEmpty()}">
         <details th:each="prova : ${provas}">
           <summary>
             <span th:text="${prova.getTitulo()}"></span>
@@ -99,7 +105,17 @@
             </label>
           </summary>
           <p class="assignment-description" th:text="${prova.getDescricao()}"></p>
-          <button type="button" th:text="#{web.page.editor.assignments.begin-test.label}"></button>
+          <div class="feedbacks-list">
+            <h3 th:text="#{web.page.editor.assignments.feedbacks.label}"></h3>
+            <div th:each="feedback : ${feedbacks.get(prova.getCodigo())}">
+              <p th:text="${feedback.getDescricao()}"></p>
+            </div>
+          </div>
+          <button
+            type="button"
+            th:if="${feedbacks.get(prova.getCodigo()).isEmpty()}"
+            th:text="#{web.page.editor.assignments.begin-test.label}"
+          ></button>
         </details>
       </div>
     </section>

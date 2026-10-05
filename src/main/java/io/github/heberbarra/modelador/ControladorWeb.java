@@ -24,15 +24,18 @@ import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.dto.AtividadeDTO;
+import io.github.heberbarra.modelador.domain.model.dto.FeedbackDTO;
 import io.github.heberbarra.modelador.domain.model.dto.NovoDiagramaDTO;
 import io.github.heberbarra.modelador.domain.model.dto.UsuarioDTO;
 import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
+import io.github.heberbarra.modelador.domain.repository.IFeedbackRepositorio;
 import io.github.heberbarra.modelador.domain.repository.IUsuarioRepositorio;
 import io.github.heberbarra.modelador.infrastructure.configurador.WatcherConfiguracao;
 import io.github.heberbarra.modelador.infrastructure.controller.ControladorSessao;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
 import io.github.heberbarra.modelador.infrastructure.mapper.AtividadeMapper;
+import io.github.heberbarra.modelador.infrastructure.mapper.FeedbackMapper;
 import io.github.heberbarra.modelador.infrastructure.mapper.UsuarioMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
@@ -42,7 +45,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -69,14 +74,17 @@ public class ControladorWeb {
     private static final IConfigurador configurador = ConfiguradorFactory.build();
     private final TaskExecutor taskExecutor;
     private final IAtividadeRepositorio atividadeRepositorio;
+    private final IFeedbackRepositorio feedbackRepositorio;
     private final IUsuarioRepositorio usuarioRepositorio;
 
     public ControladorWeb(
             @Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor,
             IAtividadeRepositorio atividadeRepositorio,
+            IFeedbackRepositorio feedbackRepositorio,
             IUsuarioRepositorio usuarioRepositorio) {
         this.taskExecutor = taskExecutor;
         this.atividadeRepositorio = atividadeRepositorio;
+        this.feedbackRepositorio = feedbackRepositorio;
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
@@ -257,9 +265,20 @@ public class ControladorWeb {
                     .map(AtividadeMapper::atividadeToDTO)
                     .toList();
 
+            Map<Integer, List<FeedbackDTO>> feedbacksAtividade = new LinkedHashMap<>();
+
+            for (Atividade atividade : atividades) {
+                feedbacksAtividade.put(
+                        atividade.getCodigo(),
+                        feedbackRepositorio.getFeedbacksByAtividade(atividade).stream()
+                                .map(FeedbackMapper::feedbackToDTO)
+                                .toList());
+            }
+
             modelMap.addAttribute("mostrarAtividades", true);
             modelMap.addAttribute("provas", provasDTOS);
             modelMap.addAttribute("atividades", atividadesDTOS);
+            modelMap.addAttribute("feedbacks", feedbacksAtividade);
         }
 
         return "editor";
