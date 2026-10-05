@@ -11,3 +11,45 @@
  *
  */
 
+body {
+  grid-template-rows: unset;
+  overflow-y: scroll;
+}
+
+main {
+  justify-content: unset;
+  padding: 1rem;
+
+  h3 {
+    text-align: left;
+    width: 60%;
+  }
+
+  img {
+    width: 60%;
+  }
+
+  div:has(#estudante) {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+
+    #estudante {
+      font-weight: bold;
+    }
+
+    input {
+      background-color: unset;
+      color: var(--cor-fonte-alternativa);
+      font-size: 1rem;
+    }
+
+  }
+
+  div#feedback-description {
+    height: 10rem;
+    width: 60%;
+  }
+
+}
+
