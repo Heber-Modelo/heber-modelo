@@ -29,7 +29,7 @@
       <h1 th:text="${programa}"></h1>
       <div id="opcoes-botoes">
         <button th:title="${tokenTrocarSenha}">
-          <th:block th:replace="~{fragments/listagemEstudantes/icons/notify :: svg}"></th:block>
+          <th:block th:text="#{web.page.students-list.label.change-password-token}"></th:block>
         </button>
         <button>
           <a th:href="@{configurarSessao.html}" th:title="#{web.page.session-configuration.title}">
