@@ -21,10 +21,12 @@ import static io.github.heberbarra.modelador.infrastructure.verificador.Verifica
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.application.usecase.gerar.GeradorToken;
+import io.github.heberbarra.modelador.domain.configurador.IConfigurador;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
 import io.github.heberbarra.modelador.domain.model.ConfiguracaoSessao;
 import io.github.heberbarra.modelador.domain.router.Roteador;
 import io.github.heberbarra.modelador.infrastructure.data.DataSourceBuilder;
+import io.github.heberbarra.modelador.infrastructure.factory.ConfiguradorFactory;
 import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessao;
 import io.github.heberbarra.modelador.infrastructure.router.RoteadorSessaoEstudante;
@@ -45,7 +47,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ControladorSessao {
@@ -99,7 +100,10 @@ public class ControladorSessao {
             VerificadorSenha verificadorSenha = new VerificadorSenha(senha);
             VerificadorTokenTrocarSenha verificadorTokenTrocarSenha =
                     new VerificadorTokenTrocarSenha(TOKEN_TROCAR_SENHA);
-            configuracaoSessao = new ConfiguracaoSessao();
+            IConfigurador configurador = ConfiguradorFactory.build();
+            configuracaoSessao = new ConfiguracaoSessao(configurador
+                    .pegarValorConfiguracao("prova", "limiteSegundosSemFoco", Long.class)
+                    .orElseGet(() -> 5l));
 
             Method verificarSenha;
             Method verificarToken;
@@ -157,7 +161,7 @@ public class ControladorSessao {
         }
     }
 
-    @RequestMapping({"/configurarSessao", "/configurarSessao.html"})
+    @GetMapping({"/configurarSessao", "/configurarSessao.html"})
     public String configurarSessao(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "session-configuration");
         InjetorAtributos.injetarPaleta(modelMap);
@@ -165,6 +169,13 @@ public class ControladorSessao {
         modelMap.addAttribute("configuracao", configuracaoSessao);
 
         return "configurarSessao";
+    }
+
+    @PostMapping("/configurarSessao")
+    public String configurarSessao(@ModelAttribute("configuracao") ConfiguracaoSessao configuracaoSessao) {
+        ControladorSessao.configuracaoSessao.setSecondsTimeout(configuracaoSessao.getSecondsTimeout());
+
+        return "redirect:/listagemEstudantes";
     }
 
     @EventListener(SpringApplicationShutdownHandlers.class)

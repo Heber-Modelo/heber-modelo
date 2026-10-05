@@ -2,7 +2,7 @@
 <html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <th:block th:replace="~{fragments/head :: head}"></th:block>
-    <link rel="stylesheet" th:href="@{/css/configurarSessao.css}" />
+    <link rel="stylesheet" th:href="@{/css/formulario.css}" />
   </head>
   <body>
     <!--
@@ -19,14 +19,12 @@
   -->
     <header th:replace="~{fragments/header :: header}"></header>
     <main>
-      <form>
-        <div th:each="atributo : ${configuracao.getAtributos()}">
-          <label>
-            <span th:text="#{${atributo.getChaveI18N()}}"></span>
-            <input th:name="${atributo.getNome()}" th:value="${atributo.getValor()}" required />
-          </label>
-        </div>
-        <div>
+      <form action="/configurarSessao" method="post">
+        <label>
+          <span class="campos-texto" th:text="#{session.config.test-lose-focus-timeout}"></span>
+          <input th:name="secondsTimeout" th:value="${configuracao.getSecondsTimeout()}" required />
+        </label>
+        <div id="botoes">
           <button type="button">
             <a
               th:href="@{listagemEstudantes.html}"
@@ -35,6 +33,7 @@
           </button>
           <button type="submit" th:text="#{web.page.session-configuration.label.save}"></button>
         </div>
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
       </form>
     </main>
   </body>

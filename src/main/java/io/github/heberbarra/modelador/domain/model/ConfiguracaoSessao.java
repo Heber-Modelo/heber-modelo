@@ -13,17 +13,21 @@
 
 package io.github.heberbarra.modelador.domain.model;
 
-import java.util.List;
-
 public class ConfiguracaoSessao {
 
-    private final List<AtributoConfiguracaoSessao<?>> atributos;
+    private long secondsTimeout;
 
-    public ConfiguracaoSessao() {
-        atributos = List.of();
+    public ConfiguracaoSessao() {}
+
+    public ConfiguracaoSessao(long secondsTimeout) {
+        this.secondsTimeout = secondsTimeout;
     }
 
-    public List<AtributoConfiguracaoSessao<?>> getAtributos() {
-        return atributos;
+    public long getSecondsTimeout() {
+        return secondsTimeout;
+    }
+
+    public void setSecondsTimeout(long secondsTimeout) {
+        this.secondsTimeout = secondsTimeout;
     }
 }
