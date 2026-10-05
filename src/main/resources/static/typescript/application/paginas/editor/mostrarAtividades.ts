@@ -11,6 +11,8 @@
  *
  */
 
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
+
 let assignmentsContainer: HTMLElement | null = document.querySelector("#atividades");
 let assignmentsDetailsTag: HTMLDetailsElement | null = document.querySelector("#assignments");
 let btnFecharAssignments: HTMLButtonElement | null = document.querySelector("#close-button");
@@ -56,33 +58,37 @@ let descricaoWrapper: HTMLElement | undefined | null =
 
 atividadeSelecionadaWrapper?.style.setProperty("display", "none");
 
+function selecionarAtividade(inputTarget: HTMLInputElement): void {
+  let detailsTag: HTMLDetailsElement = inputTarget.parentElement?.parentElement
+    ?.parentElement as HTMLDetailsElement;
+
+  let titleElement: HTMLSpanElement | null = detailsTag.querySelector(".title");
+  let deadlineElement: HTMLInputElement | null = detailsTag.querySelector(".deadline input");
+  let descriptionElement: HTMLParagraphElement | null =
+    detailsTag.querySelector(".assignment-description");
+
+  if (tituloWrapper && titleElement) {
+    tituloWrapper.innerText = titleElement.innerText;
+  }
+
+  if (codigoWrapper) {
+    codigoWrapper.value = inputTarget.value;
+  }
+
+  if (dataEntregaWrapper && deadlineElement) {
+    dataEntregaWrapper.value = deadlineElement.value;
+  }
+
+  if (descricaoWrapper && descriptionElement) {
+    descricaoWrapper.innerHTML = descriptionElement.innerHTML;
+  }
+}
+
 inputsRadioAssignments.forEach((inputRadioAssignment: HTMLInputElement): void => {
   inputRadioAssignment.addEventListener("input", (event: InputEvent): void => {
     atividadeSelecionadaWrapper?.style.removeProperty("display");
     let inputTarget: HTMLInputElement = event.target as HTMLInputElement;
-    let detailsTag: HTMLDetailsElement = inputTarget.parentElement?.parentElement
-      ?.parentElement as HTMLDetailsElement;
-
-    let titleElement: HTMLSpanElement | null = detailsTag.querySelector(".title");
-    let deadlineElement: HTMLInputElement | null = detailsTag.querySelector(".deadline input");
-    let descriptionElement: HTMLParagraphElement | null =
-      detailsTag.querySelector(".assignment-description");
-
-    if (tituloWrapper && titleElement) {
-      tituloWrapper.innerText = titleElement.innerText;
-    }
-
-    if (codigoWrapper) {
-      codigoWrapper.value = inputTarget.value;
-    }
-
-    if (dataEntregaWrapper && deadlineElement) {
-      dataEntregaWrapper.value = deadlineElement.value;
-    }
-
-    if (descricaoWrapper && descriptionElement) {
-      descricaoWrapper.innerHTML = descriptionElement.innerHTML;
-    }
+    selecionarAtividade(inputTarget);
   });
 });
 
@@ -108,4 +114,36 @@ btnLimparSelecaoAssignments?.addEventListener("click", (): void => {
   }
 
   atividadeSelecionadaWrapper?.style.setProperty("display", "none");
+});
+
+/*****************/
+/* INICIAR PROVA */
+/*****************/
+
+let buttonsIniciarProva: NodeListOf<HTMLButtonElement> = document.querySelectorAll("div#tests-list button");
+
+buttonsIniciarProva.forEach((buttonIniciarProva: HTMLButtonElement): void => {
+  buttonIniciarProva.addEventListener("click", async (event: MouseEvent): Promise<void> => {
+    if (!window.confirm(await traduzirChaveI18n("web.page.editor.start-test"))) {
+      return;
+    }
+
+    atividadeSelecionadaWrapper?.style.removeProperty("display");
+    let inputTarget: HTMLInputElement = event.target as HTMLInputElement;
+    selecionarAtividade(inputTarget);
+
+    let buttonAbrirArquivo: HTMLSpanElement | null = document.querySelector("#abrir");
+    let buttonNovoArquivo: HTMLSpanElement | null = document.querySelector("#novo");
+    let buttonHome: HTMLButtonElement | null = document.querySelector("header > button");
+    let detailsAssignments: HTMLDetailsElement | null = document.querySelector("details#assignments");
+    let sectionAtividade: HTMLElement | null = document.querySelector("#atividades");
+
+    buttonAbrirArquivo?.remove();
+    buttonNovoArquivo?.remove();
+    buttonHome?.remove();
+    detailsAssignments?.remove();
+    sectionAtividade?.remove();
+
+    window.alert(await traduzirChaveI18n("web.page.editor.started-test"));
+  })
 });

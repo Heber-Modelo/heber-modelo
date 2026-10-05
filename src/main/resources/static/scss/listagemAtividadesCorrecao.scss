@@ -59,6 +59,10 @@ main {
     width: 60%;
   }
 
+  #feedback-description-placeholder {
+    display: none;
+  }
+
 }
 
 div:has(button) {

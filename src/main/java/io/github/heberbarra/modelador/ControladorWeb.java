@@ -259,7 +259,7 @@ public class ControladorWeb {
 
             List<AtividadeDTO> provasDTOS = atividades.stream()
                     .filter(Atividade::isProva)
-                    .filter((Atividade atividade) -> atividade.getDataLimite().isBefore(momentoAtual))
+                    .filter((Atividade atividade) -> atividade.getDataLimite().isAfter(momentoAtual))
                     .map(AtividadeMapper::atividadeToDTO)
                     .toList();
             List<AtividadeDTO> atividadesDTOS = atividades.stream()

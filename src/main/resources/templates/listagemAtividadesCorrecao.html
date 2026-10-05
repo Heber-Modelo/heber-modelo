@@ -46,7 +46,7 @@
           ></th:block>
         </summary>
         <div class="atividade corrigida" th:each="atividadeCorrigida : ${atividadesCorrigidas}">
-          <a th:href="'/editar/feedback/' + ${atividadeCorrigida.getCodigoFeedback()}">
+          <a th:href="'/feedback/editar/' + ${atividadeCorrigida.getCodigoFeedback()}">
             <span class="titulo">
               <th:block th:text="${atividadeCorrigida.getTituloAtividade()}"></th:block>
             </span>

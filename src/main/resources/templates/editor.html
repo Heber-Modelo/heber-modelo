@@ -156,7 +156,7 @@
             </label>
           </summary>
           <p class="assignment-description" th:text="${atividade.getDescricao()}"></p>
-          <div class="feedbacks-list" th:if="${feedbacks.get(atividade.getCodigo())}">
+          <div class="feedbacks-list" th:if="${!feedbacks.get(atividade.getCodigo()).isEmpty()}">
             <h3 th:text="#{web.page.editor.assignments.feedbacks.label}"></h3>
             <div th:each="feedback : ${feedbacks.get(atividade.getCodigo())}">
               <p th:text="${feedback.getDescricao()}"></p>
@@ -179,7 +179,7 @@
             </label>
           </summary>
           <p class="assignment-description" th:text="${prova.getDescricao()}"></p>
-          <div class="feedbacks-list">
+          <div class="feedbacks-list" th:if="${!feedbacks.get(prova.getCodigo()).isEmpty()}">
             <h3 th:text="#{web.page.editor.assignments.feedbacks.label}"></h3>
             <div th:each="feedback : ${feedbacks.get(prova.getCodigo())}">
               <p th:text="${feedback.getDescricao()}"></p>
