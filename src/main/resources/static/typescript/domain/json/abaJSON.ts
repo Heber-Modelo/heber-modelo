@@ -14,4 +14,5 @@
 export default interface AbaJSON {
   id: number;
   nome: string;
+  nomeDiagramaAba: string;
 }

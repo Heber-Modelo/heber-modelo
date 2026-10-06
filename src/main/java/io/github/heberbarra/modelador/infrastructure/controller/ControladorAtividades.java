@@ -13,32 +13,56 @@
 
 package io.github.heberbarra.modelador.infrastructure.controller;
 
+import io.github.heberbarra.modelador.domain.exception.AtividadeNotFoundException;
+import io.github.heberbarra.modelador.domain.exception.FeedbackNotFoundException;
 import io.github.heberbarra.modelador.domain.injector.InjetorAtributos;
-import io.github.heberbarra.modelador.domain.model.AtividadeDTO;
+import io.github.heberbarra.modelador.domain.model.dto.AtividadeDTO;
+import io.github.heberbarra.modelador.domain.model.dto.AtividadeFeedbackDTO;
 import io.github.heberbarra.modelador.domain.repository.IAtividadeRepositorio;
+import io.github.heberbarra.modelador.domain.repository.IFeedbackRepositorio;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
+import io.github.heberbarra.modelador.infrastructure.entity.Feedback;
 import io.github.heberbarra.modelador.infrastructure.mapper.AtividadeMapper;
+import io.github.heberbarra.modelador.infrastructure.mapper.FeedbackMapper;
 import io.github.heberbarra.modelador.infrastructure.services.AtividadeServices;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import java.util.List;
 
 @Controller
 public class ControladorAtividades {
 
     private final IAtividadeRepositorio atividadeRepositorio;
     private final AtividadeServices atividadeServices;
+    private final IFeedbackRepositorio feedbackRepositorio;
 
-
-    public ControladorAtividades(IAtividadeRepositorio atividadeRepositorio, AtividadeServices atividadeServices) {
+    public ControladorAtividades(
+            IAtividadeRepositorio atividadeRepositorio,
+            AtividadeServices atividadeServices,
+            IFeedbackRepositorio feedbackRepositorio) {
         this.atividadeRepositorio = atividadeRepositorio;
         this.atividadeServices = atividadeServices;
+        this.feedbackRepositorio = feedbackRepositorio;
+    }
+
+    @RequestMapping("/atividade/{codigo_atividade}")
+    public String atividade(ModelMap modelMap, @PathVariable("codigo_atividade") int codigoAtividade) {
+        InjetorAtributos.injetarPaleta(modelMap);
+        InjetorAtributos.injetarTituloPagina(modelMap, "assignment");
+
+        AtividadeDTO atividade = AtividadeMapper.atividadeToDTO(this.atividadeRepositorio
+                .findAtividadeByCodigo(codigoAtividade)
+                .orElseThrow(() -> new AtividadeNotFoundException(codigoAtividade)));
+        modelMap.addAttribute("assignment", atividade);
+
+        return "atividade";
     }
 
     @GetMapping({"/criarAtividade", "/criarAtividade.html"})
@@ -56,13 +80,29 @@ public class ControladorAtividades {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/feedback/editar/{codigo}")
+    public String editarFeedback(ModelMap modelMap, @PathVariable("codigo") int codigoFeedback) {
+        InjetorAtributos.injetarPaleta(modelMap);
+        InjetorAtributos.injetarTituloPagina(modelMap, "edit-feedback");
+
+        Feedback feedback = feedbackRepositorio
+                .findByCodigo(codigoFeedback)
+                .orElseThrow(() -> new FeedbackNotFoundException(codigoFeedback));
+        modelMap.addAttribute("feedback", feedback);
+
+        return "editarFeedback";
+    }
+
     @RequestMapping({"/listagemAtividades", "/listagemAtividades.html"})
     public String listagemAtividades(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "assignments-list");
         InjetorAtributos.injetarPaleta(modelMap);
 
         List<Atividade> atividades = this.atividadeRepositorio.findAll();
-        modelMap.addAttribute("atividades", atividades.stream().map(AtividadeMapper::atividadeToDTO).toList());
+        List<AtividadeDTO> atividadeDTOS =
+                atividades.stream().map(AtividadeMapper::atividadeToDTO).toList();
+
+        modelMap.addAttribute("atividades", atividadeDTOS);
 
         return "listagemAtividades";
     }
@@ -71,6 +111,18 @@ public class ControladorAtividades {
     public String listagemAtividadesParaCorrecao(ModelMap modelMap) {
         InjetorAtributos.injetarTituloPagina(modelMap, "assignments-feedback-list");
         InjetorAtributos.injetarPaleta(modelMap);
+
+        List<AtividadeFeedbackDTO> atividadesPendentes =
+                feedbackRepositorio.getFeedbacksByDescricaoNullOrderByAtividade().stream()
+                        .map(FeedbackMapper::feedbackToAtividadeFeedbackDTO)
+                        .toList();
+        List<AtividadeFeedbackDTO> atividadesCorrigidas =
+                feedbackRepositorio.getFeedbacksByDescricaoNotNullOrderByAtividade().stream()
+                        .map(FeedbackMapper::feedbackToAtividadeFeedbackDTO)
+                        .toList();
+
+        modelMap.addAttribute("atividadesPendentes", atividadesPendentes);
+        modelMap.addAttribute("atividadesCorrigidas", atividadesCorrigidas);
 
         return "listagemAtividadesCorrecao";
     }

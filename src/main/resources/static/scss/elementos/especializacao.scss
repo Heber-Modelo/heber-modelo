@@ -1,5 +1,6 @@
 .elemento-especializacao {
   background-color: var(--cor-borda);
+  border: none;
   clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
   padding: 0.3rem 0.4rem;
 
@@ -8,6 +9,7 @@
     height: 100%;
     background-color: var(--cor-fundo);
     clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    margin-top: 0.1rem;
     pointer-events: none;
   }
 

@@ -15,9 +15,7 @@ package io.github.heberbarra.modelador.infrastructure.router;
 
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
-import io.github.heberbarra.modelador.domain.model.Sessao;
 import io.github.heberbarra.modelador.domain.router.Roteador;
-import io.github.heberbarra.modelador.infrastructure.factory.SessaoFactory;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -25,6 +23,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.Socket;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,15 +34,17 @@ import org.jspecify.annotations.Nullable;
 
 public class RoteadorSessao implements Roteador {
     private static final Logger logger = JavaLogger.obterLogger(RoteadorSessao.class.getName());
-    public Map<String, Method> funcionalidadesRegistradas;
-    public Map<String, Object> objetosAlvoFuncionalidades;
-    public Sessao sessao;
-    private final int porta;
+    private final Map<String, Method> funcionalidadesRegistradas;
+    private final Map<String, Object> objetosAlvoFuncionalidades;
+    private final Socket socket;
+    private EstadosRoteador estado;
 
-    public RoteadorSessao(int porta) {
+    public RoteadorSessao(Socket socket) {
         this.funcionalidadesRegistradas = new HashMap<>();
         this.objetosAlvoFuncionalidades = new HashMap<>();
-        this.porta = porta;
+        this.socket = socket;
+
+        this.estado = EstadosRoteador.ESPERANDO;
     }
 
     public void registrarFuncionalidade(String header, @Nullable Object objetoAlvo, Method funcionalidade) {
@@ -53,18 +54,15 @@ public class RoteadorSessao implements Roteador {
 
     @Override
     public void run() {
-        this.sessao = SessaoFactory.build(porta, null);
+        this.estado = EstadosRoteador.AUTORIZADO;
 
         String argumentos;
         String header = null;
-        String ip;
         String linha;
         String[] partesLinha;
 
-        try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(this.sessao.socket().getInputStream()));
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(this.sessao.socket().getOutputStream()))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
             while (true) {
                 linha = reader.readLine();
 
@@ -74,8 +72,7 @@ public class RoteadorSessao implements Roteador {
 
                 partesLinha = linha.split(SEPARADOR_MENSAGEM);
                 header = partesLinha[POSICAO_HEADER];
-                ip = partesLinha[POSICAO_IP];
-                argumentos = Arrays.stream(partesLinha).skip(2).collect(Collectors.joining());
+                argumentos = Arrays.stream(partesLinha).skip(1).collect(Collectors.joining());
 
                 if (Objects.equals(linha, ENCERRAR_ROUTER)) {
                     return;
@@ -90,8 +87,14 @@ public class RoteadorSessao implements Roteador {
                     continue;
                 }
 
-                Object resultado = funcionalidade.invoke(objetoAlvo, argumentos);
-                writer.write("%s;%s;%s%n".formatted(header, ip, resultado));
+                Object resultado;
+                if (argumentos.isBlank()) {
+                    resultado = funcionalidade.invoke(objetoAlvo);
+                } else {
+                    resultado = funcionalidade.invoke(objetoAlvo, argumentos);
+                }
+
+                writer.write("%s;%s%n".formatted(header, resultado));
                 writer.flush();
             }
         } catch (IOException e) {
@@ -111,5 +114,10 @@ public class RoteadorSessao implements Roteador {
                     .traduzirMensagem("error.session.router.invocation")
                     .formatted(header, e.getMessage()));
         }
+    }
+
+    @Override
+    public EstadosRoteador getEstado() {
+        return estado;
     }
 }

@@ -13,13 +13,21 @@
 
 package io.github.heberbarra.modelador.infrastructure.mapper;
 
-import io.github.heberbarra.modelador.domain.model.AtividadeDTO;
+import io.github.heberbarra.modelador.domain.model.dto.AtividadeDTO;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 
 public class AtividadeMapper {
 
-    public static AtividadeDTO atividadeToDTO(Atividade atividade){
-        return new AtividadeDTO(atividade.getNome(), atividade.getDataPostagem(), atividade.getDataLimite(), atividade.isProva(), atividade.getDescricao());
-    }
+    public static AtividadeDTO atividadeToDTO(Atividade atividade) {
+        AtividadeDTO atividadeDTO = new AtividadeDTO(
+                atividade.getNome(),
+                atividade.getDataPostagem(),
+                atividade.getDataLimite(),
+                atividade.isProva(),
+                atividade.getDescricao());
 
+        atividadeDTO.setCodigo(atividade.getCodigo());
+
+        return atividadeDTO;
+    }
 }

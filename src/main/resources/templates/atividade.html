@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <script th:src="@{/javascript/atividade.js}" defer></script>
+    <link rel="stylesheet" th:href="@{/css/atividade.css}" />
+    <link rel="stylesheet" th:href="@{/css/criarAtividade.css}" />
+    <title th:text="#{web.page.assignment.title}"></title>
+  </head>
+  <body>
+    <!--
+    ~ Copyright (c) 2026. Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
+    ~
+    ~ Licensed under the Massachusetts Institute of Technology (MIT) License.
+    ~ You may obtain a copy of the license at:
+    ~
+    ~    https://choosealicense.com/licenses/mit/
+    ~
+    ~ A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+    ~ Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+    ~
+    -->
+    <header th:replace="~{fragments/header :: header}"></header>
+    <main>
+      <form>
+        <label>
+          <span class="campos-texto" th:text="#{web.page.assignment.label.title}"></span>
+          <input type="text" name="title" th:value="${assignment.getTitulo()}" />
+        </label>
+        <div class="date-row">
+          <label>
+            <span
+              class="campos-texto"
+              th:text="#{web.page.assignment.label.publication-date}"
+            ></span>
+            <input
+              type="datetime-local"
+              name="posting-date"
+              th:value="${assignment.getDataPostagem()}"
+            />
+          </label>
+          <label>
+            <span class="campos-texto" th:text="#{web.page.assignment.label.deadline}"></span>
+            <input type="datetime-local" name="deadline" th:value="${assignment.getDataLimite()}" />
+          </label>
+        </div>
+        <div class="radioButton">
+          <span
+            class="campos-texto"
+            th:text="#{web.page.create-assignment.label.check-type}"
+          ></span>
+          <div class="opcoes-radiobutton">
+            <label>
+              <span class="campos-texto" th:text="#{web.page.assignment.label.yes}"></span>
+              <input
+                type="radio"
+                name="isTest"
+                class="botao-radio"
+                value="on"
+                required
+                th:checked="${assignment.isProva()}"
+              />
+            </label>
+            <label>
+              <span class="campos-texto" th:text="#{web.page.assignment.label.no}"></span>
+              <input
+                type="radio"
+                name="isTest"
+                class="botao-radio"
+                value="off"
+                required
+                th:checked="${!assignment.isProva()}"
+              />
+            </label>
+          </div>
+        </div>
+        <div class="description-field">
+          <div></div>
+        </div>
+        <p
+          id="assignment-description"
+          style="display: none"
+          th:text="${assignment.getDescricao()}"
+        ></p>
+      </form>
+      <div id="botoes">
+        <button type="button">
+          <a href="/listagemAtividades" th:text="#{web.page.assignment.label.back}"></a>
+        </button>
+        <button
+          type="button"
+          id="delete-assignment"
+          th:text="#{web.page.assignment.label.delete}"
+        ></button>
+        <button
+          type="submit"
+          id="save-assignment"
+          th:text="#{web.page.assignment.label.save}"
+        ></button>
+      </div>
+    </main>
+  </body>
+</html>

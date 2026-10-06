@@ -1,0 +1,61 @@
+/*!
+ * Copyright (c) 2026. Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
+ *
+ * Licensed under the Massachusetts Institute of Technology (MIT) License.
+ * You may obtain a copy of the license at:
+ *
+ *    https://choosealicense.com/licenses/mit/
+ *
+ * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+ * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+ *
+ */
+
+body {
+  grid-template-rows: unset;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+main {
+  justify-content: unset;
+  padding: 1rem 0;
+
+  h3 {
+    text-align: left;
+    width: 60%;
+  }
+
+  img {
+    width: 60%;
+  }
+
+  div:has(#estudante) {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+
+    #estudante {
+      font-weight: bold;
+    }
+
+    input {
+      background-color: unset;
+      color: var(--cor-fonte-alternativa);
+      font-size: 1rem;
+    }
+
+  }
+
+  div#feedback-description {
+    height: 10rem;
+    margin-bottom: 2rem;
+    width: 60%;
+  }
+
+  div#feedback-description-placeholder {
+    display: none;
+  }
+
+}
+

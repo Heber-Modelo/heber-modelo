@@ -30,6 +30,11 @@ spring:
     init:
       continue-on-error: true
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 
 logging:
   charset:
@@ -48,3 +53,6 @@ server:
     include-exception: true
     include-message: always
     include-binding-errors: always
+  tomcat:
+    max-http-form-post-size: 30MB
+    max-swallow-size: 30MB

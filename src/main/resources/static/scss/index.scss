@@ -59,6 +59,15 @@ header {
 
   h2 {
     font-family: "Pompiere", serif;
+
+    a {
+      color: var(--cor-letra);
+    }
+
+    a:hover {
+      color: var(--cor-botao-hover);
+    }
+
   }
 
 }
@@ -66,3 +75,15 @@ header {
 .svg-color-fill {
   color: var(--cor-botao);
 }
+
+.svg-color-stroke {
+  color: var(--cor-botao);
+  stroke: var(--cor-letra);
+}
+
+svg:hover {
+  .svg-color-fill, .svg-color-stroke {
+    color: var(--cor-botao-hover);
+  }
+}
+

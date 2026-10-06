@@ -16,7 +16,7 @@
 @use "estiloComum";
 @use "estiloHeader";
 @use "estiloTracinho";
-@use "estilosEditor/estiloBarraDeTarefas";
+@use "estilosEditor/estiloListaAtividades";
 @use "estilosEditor/estiloPontoExtensor";
 @use "estilosEditor/estiloSeta";
 @use "estilosEditor/estiloSeletorAba";
@@ -29,7 +29,7 @@ $estiloBordaPainel: var(--cor-borda) solid 0.1rem;
 body {
   display: grid;
   grid-template-columns: 20% 60% 20%;
-  grid-template-rows: 5rem 5rem calc(100% - 14.5rem) 4.5em;
+  grid-template-rows: 5rem 4.5rem calc(100% - 9.5rem);
   max-width: 100vw;
   overflow: hidden;
 
@@ -60,7 +60,7 @@ body {
 header {
   grid-column: 1 / 4;
   grid-row: 1;
-  grid-template-columns: 5% 5% 10% 60% 20%;
+  grid-template-columns: 5% 10% 5% 5% 55% 20%;
   height: 5rem;
   padding: 0.5rem 0;
 
@@ -72,18 +72,43 @@ header {
     z-index: 3;
   }
 
-  button#barra-de-tarefas-button {
+  h1 {
+    grid-column: 5;
+    grid-row: 1;
+  }
+
+  .header-item {
+    align-content: center;
+    display: flex;
+    font-size: 1.2rem;
+    justify-content: center;
+    z-index: 5;
+
+    &:hover {
+      text-decoration: underline;
+      transform: scale(1.2);
+      transition: 0.5s;
+    }
+
+    summary {
+      background-color: unset;
+      list-style: none;
+      font-size: 1.3rem;
+      font-family: Arial, sans-serif;
+    }
+
+  }
+
+  #file {
     grid-column: 2;
   }
 
-  details {
-    grid-column: 4;
-    grid-row: 2;
+  #edit {
+    grid-column: 3;
   }
 
-  h1 {
-    grid-column: 4;
-    grid-row: 1;
+  #assignments {
+    grid-column: 6;
   }
 
 }
@@ -106,7 +131,7 @@ main {
   display: grid;
   grid-template-areas: variaveis.$editorGridAreaString;
   grid-column: 2;
-  grid-row: 2 / 4;
+  grid-row: 3 / 4;
   height: 95%;
   justify-self: center;
   place-content: stretch;
@@ -227,7 +252,7 @@ aside.hidden {
   button.btn-mostrar {
     position: fixed;
     display: block;
-    top: 6rem;
+    top: 12rem;
   }
 
   &#painel-esquerdo button.btn-mostrar {
@@ -357,4 +382,262 @@ fieldset#conexoes-basicas {
   button {
     width: 100%;
   }
+}
+
+#menu-fechado,
+.menu input {
+  display: none;
+}
+
+.menu {
+  position: relative;
+  display: inline-block;
+  z-index: 50;
+}
+
+.menu-titulo {
+  display: block;
+
+  padding: 0.5rem 0.8rem;
+  font-family: Arial, sans-serif;
+  font-size: 1.5rem;
+  background-color: transparent;
+  position: relative;
+  z-index: 50;
+
+  cursor: pointer;
+
+  border-radius: 0.5rem;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.menu-titulo:hover {
+  background-color: var(--cor-hover-botao-funcao);
+}
+
+.menu-fechar {
+  display: none;
+}
+
+.file {
+  grid-column: 2;
+  grid-row: 1;
+  align-content: center;
+  justify-items: center;
+}
+
+.file:has(#file-menu:checked) .menu-abrir {
+  display: none;
+}
+
+.file:has(#file-menu:checked) .menu-fechar {
+  display: block;
+}
+
+.file:has(#file-menu:checked) .mostrar {
+  display: block;
+}
+
+.edit {
+  grid-column: 3;
+  grid-row: 1;
+  align-content: center;
+  justify-items: start;
+}
+
+.edit:has(#edit-menu:checked) .menu-abrir {
+  display: none;
+}
+
+.edit:has(#edit-menu:checked) .menu-fechar {
+  display: block;
+}
+
+.edit:has(#edit-menu:checked) .mostrar {
+  display: block;
+}
+
+.mostrar {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+
+  min-width: 20rem;
+  padding: 1rem;
+
+  background-color: var(--cor-fundo-menu-escuro);
+
+  border-radius: 0.75rem;
+
+  z-index: 50;
+}
+
+.mostrar span {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 0.9rem 1.2rem;
+
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+
+  color: var(--cor-fonte-clara);
+
+  cursor: pointer;
+
+  border-radius: 0.5rem;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.mostrar span:hover {
+  background-color: var(--cor-hover-botao-funcao);
+  color: var(--cor-letra);
+}
+
+.fechar-fora {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  cursor: default;
+}
+
+header:has(#file-menu:checked) .fechar-fora,
+header:has(#edit-menu:checked) .fechar-fora {
+  display: block;
+}
+
+.file:has(#file-menu:checked) .menu-titulo,
+.edit:has(#edit-menu:checked) .menu-titulo {
+  background-color: var(--cor-hover-botao-funcao);
+  color: var(--cor-letra);
+}
+
+.submenu {
+  position: relative;
+  width: 100%;
+}
+
+.submenu > input {
+  display: none;
+}
+
+.submenu-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  box-sizing: border-box;
+
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+
+  color: var(--cor-fonte-clara);
+
+  cursor: pointer;
+
+  border-radius: 0.5rem;
+
+  white-space: nowrap;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+.submenu-titulo:hover {
+  background-color: var(--cor-hover-botao-funcao);
+  color: var(--cor-letra);
+}
+
+.submenu-fechar {
+  display: none;
+}
+
+.submenu-mostrar {
+  display: none;
+
+  position: absolute;
+
+  left: calc(100% + 0.45rem);
+  top: 0;
+
+  min-width: 12rem;
+
+  padding: 1rem;
+
+  background-color: var(--cor-fundo-menu-mais-escuro);
+
+  border-radius: 0.75rem;
+
+  z-index: 60;
+}
+
+.submenu-mostrar span {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 0.9rem 1.2rem;
+
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+
+  color: var(--cor-fonte-clara);
+
+  cursor: pointer;
+
+  border-radius: 0.5rem;
+
+  white-space: nowrap;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.submenu-mostrar span:hover {
+  background-color: var(--cor-hover-botao-funcao);
+  color: var(--cor-letra);
+}
+
+.submenu:has(#submenu-salvar:checked) .submenu-abrir {
+  display: none;
+}
+
+.submenu:has(#submenu-salvar:checked) .submenu-fechar {
+  display: flex;
+}
+
+.submenu:has(#submenu-salvar:checked) .submenu-mostrar {
+  display: block;
+}
+
+.submenu:has(#submenu-exportar:checked) .submenu-abrir {
+  display: none;
+}
+
+.submenu:has(#submenu-exportar:checked) .submenu-fechar {
+  display: flex;
+}
+
+.submenu:has(#submenu-exportar:checked) .submenu-mostrar {
+  display: block;
+}
+
+.submenu:has(#submenu-salvar:checked, #submenu-exportar:checked) .submenu-titulo{
+  background-color: var(--cor-hover-botao-funcao);
+  color: var(--cor-letra);
 }

@@ -16,7 +16,6 @@ import TiposConexao from "domain/enum/tiposConexao";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
 import ComponenteConexaoAngulada from "domain/model/componente/componenteConexaoAngulada";
-import ComponenteConexaoReta from "domain/model/componente/componenteConexaoReta";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 import Ponto from "domain/model/ponto";
 
@@ -37,18 +36,6 @@ export default class ComponenteConexaoFactory {
       case TiposConexao.CONEXAO_ENTIDADE_FRACA:
       case TiposConexao.CONEXAO_ANGULADA:
         return new ComponenteConexaoAngulada(
-          componenteHTML,
-          propriedades,
-          ponto1,
-          ponto2,
-          lateralPrimeiroComponente,
-          lateralSegundoComponente,
-          primeiroComponente,
-          segundoComponente,
-        );
-
-      case TiposConexao.CONEXAO_RETA:
-        return new ComponenteConexaoReta(
           componenteHTML,
           propriedades,
           ponto1,

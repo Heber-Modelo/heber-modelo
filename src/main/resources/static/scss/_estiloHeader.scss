@@ -39,6 +39,11 @@ header {
       color: var(--cor-botao-hover);
     }
   }
+
+  h1 {
+    grid-column: 2;
+  }
+
 }
 
 .svg-cor-fonte {

@@ -1,0 +1,152 @@
+/*!
+ * Copyright (c) 2026. Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
+ *
+ * Licensed under the Massachusetts Institute of Technology (MIT) License.
+ * You may obtain a copy of the license at:
+ *
+ *    https://choosealicense.com/licenses/mit/
+ *
+ * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+ * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+ *
+ */
+
+#atividades {
+  background-color: var(--cor-fundo);
+  border: 0.3rem double var(--cor-borda);
+  border-radius: 0.5rem;
+  display: none;
+  grid-template-columns: 75% 23% 2%;
+  grid-template-rows: 10% 10% 35% 10% 35%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 80%;
+  width: 80%;
+  z-index: 20;
+
+  div#assignments-list, div#tests-list {
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow-y: scroll;
+    width: 75%;
+
+    details[open] > summary {
+      border-radius: 1rem 1rem 0 0;
+    }
+
+    details[open] > p {
+      border: 0.1rem solid var(--cor-borda);
+      border-top: none;
+      border-radius: 0 0 1rem 1rem;
+      padding: 0.5rem;
+    }
+
+    summary {
+      display: grid;
+      grid-template-columns: 60% 40%;
+      grid-template-rows: 50% 50%;
+
+      & > span {
+        font-weight: bold;
+      }
+
+      label.publication-date {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      label.deadline {
+        grid-column: 2;
+        grid-row: 2;
+      }
+
+      label.publication-date, label.deadline {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        input {
+          background-color: unset;
+          color: var(--cor-fonte);
+        }
+      }
+    }
+
+    div.feedbacks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding-top: 0.5rem;
+    }
+
+  }
+
+  h2#assignments-title {
+    grid-column: 1 / 4;
+    grid-row: 2;
+    text-align: center;
+  }
+
+  div#assignments-list {
+    grid-column: 1 / 4;
+    grid-row: 3;
+  }
+
+  h2#tests-title {
+    grid-column: 1 / 4;
+    grid-row: 4;
+    text-align: center;
+  }
+
+  div#tests-list {
+    grid-column: 1 / 4;
+    grid-row: 5;
+
+    button {
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      margin: 0.5rem;
+    }
+
+  }
+
+  button {
+    height: 50%;
+    width: 45%;
+  }
+
+  button#clean-selection-button {
+    align-self: center;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  button#close-button {
+    align-self: center;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+}
+
+#atividade-selecionada {
+
+  input {
+    background-color: unset;
+    color: var(--cor-fonte-alternativa);
+    font-size: 1rem;
+  }
+
+  p#descricao-atividade {
+    text-align: left;
+    width: 100%;
+  }
+
+}

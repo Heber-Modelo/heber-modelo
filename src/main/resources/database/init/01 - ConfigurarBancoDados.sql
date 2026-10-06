@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS db_HeberModelo DEFAULT CHARACTER SET = utf8mb4 DEF
 USE db_HeberModelo;
 
 CREATE TABLE IF NOT EXISTS `tb_usuario` (
-    matricula_usuario NUMERIC(11),
+    matricula_usuario VARCHAR(20),
     email_usuario VARCHAR(50) NOT NULL,
     nome_usuario VARCHAR(50) NOT NULL,
     senha_usuario TEXT NOT NULL,
@@ -15,26 +15,28 @@ CREATE TABLE IF NOT EXISTS `tb_usuario` (
 ) DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `tb_atividade` (
-    codigo_atividade TINYINT AUTO_INCREMENT,
+    codigo_atividade INT AUTO_INCREMENT,
     nome_atividade VARCHAR(100) NOT NULL,
     descricao_atividade TEXT NOT NULL,
     is_prova_atividade BOOL NOT NULL,
     data_postagem_atividade DATETIME NOT NULL,
     data_limite_atividade DATETIME NOT NULL,
-    matricula_usuario NUMERIC(11),
-    CONSTRAINT pk_tb_atividade PRIMARY KEY (codigo_atividade),
-    CONSTRAINT fk_tb_usuariotb_atividade FOREIGN KEY (matricula_usuario) REFERENCES tb_usuario(matricula_usuario)
-    ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT pk_tb_atividade PRIMARY KEY (codigo_atividade)
 ) DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `tb_feedback` (
-    codigo_feedback TINYINT AUTO_INCREMENT,
-    descricao_feedback TEXT NOT NULL,
-    codigo_atividade TINYINT,
-    matricula_professor NUMERIC(11),
+    codigo_feedback INT AUTO_INCREMENT,
+    data_criacao DATETIME NOT NULL,
+    descricao_feedback TEXT,
+    codigo_atividade INT,
+    imagem_atividade LONGTEXT,
+    matricula_professor VARCHAR(20),
+    matricula_estudante VARCHAR(20),
     CONSTRAINT pk_tb_feedback PRIMARY KEY (codigo_feedback),
     CONSTRAINT fk_tb_atividadetb_feedback FOREIGN KEY (codigo_atividade) REFERENCES tb_atividade(codigo_atividade)
     ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_tb_usuariotb_feedback FOREIGN KEY (matricula_professor) REFERENCES tb_usuario(matricula_usuario)
+    CONSTRAINT fk_tb_usuariotb_feedback_matricula_professor FOREIGN KEY (matricula_professor) REFERENCES tb_usuario(matricula_usuario)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_tb_usuariotb_feedback_matricula_estudante FOREIGN KEY (matricula_estudante) REFERENCES tb_usuario(matricula_usuario)
     ON DELETE CASCADE ON UPDATE CASCADE
 ) DEFAULT CHARSET = utf8mb4;

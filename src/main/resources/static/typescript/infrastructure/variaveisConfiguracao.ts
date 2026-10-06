@@ -12,4 +12,4 @@
  */
 
 let incrementoMovimentacao: number;
-let modoAvancadoEditorPropriedades: boolean;
+let utilizarAbasExclusivas: boolean;

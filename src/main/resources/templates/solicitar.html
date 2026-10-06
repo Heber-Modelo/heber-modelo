@@ -3,8 +3,11 @@
   <head>
     <!--suppress HtmlUnknownTag -->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}" />
     <link rel="stylesheet" th:href="@{/css/solicitar.css}" />
+    <script th:src="@{/javascript/solicitar.js}" defer></script>
     <title th:text="#{web.page.request-password-change.title}"></title>
+    <meta name="_csrf" th:content="${_csrf.token}" />
   </head>
   <!--
 Copyright (C) 2025 Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
@@ -18,47 +21,28 @@ A short and simple permissive license with conditions only requiring preservatio
 Licensed works, modifications, and larger works may be distributed under different terms and without source code.
 -->
   <body>
-    <header th:replace="~{fragments/header :: header}"></header>
+    <header>
+      <!--/*@thymesVar id="programa" type="java.util.String"*/-->
+      <h1 th:text="${programa}"></h1>
+    </header>
     <main>
-      <form action="" method="post">
-        <label>
-          <th:block th:text="#{web.page.request-password-change.label.id}"></th:block>:
-          <input
-            type="number"
-            name="matricula"
-            th:placeholder="#{web.page.request-password-change.placeholder.id}"
-            required
-          />
-        </label>
-        <label>
-          <th:block th:text="#{web.page.request-password-change.label.name}"></th:block>:
-          <input
-            type="text"
-            name="nome"
-            th:placeholder="#{web.page.request-password-change.placeholder.name}"
-            required
-          />
-        </label>
-        <label>
-          <th:block th:text="#{web.page.request-password-change.label.reason}"></th:block>:
-          <textarea
-            name="justificativa"
-            th:placeholder="#{web.page.request-password-change.placeholder.reason}"
-            required
-          ></textarea>
-        </label>
-        <button
-          th:text="#{web.page.request-password-change.label.button.continue}"
-          id="continuar"
-        ></button>
-        <span>
-          <th:block th:text="#{web.page.request-password-change.privacy-notice.1}"></th:block>
-          <a
-            href="privacidade.html"
-            th:text="#{web.page.request-password-change.privacy-notice.2}"
-            id="politica"
-          ></a>
-        </span>
+      <form action="/solicitar" method="post">
+        <h2 th:text="#{web.page.request-password-change.label.token}"></h2>
+        <div id="digitos-token">
+          <label th:each="i : ${#numbers.sequence(0, 5)}">
+            <input type="text" minlength="1" maxlength="1" required name="token[]" />
+          </label>
+        </div>
+        <div id="botoes">
+          <button type="button">
+            <a href="/login" th:text="#{web.page.register.label.cancel}"></a>
+          </button>
+          <button
+            type="submit"
+            th:text="#{web.page.request-password-change.label.button.continue}"
+            id="continuar"
+          ></button>
+        </div>
         <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
       </form>
     </main>

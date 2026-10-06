@@ -11,8 +11,14 @@
  *
  */
 
-package io.github.heberbarra.modelador.domain.model;
+package io.github.heberbarra.modelador.domain.exception;
 
-import java.net.Socket;
+import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 
-public record Sessao(Socket socket) {}
+public class AtividadeNotFoundException extends RuntimeException {
+    public AtividadeNotFoundException(int codigo) {
+        super(TradutorWrapper.tradutor
+                .traduzirMensagem("error.assignment.id-notfound")
+                .formatted(codigo));
+    }
+}

@@ -16,7 +16,7 @@ package io.github.heberbarra.modelador.infrastructure.assembler;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import io.github.heberbarra.modelador.domain.model.MensagemTraduzidaDTO;
+import io.github.heberbarra.modelador.domain.model.dto.MensagemTraduzidaDTO;
 import io.github.heberbarra.modelador.infrastructure.controller.ControladorTraducao;
 import org.jspecify.annotations.NonNull;
 import org.springframework.hateoas.EntityModel;

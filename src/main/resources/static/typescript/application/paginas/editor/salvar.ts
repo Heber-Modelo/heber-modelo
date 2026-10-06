@@ -18,6 +18,7 @@ import DescricaoRelacionalJSON from "domain/json/descricaoRelacionalJSON";
 import DiagramasJSON from "domain/json/diagramasJSON";
 import DicionarioDadosJSON from "domain/json/dicionarioDadosJSON";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 
 const NOMES_COMPONENTES_ESPECIAIS: string[] = ["editor_descricao_relacional", "tabela_dicionario"];
 
@@ -25,6 +26,7 @@ const PROPRIEDADE_ID_ABA: string = "data-indice-aba";
 const PROPRIEDADE_ID_COMPONENTE: string = "data-id";
 const PROPRIEDADES_IDS_OUVINTES: string = "data-ids-ouvintes";
 const PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
+const PROPRIEDADE_NOME_DIAGRAMA_ABA: string = "data-nome-diagrama-aba";
 const PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string = "data-recebe-pontos-extensores";
 const PROPRIEDADE_RECEBE_SETAS_CONECTORAS: string = "data-recebe-setas-conectoras";
 
@@ -59,8 +61,9 @@ function coletarAbas(elementosAbas: NodeListOf<HTMLDivElement>): AbaJSON[] {
 
     let id: number = Number(aba.getAttribute(PROPRIEDADE_ID_ABA));
     let nome: string = elementoNomeAba?.innerText || String(id);
+    let nomeDiagramaAba: string = aba.getAttribute(PROPRIEDADE_NOME_DIAGRAMA_ABA) || "";
 
-    abas.push({ id, nome });
+    abas.push({ id, nome, nomeDiagramaAba });
   }
 
   return abas;
@@ -251,8 +254,6 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
     dataDictionaries: dicionariosDados,
   };
 
-  fecharTagDetails(event.target as HTMLElement);
-
   if (tipoArquivo === TipoArquivo.JSON) {
     let jsonData: string = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(requestBody, null, 2))}`;
     downloadFile(jsonData, "diagrama.json");
@@ -321,6 +322,33 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   );
   xhtmlWrapperElement.remove();
 
+  if (tipoArquivo === TipoArquivo.BANCO) {
+    let codigoAtividadeInput: HTMLInputElement | null = document.querySelector("#codigo-atividade");
+    let codigoAtividade: string | undefined = codigoAtividadeInput?.value;
+
+    if (codigoAtividade === undefined || codigoAtividade.length === 0) {
+      window.alert(await traduzirChaveI18n("web.page.editor.selected-assignment.no-selection"));
+      return;
+    }
+
+    let formData: FormData = new FormData();
+    formData.append("codigoAtividade", codigoAtividade);
+    images.map((image: string): string => image.substring(image.indexOf(",") + 1)).forEach((image: string): void => {
+      formData.append("imagens", image);
+    });
+
+    await fetch("/enviarAtividade", {
+      method: "POST",
+      headers: {
+        "X-XSRF-TOKEN": csrfToken,
+      },
+      credentials: "same-origin",
+      body: formData,
+    });
+
+    return;
+  }
+
   if (tipoArquivo === TipoArquivo.PDF) {
     const pdfDocument = new jsPDF("landscape", "mm", [1920, 1080]);
     let pdfHeight: number = pdfDocument.internal.pageSize.getHeight();
@@ -345,26 +373,32 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   }
 }
 
-let buttonSalvarJSON: HTMLButtonElement | null = document.querySelector("#btn-salvar-json");
-let buttonSalvarXML: HTMLButtonElement | null = document.querySelector("#btn-salvar-xml");
-let buttonExportarPDF: HTMLButtonElement | null = document.querySelector("#btn-exportar-pdf");
-let buttonExportarPNG: HTMLButtonElement | null = document.querySelector("#btn-exportar-png");
-let buttonExportarSVG: HTMLButtonElement | null = document.querySelector("#btn-exportar-svg");
+let spanButtonSalvarJSON: HTMLSpanElement | null = document.querySelector("#save-type-json");
+let spanButtonSalvarXML: HTMLSpanElement | null = document.querySelector("#save-type-xml");
+let spanButtonExportarPDF: HTMLSpanElement | null = document.querySelector("#export-type-pdf");
+let spanButtonExportarPNG: HTMLSpanElement | null = document.querySelector("#export-type-png");
+let spanButtonExportarSVG: HTMLSpanElement | null = document.querySelector("#export-type-svg");
+let buttonEnviarAtividade: HTMLButtonElement | null =
+  document.querySelector("#btn-enviar-atividade");
 
-buttonSalvarJSON?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+spanButtonSalvarJSON?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.JSON),
 );
-buttonSalvarXML?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+spanButtonSalvarXML?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.XML),
 );
-buttonExportarPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+spanButtonExportarPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.PDF),
 );
 
-buttonExportarPNG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+spanButtonExportarPNG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.PNG),
 );
 
-buttonExportarSVG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+spanButtonExportarSVG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
   salvar(event, TipoArquivo.SVG),
+);
+
+buttonEnviarAtividade?.addEventListener("click", (event: MouseEvent): Promise<void> =>
+  salvar(event, TipoArquivo.BANCO),
 );

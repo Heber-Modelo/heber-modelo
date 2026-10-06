@@ -60,8 +60,8 @@ programa, caso não existam.
 
 ### Arquivos de configurações:
 
-* Configuracoes.toml
-* Paleta.toml
+* config.toml
+* paleta.toml
 
 # Instalação
 
@@ -69,13 +69,61 @@ O programa é disponibilizado como um arquivo jar, sendo possível baixar o prog
 clonando o repositório e compilando o programa usando gradle bootJar.
 
 Para rodar o programa, basta dar dois cliques dependendo da configuração do sistema, ou utilizar o seguinte comando
-num terminal(na mesma pasta na qual o programa foi posto):
+num terminal(na mesma pasta na qual o programa foi posto):[^1]
 
 ```shell
 java -jar heber-modelo.jar
 ```
 
-*É necessário utilizar a versão 25 do Java.
+[^1]: É necessário utilizar a [versão 25 do Java](https://www.oracle.com/java/technologies/downloads/).
+
+## Configuração do Banco de Dados
+
+### Autenticação
+
+As credenciais do Banco de Dados são definidas no arquivo ".env" localizado na pasta de configuração do programa. Sendo,
+portanto, necessário rodar o programa pelo menos uma vez ou utilizar a flag "--gen-config". As credenciais são utilizadas
+para acessar o Banco de Dados, e, se for o caso, para configurar os usuários do Banco de Dados, logo, é imprescindível
+editar o arquivo ".env" antes de criar o Banco de Dados.
+
+### Método Utilizando Docker
+
+O método recomendado para configurar o banco de dados aplicação é por meio do [Docker](https://docker.com),
+a fim de criar um ambiente isolado e seguro para os dados, para tal ejete tanto os arquivos SQL do banco
+quanto os arquivos próprios do docker:
+
+```shell
+java -jar heber-modelo.jar --eject-database-scripts
+java -jar heber-modelo.jar --eject-docker-compose
+```
+
+Na configuração padrão os arquivos serão gerados numa pasta "db" no mesmo local onde o comando foi executado,
+é possível alterar o nome dessa pasta nas configurações do programa.
+
+Dentro da pasta gerada, basta executar o seguinte comando para iniciar e configurar o Banco de Dados:
+
+```shell
+docker compose up -d
+```
+
+### Método Alternativo
+
+Caso não seja desejado, ou possível, utilizar Docker, é possível gerar um arquivo SQL para configurar os usuários,
+em conjunto com o SQL gerado pelo "--eject-database-scripts". Nesse caso, apenas esses dois comandos são necessários:
+
+```shell
+java -jar heber-modelo.jar --eject-database-scripts
+java -jar heber-modelo.jar --generate-sql-users
+```
+
+Assim como a pasta "db", o arquivo de configuração de usuários será gerado no local no qual o comando foi executado.
+
+Modifique o arquivo "criarUsuarios.sql" para definir as credenciais de acesso ao banco, podendo ser utilizado
+qualquer editor de texto simples, como o Bloco de Notas.
+
+Agora, basta executar primeiro o arquivo "01 - ConfigurarBancoDados.sql" e em seguida o arquivo "criarUsuarios.sql",
+valendo-se, por exemplo, do [MySQL Workbench](https://www.mysql.com/products/workbench/), a ferramenta oficial para
+se ter uma interface visual de acesso ao MySQL, para rodar os comandos contidos nos arquivos.
 
 ## Compilação Manual
 
@@ -119,16 +167,17 @@ uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/
 - [ ] Seletor Radial
 - [ ] Formatação automática
 - [x] Suporte para temas
-- [ ] Suporte para plugins**
+- [ ] Suporte para plugins[^2]
 - [x] Suporte para keymaps customizados
 - [ ] Formatação automática de atributos
 - [ ] Estilos diferentes de fundo/grade
 - [x] Exportação para PDF, SVG, PNG e XHTML
 - [ ] Alinhar elementos com a grade
-- [x] Auto atualização*
+- [x] Auto atualização[^3]
 
-\*Devido à mudança de nome do programa, versões anteriores a v0.0.5-SNAPSHOT não conseguem atualizar.
-\*\*A funcionalidade de plugins está em fase de planejamento, e não é prioritária no momento.
+[^2]: A funcionalidade de plugins está em fase de planejamento, e não é prioritária no momento.
+
+[^3]: Devido à mudança de nome do programa, versões anteriores a v0.0.5-SNAPSHOT não conseguem atualizar.
 
 # Autores
 

@@ -5,6 +5,7 @@
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <link rel="stylesheet" th:href="@{/css/formulario.css}" />
     <title th:text="#{web.page.reset-password.title}"></title>
+    <meta name="_csrf" th:content="${_csrf.token}" />
   </head>
   <!--
 Copyright (C) 2025 Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
@@ -20,13 +21,30 @@ Licensed works, modifications, and larger works may be distributed under differe
   <body>
     <header th:replace="~{fragments/header :: header}"></header>
     <main>
-      <form action="" method="post">
+      <form action="/redefinir" method="post" th:object="${usuario}">
+        <div
+          class="aviso"
+          th:text="#{web.page.reset-password.user-not-found}"
+          th:if="${param.userNotFound}"
+        ></div>
+        <div
+          class="aviso"
+          th:text="#{web.page.reset-password.passwords-differ}"
+          th:if="${param.mismatch}"
+        ></div>
         <label>
-          <th:block th:text="#{web.page.reset-password.label.new-password}"></th:block>:
+          <span class="campos-texto" th:text="#{web.page.reset-password.label.username}"></span>
+          <input type="text" name="username" />
+        </label>
+        <label>
+          <span class="campos-texto" th:text="#{web.page.reset-password.label.new-password}"></span>
           <input type="password" name="senhaNova" required />
         </label>
         <label>
-          <th:block th:text="#{web.page.reset-password.label.confirm-password}"></th:block>:
+          <span
+            class="campos-texto"
+            th:text="#{web.page.reset-password.label.confirm-password}"
+          ></span>
           <input type="password" name="confirmarSenha" required />
         </label>
         <button th:text="#{web.page.reset-password.label.button.continue}" id="continuar"></button>
@@ -41,7 +59,7 @@ Licensed works, modifications, and larger works may be distributed under differe
             .
           </span>
         </small>
-        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
       </form>
     </main>
     <div th:replace="~{fragments/cookiesBanner :: #cookies-banner}"></div>

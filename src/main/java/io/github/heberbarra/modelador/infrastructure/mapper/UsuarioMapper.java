@@ -13,7 +13,7 @@
 
 package io.github.heberbarra.modelador.infrastructure.mapper;
 
-import io.github.heberbarra.modelador.domain.model.UsuarioDTO;
+import io.github.heberbarra.modelador.domain.model.dto.UsuarioDTO;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import org.jspecify.annotations.NonNull;
 

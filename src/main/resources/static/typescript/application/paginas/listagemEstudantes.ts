@@ -19,18 +19,18 @@ async function encerrarSessao(): Promise<void> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-XSRF-TOKEN": csrfToken
+      "X-XSRF-TOKEN": csrfToken,
     },
-    credentials: "same-origin"
+    credentials: "same-origin",
   });
 
   await fetch("/logout", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-XSRF-TOKEN": csrfToken
+      "X-XSRF-TOKEN": csrfToken,
     },
-    credentials: "same-origin"
+    credentials: "same-origin",
   });
 
   window.location.href = "/";

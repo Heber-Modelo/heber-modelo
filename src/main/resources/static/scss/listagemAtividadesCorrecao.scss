@@ -13,9 +13,56 @@
 
 main {
   align-self: center;
+  display: grid;
+  grid-template-columns: 100%;
   justify-self: center;
-  justify-content: end;
   max-width: 60%;
+
+  details {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-self: center;
+    width: 100%;
+
+    summary {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .atividade {
+      border: 0.1rem solid var(--cor-borda);
+      border-radius: 0.5rem;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      width: 100%;
+
+      a {
+        color: var(--cor-botao);
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+
+      a:hover {
+        color: var(--cor-botao-hover);
+      }
+
+    }
+
+  }
+
+  button {
+    align-self: end;
+    justify-self: center;
+    width: 60%;
+  }
+
+  #feedback-description-placeholder {
+    display: none;
+  }
+
 }
 
 div:has(button) {

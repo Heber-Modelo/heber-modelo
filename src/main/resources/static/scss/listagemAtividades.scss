@@ -12,24 +12,39 @@
  */
 
 main {
-  display: flex;
+  display: grid;
+  grid-template-rows: 85% 15%;
   align-self: center;
   justify-self: center;
   max-width: 60%;
 
+  a {
+    text-decoration: none;
+  }
 
   .listagem-atividades {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    gap: 1rem;
   }
+}
+
+.atividades {
+  display: flex;
+  flex-direction: column;
+  margin: 10rem;
+  row-gap: 1.2rem;
+  grid-row: 1;
+  max-height: 80%;
+  overflow-y: auto;
 }
 
 div:has(button) {
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
 }
 
@@ -57,9 +72,45 @@ div:has(button) {
     color: var(--cor-letra);
   }
 
+  label {
+    pointer-events: none;
+    width: 45%;
+
+    span {
+      padding: 0;
+    }
+
+    input {
+      background-color: unset;
+      color: var(--cor-letra);
+      font-size: 1.5rem;
+      text-decoration: none;
+    }
+  }
+
   svg{
     max-height: 4rem;
     max-width: 2.5rem;
+  }
+}
+
+.botoes{
+  height: 4.5rem;
+  grid-row: 2;
+
+  button:not(.backwards){
+    width: unset;
+    padding: 0.5rem;
+  }
+
+  .backwards {
+    width: 4.5rem;
+    height: 4.5rem;
+
+    svg{
+      height: 3rem;
+      width: 3rem;
+    }
   }
 }
 

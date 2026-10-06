@@ -10,11 +10,13 @@
     <script th:src="@{/javascript/helperAbrirNovoArquivo.js}" defer></script>
     <script th:src="@{/javascript/helperEditorDescricaoModeloRelacional.js}" defer></script>
     <script th:src="@{/javascript/helperSeletorTipoDiagrama.js}" defer></script>
+    <script th:src="@{/javascript/mostrarAtividades.js}" defer></script>
     <script th:src="@{/javascript/salvar.js}" defer></script>
     <script>
       configurarGrade("--espessura-grade", "[(${espessuraGrade})]");
       configurarGrade("--tamanho-quadrado-grade", "[(${tamanhoQuadradoGrade})]");
       incrementoMovimentacao = Number("[(${incrementoMovimentacaoElemento})]");
+      utilizarAbasExclusivas = "[(${abasExclusivas})]" === "true";
     </script>
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_headerName" th:content="${_csrf.headerName}" />
@@ -39,82 +41,158 @@
           <th:block th:insert="~{fragments/common/icons/home.html}"></th:block>
         </a>
       </button>
-      <button id="barra-de-tarefas-button">V</button>
-      <details>
-        <summary style="display: none"></summary>
-        <div class="barra-de-tarefas">
-          <details class="menu-opcoes">
-            <summary th:title="#{web.editor.toolbar.file}" id="arquivo">
-              <th:block th:insert="~{fragments/editor/icons/file :: svg}"></th:block>
-            </summary>
-            <div class="mostrar-conteudo">
-              <div class="comando" id="btn-abrir-novo">
-                <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.new-file}"></span>
-                <span class="atalho"></span>
-              </div>
-              <div class="comando" id="btn-importar">
-                <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.open-file}"></span>
-                <span class="atalho"></span>
-              </div>
-              <hr />
-              <div class="comando" id="btn-salvar-json">
-                <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.save-file}"></span>
-                <span class="atalho">JSON</span>
-              </div>
-              <div class="comando" id="btn-salvar-xml">
-                <span class="itens-menu" th:text="#{web.page.editor.toolbar.item.save-file}"></span>
-                <span class="atalho">XML</span>
-              </div>
-              <div class="comando" id="btn-exportar-pdf">
-                <span
-                  class="itens-menu"
-                  th:text="#{web.page.editor.toolbar.item.export-file}"
-                ></span>
-                <span class="atalho">PDF</span>
-              </div>
-              <div class="comando" id="btn-exportar-png">
-                <span
-                  class="itens-menu"
-                  th:text="#{web.page.editor.toolbar.item.export-file}"
-                ></span>
-                <span class="atalho">PNG</span>
-              </div>
-              <div class="comando" id="btn-exportar-svg">
-                <span
-                  class="itens-menu"
-                  th:text="#{web.page.editor.toolbar.item.export-file}"
-                ></span>
-                <span class="atalho">SVG</span>
-              </div>
-            </div>
-          </details>
-          <button th:title="#{web.editor.toolbar.copy}" id="copiar">
-            <th:block th:replace="~{fragments/editor/icons/copy :: svg}"></th:block>
-          </button>
-          <button th:title="#{web.editor.toolbar.paste}" id="colar">
-            <th:block th:replace="~{fragments/editor/icons/paste :: svg}"></th:block>
-          </button>
-          <button th:title="#{web.editor.toolbar.cut}" id="cortar">
-            <th:block th:replace="~{fragments/editor/icons/cut :: svg}"></th:block>
-          </button>
-          <button th:title="#{web.editor.toolbar.undo}" id="desfazer">
-            <th:block th:replace="~{fragments/editor/icons/undo :: svg}"></th:block>
-          </button>
-          <button th:title="#{web.editor.toolbar.redo}" id="refazer">
-            <th:block th:replace="~{fragments/editor/icons/redo :: svg}"></th:block>
-          </button>
-          <button th:title="#{web.editor.toolbar.erase}" id="apagar">
-            <th:block th:replace="~{fragments/editor/icons/delete :: svg}"></th:block>
-          </button>
-          <button th:title="#{web.editor.toolbar.delete}" id="deletar">
-            <th:block th:replace="~{fragments/editor/icons/deleteAll :: svg}"></th:block>
-          </button>
-        </div>
+      <details class="header-item" id="assignments" th:if="${mostrarAtividades}">
+        <summary th:text="#{web.page.editor.assignments.title}"></summary>
       </details>
-      <!--/*@thymesVar id="programa" type="java.lang.String"*/-->
+      <input type="radio" name="toolbar-menu" id="menu-fechado" checked />
+      <div class="menu file">
+        <input type="radio" name="toolbar-menu" id="file-menu" />
+        <label for="file-menu" class="menu-titulo menu-abrir">
+          <span th:text="#{web.page.editor.file}"></span>
+        </label>
+        <label for="menu-fechado" class="menu-titulo menu-fechar">
+          <span th:text="#{web.page.editor.file}"></span>
+        </label>
+        <div class="mostrar">
+          <span th:text="#{web.page.editor.toolbar.item.new-file}" id="novo"></span>
+          <span th:text="#{web.page.editor.toolbar.item.open-file}" id="abrir"></span>
+          <input type="radio" name="file-submenu" id="submenu-fechado" checked />
+          <div class="submenu">
+            <input type="radio" name="file-submenu" id="submenu-salvar" />
+            <label for="submenu-salvar" class="submenu-titulo submenu-abrir">
+              <span th:text="#{web.page.editor.toolbar.item.save-file}"></span>
+              <span class="seta">›</span>
+            </label>
+            <label for="submenu-fechado" class="submenu-titulo submenu-fechar">
+              <span th:text="#{web.page.editor.toolbar.item.save-file}"></span>
+              <span class="seta">›</span>
+            </label>
+            <div class="submenu-mostrar">
+              <span
+                th:text="#{web.page.editor.toolbar.save.file-type.xml}"
+                id="save-type-xml"
+              ></span>
+              <span
+                th:text="#{web.page.editor.toolbar.save.file-type.json}"
+                id="save-type-json"
+              ></span>
+            </div>
+          </div>
+          <div class="submenu">
+            <input type="radio" name="file-submenu" id="submenu-exportar" />
+            <label for="submenu-exportar" class="submenu-titulo submenu-abrir">
+              <span th:text="#{web.page.editor.toolbar.item.export-file}"></span>
+              <span class="seta">›</span>
+            </label>
+            <label for="submenu-fechado" class="submenu-titulo submenu-fechar">
+              <span th:text="#{web.page.editor.toolbar.item.export-file}"></span>
+              <span class="seta">›</span>
+            </label>
+            <div class="submenu-mostrar">
+              <span
+                th:text="#{web.page.editor.toolbar.export.file-type.png}"
+                id="export-type-png"
+              ></span>
+              <span
+                th:text="#{web.page.editor.toolbar.export.file-type.pdf}"
+                id="export-type-pdf"
+              ></span>
+              <span
+                th:text="#{web.page.editor.toolbar.export.file-type.svg}"
+                id="export-type-svg"
+              ></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu edit">
+        <input type="radio" name="toolbar-menu" id="edit-menu" />
+        <label for="edit-menu" class="menu-titulo menu-abrir">
+          <span th:text="#{web.page.editor.edit}"></span>
+        </label>
+        <label for="menu-fechado" class="menu-titulo menu-fechar">
+          <span th:text="#{web.page.editor.edit}"></span>
+        </label>
+        <div class="mostrar">
+          <span th:text="#{web.page.editor.toolbar.copy}" id="copiar"></span>
+          <span th:text="#{web.page.editor.toolbar.paste}" id="colar"></span>
+          <span th:text="#{web.page.editor.toolbar.cut}" id="cortar"></span>
+          <span th:text="#{web.page.editor.toolbar.undo}" id="desfazer"></span>
+          <span th:text="#{web.page.editor.toolbar.redo}" id="refazer"></span>
+          <span th:text="#{web.page.editor.toolbar.erase}" id="apagar"></span>
+          <span th:text="#{web.page.editor.toolbar.delete}" id="deletar"></span>
+        </div>
+      </div>
+      <label for="menu-fechado" class="fechar-fora"></label>
       <h1 th:text="${programa}"></h1>
     </header>
-
+    <section id="atividades" th:if="${mostrarAtividades}">
+      <button
+        type="button"
+        id="clean-selection-button"
+        th:text="#{web.page.editor.assignments.clean-selection.label}"
+      ></button>
+      <button
+        type="button"
+        id="close-button"
+        th:text="#{web.page.editor.assignments.close.label}"
+      ></button>
+      <h2 th:text="#{web.page.editor.assignments.title}" id="assignments-title"></h2>
+      <div id="assignments-list" th:if="${!atividades.isEmpty()}">
+        <details th:each="atividade : ${atividades}">
+          <summary>
+            <span class="title" th:text="${atividade.getTitulo()}"></span>
+            <label class="publication-date">
+              <span th:text="#{web.page.assignment.label.publication-date}"></span>
+              <input type="datetime-local" th:value="${atividade.getDataPostagem()}" />
+            </label>
+            <label class="deadline">
+              <span th:text="#{web.page.assignment.label.deadline}"></span>
+              <input type="datetime-local" th:value="${atividade.getDataLimite()}" />
+            </label>
+            <label class="is-selected">
+              <span th:text="#{web.page.editor.assignments.selected.label}"></span>
+              <input name="selected-assignment" type="radio" th:value="${atividade.getCodigo()}" />
+            </label>
+          </summary>
+          <p class="assignment-description" th:text="${atividade.getDescricao()}"></p>
+          <div class="feedbacks-list" th:if="${!feedbacks.get(atividade.getCodigo()).isEmpty()}">
+            <h3 th:text="#{web.page.editor.assignments.feedbacks.label}"></h3>
+            <div th:each="feedback : ${feedbacks.get(atividade.getCodigo())}">
+              <p th:text="${feedback.getDescricao()}"></p>
+            </div>
+          </div>
+        </details>
+      </div>
+      <h2 th:text="#{web.page.editor.assignments.tests.title}" id="tests-title"></h2>
+      <div id="tests-list" th:if="${!provas.isEmpty()}">
+        <details th:each="prova : ${provas}">
+          <summary>
+            <span th:text="${prova.getTitulo()}"></span>
+            <label class="publication-date">
+              <span th:text="#{web.page.assignment.label.publication-date}"></span>
+              <input type="datetime-local" th:value="${prova.getDataPostagem()}" />
+            </label>
+            <label class="deadline">
+              <span th:text="#{web.page.assignment.label.deadline}"></span>
+              <input type="datetime-local" th:value="${prova.getDataLimite()}" />
+            </label>
+          </summary>
+          <p class="assignment-description" th:text="${prova.getDescricao()}"></p>
+          <div class="feedbacks-list" th:if="${!feedbacks.get(prova.getCodigo()).isEmpty()}">
+            <h3 th:text="#{web.page.editor.assignments.feedbacks.label}"></h3>
+            <div th:each="feedback : ${feedbacks.get(prova.getCodigo())}">
+              <p th:text="${feedback.getDescricao()}"></p>
+            </div>
+          </div>
+          <button
+            type="button"
+            th:if="${feedbacks.get(prova.getCodigo()).isEmpty()}"
+            th:text="#{web.page.editor.assignments.begin-test.label}"
+          ></button>
+        </details>
+      </div>
+    </section>
     <aside id="painel-esquerdo">
       <button type="button" class="btn-painel-esquerdo btn-esconder">&lt;</button>
       <button type="button" class="btn-painel-esquerdo btn-mostrar">&gt;</button>
@@ -138,6 +216,23 @@
       <button type="button" class="btn-painel-direito btn-mostrar">&lt;</button>
       <section id="seletor-tipos-conexao" class="pagina">
         <h2 th:text="#{web.page.editor.section.type-selector}"></h2>
+      </section>
+      <section id="atividade-selecionada" class="pagina" th:if="${mostrarAtividades}">
+        <h2>
+          <span th:text="#{web.page.editor.selected-assignment.title}"></span>&nbsp;
+          <span id="titulo-atividade"></span>
+        </h2>
+        <input type="hidden" id="codigo-atividade" />
+        <label>
+          <span th:text="#{web.page.editor.selected-assignment.label.deadline}"></span>
+          <input type="datetime-local" id="data-entrega-atividade" readonly />
+        </label>
+        <p id="descricao-atividade"></p>
+        <button
+          type="button"
+          id="btn-enviar-atividade"
+          th:text="#{web.page.editor.selected-assignment.label.submit}"
+        ></button>
       </section>
       <section id="propriedades" class="pagina">
         <h2 th:text="#{web.page.editor.section.properties}"></h2>
@@ -182,14 +277,13 @@
       <div id="seta-placeholder" style="display: none; position: absolute">X</div>
     </main>
     <div th:replace="~{fragments/cookiesBanner :: #cookies-banner}"></div>
-
     <footer>
       <div>
         <div class="aba" data-indice-aba="1">
           <p
             class="numero-aba"
             contenteditable="plaintext-only"
-            th:text="#{web.page.editor.label.tab} + ' 1'"
+            th:text="'1 - ' + #{web.page.editor.label.default-tab}"
           ></p>
         </div>
       </div>

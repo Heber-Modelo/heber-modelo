@@ -39,6 +39,7 @@ public class DiagramasJSON implements XHTMLConvertable {
     public static final String TYPES_ID = "types";
     public static final String PROPRIEDADE_ID_ABA = "data-indice-aba";
     public static final String PROPRIEDADE_NOME_ABA = "data-nome-aba";
+    public static final String PROPRIEDADE_NOME_DIAGRAMA_ABA = "data-nome-diagrama-aba";
     private final IAcessadorRecurso acessadorRecurso;
     LocalDateTime creationDate;
     List<String> loadedCSSFiles;
@@ -147,17 +148,21 @@ public class DiagramasJSON implements XHTMLConvertable {
         }
 
         Map<Integer, String> nomesAbas = new LinkedHashMap<>();
+        Map<Integer, String> nomesDiagramasAbas = new LinkedHashMap<>();
         for (AbaJSON tab : tabs) {
             nomesAbas.put(tab.id, tab.nome);
+            nomesDiagramasAbas.put(tab.id, tab.nomeDiagramaAba);
         }
 
         for (Integer idAba : abas.keySet()) {
-            builder.append("<fieldset %s=\"%d\" %s=\"%s\">%n<legend>%s</legend>%n"
+            builder.append("<fieldset %s=\"%d\" %s=\"%s\" %s=\"%s\">%n<legend>%s</legend>%n"
                     .formatted(
                             PROPRIEDADE_ID_ABA,
                             idAba,
                             PROPRIEDADE_NOME_ABA,
                             nomesAbas.get(idAba),
+                            PROPRIEDADE_NOME_DIAGRAMA_ABA,
+                            nomesDiagramasAbas.get(idAba),
                             nomesAbas.get(idAba)));
             abas.get(idAba).forEach(builder::append);
             builder.append("</fieldset>%n".formatted());

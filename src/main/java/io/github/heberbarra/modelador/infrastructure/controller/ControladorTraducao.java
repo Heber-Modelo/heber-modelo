@@ -14,7 +14,7 @@
 package io.github.heberbarra.modelador.infrastructure.controller;
 
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
-import io.github.heberbarra.modelador.domain.model.MensagemTraduzidaDTO;
+import io.github.heberbarra.modelador.domain.model.dto.MensagemTraduzidaDTO;
 import io.github.heberbarra.modelador.infrastructure.assembler.TraducaoModelAssembler;
 import org.jspecify.annotations.NonNull;
 import org.springframework.hateoas.EntityModel;

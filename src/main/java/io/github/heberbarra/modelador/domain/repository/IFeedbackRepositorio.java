@@ -16,12 +16,17 @@ package io.github.heberbarra.modelador.domain.repository;
 import io.github.heberbarra.modelador.infrastructure.entity.Atividade;
 import io.github.heberbarra.modelador.infrastructure.entity.Feedback;
 import java.util.List;
+import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IFeedbackRepositorio extends JpaRepository<@NonNull Feedback, @NonNull Integer> {
 
-    Feedback getFeedbackByCodigo(int codigo);
+    Optional<Feedback> findByCodigo(int codigo);
 
     List<Feedback> getFeedbacksByAtividade(Atividade atividade);
+
+    List<Feedback> getFeedbacksByDescricaoNullOrderByAtividade();
+
+    List<Feedback> getFeedbacksByDescricaoNotNullOrderByAtividade();
 }

@@ -17,5 +17,12 @@ public interface Roteador extends Runnable {
     String ENCERRAR_ROUTER = "ENCERRAR";
     String SEPARADOR_MENSAGEM = ";";
     int POSICAO_HEADER = 0;
-    int POSICAO_IP = 1;
+
+    enum EstadosRoteador {
+        AUTORIZADO,
+        BLOQUEADO,
+        ESPERANDO
+    }
+
+    EstadosRoteador getEstado();
 }

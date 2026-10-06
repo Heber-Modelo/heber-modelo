@@ -12,6 +12,7 @@
  */
 
 enum TipoArquivo {
+  BANCO,
   JSON,
   PDF,
   PNG,

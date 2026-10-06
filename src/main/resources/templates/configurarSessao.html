@@ -1,9 +1,8 @@
 <!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <th:block th:replace="~{fragments/head :: head}"></th:block>
-    <title th:text="#{web.page.session-configuration.title}"></title>
-    <link rel="stylesheet" th:href="@{/css/configurarSessao.css}" />
+    <link rel="stylesheet" th:href="@{/css/formulario.css}" />
   </head>
   <body>
     <!--
@@ -20,20 +19,22 @@
   -->
     <header th:replace="~{fragments/header :: header}"></header>
     <main>
-      <div>
-        <button>
-          <a
-            th:href="@{listagemEstudantes.html}"
-            th:text="#{web.page.session-configuration.label.cancel}"
-          ></a>
-        </button>
-        <button>
-          <a
-            th:href="@{listagemEstudantes.html}"
-            th:text="#{web.page.session-configuration.label.save}"
-          ></a>
-        </button>
-      </div>
+      <form action="/configurarSessao" method="post">
+        <label>
+          <span class="campos-texto" th:text="#{session.config.test-lose-focus-timeout}"></span>
+          <input th:name="secondsTimeout" th:value="${configuracao.getSecondsTimeout()}" required />
+        </label>
+        <div id="botoes">
+          <button type="button">
+            <a
+              th:href="@{listagemEstudantes.html}"
+              th:text="#{web.page.session-configuration.label.cancel}"
+            ></a>
+          </button>
+          <button type="submit" th:text="#{web.page.session-configuration.label.save}"></button>
+        </div>
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
+      </form>
     </main>
   </body>
 </html>

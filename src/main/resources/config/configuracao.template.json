@@ -168,6 +168,18 @@
       "atributo": "modoAvancadoEditorPropriedades",
       "tipo": "Boolean",
       "valorPadrao": false
+    },
+    {
+      "categoria": "editor",
+      "atributo": "abasExclusivas",
+      "tipo": "Boolean",
+      "valorPadrao": true
+    },
+    {
+      "categoria": "prova",
+      "atributo": "limiteSegundosSemFoco",
+      "tipo": "Long",
+      "valorPadrao": 5
     }
   ]
 }

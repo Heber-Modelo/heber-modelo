@@ -16,7 +16,7 @@ package io.github.heberbarra.modelador.domain.exception;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 
 public class UsuarioNotFoundException extends RuntimeException {
-    public UsuarioNotFoundException(long matricula) {
+    public UsuarioNotFoundException(String matricula) {
         super(TradutorWrapper.tradutor
                 .traduzirMensagem("error.user.id-notfound")
                 .formatted(matricula));

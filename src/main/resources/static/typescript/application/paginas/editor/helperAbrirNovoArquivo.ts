@@ -31,5 +31,5 @@ function abrirNovoArquivo(): void {
   temporaryFormElement.remove();
 }
 
-let btnAbrirNovoArquivo: HTMLButtonElement | null = document.querySelector("#btn-abrir-novo");
-btnAbrirNovoArquivo?.addEventListener("click", abrirNovoArquivo);
+let spanBtnAbrirNovoArquivo: HTMLSpanElement | null = document.querySelector("#novo");
+spanBtnAbrirNovoArquivo?.addEventListener("click", abrirNovoArquivo);

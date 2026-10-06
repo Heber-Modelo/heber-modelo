@@ -18,9 +18,24 @@ main {
   justify-self: center;
   justify-content: end;
   max-width: 60%;
+
+  form {
+    display: grid;
+    height: 100%;
+    width: 100%;
+  }
+
+}
+
+div:has(label) {
+  align-self: center;
+  display: flex;
+  font-size: 1rem;
+  justify-self: start;
 }
 
 div:has(button) {
+  align-self: end;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

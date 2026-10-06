@@ -19,7 +19,10 @@
     A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
     Licensed works, modifications, and larger works may be distributed under different terms and without source code.
     -->
-    <header th:replace="~{fragments/header :: header}"></header>
+    <header>
+      <!--/*@thymesVar id="programa" type="java.util.String"*/-->
+      <h1 th:text="${programa}"></h1>
+    </header>
     <main>
       <form action="cadastro.html" method="post" th:object="${usuario}">
         <div class="aviso" th:if="${param.exists}" th:text="#{web.page.register.use-exists}"></div>

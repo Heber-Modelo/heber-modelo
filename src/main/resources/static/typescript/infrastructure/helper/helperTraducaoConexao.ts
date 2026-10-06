@@ -26,10 +26,6 @@ export default async function helperTraducaoConexao(tipoConexao: TiposConexao): 
       chaveTraducao = "web.page.editor.section.type-selector.weak-entity-connection";
       break;
 
-    case TiposConexao.CONEXAO_RETA:
-      chaveTraducao = "web.page.editor.section.type-selector.straight-connection";
-      break;
-
     case TiposConexao.CONEXAO_SETA:
       chaveTraducao = "web.page.editor.section.type-selector.arrow-connection";
       break;

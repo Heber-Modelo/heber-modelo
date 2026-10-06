@@ -19,12 +19,12 @@ async function logout(): Promise<void> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-XSRF-TOKEN": csrfToken
+      "X-XSRF-TOKEN": csrfToken,
     },
     credentials: "same-origin",
   });
 
-  window.location.reload();
+  window.location.href = "/login";
 }
 
 const logoutButton: HTMLButtonElement | null = document.querySelector("#logout");

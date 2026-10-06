@@ -8,6 +8,7 @@ const baseDirectory = path.resolve(__dirname, "src/main/resources/static/typescr
 export default {
   devtool: "inline-source-map",
   entry: {
+    atividade: path.resolve(baseDirectory, "application/paginas/atividade.ts"),
     cadastro: path.resolve(baseDirectory, "application/paginas/cadastro.ts"),
     callbacksElementos: path.resolve(
       baseDirectory,
@@ -16,6 +17,7 @@ export default {
     cookiesBanner: path.resolve(baseDirectory, "application/paginas/cookiesBanner.ts"),
     criarAtividade: path.resolve(baseDirectory, "application/paginas/criarAtividade.ts"),
     desligar: path.resolve(baseDirectory, "application/paginas/desligar.ts"),
+    editarFeedback: path.resolve(baseDirectory, "application/paginas/editarFeedback.ts"),
     editor: path.resolve(baseDirectory, "application/paginas/editor/editor.ts"),
     helperAbrirNovoArquivo: path.resolve(
       baseDirectory,
@@ -32,7 +34,12 @@ export default {
     index: path.resolve(baseDirectory, "application/paginas/index.ts"),
     listagemEstudantes: path.resolve(baseDirectory, "application/paginas/listagemEstudantes.ts"),
     login: path.resolve(baseDirectory, "application/paginas/login.ts"),
+    mostrarAtividades: path.resolve(
+      baseDirectory,
+      "application/paginas/editor/mostrarAtividades.ts",
+    ),
     salvar: path.resolve(baseDirectory, "application/paginas/editor/salvar.ts"),
+    solicitar: path.resolve(baseDirectory, "application/paginas/solicitar.ts"),
     quill: "quill",
   },
   output: {

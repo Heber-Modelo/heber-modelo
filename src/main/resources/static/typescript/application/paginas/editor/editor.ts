@@ -54,6 +54,7 @@ import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import "infrastructure/variaveisConfiguracao";
 import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
+import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import DirecoesMovimento from "domain/enum/direcoesMovimento";
 import LateraisComponente from "domain/enum/lateraisComponente";
 import NomesComponente from "domain/enum/nomesComponente";
@@ -195,7 +196,45 @@ let tiposDiagrama: HTMLElement | null = document.querySelector("#tipos-diagrama"
 
 async function callbackCriarComponente(event: Event): Promise<void> {
   let btn: HTMLButtonElement = event.target as HTMLButtonElement;
+  let chaveI18NDiagrama: string | null = btn.getAttribute(
+    ComponenteFactory.PROPRIEDADE_CHAVE_I18N_DIAGRAMA,
+  );
+  let nomeDiagrama: string | null = btn.getAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA);
   let nomeElemento: string | null = btn.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE);
+
+  let nomeAbaAtual: string | null | undefined =
+    selecionadorAba.abaSelecionada?.htmlElement.getAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA);
+
+  if (utilizarAbasExclusivas) {
+    if (nomeDiagrama && (nomeAbaAtual === null || nomeAbaAtual === undefined)) {
+      selecionadorAba.abaSelecionada?.htmlElement.setAttribute(
+        Aba.ATRIBUTO_NOME_DIAGRAMA_ABA,
+        nomeDiagrama,
+      );
+
+      let nomeAba: HTMLElement | null | undefined =
+        selecionadorAba.abaSelecionada?.htmlElement.querySelector(`.${Aba.CLASSE_NUMERO_ABA}`);
+
+      if (chaveI18NDiagrama && nomeAba) {
+        nomeAba.innerText = `${selecionadorAba.abaSelecionada?.id} - ${await traduzirChaveI18n(chaveI18NDiagrama)}`;
+      }
+    } else if (nomeDiagrama && nomeAbaAtual !== nomeDiagrama) {
+      await criarNovaAba();
+      let abas: Aba[] = repositorioAbas.listar();
+      let indiceUltimaAba: number = abas.length - 1;
+      let ultimaAba: Aba = abas[indiceUltimaAba];
+      selecionadorAba.selecionarAba(ultimaAba);
+      ultimaAba.htmlElement.setAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA, nomeDiagrama);
+
+      let nomeAba: HTMLElement | null = ultimaAba.htmlElement.querySelector(
+        `.${Aba.CLASSE_NUMERO_ABA}`,
+      );
+
+      if (chaveI18NDiagrama && nomeAba) {
+        nomeAba.innerText = `${ultimaAba.id} - ${await traduzirChaveI18n(chaveI18NDiagrama)}`;
+      }
+    }
+  }
 
   const { CriarComponenteCommandBuilder } =
     await import("infrastructure/command/criarComponenteCommand");
@@ -545,29 +584,15 @@ if (divComponentes) {
 /* TOOLBAR */
 /***********/
 
-let toolbarButton: HTMLButtonElement | null = document.querySelector("#barra-de-tarefas-button");
-let toolbar: HTMLDetailsElement | null = document.querySelector("details:has(.barra-de-tarefas)");
+let spanButtonCopiar: HTMLSpanElement | null = document.querySelector("#copiar");
+let spanButtonColar: HTMLSpanElement | null = document.querySelector("#colar");
+let spanButtonCortar: HTMLSpanElement | null = document.querySelector("#cortar");
+let spanButtonDesfazer: HTMLSpanElement | null = document.querySelector("#desfazer");
+let spanButtonRefazer: HTMLSpanElement | null = document.querySelector("#refazer");
+let spanButtonApagar: HTMLSpanElement | null = document.querySelector("#apagar");
+let spanButtonDeletar: HTMLSpanElement | null = document.querySelector("#deletar");
 
-toolbarButton?.addEventListener("click", (): void => {
-  if (toolbar) {
-    toolbar.open = !toolbar.open;
-
-    let larguraBody: number = document.body.getBoundingClientRect().width;
-    let larguraDivToolbar: number = larguraBody * 0.6;
-
-    toolbar.querySelector("div")?.style.setProperty("width", `${larguraDivToolbar}px`);
-  }
-});
-
-let buttonCopiar: HTMLDivElement | null = document.querySelector("button#copiar");
-let buttonColar: HTMLDivElement | null = document.querySelector("button#colar");
-let buttonCortar: HTMLDivElement | null = document.querySelector("button#cortar");
-let buttonRefazer: HTMLDivElement | null = document.querySelector("button#refazer");
-let buttonDesfazer: HTMLDivElement | null = document.querySelector("button#desfazer");
-let buttonApagar: HTMLDivElement | null = document.querySelector("button#apagar");
-let buttonDeletar: HTMLDivElement | null = document.querySelector("button#deletar");
-
-buttonApagar?.addEventListener("click", async (): Promise<void> => {
+spanButtonApagar?.addEventListener("click", async (): Promise<void> => {
   const { ApagarComponenteCommandBuilder } =
     await import("infrastructure/command/apagarComponenteCommand");
 
@@ -583,7 +608,7 @@ buttonApagar?.addEventListener("click", async (): Promise<void> => {
   atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
 });
 
-buttonDeletar?.addEventListener("click", async (): Promise<void> => {
+spanButtonDeletar?.addEventListener("click", async (): Promise<void> => {
   let traducao: ResponseTraducaoJSON = await (
     await fetch("/traducao/web.page.editor.confirm.delete-all")
   ).json();
@@ -595,7 +620,7 @@ buttonDeletar?.addEventListener("click", async (): Promise<void> => {
       .definirDiagrama(diagrama)
       .definirRepositorioComponente(repositorioComponentes)
       .build();
-    commandHistory.saveAndExecuteCommand(command);
+    command.execute();
 
     selecionadorComponente.removerSelecao();
     limparPropriedades(abaPropriedades);
@@ -603,15 +628,15 @@ buttonDeletar?.addEventListener("click", async (): Promise<void> => {
   }
 });
 
-buttonDesfazer?.addEventListener("click", (): void => {
+spanButtonDesfazer?.addEventListener("click", (): void => {
   commandHistory.undoLastCommand();
 });
 
-buttonRefazer?.addEventListener("click", (): void => {
+spanButtonRefazer?.addEventListener("click", (): void => {
   commandHistory.redoLastCommand();
 });
 
-buttonCopiar?.addEventListener("click", async (): Promise<void> => {
+spanButtonCopiar?.addEventListener("click", async (): Promise<void> => {
   const { CopiarComponenteCommandBuilder } =
     await import("infrastructure/command/copiarComponenteCommand");
 
@@ -621,7 +646,7 @@ buttonCopiar?.addEventListener("click", async (): Promise<void> => {
   commandHistory.saveAndExecuteCommand(command);
 });
 
-buttonColar?.addEventListener("click", async (): Promise<void> => {
+spanButtonColar?.addEventListener("click", async (): Promise<void> => {
   const { ColarComponenteCommandBuilder } =
     await import("infrastructure/command/colarComponenteCommand");
 
@@ -635,7 +660,7 @@ buttonColar?.addEventListener("click", async (): Promise<void> => {
   commandHistory.saveAndExecuteCommand(command);
 });
 
-buttonCortar?.addEventListener("click", async (): Promise<void> => {
+spanButtonCortar?.addEventListener("click", async (): Promise<void> => {
   const { CortarComponenteCommandBuilder } =
     await import("infrastructure/command/cortarComponenteCommand");
 
@@ -700,7 +725,7 @@ function fecharAba(event: MouseEvent): void {
   selecionadorAba.selecionarAba(proximaAba);
 }
 
-buttonNovaAba?.addEventListener("click", async (): Promise<void> => {
+async function criarNovaAba(): Promise<void> {
   const { default: criarAba } = await import("infrastructure/services/criarAba");
   let novaAba: Aba = await criarAba(geradorIDAba.pegarProximoID(), fecharAba);
 
@@ -711,7 +736,9 @@ buttonNovaAba?.addEventListener("click", async (): Promise<void> => {
   novaAba.htmlElement.addEventListener("click", (): void => {
     selecionadorAba.selecionarAba(novaAba);
   });
-});
+}
+
+buttonNovaAba?.addEventListener("click", criarNovaAba);
 
 /********************/
 /* IMPORTAR ARQUIVO */
@@ -739,8 +766,8 @@ fileInput.addEventListener("input", async (event: InputEvent): Promise<void> => 
   await importadorDiagramas.carregarArquivo(event);
 });
 
-let buttonImportar: HTMLButtonElement | null = document.querySelector("#btn-importar");
-buttonImportar?.addEventListener("click", (): void => {
+let spanButtonImportar: HTMLSpanElement | null = document.querySelector("#abrir");
+spanButtonImportar?.addEventListener("click", (): void => {
   fileInput.click();
 });
 

@@ -11,11 +11,13 @@
  *
  */
 
-package io.github.heberbarra.modelador.domain.model;
+package io.github.heberbarra.modelador.domain.model.dto;
 
 import java.time.LocalDateTime;
 
 public class AtividadeDTO {
+
+    public AtividadeDTO() {}
 
     public AtividadeDTO(
             String titulo, LocalDateTime datePostagem, LocalDateTime dataLimite, boolean isProva, String descricao) {
@@ -26,11 +28,20 @@ public class AtividadeDTO {
         this.descricao = descricao;
     }
 
+    int codigo;
     String titulo;
     LocalDateTime dataPostagem;
     LocalDateTime dataLimite;
     String descricao;
     boolean isProva;
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
 
     public String getTitulo() {
         return titulo;

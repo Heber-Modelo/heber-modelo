@@ -17,11 +17,11 @@
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <link rel="stylesheet" th:href="@{/css/criarAtividade.css}" />
     <script th:src="@{/javascript/criarAtividade.js}" defer></script>
+    <title th:text="#{web.page.create-assignment.title}"></title>
     <meta name="_csrf" th:content="${_csrf.token}" />
   </head>
   <body>
     <header th:replace="~{fragments/header :: header}"></header>
-
     <main>
       <form method="post" th:action="@{criarAtividade}">
         <h1 th:text="#{web.page.create-assignment.title}"></h1>
@@ -29,13 +29,11 @@
           <span class="campos-texto" th:text="#{web.page.create-assignment.label.title}"></span>
           <input type="text" name="title" required />
         </label>
-
         <div class="radioButton">
           <span
             class="campos-texto"
             th:text="#{web.page.create-assignment.label.check-type}"
           ></span>
-
           <div class="opcoes-radiobutton">
             <label>
               <span class="campos-texto" th:text="#{web.page.create-assignment.label.yes}"></span>
@@ -47,7 +45,6 @@
             </label>
           </div>
         </div>
-
         <div class="date-row">
           <label>
             <span
@@ -56,7 +53,6 @@
             ></span>
             <input type="datetime-local" name="posting-date" required />
           </label>
-
           <label>
             <span
               class="campos-texto"
@@ -65,11 +61,9 @@
             <input type="datetime-local" name="deadline" required />
           </label>
         </div>
-
         <div class="description-field">
           <div></div>
         </div>
-
         <div id="botoes">
           <button id="cancelar" type="button">
             <a th:href="@{index.html}" th:text="#{web.page.session.button.cancel}"></a>

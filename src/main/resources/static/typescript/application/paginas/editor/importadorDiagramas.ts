@@ -142,6 +142,10 @@ export default class ImportadorDiagramas {
     let numeroAbaPadrao: HTMLElement | null = this._abaPadrao.htmlElement.querySelector(
       `.${Aba.CLASSE_NUMERO_ABA}`,
     );
+    this._abaPadrao.htmlElement.setAttribute(
+      Aba.ATRIBUTO_NOME_DIAGRAMA_ABA,
+      this._dados.tabs[0].nomeDiagramaAba,
+    );
 
     if (numeroAbaPadrao) {
       numeroAbaPadrao.innerText = this._dados.tabs[0].nome;
@@ -159,6 +163,8 @@ export default class ImportadorDiagramas {
       if (htmlElementNumeroAba) {
         htmlElementNumeroAba.innerText = tab.nome;
       }
+
+      novaAba.htmlElement.setAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA, tab.nomeDiagramaAba);
 
       this._repositorioAbas.adicionar(novaAba);
 

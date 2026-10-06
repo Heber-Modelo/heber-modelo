@@ -99,11 +99,7 @@
     },
     {
       "nomeVariavel": "cor_fonte_clara",
-      "valorPadraoVariavel": "#A2A2A2"
-    },
-    {
-      "nomeVariavel": "cor_fundo_menu",
-      "valorPadraoVariavel": "#F1F1F1"
+      "valorPadraoVariavel": "#EEEEEE"
     },
     {
       "nomeVariavel": "cor_fundo_area_de_edicao",
@@ -112,6 +108,18 @@
     {
       "nomeVariavel": "cor_borda_aba_selecionada",
       "valorPadraoVariavel": "#5E01AF"
+    },
+    {
+      "nomeVariavel": "cor_hover_botao_funcao",
+      "valorPadraoVariavel": "#9355CA"
+    },
+    {
+      "nomeVariavel": "cor_fundo_menu_escuro",
+      "valorPadraoVariavel": "#360066"
+    },
+    {
+      "nomeVariavel": "cor_fundo_menu_mais_escuro",
+      "valorPadraoVariavel": "#240045"
     }
   ]
 }

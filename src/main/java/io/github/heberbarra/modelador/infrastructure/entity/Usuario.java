@@ -24,7 +24,7 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(long matricula, String email, String nome, String senha, String tipo) {
+    public Usuario(String matricula, String email, String nome, String senha, String tipo) {
         this.matricula = matricula;
         this.email = email;
         this.nome = nome;
@@ -34,7 +34,7 @@ public class Usuario {
 
     @Id
     @Column(name = "matricula_usuario")
-    private long matricula;
+    private String matricula;
 
     @Column(name = "email_usuario", unique = true, nullable = false)
     private String email;
@@ -48,11 +48,11 @@ public class Usuario {
     @Column(name = "tipo_usuario")
     private String tipo;
 
-    public long getMatricula() {
+    public String getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(long matricula) {
+    public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
 

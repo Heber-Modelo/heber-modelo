@@ -28,8 +28,8 @@
       </button>
       <h1 th:text="${programa}"></h1>
       <div id="opcoes-botoes">
-        <button>
-          <th:block th:replace="~{fragments/listagemEstudantes/icons/notify :: svg}"></th:block>
+        <button th:title="${tokenTrocarSenha}">
+          <th:block th:text="#{web.page.students-list.label.change-password-token}"></th:block>
         </button>
         <button>
           <a th:href="@{configurarSessao.html}" th:title="#{web.page.session-configuration.title}">
@@ -48,7 +48,7 @@
       >
         <a
           th:href="'perfil/' + ${professor.getMatricula()}"
-          th:insert="~{fragments/listagemEstudantes/icons/profile :: svg}"
+          th:insert="~{fragments/common/icons/profile :: svg}"
         ></a>
         <span th:text="${professor.getNome()}"></span>
         <a th:href="'mailto:' + ${professor.getEmail()}">
@@ -60,7 +60,7 @@
       <div class="user-data" th:each="student : ${students}" th:title="${student.getMatricula()}">
         <a
           th:href="'perfil/' + ${student.getMatricula()}"
-          th:insert="~{fragments/listagemEstudantes/icons/profile :: svg}"
+          th:insert="~{fragments/common/icons/profile :: svg}"
         ></a>
         <span th:text="${student.getNome()}"></span>
         <a th:href="'mailto:' + ${student.getEmail()}">

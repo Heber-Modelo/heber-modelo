@@ -13,6 +13,7 @@
 
 export default class Aba {
   public static readonly ATRIBUTO_INDICE_ABA: string = "data-indice-aba";
+  public static readonly ATRIBUTO_NOME_DIAGRAMA_ABA: string = "data-nome-diagrama-aba";
   public static readonly CLASSE_ABA: string = "aba";
   public static readonly CLASSE_NUMERO_ABA: string = "numero-aba";
 
