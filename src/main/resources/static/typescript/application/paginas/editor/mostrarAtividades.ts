@@ -116,11 +116,13 @@ btnLimparSelecaoAssignments?.addEventListener("click", (): void => {
   atividadeSelecionadaWrapper?.style.setProperty("display", "none");
 });
 
-/*****************/
-/* INICIAR PROVA */
-/*****************/
+/**************************/
+/* INICIAR/ENCERRAR PROVA */
+/**************************/
 
-let buttonsIniciarProva: NodeListOf<HTMLButtonElement> = document.querySelectorAll("div#tests-list button");
+let buttonEnviar: HTMLButtonElement | null = document.querySelector("#btn-enviar-atividade");
+let buttonsIniciarProva: NodeListOf<HTMLButtonElement> =
+  document.querySelectorAll("div#tests-list button");
 
 buttonsIniciarProva.forEach((buttonIniciarProva: HTMLButtonElement): void => {
   buttonIniciarProva.addEventListener("click", async (event: MouseEvent): Promise<void> => {
@@ -135,7 +137,8 @@ buttonsIniciarProva.forEach((buttonIniciarProva: HTMLButtonElement): void => {
     let buttonAbrirArquivo: HTMLSpanElement | null = document.querySelector("#abrir");
     let buttonNovoArquivo: HTMLSpanElement | null = document.querySelector("#novo");
     let buttonHome: HTMLButtonElement | null = document.querySelector("header > button");
-    let detailsAssignments: HTMLDetailsElement | null = document.querySelector("details#assignments");
+    let detailsAssignments: HTMLDetailsElement | null =
+      document.querySelector("details#assignments");
     let sectionAtividade: HTMLElement | null = document.querySelector("#atividades");
 
     buttonAbrirArquivo?.remove();
@@ -150,10 +153,43 @@ buttonsIniciarProva.forEach((buttonIniciarProva: HTMLButtonElement): void => {
     let response: Response = await fetch("/tempoLimiteSegundosTimeout", {
       method: "GET",
       headers: {
-        "X-XSRF-TOKEN": csrfToken
+        "X-XSRF-TOKEN": csrfToken,
+      },
+    });
+
+    let temporalAgora: Temporal.PlainDateTime = Temporal.PlainDateTime.from(
+      dataEntregaWrapper?.value || "",
+    );
+    let temporalLimiteProva: Temporal.PlainDateTime = Temporal.Now.plainDateTimeISO();
+    let tempoLimiteAusencia: number = Number(await response.text()) * 1000;
+    let timeoutAtivo: boolean = false;
+    let setTimeoutId: number;
+
+    buttonEnviar?.addEventListener("click", (event: MouseEvent): void => {
+      (event.target as HTMLButtonElement).remove();
+    });
+
+    let duracaoProva: number = Math.abs(
+      temporalAgora.until(temporalLimiteProva).total("millisecond"),
+    );
+    setTimeout((): void => {
+      buttonEnviar?.click();
+      buttonEnviar?.remove();
+    }, duracaoProva);
+
+    document.addEventListener("visibilitychange", (): void => {
+      if (timeoutAtivo) {
+        clearTimeout(setTimeoutId);
+      } else {
+        setTimeoutId = setTimeout((): void => {
+          buttonEnviar?.click();
+          buttonEnviar?.remove();
+        }, tempoLimiteAusencia);
       }
-    })
+
+      timeoutAtivo = !timeoutAtivo;
+    });
 
     window.alert(await traduzirChaveI18n("web.page.editor.started-test"));
-  })
+  });
 });
