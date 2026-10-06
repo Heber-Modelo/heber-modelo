@@ -1,0 +1,244 @@
+/*!
+ * Copyright (c) 2026. Heber Ferreira Barra, João Gabriel de Cristo, Matheus Jun Alves Matuda.
+ *
+ * Licensed under the Massachusetts Institute of Technology (MIT) License.
+ * You may obtain a copy of the license at:
+ *
+ *    https://choosealicense.com/licenses/mit/
+ *
+ * A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+ * Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+ *
+ */
+
+#menu-fechado,
+.menu input {
+  display: none;
+}
+
+.menu {
+  display: inline-block;
+  position: relative;
+  z-index: 50;
+}
+
+.menu-titulo {
+  background-color: transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: block;
+  font-family: Arial, sans-serif;
+  font-size: 1.5rem;
+  padding: 0.5rem 0.8rem;
+  position: relative;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  z-index: 50;
+
+  &:hover {
+    background-color: var(--cor-hover-botao-funcao);
+  }
+
+}
+
+.menu-fechar {
+  display: none;
+}
+
+.file {
+  align-content: center;
+  grid-column: 2;
+  grid-row: 1;
+  justify-items: center;
+}
+
+.edit:has(#file-menu:checked), .file:has(#file-menu:checked) {
+  .menu-abrir {
+    display: none;
+  }
+
+  .menu-fechar {
+    display: block;
+  }
+
+  .mostrar {
+    display: block;
+  }
+}
+
+.edit {
+  align-content: center;
+  grid-column: 3;
+  grid-row: 1;
+  justify-items: start;
+}
+
+.edit:has(#edit-menu:checked) {
+  .menu-abrir {
+    display: none;
+  }
+
+  .menu-fechar {
+    display: block;
+  }
+
+  .mostrar {
+    display: block;
+  }
+}
+
+.mostrar {
+  background-color: var(--cor-fundo-menu-escuro);
+  border-radius: 0.75rem;
+  display: none;
+  left: 0;
+  min-width: 20rem;
+  padding: 1rem;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  z-index: 50;
+}
+
+.mostrar span {
+  align-items: center;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: var(--cor-fonte-clara);
+  cursor: pointer;
+  display: flex;
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+  padding: 0.9rem 1.2rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  width: 100%;
+
+  &:hover {
+    background-color: var(--cor-hover-botao-funcao);
+    color: var(--cor-letra);
+  }
+
+}
+
+.fechar-fora {
+  cursor: default;
+  display: none;
+  inset: 0;
+  position: fixed;
+  z-index: 40;
+}
+
+header:has(#file-menu:checked) .fechar-fora,
+header:has(#edit-menu:checked) .fechar-fora {
+  display: block;
+}
+
+.file:has(#file-menu:checked) .menu-titulo,
+.edit:has(#edit-menu:checked) .menu-titulo {
+  background-color: var(--cor-hover-botao-funcao);
+  color: var(--cor-letra);
+}
+
+.submenu {
+  position: relative;
+  width: 100%;
+}
+
+.submenu > input {
+  display: none;
+}
+
+.submenu-titulo {
+  align-items: center;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: var(--cor-fonte-clara);
+  cursor: pointer;
+  display: flex;
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+  justify-content: space-between;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.submenu-titulo:hover {
+  background-color: var(--cor-hover-botao-funcao);
+  color: var(--cor-letra);
+}
+
+.submenu-fechar {
+  display: none;
+}
+
+.submenu-mostrar {
+  background-color: var(--cor-fundo-menu-mais-escuro);
+  border-radius: 0.75rem;
+  display: none;
+  left: calc(100% + 0.45rem);
+  min-width: 12rem;
+  padding: 1rem;
+  position: absolute;
+  top: 0;
+  z-index: 60;
+}
+
+.submenu-mostrar span {
+  align-items: center;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: var(--cor-fonte-clara);
+  cursor: pointer;
+  display: flex;
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+  padding: 0.9rem 1.2rem;
+  white-space: nowrap;
+  width: 100%;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.submenu-mostrar span:hover {
+  background-color: var(--cor-hover-botao-funcao);
+  color: var(--cor-letra);
+}
+
+.submenu:has(#submenu-salvar:checked) {
+  .submenu-abrir {
+    display: none;
+  }
+
+  .submenu-fechar {
+    display: flex;
+  }
+
+  .submenu-mostrar {
+    display: block;
+  }
+}
+
+.submenu:has(#submenu-exportar:checked) {
+  .submenu-abrir {
+    display: none;
+  }
+
+  .submenu-fechar {
+    display: flex;
+  }
+
+  .submenu-mostrar {
+    display: block;
+  }
+}
+
+.submenu:has(#submenu-salvar:checked, #submenu-exportar:checked) .submenu-titulo{
+  background-color: var(--cor-hover-botao-funcao);
+  color: var(--cor-letra);
+}
