@@ -220,6 +220,8 @@ public class ControladorLogin {
                 roteador.setEstadoTrocarSenha(ESPERANDO);
                 return ResponseEntity.ok().build();
             }
+
+            roteador.setEstadoTrocarSenha(ESPERANDO);
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
