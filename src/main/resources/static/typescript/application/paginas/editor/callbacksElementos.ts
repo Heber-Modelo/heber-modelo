@@ -16,6 +16,34 @@ const callbackInverterAtributo = (event: MouseEvent): void => {
   }
 };
 
+const girarEspecializacaoDireita = (event: MouseEvent): void => {
+  let especializacao: HTMLElement = (event.target as HTMLElement).parentElement as HTMLElement;
+  let rotacaoAtual: string = especializacao.style.getPropertyValue("rotate");
+
+  if (rotacaoAtual === "") {
+    especializacao.style.setProperty("rotate", "-90deg");
+    return;
+  }
+
+  let valorNumericoRotacao: number = Number(rotacaoAtual.substring(0, rotacaoAtual.length - 3));
+  valorNumericoRotacao -= 90;
+  especializacao.style.setProperty("rotate", `${valorNumericoRotacao}deg`);
+};
+
+const girarEspecializacaoEsquerda = (event: MouseEvent): void => {
+  let especializacao: HTMLElement = (event.target as HTMLElement).parentElement as HTMLElement;
+  let rotacaoAtual: string = especializacao.style.getPropertyValue("rotate");
+
+  if (rotacaoAtual === "") {
+    especializacao.style.setProperty("rotate", "90deg");
+    return;
+  }
+
+  let valorNumericoRotacao: number = Number(rotacaoAtual.substring(0, rotacaoAtual.length - 3));
+  valorNumericoRotacao += 90;
+  especializacao.style.setProperty("rotate", `${valorNumericoRotacao}deg`);
+};
+
 /*********************************/
 /* Diagrama do Modelo Relacional */
 /*********************************/
