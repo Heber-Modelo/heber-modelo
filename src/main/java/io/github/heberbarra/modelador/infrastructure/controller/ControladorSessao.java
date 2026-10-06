@@ -100,8 +100,8 @@ public class ControladorSessao {
         taskExecutor.execute(() -> {
             IConfigurador configurador = ConfiguradorFactory.build();
             configuracaoSessao = new ConfiguracaoSessao(configurador
-                    .pegarValorConfiguracao("prova", "limiteSegundosSemFoco", Long.class)
-                    .orElseGet(() -> 5l));
+                    .pegarValorConfiguracao("prova", "limiteSegundosSemFoco", long.class)
+                    .orElse(5L));
 
             AcessadorSegundosTimeoutTeste acessadorSegundosTimeoutTeste =
                     new AcessadorSegundosTimeoutTeste(configuracaoSessao);
@@ -176,6 +176,7 @@ public class ControladorSessao {
         InjetorAtributos.injetarPaleta(modelMap);
 
         modelMap.addAttribute("configuracao", configuracaoSessao);
+        modelMap.addAttribute("tokenTrocarSenha", TOKEN_TROCAR_SENHA);
 
         return "configurarSessao";
     }

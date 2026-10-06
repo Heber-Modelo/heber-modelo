@@ -21,6 +21,10 @@
     <main>
       <form action="/configurarSessao" method="post">
         <label>
+          <span class="campos-texto" th:text="#{session.config.change-password-token}"></span>
+          <input type="text" th:value="${tokenTrocarSenha}" readonly />
+        </label>
+        <label>
           <span class="campos-texto" th:text="#{session.config.test-lose-focus-timeout}"></span>
           <input th:name="secondsTimeout" th:value="${configuracao.getSecondsTimeout()}" required />
         </label>
