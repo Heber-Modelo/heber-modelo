@@ -1,6 +1,6 @@
 {
   "$schema": ".elemento.schema.json",
-  "valorHtmlInterno": "<div></div>",
+  "valorHtmlInterno": "<div></div><button class=\"btn-esquerdo\" onmouseup=\"girarEspecializacaoEsquerda(event)\">&lt;</button><button class=\"btn-direito\" onmouseup=\"girarEspecializacaoDireita(event)\">&gt;</button>",
   "classesElemento": ["elemento-especializacao"],
   "recebePontoExtensor": true,
   "recebeSetaConectora": true,
