@@ -225,31 +225,41 @@ public class ControladorWeb {
 
         Optional<Boolean> exibirGrade = configurador.pegarValorConfiguracao("grade", "exibir", boolean.class);
         if (exibirGrade.isPresent() && exibirGrade.get()) {
-            Optional<Long> tamanhoQuadradoGrade =
+            Optional<Long> optionalTamanhoQuadradoGrade =
                     configurador.pegarValorConfiguracao("grade", "tamanho_quadrado_px", long.class);
-            Optional<Long> espessuraGrade = configurador.pegarValorConfiguracao("grade", "espessura", long.class);
-            Optional<Boolean> modoAvancadoEditorPropriedades =
+            Optional<Long> optionalEspessuraGrade =
+                    configurador.pegarValorConfiguracao("grade", "espessura", long.class);
+            Optional<Boolean> optionalModoAvancadoEditorPropriedades =
                     configurador.pegarValorConfiguracao("editor", "modoAvancadoEditorPropriedades", boolean.class);
 
-            if (tamanhoQuadradoGrade.isPresent()
-                    && espessuraGrade.isPresent()
-                    && modoAvancadoEditorPropriedades.isPresent()) {
-                modelMap.addAttribute("tamanhoQuadradoGrade", tamanhoQuadradoGrade.get() + "px");
-                modelMap.addAttribute("espessuraGrade", espessuraGrade.get() + "px");
-                modelMap.addAttribute("modoAvancadoEditorPropriedades", modoAvancadoEditorPropriedades.get());
-            }
+            optionalEspessuraGrade.ifPresent(
+                    (Long espessuraGrade) -> modelMap.addAttribute("espessuraGrade", espessuraGrade + "px"));
+            optionalModoAvancadoEditorPropriedades.ifPresent(
+                    (Boolean modoAvancado) -> modelMap.addAttribute("modoAvancadoEditorPropriedades", modoAvancado));
+            optionalTamanhoQuadradoGrade.ifPresent(
+                    (Long tamanhoQuadrado) -> modelMap.addAttribute("tamanhoQuadradoGrade", tamanhoQuadrado + "px"));
         }
 
-        modelMap.addAttribute(
-                "incrementoMovimentacaoElemento",
-                configurador
-                        .pegarValorConfiguracao("editor", "incrementoMovimentacaoElemento", long.class)
-                        .orElse(0L));
-        modelMap.addAttribute(
-                "abasExclusivas",
-                configurador
-                        .pegarValorConfiguracao("editor", "abasExclusivas", boolean.class)
-                        .orElse(true));
+        Optional<Boolean> optionalAbasExclusivas =
+                configurador.pegarValorConfiguracao("editor", "abasExclusivas", boolean.class);
+        optionalAbasExclusivas.ifPresent(
+                (Boolean abasExclusivas) -> modelMap.addAttribute("abasExclusivas", abasExclusivas));
+        Optional<Long> optionalIncrementoMovimentacao =
+                configurador.pegarValorConfiguracao("editor", "incrementoMovimentacaoElemento", long.class);
+        optionalIncrementoMovimentacao.ifPresent(
+                (Long incremento) -> modelMap.addAttribute("incrementoMovimentacaoElemento", incremento));
+        Optional<Double> optionalPDFAlturaFolha =
+                configurador.pegarValorConfiguracao("editor", "salvarPDFAlturaFolhaMM", double.class);
+        optionalPDFAlturaFolha.ifPresent((Double altura) -> modelMap.addAttribute("pdfAlturaFolha", altura));
+        Optional<Double> optionalPDFLarguraFolha =
+                configurador.pegarValorConfiguracao("editor", "salvarPDFLarguraFolhaMM", double.class);
+        optionalPDFLarguraFolha.ifPresent((Double largura) -> modelMap.addAttribute("pdfLarguraFolha", largura));
+        Optional<Long> optionalPNGAltura =
+                configurador.pegarValorConfiguracao("editor", "salvarPNGAlturaPixeis", long.class);
+        optionalPNGAltura.ifPresent((Long altura) -> modelMap.addAttribute("alturaPNG", altura));
+        Optional<Long> optionalPNGLargura =
+                configurador.pegarValorConfiguracao("editor", "salvarPNGLarguraPixeis", long.class);
+        optionalPNGLargura.ifPresent((Long largura) -> modelMap.addAttribute("larguraPNG", largura));
 
         if (!ControladorSessao.isSessaoInativa()) {
             List<Atividade> atividades = this.atividadeRepositorio.findAllByDataPostagemBefore(LocalDateTime.now());

@@ -16,6 +16,10 @@
       configurarGrade("--espessura-grade", "[(${espessuraGrade})]");
       configurarGrade("--tamanho-quadrado-grade", "[(${tamanhoQuadradoGrade})]");
       incrementoMovimentacao = Number("[(${incrementoMovimentacaoElemento})]");
+      pdfAlturaFolha = Number("[(${pdfAlturaFolha})]");
+      pdfLarguraFolha = Number("[(${pdfLarguraFolha})]");
+      pngAlturaImagem = Number("[(${alturaPNG})]");
+      pngLarguraImagem = Number("[(${larguraPNG})]");
       utilizarAbasExclusivas = "[(${abasExclusivas})]" === "true";
     </script>
     <meta name="_csrf" th:content="${_csrf.token}" />
