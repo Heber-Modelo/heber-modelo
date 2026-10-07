@@ -1,12 +1,17 @@
 .elemento-atributo {
   background-color: transparent;
-  border: none;
+  border-color: transparent;
   width: fit-content;
   height: fit-content;
   padding: 1rem 0;
 
   &:hover {
     background-color: transparent;
+    border-color: var(--cor-borda-componente-selecionado);
+  }
+
+  &.selected {
+    border-color: var(--cor-borda-componente-selecionado);
   }
 
   .nome {
@@ -16,6 +21,7 @@
   .marcador-atributo {
     border: solid 0.1rem var(--cor-borda);
     border-radius: 50%;
+    cursor: pointer;
     width: 1rem;
     aspect-ratio: 1 / 1;
     margin: 0.2rem 0;
