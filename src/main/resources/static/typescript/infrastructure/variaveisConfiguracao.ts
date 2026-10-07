@@ -12,4 +12,8 @@
  */
 
 let incrementoMovimentacao: number;
+let pdfAlturaFolha: number;
+let pdfLarguraFolha: number;
+let pngAlturaImagem: number;
+let pngLarguraImagem: number;
 let utilizarAbasExclusivas: boolean;

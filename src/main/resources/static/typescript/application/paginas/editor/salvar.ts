@@ -43,16 +43,6 @@ function extrairElementosLista(tipos: string | null | undefined): string[] {
     .map((tipo: string): string => tipo.trim());
 }
 
-function fecharTagDetails(elementoInicial: HTMLElement): void {
-  let elemento: HTMLElement | null | undefined = elementoInicial;
-
-  while (!(elemento instanceof HTMLDetailsElement)) {
-    elemento = elemento?.parentElement;
-  }
-
-  elemento.open = false;
-}
-
 function coletarAbas(elementosAbas: NodeListOf<HTMLDivElement>): AbaJSON[] {
   let abas: AbaJSON[] = [];
 
@@ -226,7 +216,7 @@ function downloadFile(url: string, filename: string): void {
   temporaryDownloadAnchor.remove();
 }
 
-async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
+async function salvar(tipoArquivo: TipoArquivo): Promise<void> {
   let dataCriado: Date = new Date();
   let tiposDiagrama: string[] = extrairElementosLista(seletorTipoDiagrama?.innerText);
 
@@ -285,6 +275,7 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   let xhtmlWrapperElement: HTMLElement = document.createElement("div");
   document.body.append(xhtmlWrapperElement);
   xhtmlWrapperElement.innerHTML = xhtml.split("<body>")[1].split("</body>")[0];
+  xhtmlWrapperElement.id = "xhtml-wrapper";
   let paginasXHTML: NodeListOf<HTMLElement> = xhtmlWrapperElement.querySelectorAll(
     "fieldset[data-indice-aba]",
   );
@@ -299,7 +290,15 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
     let images: string[] = await Promise.all(
       paginasXHTML
         .values()
-        .map(async (pagina: HTMLElement): Promise<string> => toSvg(pagina, { quality: 1 }))
+        .map(async (pagina: HTMLElement): Promise<string> =>
+          toSvg(pagina, {
+            quality: 1,
+            canvasHeight: pngAlturaImagem,
+            canvasWidth: pngLarguraImagem,
+            height: pngAlturaImagem,
+            width: pngLarguraImagem,
+          }),
+        )
         .toArray(),
     );
 
@@ -317,7 +316,15 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   let images: string[] = await Promise.all(
     paginasXHTML
       .values()
-      .map(async (pagina: HTMLElement): Promise<string> => toPng(pagina, { quality: 1 }))
+      .map(async (pagina: HTMLElement): Promise<string> =>
+        toPng(pagina, {
+          quality: 1,
+          canvasHeight: pngAlturaImagem,
+          canvasWidth: pngLarguraImagem,
+          height: pngAlturaImagem,
+          width: pngLarguraImagem,
+        }),
+      )
       .toArray(),
   );
   xhtmlWrapperElement.remove();
@@ -333,9 +340,11 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
 
     let formData: FormData = new FormData();
     formData.append("codigoAtividade", codigoAtividade);
-    images.map((image: string): string => image.substring(image.indexOf(",") + 1)).forEach((image: string): void => {
-      formData.append("imagens", image);
-    });
+    images
+      .map((image: string): string => image.substring(image.indexOf(",") + 1))
+      .forEach((image: string): void => {
+        formData.append("imagens", image);
+      });
 
     await fetch("/enviarAtividade", {
       method: "POST",
@@ -350,12 +359,10 @@ async function salvar(event: Event, tipoArquivo: TipoArquivo): Promise<void> {
   }
 
   if (tipoArquivo === TipoArquivo.PDF) {
-    const pdfDocument = new jsPDF("landscape", "mm", [1920, 1080]);
-    let pdfHeight: number = pdfDocument.internal.pageSize.getHeight();
-    let pdfWidth: number = pdfDocument.internal.pageSize.getWidth();
+    const pdfDocument = new jsPDF("landscape", "mm", [pdfLarguraFolha, pdfAlturaFolha]);
 
     for (let i: number = 0; i < images.length; i++) {
-      pdfDocument.addImage(images[i], "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdfDocument.addImage(images[i], "PNG", 0, 0, pdfLarguraFolha, pdfAlturaFolha);
 
       if (i !== images.length - 1) {
         pdfDocument.addPage();
@@ -381,24 +388,12 @@ let spanButtonExportarSVG: HTMLSpanElement | null = document.querySelector("#exp
 let buttonEnviarAtividade: HTMLButtonElement | null =
   document.querySelector("#btn-enviar-atividade");
 
-spanButtonSalvarJSON?.addEventListener("click", (event: MouseEvent): Promise<void> =>
-  salvar(event, TipoArquivo.JSON),
-);
-spanButtonSalvarXML?.addEventListener("click", (event: MouseEvent): Promise<void> =>
-  salvar(event, TipoArquivo.XML),
-);
-spanButtonExportarPDF?.addEventListener("click", (event: MouseEvent): Promise<void> =>
-  salvar(event, TipoArquivo.PDF),
-);
+spanButtonSalvarJSON?.addEventListener("click", (): Promise<void> => salvar(TipoArquivo.JSON));
+spanButtonSalvarXML?.addEventListener("click", (): Promise<void> => salvar(TipoArquivo.XML));
+spanButtonExportarPDF?.addEventListener("click", (): Promise<void> => salvar(TipoArquivo.PDF));
 
-spanButtonExportarPNG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
-  salvar(event, TipoArquivo.PNG),
-);
+spanButtonExportarPNG?.addEventListener("click", (): Promise<void> => salvar(TipoArquivo.PNG));
 
-spanButtonExportarSVG?.addEventListener("click", (event: MouseEvent): Promise<void> =>
-  salvar(event, TipoArquivo.SVG),
-);
+spanButtonExportarSVG?.addEventListener("click", (): Promise<void> => salvar(TipoArquivo.SVG));
 
-buttonEnviarAtividade?.addEventListener("click", (event: MouseEvent): Promise<void> =>
-  salvar(event, TipoArquivo.BANCO),
-);
+buttonEnviarAtividade?.addEventListener("click", (): Promise<void> => salvar(TipoArquivo.BANCO));

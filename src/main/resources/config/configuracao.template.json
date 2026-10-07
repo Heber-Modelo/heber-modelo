@@ -180,6 +180,30 @@
       "atributo": "limiteSegundosSemFoco",
       "tipo": "Long",
       "valorPadrao": 5
+    },
+    {
+      "categoria": "editor",
+      "atributo": "salvarPDFAlturaFolhaMM",
+      "tipo": "Double",
+      "valorPadrao": 210.0
+    },
+    {
+      "categoria": "editor",
+      "atributo": "salvarPDFLarguraFolhaMM",
+      "tipo": "Double",
+      "valorPadrao": 297.0
+    },
+    {
+      "categoria": "editor",
+      "atributo": "salvarPNGAlturaPixeis",
+      "tipo": "Long",
+      "valorPadrao": 2160
+    },
+    {
+      "categoria": "editor",
+      "atributo": "salvarPNGLarguraPixeis",
+      "tipo": "Long",
+      "valorPadrao": 3820
     }
   ]
 }

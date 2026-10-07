@@ -384,3 +384,13 @@ fieldset#conexoes-basicas {
     width: 100%;
   }
 }
+
+div#xhtml-wrapper {
+  overflow: scroll;
+
+  fieldset {
+    justify-content: unset;
+    overflow: scroll;
+  }
+
+}
