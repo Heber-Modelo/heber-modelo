@@ -24,11 +24,11 @@ body:has(fieldset[data-nome-aba]) {
   align-items: center;
   display: grid;
   grid-template-areas: variaveis.$editorGridAreaString;
-  justify-content: center;
   height: fit-content;
   width: fit-content;
   min-height: 100vh;
   min-width: 95vw;
+  overflow: scroll;
 
   .componente {
     z-index: 0;
