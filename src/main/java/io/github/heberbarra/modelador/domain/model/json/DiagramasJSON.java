@@ -97,7 +97,11 @@ public class DiagramasJSON implements XHTMLConvertable {
         builder.append("}%n</style>%n".formatted());
 
         for (String cssFile : this.loadedCSSFiles) {
-            builder.append("<style>%s</style>%n".formatted(this.loadCSSData(cssFile)));
+            String cssData = this.loadCSSData(cssFile);
+            int indexFinalCopyright = cssData.lastIndexOf("*/");
+
+            String cssDataNoCopyright = cssData.substring(indexFinalCopyright == -1 ? 0 : indexFinalCopyright + 2);
+            builder.append("<style>%s</style>%n".formatted(cssDataNoCopyright));
         }
 
         builder.append("</head>%n<body>%n".formatted());
