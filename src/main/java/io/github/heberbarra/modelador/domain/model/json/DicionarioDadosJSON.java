@@ -110,8 +110,25 @@ public class DicionarioDadosJSON implements XHTMLConvertable {
         return builder.toString();
     }
 
+    private @NonNull List<String> regularizarValoresLista(@NonNull List<String> valoresOriginais) {
+        return valoresOriginais.stream()
+                .map((String valorOriginal) ->
+                        valorOriginal.replace("&nbsp;", "").replace("<br><br>", "<br></br>"))
+                .toList();
+    }
+
     private @NonNull StringBuilder createBuilder(String tableHeader) {
         StringBuilder builder = new StringBuilder(tableHeader);
+
+        atributos = regularizarValoresLista(atributos);
+        descricoes = regularizarValoresLista(descricoes);
+        tipos = regularizarValoresLista(tipos);
+        tamanhos = regularizarValoresLista(tamanhos);
+        nulos = regularizarValoresLista(nulos);
+        regras = regularizarValoresLista(regras);
+        chaves = regularizarValoresLista(chaves);
+        defaults = regularizarValoresLista(defaults);
+        unicos = regularizarValoresLista(unicos);
 
         builder.append("<tbody>%n".formatted());
         int rowNumber = descricoes.size();
