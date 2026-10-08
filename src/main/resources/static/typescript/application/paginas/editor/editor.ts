@@ -520,11 +520,29 @@ async function callbackTerminarConexaoAtributo(event: MouseEvent): Promise<void>
     const { CriarComponenteCommandBuilder } =
       await import("infrastructure/command/criarComponenteCommand");
 
+    let indiceAbaAtual: number | undefined = selecionadorAba.abaSelecionada?.id;
+    let componentesVisiveis: NodeListOf<HTMLElement> = document.querySelectorAll(
+      `.componente[data-indice-aba=${indiceAbaAtual}]`,
+    );
+
+    for (const componenteAbaAtual of componentesVisiveis) {
+      let nomeComponente: string | null = componenteAbaAtual.getAttribute(
+        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+      );
+
+      if (
+        nomeComponente === NomesComponente.EDITOR_DESCRICAO_RELACIONAL ||
+        nomeComponente === NomesComponente.TABELA_DICIONARIO_DADOS
+      ) {
+        return;
+      }
+    }
+
     let command = new CriarComponenteCommandBuilder()
       .definirDiagrama(diagrama)
       .definirFabricaComponente(fabricaComponente)
       .definirGeradorIDComponente(geradorIDComponente)
-      .definirNomeElemento(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE)
+      .definirNomeElemento(NomesComponente.ATRIBUTO_DER)
       .definirRegistradorEventosElemento(registradorEventosElemento)
       .definirRepositorioComponentes(repositorioComponentes)
       .definirSelecionadorAba(selecionadorAba)
