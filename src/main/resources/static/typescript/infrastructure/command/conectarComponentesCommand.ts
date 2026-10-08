@@ -134,6 +134,20 @@ export default class ConectarComponentesCommand implements ICommand {
       };
     }
 
+    if (
+      this._primeiroComponente.htmlComponente.getAttribute(
+        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+      ) !== NomesComponente.ENTIDADE &&
+      this._segundoComponente.htmlComponente.getAttribute(
+        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+      ) !== NomesComponente.ENTIDADE
+    ) {
+      return {
+        ok: true,
+        error: undefined,
+      };
+    }
+
     this._fabricaComponente
       .criarComponente(NomesComponente.CARDINALIDADE)
       .then((componente: ComponenteDiagrama): void => {
