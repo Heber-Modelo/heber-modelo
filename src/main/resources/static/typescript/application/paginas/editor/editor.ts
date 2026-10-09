@@ -185,6 +185,18 @@ componentes.forEach((componente: HTMLDivElement): void => {
   registradorEventosElemento.registrarEventos(componente);
 });
 
+/*******************/
+/* CONFIRMAR SAÍDA */
+/*******************/
+
+document
+  .querySelector("button:has(a[title=Home])")
+  ?.addEventListener("click", async (): Promise<void> => {
+    if (window.confirm(await traduzirChaveI18n("web.page.editor.confirm-exit"))) {
+      window.location.href = "/";
+    }
+  });
+
 /**************************/
 /* CARREGAMENTO DIAGRAMAS */
 /**************************/
