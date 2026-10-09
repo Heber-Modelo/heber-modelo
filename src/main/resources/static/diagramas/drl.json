@@ -5,19 +5,14 @@
   "exigeAbaExclusiva": false,
   "elementos": [
     {
-      "nome": "entidade",
-      "tipo": "entidade_relacional",
-      "chaveI18N": "element.entity-relational"
+      "nome": "tabela",
+      "tipo": "tabela_relacional",
+      "chaveI18N": "element.relational-table"
     },
     {
       "nome": "nota",
       "tipo": "nota",
       "chaveI18N": "element.note"
-    },
-    {
-      "nome": "cardinalidade",
-      "tipo": "cardinalidade",
-      "chaveI18N": "element.entity-cardinality"
     },
     {
       "nome": "texto",

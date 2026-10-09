@@ -418,10 +418,10 @@ async function conectarElementos(event: MouseEvent): Promise<void> {
   if (
     conectarComponentesCommandBuilder.primeiroComponente?.htmlComponente.getAttribute(
       ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-    ) === NomesComponente.ENTIDADE_RELACIONAL &&
+    ) === NomesComponente.TABELA_RELACIONAL &&
     conectarComponentesCommandBuilder.segundoComponente?.htmlComponente.getAttribute(
       ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-    ) === NomesComponente.ENTIDADE_RELACIONAL
+    ) === NomesComponente.TABELA_RELACIONAL
   ) {
     const { ConectarDuasEntidadesRelacionaisCommandBuilder } =
       await import("infrastructure/command/conectarDuasEntidadesRelacionaisCommand");

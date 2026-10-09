@@ -37,12 +37,12 @@ body:has(fieldset[data-nome-aba]) {
   .elemento-conexao-angulada, .elemento-conexao-entidade-fraca, .elemento-conexao-seta {
     z-index: -1;
   }
-  .elemento-entidade-relacional .atributo {
+  .elemento-tabela-relacional .atributo {
     height: fit-content;
     width: unset;
   }
 
-  .elemento-entidade-relacional .nome {
+  .elemento-tabela-relacional .nome {
     width: unset;
   }
 
