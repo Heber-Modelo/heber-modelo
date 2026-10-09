@@ -277,6 +277,7 @@ inputsCarregarDiagrama.forEach((input: HTMLInputElement): void => {
     .definirRepositorioTiposDiagrama(repositorioTiposDiagrama)
     .definirSectionComponentes(sectionComponentes)
     .definirSelecionadorAba(selecionadorAba)
+    .definirSelecionadorComponente(selecionadorComponente)
     .definirSeletorAbas(seletorAbas)
     .build();
 
@@ -713,6 +714,7 @@ let abaPadrao: Aba = new Aba(1, htmlElementAbaPadrao);
 repositorioAbas.adicionar(abaPadrao);
 
 abaPadrao.htmlElement.addEventListener("click", (): void => {
+  selecionadorComponente.removerSelecao();
   selecionadorAba.selecionarAba(abaPadrao);
 });
 
@@ -764,6 +766,7 @@ async function criarNovaAba(): Promise<void> {
   repositorioAbas.adicionar(novaAba);
 
   novaAba.htmlElement.addEventListener("click", (): void => {
+    selecionadorComponente.removerSelecao();
     selecionadorAba.selecionarAba(novaAba);
   });
 }
