@@ -16,7 +16,7 @@ package io.github.heberbarra.modelador.infrastructure.assembler;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import io.github.heberbarra.modelador.infrastructure.controller.ControladorRestUsuarios;
+import io.github.heberbarra.modelador.infrastructure.controller.ControladorUsuarios;
 import io.github.heberbarra.modelador.infrastructure.entity.Usuario;
 import org.jspecify.annotations.NonNull;
 import org.springframework.hateoas.EntityModel;
@@ -31,8 +31,8 @@ public class UsuarioModelAssembler
     @NonNull public EntityModel<@NonNull Usuario> toModel(@NonNull Usuario usuario) {
         return EntityModel.of(
                 usuario,
-                linkTo(methodOn(ControladorRestUsuarios.class).one(usuario.getMatricula()))
+                linkTo(methodOn(ControladorUsuarios.class).one(usuario.getMatricula()))
                         .withSelfRel(),
-                linkTo(methodOn(ControladorRestUsuarios.class).all()).withRel("usuários"));
+                linkTo(methodOn(ControladorUsuarios.class).all()).withRel("usuários"));
     }
 }

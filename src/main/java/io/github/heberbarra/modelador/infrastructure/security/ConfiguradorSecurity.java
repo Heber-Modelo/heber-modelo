@@ -39,11 +39,13 @@ public class ConfiguradorSecurity {
                 .requestMatchers(
                         "/atividade",
                         "/atividade/{codigo}",
+                        "/atualizarFeedback",
                         "/configurarSessao",
                         "/configurarSessao.html",
                         "/criarAtividade",
                         "/criarAtividade.html",
                         "/encerrarSessao",
+                        "/feedback/editar/{codigo}",
                         "/listagemAtividades",
                         "/listagemAtividades.html",
                         "/listagemAtividadesCorrecao",
