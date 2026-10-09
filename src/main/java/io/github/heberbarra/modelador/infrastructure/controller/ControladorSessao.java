@@ -49,6 +49,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ControladorSessao {
@@ -186,6 +188,28 @@ public class ControladorSessao {
         ControladorSessao.configuracaoSessao.setSecondsTimeout(configuracaoSessao.getSecondsTimeout());
 
         return "redirect:/listagemEstudantes";
+    }
+
+    @RequestMapping("/tempoLimiteSegundosTimeout")
+    @ResponseBody
+    public Long requisitarTempoLimiteSegundosTimeout() {
+        if (ControladorSessao.getRoteador() instanceof RoteadorSessaoEstudante roteadorSessaoEstudante) {
+            RoteadorSessaoEstudante.setDados("");
+            RoteadorSessaoEstudante.setHeaderDados(ACESSADOR_SEGUNDOS_TIMEOUT_TESTE_HEADER);
+
+            while (roteadorSessaoEstudante.getSegundosTimeout() == null) {
+                try {
+                    //noinspection BusyWait
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            return roteadorSessaoEstudante.getSegundosTimeout();
+        } else {
+            return 0L;
+        }
     }
 
     @EventListener(SpringApplicationShutdownHandlers.class)
