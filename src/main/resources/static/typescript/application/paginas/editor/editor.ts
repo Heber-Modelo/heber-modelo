@@ -649,9 +649,20 @@ spanButtonDeletar?.addEventListener("click", async (): Promise<void> => {
 
     let command = new ApagarTodosComponentesCommandBuilder()
       .definirDiagrama(diagrama)
+      .definirRepositorioAba(repositorioAbas)
       .definirRepositorioComponente(repositorioComponentes)
       .build();
     command.execute();
+
+    selecionadorAba.selecionarAba(abaPadrao);
+
+    let numeroAbaPadrao: HTMLElement | null = abaPadrao.htmlElement.querySelector(".numero-aba");
+    if (numeroAbaPadrao) {
+      numeroAbaPadrao.innerHTML = `1 - ${await traduzirChaveI18n("web.page.editor.label.default-tab")}`;
+    }
+
+    geradorIDAba.id = 1;
+    geradorIDComponente.id = 0;
 
     selecionadorComponente.removerSelecao();
     limparPropriedades(abaPropriedades);
