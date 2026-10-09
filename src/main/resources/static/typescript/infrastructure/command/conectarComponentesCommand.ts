@@ -120,27 +120,23 @@ export default class ConectarComponentesCommand implements ICommand {
         this._diagrama.append(this._componenteConexao.htmlComponente);
       });
 
-    if (
+    let nomePrimeiroComponente: string | null =
       this._primeiroComponente.htmlComponente.getAttribute(
         ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-      ) !== NomesComponente.RELACIONAMENTO &&
-      this._segundoComponente.htmlComponente.getAttribute(
-        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-      ) !== NomesComponente.RELACIONAMENTO
-    ) {
-      return {
-        ok: true,
-        error: undefined,
-      };
-    }
+      );
+    let nomeSegundoComponente: string | null = this._segundoComponente.htmlComponente.getAttribute(
+      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+    );
 
     if (
-      this._primeiroComponente.htmlComponente.getAttribute(
-        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-      ) !== NomesComponente.ENTIDADE &&
-      this._segundoComponente.htmlComponente.getAttribute(
-        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-      ) !== NomesComponente.ENTIDADE
+      (nomePrimeiroComponente !== NomesComponente.RELACIONAMENTO ||
+        nomeSegundoComponente !== NomesComponente.ENTIDADE) &&
+      (nomePrimeiroComponente !== NomesComponente.ENTIDADE ||
+        nomeSegundoComponente !== NomesComponente.RELACIONAMENTO) &&
+      (nomePrimeiroComponente !== NomesComponente.AGREGACAO ||
+        nomeSegundoComponente !== NomesComponente.ENTIDADE) &&
+      (nomePrimeiroComponente !== NomesComponente.ENTIDADE ||
+        nomeSegundoComponente !== NomesComponente.AGREGACAO)
     ) {
       return {
         ok: true,
@@ -164,33 +160,35 @@ export default class ConectarComponentesCommand implements ICommand {
           String(this._geradorIDComponente.pegarProximoID()),
         );
 
-        if (this._componenteConexao === undefined) {
-          return;
-        }
+        setTimeout((): void => {
+          if (this._componenteConexao === undefined) {
+            return;
+          }
 
-        if (
-          this._primeiroComponente.htmlComponente.getAttribute(
-            ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-          ) === NomesComponente.RELACIONAMENTO
-        ) {
-          this._componenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
-            componente.htmlComponente,
-            componente.propriedades,
-            this._segundoComponente,
-            this._componenteConexao,
-            this._primeiroComponente,
-            this._lateralSegundoComponente,
-          );
-        } else {
-          this._componenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
-            componente.htmlComponente,
-            componente.propriedades,
-            this._primeiroComponente,
-            this._componenteConexao,
-            this._segundoComponente,
-            this._lateralPrimeiroComponente,
-          );
-        }
+          if (
+            this._primeiroComponente.htmlComponente.getAttribute(
+              ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+            ) === NomesComponente.ENTIDADE
+          ) {
+            this._componenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
+              componente.htmlComponente,
+              componente.propriedades,
+              this._primeiroComponente,
+              this._componenteConexao,
+              this._segundoComponente,
+              this._lateralPrimeiroComponente,
+            );
+          } else {
+            this._componenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
+              componente.htmlComponente,
+              componente.propriedades,
+              this._segundoComponente,
+              this._componenteConexao,
+              this._primeiroComponente,
+              this._lateralSegundoComponente,
+            );
+          }
+        }, 300);
       });
     return {
       ok: true,
