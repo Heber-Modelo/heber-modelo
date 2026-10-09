@@ -16,15 +16,23 @@ import ICommand, { CommandResult } from "domain/model/command/iCommand";
 import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import ICommandBuilder from "domain/model/command/iCommandBuilder";
+import IRepositorioAbas from "domain/model/repositorio/iRepositorioAbas";
+import Aba from "domain/model/aba";
 
 export default class ApagarTodosComponentesCommand implements ICommand {
-  private readonly _repositorioComponente: IRepositorioComponente;
   private readonly _diagrama: HTMLElement;
+  private readonly _repositorioAba: IRepositorioAbas;
+  private readonly _repositorioComponente: IRepositorioComponente;
   private _componentes: ComponenteDiagrama[] = [];
 
-  constructor(repositorioComponente: IRepositorioComponente, diagrama: HTMLElement) {
-    this._repositorioComponente = repositorioComponente;
+  constructor(
+    diagrama: HTMLElement,
+    repositorioAba: IRepositorioAbas,
+    repositorioComponente: IRepositorioComponente,
+  ) {
     this._diagrama = diagrama;
+    this._repositorioAba = repositorioAba;
+    this._repositorioComponente = repositorioComponente;
   }
 
   execute(): CommandResult {
@@ -53,6 +61,13 @@ export default class ApagarTodosComponentesCommand implements ICommand {
 
     this._repositorioComponente.limparMemoria();
 
+    this._repositorioAba
+      .listar()
+      .slice(1)
+      .forEach((aba: Aba): void => {
+        this._repositorioAba.remover(aba);
+      });
+
     return {
       ok: true,
       error: undefined,
@@ -77,11 +92,18 @@ export default class ApagarTodosComponentesCommand implements ICommand {
 }
 
 export class ApagarTodosComponentesCommandBuilder implements ICommandBuilder<ApagarTodosComponentesCommand> {
-  private _repositorioComponente: IRepositorioComponente | null = null;
   private _diagrama: HTMLElement | null | undefined = null;
+  private _repositorioAba: IRepositorioAbas | null = null;
+  private _repositorioComponente: IRepositorioComponente | null = null;
 
   public definirDiagrama(diagrama: HTMLElement | undefined | null): this {
     this._diagrama = diagrama;
+
+    return this;
+  }
+
+  public definirRepositorioAba(repositorioAba: IRepositorioAbas | null): this {
+    this._repositorioAba = repositorioAba;
 
     return this;
   }
@@ -97,10 +119,18 @@ export class ApagarTodosComponentesCommandBuilder implements ICommandBuilder<Apa
       throw new CommandBuilderException("diagrama");
     }
 
+    if (this._repositorioAba === null) {
+      throw new CommandBuilderException("repositório de abas");
+    }
+
     if (this._repositorioComponente === null) {
       throw new CommandBuilderException("repositório de componentes");
     }
 
-    return new ApagarTodosComponentesCommand(this._repositorioComponente, this._diagrama);
+    return new ApagarTodosComponentesCommand(
+      this._diagrama,
+      this._repositorioAba,
+      this._repositorioComponente,
+    );
   }
 }
