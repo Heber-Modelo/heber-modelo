@@ -49,6 +49,9 @@ public class Principal implements WebServerFactoryCustomizer<@NonNull Configurab
     private static Locale locale;
 
     static void main(String[] args) {
+        if (args.length == 0) {
+            iniciarJar();
+        }
 
         if (Arrays.stream(args).toList().contains("--language=english")) {
             locale = Locale.ENGLISH;
@@ -70,6 +73,28 @@ public class Principal implements WebServerFactoryCustomizer<@NonNull Configurab
         AtualizadorPrograma atualizador = new AtualizadorPrograma();
         atualizador.atualizar();
         SpringApplication.run(ControladorWeb.class, args);
+    }
+
+    private static void iniciarJar() {
+        String versao = Principal.class.getPackage().getImplementationVersion();
+
+        if (versao == null) {
+            return;
+        }
+
+        try {
+            Process _ = Runtime.getRuntime()
+                    .exec("cmd.exe /c start java -jar %s cmd"
+                            .formatted(new File(Principal.class
+                                            .getProtectionDomain()
+                                            .getCodeSource()
+                                            .getLocation()
+                                            .getPath())
+                                    .getAbsolutePath())
+                            .split(" "));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
