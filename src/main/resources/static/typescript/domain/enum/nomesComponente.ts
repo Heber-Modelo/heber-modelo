@@ -18,9 +18,9 @@ enum NomesComponente {
   COMPONENTE = "componente",
   EDITOR_DESCRICAO_RELACIONAL = "editor_descricao_relacional",
   ENTIDADE = "entidade",
-  ENTIDADE_RELACIONAL = "entidade_relacional",
   RELACIONAMENTO = "relacionamento",
   TABELA_DICIONARIO_DADOS = "tabela_dicionario",
+  TABELA_RELACIONAL = "tabela_relacional",
 }
 
 export default NomesComponente;

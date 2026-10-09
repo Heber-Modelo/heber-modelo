@@ -1,13 +1,13 @@
 {
   "$schema": ".elemento.schema.json",
   "valorHtmlInterno": "<div contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">tbEntidade</div><div class=\"atributo\" onmouseup=\"callbackAlterarAtributoRelacional(event)\"><span class=\"chave\"><span class=\"desc-chave\"></span></span><span contenteditable=\"true\" spellcheck=\"true\" class=\"texto\">atributo: tipo</span></div><button onclick=\"callbackCriarAtributoRelacional(event)\">+</button>",
-  "classesElemento": ["elemento-entidade-relacional"],
+  "classesElemento": ["elemento-tabela-relacional"],
   "recebePontoExtensor": true,
   "recebeSetaConectora": true,
   "propriedades": [
     {
       "chaveI18nLabel": "element.property.name.label",
-      "chaveI18nValorInicial": "element.property.default-name.relational-entity",
+      "chaveI18nValorInicial": "element.property.default-name.relational-table",
       "classeElemento": "nome",
       "nomePropriedade": "innerText",
       "sufixo": ""
