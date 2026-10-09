@@ -76,7 +76,8 @@ export default class ComponenteCardinalidadeRelacionamento
     }
 
     if (anguloEntreComponentes > 75 && anguloEntreComponentes < 105) {
-      novaPosicao.y += this._htmlComponente.getBoundingClientRect().height;
+      novaPosicao.y +=
+        this._htmlComponente.getBoundingClientRect().height - ComponenteDiagrama.OFFSET_POSICOES;
     }
 
     if (
@@ -84,11 +85,15 @@ export default class ComponenteCardinalidadeRelacionamento
       anguloEntreComponentes > -105 ||
       (anguloEntreComponentes < 15 && anguloEntreComponentes > -15)
     ) {
-      novaPosicao.y -= this._htmlComponente.getBoundingClientRect().height;
+      novaPosicao.y -=
+        this._htmlComponente.getBoundingClientRect().height + ComponenteDiagrama.OFFSET_POSICOES;
     }
 
     this._htmlComponente.style.setProperty("top", `${novaPosicao.y}px`);
-    this._htmlComponente.style.setProperty("left", `${novaPosicao.x}px`);
+    this._htmlComponente.style.setProperty(
+      "left",
+      `${novaPosicao.x + ComponenteDiagrama.OFFSET_POSICOES / 2}px`,
+    );
   }
 
   alertarRemovido(): void {
