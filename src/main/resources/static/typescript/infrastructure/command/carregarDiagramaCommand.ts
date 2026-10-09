@@ -23,6 +23,7 @@ import IRepositorioTiposDiagrama from "domain/model/repositorio/iRepositorioTipo
 import Aba from "domain/model/aba";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 
 export default class CarregarDiagramaCommand implements ICommand {
   private readonly _callbackCriarComponente: (event: Event) => void;
@@ -33,6 +34,7 @@ export default class CarregarDiagramaCommand implements ICommand {
   private readonly _repositorioTiposDiagrama: IRepositorioTiposDiagrama;
   private readonly _sectionComponentes: HTMLElement;
   private readonly _selecionadorAba: SelecionadorAba;
+  private readonly _selecionadorComponente: SelecionadorComponente;
   private readonly _seletorAbas: HTMLElement;
 
   private _fieldSetElementos: HTMLFieldSetElement | null = null;
@@ -46,6 +48,7 @@ export default class CarregarDiagramaCommand implements ICommand {
     repositorioTiposDiagrama: IRepositorioTiposDiagrama,
     sectionComponentes: HTMLElement,
     selecionadorAba: SelecionadorAba,
+    selecionadorComponente: SelecionadorComponente,
     seletorAba: HTMLElement,
   ) {
     this._callbackCriarComponente = callbackCriarComponente;
@@ -56,6 +59,7 @@ export default class CarregarDiagramaCommand implements ICommand {
     this._repositorioTiposDiagrama = repositorioTiposDiagrama;
     this._sectionComponentes = sectionComponentes;
     this._selecionadorAba = selecionadorAba;
+    this._selecionadorComponente = selecionadorComponente;
     this._seletorAbas = seletorAba;
   }
 
@@ -86,6 +90,7 @@ export default class CarregarDiagramaCommand implements ICommand {
             this._seletorAbas.append(novaAba.htmlElement);
 
             novaAba.htmlElement.addEventListener("click", (): void => {
+              this._selecionadorComponente.removerSelecao();
               this._selecionadorAba.selecionarAba(novaAba);
             });
 
@@ -181,6 +186,7 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
   private _repositorioTiposDiagrama: IRepositorioTiposDiagrama | null = null;
   private _sectionComponentes: HTMLElement | null = null;
   private _selecionadorAba: SelecionadorAba | null = null;
+  private _selecionadorComponente: SelecionadorComponente | null = null;
   private _seletorAbas: HTMLElement | null = null;
 
   public definirCallbackCriarComponente(
@@ -235,6 +241,14 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
     return this;
   }
 
+  public definirSelecionadorComponente(
+    selecionadorComponente: SelecionadorComponente | null,
+  ): this {
+    this._selecionadorComponente = selecionadorComponente;
+
+    return this;
+  }
+
   public definirSeletorAbas(seletorAba: HTMLElement | null): this {
     this._seletorAbas = seletorAba;
 
@@ -274,6 +288,10 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
       throw new CommandBuilderException("selecionador de aba");
     }
 
+    if (this._selecionadorComponente === null) {
+      throw new CommandBuilderException("selecionador de componente");
+    }
+
     if (this._seletorAbas === null) {
       throw new CommandBuilderException("seletor de aba");
     }
@@ -287,6 +305,7 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
       this._repositorioTiposDiagrama,
       this._sectionComponentes,
       this._selecionadorAba,
+      this._selecionadorComponente,
       this._seletorAbas,
     );
   }
