@@ -14,6 +14,7 @@
 import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
+import PropertyChangeEvent from "domain/event/propertyChangeEvent";
 
 export default class PropriedadeSelecionavel extends PropriedadeComponente {
   private readonly _chavesI18nLabelsValoresPermitidos: string[] | undefined;
@@ -92,7 +93,15 @@ export default class PropriedadeSelecionavel extends PropriedadeComponente {
       let targetElement: HTMLElement | null = this._componente.htmlComponente.querySelector(
         this._classeElemento,
       );
-      targetElement?.dispatchEvent(new Event(PropriedadeSelecionavel.PROPERTY_CHANGE_EVENT));
+
+      if (
+        targetElement === null &&
+        this._componente.htmlComponente.classList.contains(this._classeElemento.substring(1))
+      ) {
+        targetElement = this._componente.htmlComponente;
+      }
+
+      targetElement?.dispatchEvent(new PropertyChangeEvent());
     });
 
     let labelElement: HTMLLabelElement = document.createElement("label");

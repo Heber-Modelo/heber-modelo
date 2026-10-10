@@ -16,6 +16,7 @@ import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 import Ponto from "domain/model/ponto";
+import PropertyChangeEvent from "domain/event/propertyChangeEvent";
 
 export default abstract class AbstractComponenteConexao
   extends ComponenteDiagrama
@@ -56,7 +57,7 @@ export default abstract class AbstractComponenteConexao
     if (elementoPontoNorteValor) {
       elementoPontoNorteValor.innerText = LateraisComponente[lateralPrimeiroPonto];
       elementoPontoNorteValor.addEventListener(
-        PropriedadeComponente.PROPERTY_CHANGE_EVENT,
+        PropertyChangeEvent.PROPERTY_CHANGE_EVENT,
         (): void => {
           this._lateralPrimeiroPonto =
             LateraisComponente[
@@ -73,7 +74,7 @@ export default abstract class AbstractComponenteConexao
     if (elementoPontoSulValor) {
       elementoPontoSulValor.innerText = LateraisComponente[lateralSegundoPonto];
       elementoPontoSulValor.addEventListener(
-        PropriedadeComponente.PROPERTY_CHANGE_EVENT,
+        PropertyChangeEvent.PROPERTY_CHANGE_EVENT,
         (): void => {
           this._lateralSegundoPonto =
             LateraisComponente[elementoPontoSulValor.innerText as keyof typeof LateraisComponente];

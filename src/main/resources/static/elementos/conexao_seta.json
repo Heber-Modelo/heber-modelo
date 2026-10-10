@@ -6,6 +6,18 @@
   "recebeSetaConectora": false,
   "propriedades": [
     {
+      "chaveI18nLabel": "element.property.connection-type.label",
+      "classeElemento": "elemento-conexao-angulada",
+      "nomePropriedade": "connectionType",
+      "sufixo": "",
+      "chavesI18nLabelsValoresPermitidos": [
+        "element.property-value.angled-connection.label",
+        "element.property-value.weak-entity-connection.label",
+        "element.property-value.arrow-connection.label"
+      ],
+      "valoresPermitidos": ["CONEXAO_ANGULADA", "CONEXAO_ENTIDADE_FRACA", "CONEXAO_SETA"]
+    },
+    {
       "chaveI18nLabel": "element.property.position-north-point.label",
       "classeElemento": "ponto-norte-valor",
       "nomePropriedade": "posicao-ponto-norte",

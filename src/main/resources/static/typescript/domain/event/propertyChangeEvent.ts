@@ -11,18 +11,10 @@
  *
  */
 
-import TiposConexao from "domain/enum/tiposConexao";
+export default class PropertyChangeEvent extends Event {
+  public static readonly PROPERTY_CHANGE_EVENT: string = "propertyChange";
 
-export default class ChangeConnectionTypeEvent extends Event {
-  public static readonly CHANGE_CONNECTION_TYPE_EVENT: string = "changeConnectionType";
-  private readonly _tipoConexao: TiposConexao;
-
-  constructor(tipoConexao: TiposConexao) {
-    super(ChangeConnectionTypeEvent.CHANGE_CONNECTION_TYPE_EVENT);
-    this._tipoConexao = tipoConexao;
-  }
-
-  get tipoConexao(): TiposConexao {
-    return this._tipoConexao;
+  constructor() {
+    super(PropertyChangeEvent.PROPERTY_CHANGE_EVENT);
   }
 }

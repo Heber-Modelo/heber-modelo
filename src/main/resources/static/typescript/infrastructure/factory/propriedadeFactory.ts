@@ -16,6 +16,7 @@ import PropriedadeComponente from "domain/model/propriedade/propriedadeComponent
 import PropriedadeInnerText from "domain/model/propriedade/propriedadeInnerText";
 import PropriedadeSelecionavel from "domain/model/propriedade/propriedadeSelecionavel";
 import PropriedadeEstiloComponente from "domain/model/propriedade/propriedadeEstiloComponente";
+import PropriedadeSelecionavelTipoConexao from "domain/model/propriedade/propriedadeSelecionavelTipoConexao";
 
 export default class PropriedadeFactory {
   public criarPropriedade(
@@ -29,6 +30,16 @@ export default class PropriedadeFactory {
   ): PropriedadeComponente | null {
     if (nomePropriedade === "innerText") {
       return new PropriedadeInnerText(componente, sufixo, label, classeElemento);
+    } else if (nomePropriedade === "connectionType" && valoresPermitidos) {
+      return new PropriedadeSelecionavelTipoConexao(
+        nomePropriedade,
+        componente,
+        sufixo,
+        label,
+        classeElemento,
+        chavesI18nLabelsValoresPermitidos,
+        valoresPermitidos,
+      );
     } else if (nomePropriedade.startsWith("style")) {
       return new PropriedadeEstiloComponente(
         nomePropriedade.split(".")[1],
