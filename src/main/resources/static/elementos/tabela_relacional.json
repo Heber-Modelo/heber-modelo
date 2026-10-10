@@ -1,6 +1,6 @@
 {
   "$schema": ".elemento.schema.json",
-  "valorHtmlInterno": "<div contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">tbEntidade</div><div class=\"atributo\" onmouseup=\"callbackAlterarAtributoRelacional(event)\"><span class=\"chave\"><span class=\"desc-chave\"></span></span><span contenteditable=\"true\" spellcheck=\"true\" class=\"texto\">atributo: tipo</span></div><button onclick=\"callbackCriarAtributoRelacional(event)\">+</button>",
+  "valorHtmlInterno": "<div contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">tbEntidade</div><div class=\"atributo\"><span class=\"chave\"><span class=\"desc-chave\"></span></span><span contenteditable=\"true\" spellcheck=\"true\" class=\"texto\">atributo: tipo</span></div><button>-</button><button onclick=\"callbackCriarAtributoRelacional(event)\">+</button>",
   "classesElemento": ["elemento-tabela-relacional"],
   "recebePontoExtensor": true,
   "recebeSetaConectora": true,
@@ -41,6 +41,25 @@
       "classeElemento": "elemento-tabela-relacional",
       "nomePropriedade": "style.top",
       "sufixo": "px"
+    },
+    {
+      "chaveI18nLabel": "element.property.attribute.key.label",
+      "classeElemento": "chave",
+      "nomePropriedade": "child.attribute-key",
+      "sufixo": "",
+      "chavesI18nLabelsValoresPermitidos": [
+        "element.property-value.attribute.key.none",
+        "element.property-value.attribute.key.primary",
+        "element.property-value.attribute.key.foreign"
+      ],
+      "valoresPermitidos": ["NONE", "PRIMARY", "FOREIGN"]
+    },
+    {
+      "chaveI18nLabel": "element.property.attribute.name.label",
+      "chaveI18nValorInicial": "element.property.default-name.attribute-name",
+      "classeElemento": "texto",
+      "nomePropriedade": "child.innerText",
+      "sufixo": ""
     }
   ]
 }

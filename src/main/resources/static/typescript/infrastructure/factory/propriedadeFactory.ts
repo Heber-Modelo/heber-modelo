@@ -13,9 +13,11 @@
 
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
-import PropriedadeInnerText from "domain/model/propriedade/propriedadeInnerText";
-import PropriedadeSelecionavel from "domain/model/propriedade/propriedadeSelecionavel";
 import PropriedadeEstiloComponente from "domain/model/propriedade/propriedadeEstiloComponente";
+import PropriedadeInnerText from "domain/model/propriedade/propriedadeInnerText";
+import PropriedadeFilho from "domain/model/propriedade/propriedadeFilho";
+import PropriedadeFilhoChaveAtributo from "domain/model/propriedade/propriedadeFilhoChaveAtributo";
+import PropriedadeSelecionavel from "domain/model/propriedade/propriedadeSelecionavel";
 import PropriedadeSelecionavelTipoConexao from "domain/model/propriedade/propriedadeSelecionavelTipoConexao";
 
 export default class PropriedadeFactory {
@@ -47,6 +49,24 @@ export default class PropriedadeFactory {
         sufixo,
         label,
         classeElemento,
+      );
+    } else if (!valoresPermitidos && nomePropriedade.startsWith("child.")) {
+      return new PropriedadeFilho(
+        nomePropriedade.split(".")[1],
+        componente,
+        sufixo,
+        label,
+        classeElemento,
+      );
+    } else if (valoresPermitidos && nomePropriedade.startsWith("child.")) {
+      return new PropriedadeFilhoChaveAtributo(
+        nomePropriedade.split(".")[1],
+        componente,
+        sufixo,
+        label,
+        classeElemento,
+        chavesI18nLabelsValoresPermitidos,
+        valoresPermitidos,
       );
     } else if (valoresPermitidos) {
       return new PropriedadeSelecionavel(
