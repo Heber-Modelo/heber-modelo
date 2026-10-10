@@ -24,6 +24,9 @@ import PropriedadeComponente from "domain/model/propriedade/propriedadeComponent
 export function limparPropriedades(abaPropriedades: HTMLElement | null): void {
   if (abaPropriedades === null) return;
 
+  let nomesComponentes: NodeListOf<HTMLHeadingElement> = abaPropriedades.querySelectorAll("h3");
+  nomesComponentes.forEach((nomeComponente: HTMLHeadingElement): void => nomeComponente.remove());
+
   let propriedades: NodeListOf<HTMLElement> = abaPropriedades.querySelectorAll(
     `.${PropriedadeComponente.CLASSE_PROPRIEDADE_CUSTOMIZADA}`,
   );
@@ -59,10 +62,25 @@ export function mouseDownSelecionarElemento(event: Event): void {
 
   selecionador.selecionarElemento(componente);
   limparPropriedades(abaPropriedades);
+
+  let nomeComponente: HTMLHeadingElement = document.createElement("h3");
+  abaPropriedades?.append(nomeComponente);
+  nomeComponente.innerText = (
+    componente.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE) ?? ""
+  )
+    .toUpperCase()
+    .replaceAll("_", " ");
   adicionarPropriedades(abaPropriedades, componente.propriedades, selecionador);
 
   componente.ouvintes.forEach((ouvinte: ComponenteDiagramaOuvinte): void => {
     if (ouvinte instanceof ComponenteDiagrama && !(ouvinte instanceof AbstractComponenteConexao)) {
+      let nomeComponente: HTMLHeadingElement = document.createElement("h3");
+      abaPropriedades?.append(nomeComponente);
+      nomeComponente.innerText = (
+        ouvinte.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE) ?? ""
+      )
+        .toUpperCase()
+        .replaceAll("_", " ");
       adicionarPropriedades(abaPropriedades, ouvinte.propriedades, selecionador);
     }
   });
