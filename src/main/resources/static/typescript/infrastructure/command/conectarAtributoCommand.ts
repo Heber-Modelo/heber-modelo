@@ -146,6 +146,9 @@ export default class ConectarAtributoCommand implements ICommand {
 
       if (lateralComponente === LateraisComponente.OESTE) {
         lateralAtributo = LateraisComponente.LESTE;
+        let nomeAtributo: HTMLElement | undefined | null =
+          this._componenteAtributo?.htmlComponente.querySelector(".nome");
+        nomeAtributo?.dispatchEvent(new MouseEvent("mouseup", { button: 1 }));
       }
 
       this._commandConectarComponentes = new ConectarComponentesCommandBuilder()
