@@ -10,6 +10,30 @@
       "classeElemento": "elemento-especializacao",
       "nomePropriedade": "style.rotate",
       "sufixo": "deg"
+    },
+    {
+      "chaveI18nLabel": "element.property.height.label",
+      "classeElemento": "elemento-especializacao",
+      "nomePropriedade": "style.height",
+      "sufixo": "px"
+    },
+    {
+      "chaveI18nLabel": "element.property.width.label",
+      "classeElemento": "elemento-especializacao",
+      "nomePropriedade": "style.width",
+      "sufixo": "px"
+    },
+    {
+      "chaveI18nLabel": "element.property.x.label",
+      "classeElemento": "elemento-especializacao",
+      "nomePropriedade": "style.left",
+      "sufixo": "px"
+    },
+    {
+      "chaveI18nLabel": "element.property.y.label",
+      "classeElemento": "elemento-especializacao",
+      "nomePropriedade": "style.top",
+      "sufixo": "px"
     }
   ]
 }

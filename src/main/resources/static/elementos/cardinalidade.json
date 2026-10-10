@@ -13,6 +13,36 @@
       "nomePropriedade": "cardinalidade",
       "sufixo": "",
       "valoresPermitidos": ["(0, N)", "(1, N)", "(0, 1)", "(1, 1)"]
+    },
+    {
+      "chaveI18nLabel": "element.property.height.label",
+      "classeElemento": "elemento-cardinalidade",
+      "nomePropriedade": "style.height",
+      "sufixo": "px"
+    },
+    {
+      "chaveI18nLabel": "element.property.width.label",
+      "classeElemento": "elemento-cardinalidade",
+      "nomePropriedade": "style.width",
+      "sufixo": "px"
+    },
+    {
+      "chaveI18nLabel": "element.property.x.label",
+      "classeElemento": "elemento-cardinalidade",
+      "nomePropriedade": "style.left",
+      "sufixo": "px"
+    },
+    {
+      "chaveI18nLabel": "element.property.y.label",
+      "classeElemento": "elemento-cardinalidade",
+      "nomePropriedade": "style.top",
+      "sufixo": "px"
+    },
+    {
+      "chaveI18nLabel": "element.property.font-size.label",
+      "classeElemento": "tipo",
+      "nomePropriedade": "style.font-size",
+      "sufixo": "pt"
     }
   ]
 }

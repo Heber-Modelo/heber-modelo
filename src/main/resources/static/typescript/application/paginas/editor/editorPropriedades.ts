@@ -21,92 +21,6 @@ import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 
-class InputPropriedade {
-  private readonly _elementoInput: HTMLInputElement | null;
-  private readonly nomePropriedade: string;
-
-  constructor(elementoInput: HTMLInputElement | null, propriedade: string) {
-    this._elementoInput = elementoInput;
-    this.nomePropriedade = propriedade;
-  }
-
-  public atualizar(elementoSelecionado: HTMLElement | null): void {
-    atualizarValorInput(elementoSelecionado, this._elementoInput, this.nomePropriedade);
-  }
-
-  get elementoInput(): HTMLInputElement | null {
-    return this._elementoInput;
-  }
-}
-
-// NOTE: Não funciona com parênteses.
-function calcularExpressao(expressao: string): number | null {
-  let regexFiltroExpressao: RegExp = /(?<!\S)[0-9]+(?:[-+%~^*\/]+?\d+(?:\.\d+)?)+(?!\S)/g;
-
-  if (expressao.match(regexFiltroExpressao) === null) {
-    return null;
-  }
-
-  return eval(expressao);
-}
-
-function ajustarValorAtributo(valor: string): string {
-  let regexVerificarNumero: RegExp = /^-?\d+$/g;
-  if (regexVerificarNumero.test(valor)) {
-    return `${parseFloat(valor)}px`;
-  }
-
-  let resultadoExpressao: number | null = calcularExpressao(valor);
-
-  if (resultadoExpressao === null) {
-    return "0px";
-  }
-
-  return `${resultadoExpressao}px`;
-}
-
-function modificarPropriedadeElemento(
-  elemento: HTMLElement | null,
-  inputAtributo: HTMLInputElement | null,
-  nomePropriedade: string,
-): void {
-  if (elemento === null || inputAtributo === null) return;
-
-  let novoValorAtributo: string = ajustarValorAtributo(inputAtributo.value);
-  elemento.style.setProperty(nomePropriedade, novoValorAtributo);
-
-  if (selecionadorComponente.componenteSelecionado) {
-    selecionadorComponente.selecionarElemento(selecionadorComponente.componenteSelecionado);
-  }
-}
-
-export function atualizarValorInput(
-  elemento: HTMLElement | null,
-  inputAtributo: HTMLInputElement | null,
-  nomePropriedade: string,
-): void {
-  if (elemento === null || elemento === undefined || inputAtributo === null) return;
-
-  let valorPropriedade: string = getComputedStyle(elemento).getPropertyValue(nomePropriedade);
-  inputAtributo.value = valorPropriedade.substring(0, valorPropriedade.length - 2);
-}
-
-export function atualizarInputs(
-  elementoSelecionado: HTMLElement | null,
-  inputs: InputPropriedade[],
-): void {
-  if (elementoSelecionado !== null) {
-    inputs.forEach((input: InputPropriedade): void => input.atualizar(elementoSelecionado));
-    return;
-  }
-
-  inputs.forEach((input: InputPropriedade): void => {
-    if (input.elementoInput !== null) {
-      input.elementoInput.value = "";
-    }
-  });
-}
-
 export function limparPropriedades(abaPropriedades: HTMLElement | null): void {
   if (abaPropriedades === null) return;
 
@@ -115,8 +29,6 @@ export function limparPropriedades(abaPropriedades: HTMLElement | null): void {
   );
   propriedades.forEach((propriedade: HTMLElement): void => propriedade.remove());
 }
-
-export let inputs: InputPropriedade[] = [];
 
 function adicionarPropriedades(
   abaPropriedades: HTMLElement | null,
@@ -148,8 +60,6 @@ export function mouseDownSelecionarElemento(event: Event): void {
     }
   });
 
-  atualizarInputs(selecionador.componenteSelecionado?.htmlComponente ?? null, inputs);
-
   let recebePontosExtensores: string | null = componente.htmlComponente.getAttribute(
     ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
   );
@@ -158,107 +68,3 @@ export function mouseDownSelecionarElemento(event: Event): void {
     selecionador.esconderPontosExtensores();
   }
 }
-
-export const editorEixoX: HTMLInputElement | null = document.querySelector(
-  "#propriedades input[name='componente-x']",
-);
-
-export const editorEixoY: HTMLInputElement | null = document.querySelector(
-  "#propriedades input[name='componente-y']",
-);
-
-let editorAltura: HTMLInputElement | null = document.querySelector(
-  "#propriedades input[name='componente-altura']",
-);
-
-let editorLargura: HTMLInputElement | null = document.querySelector(
-  "#propriedades input[name='componente-largura']",
-);
-
-let editorTamanhoFonte: HTMLInputElement | null = document.querySelector(
-  "#propriedades input[name='componente-tamanho-fonte']",
-);
-
-let selecionadorComponente: SelecionadorComponente = selecionadorComponenteFactory.build();
-
-inputs.push(new InputPropriedade(editorEixoX, "left"));
-inputs.push(new InputPropriedade(editorEixoY, "top"));
-inputs.push(new InputPropriedade(editorAltura, "height"));
-inputs.push(new InputPropriedade(editorLargura, "width"));
-inputs.push(new InputPropriedade(editorTamanhoFonte, "font-size"));
-
-editorEixoX?.addEventListener("input", (): void => {
-  modificarPropriedadeElemento(
-    selecionadorComponente.pegarHTMLElementoSelecionado(),
-    editorEixoX,
-    "left",
-  );
-  selecionadorComponente.moverSetasParaComponenteSelecionado();
-  selecionadorComponente.componenteSelecionado?.atualizarOuvintes();
-});
-
-editorEixoY?.addEventListener("input", (): void => {
-  modificarPropriedadeElemento(
-    selecionadorComponente.pegarHTMLElementoSelecionado(),
-    editorEixoY,
-    "top",
-  );
-  selecionadorComponente.moverSetasParaComponenteSelecionado();
-  selecionadorComponente.componenteSelecionado?.atualizarOuvintes();
-});
-
-editorAltura?.addEventListener("input", (): void => {
-  modificarPropriedadeElemento(
-    selecionadorComponente.pegarHTMLElementoSelecionado(),
-    editorAltura,
-    "height",
-  );
-});
-
-editorLargura?.addEventListener("input", (): void => {
-  modificarPropriedadeElemento(
-    selecionadorComponente.pegarHTMLElementoSelecionado(),
-    editorLargura,
-    "width",
-  );
-});
-
-editorTamanhoFonte?.addEventListener("input", (): void => {
-  modificarPropriedadeElemento(
-    selecionadorComponente.pegarHTMLElementoSelecionado(),
-    editorTamanhoFonte,
-    "font-size",
-  );
-});
-
-editorEixoX?.addEventListener("focusout", (): void => {
-  atualizarValorInput(selecionadorComponente.pegarHTMLElementoSelecionado(), editorEixoX, "left");
-});
-
-editorEixoY?.addEventListener("focusout", (): void => {
-  atualizarValorInput(selecionadorComponente.pegarHTMLElementoSelecionado(), editorEixoY, "top");
-});
-
-editorAltura?.addEventListener("focusout", (): void => {
-  atualizarValorInput(
-    selecionadorComponente.pegarHTMLElementoSelecionado(),
-    editorAltura,
-    "height",
-  );
-});
-
-editorLargura?.addEventListener("focusout", (): void => {
-  atualizarValorInput(
-    selecionadorComponente.pegarHTMLElementoSelecionado(),
-    editorLargura,
-    "width",
-  );
-});
-
-editorTamanhoFonte?.addEventListener("focusout", (): void => {
-  atualizarValorInput(
-    selecionadorComponente.pegarHTMLElementoSelecionado(),
-    editorTamanhoFonte,
-    "font-size",
-  );
-});
