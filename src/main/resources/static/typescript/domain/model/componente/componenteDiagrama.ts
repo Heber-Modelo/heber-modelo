@@ -21,7 +21,6 @@ import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero
 export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
   public static readonly CLASSE_BASE_COMPONENTE: string = "componente";
   public static readonly CLASSE_ELEMENTO_SELECIONADO: string = "selected";
-  public static readonly OFFSET_POSICOES: number = 10;
   public static readonly PROPRIEDADE_ID_COMPONENTE: string = "data-id";
   public static readonly PROPRIEDADES_IDS_OUVINTES: string = "data-ids-ouvintes";
 
@@ -71,7 +70,7 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
         x =
           converterPixeisParaNumero(estiloComponente.left) +
           converterPixeisParaNumero(estiloComponente.width) / 2;
-        y = converterPixeisParaNumero(estiloComponente.top) + ComponenteDiagrama.OFFSET_POSICOES;
+        y = converterPixeisParaNumero(estiloComponente.top);
         break;
 
       case LateraisComponente.SUL:
@@ -80,12 +79,11 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
           converterPixeisParaNumero(estiloComponente.width) / 2;
         y =
           converterPixeisParaNumero(estiloComponente.top) +
-          converterPixeisParaNumero(estiloComponente.height) -
-          ComponenteDiagrama.OFFSET_POSICOES;
+          converterPixeisParaNumero(estiloComponente.height);
         break;
 
       case LateraisComponente.OESTE:
-        x = converterPixeisParaNumero(estiloComponente.left) + ComponenteDiagrama.OFFSET_POSICOES;
+        x = converterPixeisParaNumero(estiloComponente.left);
         y =
           converterPixeisParaNumero(estiloComponente.top) +
           converterPixeisParaNumero(estiloComponente.height) / 2;
@@ -94,8 +92,7 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
       case LateraisComponente.LESTE:
         x =
           converterPixeisParaNumero(estiloComponente.left) +
-          converterPixeisParaNumero(estiloComponente.width) -
-          ComponenteDiagrama.OFFSET_POSICOES;
+          converterPixeisParaNumero(estiloComponente.width);
         y =
           converterPixeisParaNumero(estiloComponente.top) +
           converterPixeisParaNumero(estiloComponente.height) / 2;
