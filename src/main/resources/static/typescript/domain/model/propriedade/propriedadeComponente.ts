@@ -31,7 +31,7 @@ export default class PropriedadeComponente {
     this._classeElemento = classeElemento.startsWith(".") ? classeElemento : `.${classeElemento}`;
   }
 
-  protected _nome: string;
+  private readonly _nome: string;
   protected _componente: ComponenteDiagrama;
   protected _sufixo: string;
   protected _label: string;
@@ -89,5 +89,9 @@ export default class PropriedadeComponente {
     labelInput.classList.add(PropriedadeComponente.CLASSE_PROPRIEDADE_CUSTOMIZADA);
 
     return labelInput;
+  }
+
+  get nome(): string {
+    return this._nome;
   }
 }

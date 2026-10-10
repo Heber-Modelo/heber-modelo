@@ -11,10 +11,6 @@
  *
  */
 
-import {
-  limparPropriedades,
-  mouseDownSelecionarElemento,
-} from "application/paginas/editor/editorPropriedades";
 import ImportadorDiagramas from "application/paginas/editor/importadorDiagramas";
 import "application/paginas/editor/painelLateral";
 import { CarregarCSSCommandBuilder } from "infrastructure/command/carregarCSSCommand";
@@ -56,9 +52,11 @@ import TiposConexao from "domain/enum/tiposConexao";
 import PropertyChangeEvent from "domain/event/propertyChangeEvent";
 import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
 import ResponseTraducaoJSON from "domain/json/responseTraducaoJSON";
 import Aba from "domain/model/aba";
 import Ponto from "domain/model/ponto";
+import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 import SetaConectora from "domain/model/setaConectora";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 
@@ -102,6 +100,90 @@ diagrama?.addEventListener("click", (event: MouseEvent): void => {
     limparPropriedades(abaPropriedades);
   }
 });
+
+/**************************/
+/* EDITOR DE PROPRIEDADES */
+/**************************/
+
+function limparPropriedades(abaPropriedades: HTMLElement | null): void {
+  if (abaPropriedades === null) return;
+
+  let nomesComponentes: NodeListOf<HTMLHeadingElement> = abaPropriedades.querySelectorAll("h3");
+  nomesComponentes.forEach((nomeComponente: HTMLHeadingElement): void => nomeComponente.remove());
+
+  let propriedades: NodeListOf<HTMLElement> = abaPropriedades.querySelectorAll(
+    `.${PropriedadeComponente.CLASSE_PROPRIEDADE_CUSTOMIZADA}`,
+  );
+  propriedades.forEach((propriedade: HTMLElement): void => propriedade.remove());
+}
+
+const PROPRIEDADES_MODO_AVANCADO: string[] = ["left", "top", "height", "width"];
+
+function adicionarPropriedades(
+  abaPropriedades: HTMLElement | null,
+  propriedades: PropriedadeComponente[],
+  selecionador: SelecionadorComponente,
+): void {
+  propriedades
+    .filter(
+      (propriedade: PropriedadeComponente): boolean =>
+        !PROPRIEDADES_MODO_AVANCADO.includes(propriedade.nome) || modoAvancadoEditorPropriedades,
+    )
+    .forEach((propriedade: PropriedadeComponente): void => {
+      let editorPropriedade: HTMLLabelElement = propriedade.criarElementoInputPropriedade();
+      editorPropriedade.querySelector("input")?.addEventListener("input", (): void => {
+        selecionador.reposicionarPontosExtensores();
+        selecionador.reposicionarSetasConectoras(
+          selecionador.componenteSelecionado as ComponenteDiagrama,
+        );
+      });
+      abaPropriedades?.appendChild(editorPropriedade);
+    });
+}
+
+function mouseDownSelecionarElemento(event: Event): void {
+  let abaPropriedades: HTMLElement | null = document.querySelector("section#propriedades");
+  let componente: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(
+    event.target as HTMLElement,
+  );
+
+  if (componente === null) {
+    return;
+  }
+
+  selecionadorComponente.selecionarElemento(componente);
+  limparPropriedades(abaPropriedades);
+
+  let nomeComponente: HTMLHeadingElement = document.createElement("h3");
+  abaPropriedades?.append(nomeComponente);
+  nomeComponente.innerText = (
+    componente.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE) ?? ""
+  )
+    .toUpperCase()
+    .replaceAll("_", " ");
+  adicionarPropriedades(abaPropriedades, componente.propriedades, selecionadorComponente);
+
+  componente.ouvintes.forEach((ouvinte: ComponenteDiagramaOuvinte): void => {
+    if (ouvinte instanceof ComponenteDiagrama && !(ouvinte instanceof AbstractComponenteConexao)) {
+      let nomeComponente: HTMLHeadingElement = document.createElement("h3");
+      abaPropriedades?.append(nomeComponente);
+      nomeComponente.innerText = (
+        ouvinte.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE) ?? ""
+      )
+        .toUpperCase()
+        .replaceAll("_", " ");
+      adicionarPropriedades(abaPropriedades, ouvinte.propriedades, selecionadorComponente);
+    }
+  });
+
+  let recebePontosExtensores: string | null = componente.htmlComponente.getAttribute(
+    ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
+  );
+
+  if (recebePontosExtensores === "false") {
+    selecionadorComponente.esconderPontosExtensores();
+  }
+}
 
 /*********************************/
 /* MOVIMENTAÇÃO DE UM COMPONENTE */

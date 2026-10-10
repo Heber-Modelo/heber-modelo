@@ -248,6 +248,10 @@ public class ControladorWeb {
                 configurador.pegarValorConfiguracao("editor", "incrementoMovimentacaoElemento", long.class);
         optionalIncrementoMovimentacao.ifPresent(
                 (Long incremento) -> modelMap.addAttribute("incrementoMovimentacaoElemento", incremento));
+        Optional<Boolean> optionalModoAvancadoEditorPropriedades =
+                configurador.pegarValorConfiguracao("editor", "modoAvancadoEditorPropriedades", boolean.class);
+        optionalModoAvancadoEditorPropriedades.ifPresent(
+                (Boolean modoAvancado) -> modelMap.addAttribute("modoAvancadoEditorPropriedades", modoAvancado));
         Optional<Double> optionalPDFAlturaFolha =
                 configurador.pegarValorConfiguracao("editor", "salvarPDFAlturaFolhaMM", double.class);
         optionalPDFAlturaFolha.ifPresent((Double altura) -> modelMap.addAttribute("pdfAlturaFolha", altura));
