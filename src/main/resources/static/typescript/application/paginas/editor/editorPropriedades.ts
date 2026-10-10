@@ -33,9 +33,16 @@ export function limparPropriedades(abaPropriedades: HTMLElement | null): void {
 function adicionarPropriedades(
   abaPropriedades: HTMLElement | null,
   propriedades: PropriedadeComponente[],
+  selecionador: SelecionadorComponente,
 ): void {
   propriedades.forEach((propriedade: PropriedadeComponente): void => {
     let editorPropriedade: HTMLLabelElement = propriedade.criarElementoInputPropriedade();
+    editorPropriedade.querySelector("input")?.addEventListener("input", (): void => {
+      selecionador.reposicionarPontosExtensores();
+      selecionador.reposicionarSetasConectoras(
+        selecionador.componenteSelecionado as ComponenteDiagrama,
+      );
+    });
     abaPropriedades?.appendChild(editorPropriedade);
   });
 }
@@ -52,11 +59,11 @@ export function mouseDownSelecionarElemento(event: Event): void {
 
   selecionador.selecionarElemento(componente);
   limparPropriedades(abaPropriedades);
-  adicionarPropriedades(abaPropriedades, componente.propriedades);
+  adicionarPropriedades(abaPropriedades, componente.propriedades, selecionador);
 
   componente.ouvintes.forEach((ouvinte: ComponenteDiagramaOuvinte): void => {
     if (ouvinte instanceof ComponenteDiagrama && !(ouvinte instanceof AbstractComponenteConexao)) {
-      adicionarPropriedades(abaPropriedades, ouvinte.propriedades);
+      adicionarPropriedades(abaPropriedades, ouvinte.propriedades, selecionador);
     }
   });
 
