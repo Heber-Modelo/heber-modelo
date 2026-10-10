@@ -1,0 +1,7 @@
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="25" y="25" width="450" height="400" fill="currentColor"/>
+    <rect x="68" y="75" width="365" height="300" fill="currentColor" class="svg-cor-borda"/>
+    <rect x="83" y="90" width="335" height="90" fill="currentColor" class="svg-cor-fundo"/>
+    <rect x="83" y="188" width="335" height="82" fill="currentColor"/>
+    <rect x="83" y="278" width="335" height="82" fill="currentColor"/>
+</svg>

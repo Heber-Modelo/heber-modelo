@@ -12,11 +12,6 @@
  */
 
 import {
-  atualizarInputs,
-  atualizarValorInput,
-  editorEixoX,
-  editorEixoY,
-  inputs,
   limparPropriedades,
   mouseDownSelecionarElemento,
 } from "application/paginas/editor/editorPropriedades";
@@ -106,7 +101,6 @@ diagrama?.addEventListener("click", (event: MouseEvent): void => {
   if (target.tagName === "MAIN") {
     selecionadorComponente.removerSelecao();
     limparPropriedades(abaPropriedades);
-    atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
   }
 });
 
@@ -154,8 +148,6 @@ function dragElement(event: MouseEvent): void {
   window.scrollTo(x, y);
   componenteAtual.style.left = `${x}px`;
   componenteAtual.style.top = `${y}px`;
-  atualizarValorInput(selecionadorComponente.pegarHTMLElementoSelecionado(), editorEixoY, "top");
-  atualizarValorInput(selecionadorComponente.pegarHTMLElementoSelecionado(), editorEixoX, "left");
 
   let componente: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(
     event.target as HTMLElement,
@@ -636,7 +628,6 @@ spanButtonApagar?.addEventListener("click", async (): Promise<void> => {
 
   selecionadorComponente.removerSelecao();
   limparPropriedades(abaPropriedades);
-  atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
 });
 
 spanButtonDeletar?.addEventListener("click", async (): Promise<void> => {
@@ -666,7 +657,6 @@ spanButtonDeletar?.addEventListener("click", async (): Promise<void> => {
 
     selecionadorComponente.removerSelecao();
     limparPropriedades(abaPropriedades);
-    atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
   }
 });
 
@@ -822,8 +812,6 @@ spanButtonImportar?.addEventListener("click", (): void => {
 let teclaAnterior: string | null = null;
 
 document.addEventListener("keydown", (event: KeyboardEvent): void => {
-  atualizarValorInput(selecionadorComponente.pegarHTMLElementoSelecionado(), editorEixoY, "top");
-  atualizarValorInput(selecionadorComponente.pegarHTMLElementoSelecionado(), editorEixoX, "left");
   if (teclaAnterior === null) {
     teclaAnterior = event.key;
   }
@@ -897,7 +885,6 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
     case bindings.get("removerSelecao"):
       selecionadorComponente.removerSelecao();
       limparPropriedades(abaPropriedades);
-      atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
       break;
 
     // Apagar elemento
@@ -913,7 +900,6 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
 
           selecionadorComponente.removerSelecao();
           limparPropriedades(abaPropriedades);
-          atualizarInputs(selecionadorComponente.pegarHTMLElementoSelecionado(), inputs);
         },
       );
 

@@ -12,6 +12,7 @@
  */
 
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import calcularExpressao from "domain/services/calcularValorExpressao";
 
 export default class PropriedadeComponente {
   public static readonly CLASSE_PROPRIEDADE_CUSTOMIZADA: string = "custom";
@@ -46,9 +47,21 @@ export default class PropriedadeComponente {
   }
 
   public definirValorPropriedade(valor: string): void {
+    let novoValor: string = valor.endsWith(this._sufixo)
+      ? valor.substring(0, valor.length - this._sufixo.length)
+      : valor;
+
+    try {
+      let valorNumerico: number | null = calcularExpressao(novoValor);
+
+      if (valorNumerico) {
+        novoValor = `${valorNumerico}`;
+      }
+    } catch (e) {}
+
     this._componente.htmlComponente
       .querySelector(this._classeElemento)
-      ?.setAttribute(this._nome, `${valor}${this._sufixo}`);
+      ?.setAttribute(this._nome, `${novoValor}${this._sufixo}`);
   }
 
   protected formatarLabel(): string {

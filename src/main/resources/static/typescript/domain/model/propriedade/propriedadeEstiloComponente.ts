@@ -12,6 +12,7 @@
  */
 
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
+import calcularExpressao from "domain/services/calcularValorExpressao";
 
 export default class PropriedadeEstiloComponente extends PropriedadeComponente {
   public definirValorPropriedade(valor: string): void {
@@ -27,7 +28,19 @@ export default class PropriedadeEstiloComponente extends PropriedadeComponente {
       elementoAlvo = this._componente.htmlComponente.querySelector(this._classeElemento);
     }
 
-    elementoAlvo?.style.setProperty(this._nome, `${valor}${this._sufixo}`);
+    let novoValor: string = valor.endsWith(this._sufixo)
+      ? valor.substring(0, valor.length - this._sufixo.length)
+      : valor;
+
+    try {
+      let valorNumerico: number | null = calcularExpressao(novoValor);
+
+      if (valorNumerico) {
+        novoValor = `${valorNumerico}`;
+      }
+    } catch (e) {}
+
+    elementoAlvo?.style.setProperty(this._nome, `${novoValor}${this._sufixo}`);
   }
 
   protected pegarValorPropriedade(): string {
@@ -43,6 +56,13 @@ export default class PropriedadeEstiloComponente extends PropriedadeComponente {
       elementoAlvo = this._componente.htmlComponente.querySelector(this._classeElemento);
     }
 
-    return elementoAlvo?.style.getPropertyValue(this._nome) ?? "";
+    let valorPropriedade: string = elementoAlvo?.style.getPropertyValue(this._nome) ?? "";
+
+    if (elementoAlvo && valorPropriedade === "" && this._nome !== "font-size") {
+      let estiloComponente: CSSStyleDeclaration = getComputedStyle(elementoAlvo);
+      valorPropriedade = estiloComponente.getPropertyValue(this._nome);
+    }
+
+    return valorPropriedade;
   }
 }

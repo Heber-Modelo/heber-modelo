@@ -6,6 +6,36 @@
   "recebeSetaConectora": true,
   "propriedades": [
     {
+      "chaveI18nLabel": "element.property.font-size.label",
+      "classeElemento": "nome",
+      "nomePropriedade": "style.font-size",
+      "sufixo": "pt"
+    },
+    {
+      "chaveI18nLabel": "element.property.height.label",
+      "classeElemento": "elemento-entidade",
+      "nomePropriedade": "style.height",
+      "sufixo": "px"
+    },
+    {
+      "chaveI18nLabel": "element.property.width.label",
+      "classeElemento": "elemento-entidade",
+      "nomePropriedade": "style.width",
+      "sufixo": "px"
+    },
+    {
+      "chaveI18nLabel": "element.property.x.label",
+      "classeElemento": "elemento-entidade",
+      "nomePropriedade": "style.left",
+      "sufixo": "px"
+    },
+    {
+      "chaveI18nLabel": "element.property.y.label",
+      "classeElemento": "elemento-entidade",
+      "nomePropriedade": "style.top",
+      "sufixo": "px"
+    },
+    {
       "chaveI18nLabel": "element.property.name.label",
       "chaveI18nValorInicial": "element.property.default-name.entity",
       "classeElemento": "nome",
