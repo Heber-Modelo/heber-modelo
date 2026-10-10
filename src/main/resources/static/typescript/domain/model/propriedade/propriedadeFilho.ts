@@ -39,7 +39,7 @@ export default class PropriedadeFilho extends PropriedadeComponente {
       return elementoAlvo.innerText;
     }
 
-    return elementoAlvo.getAttribute(this._nome) ?? "";
+    return elementoAlvo?.getAttribute(this._nome) ?? "";
   }
 
   public definirValorPropriedade(valor: string): void {

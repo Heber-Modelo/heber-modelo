@@ -59,6 +59,7 @@ import Ponto from "domain/model/ponto";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 import SetaConectora from "domain/model/setaConectora";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
+import TabelaRelacionalChangeEvent from "domain/event/tabelaRelacionalChangeEvent";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -184,6 +185,19 @@ function mouseDownSelecionarElemento(event: Event): void {
     selecionadorComponente.esconderPontosExtensores();
   }
 }
+
+/*******************************/
+/** TABELA RELACIONAL UPDATER **/
+/*******************************/
+
+diagrama?.addEventListener(TabelaRelacionalChangeEvent.TABELA_RELACIONAL_CHANGE_EVENT, (): void => {
+  let componenteSelecionado: ComponenteDiagrama | null =
+    selecionadorComponente.componenteSelecionado;
+  selecionadorComponente.removerSelecao();
+  limparPropriedades(abaPropriedades);
+  componenteSelecionado?.htmlComponente.dispatchEvent(new MouseEvent("mousedown"));
+  componenteSelecionado?.htmlComponente.dispatchEvent(new MouseEvent("mouseup"));
+});
 
 /*********************************/
 /* MOVIMENTAÇÃO DE UM COMPONENTE */

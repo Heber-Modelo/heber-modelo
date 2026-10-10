@@ -9,11 +9,15 @@
     div.nome,
     div.atributo {
       border-color: var(--cor-borda-componente-selecionado);
-
-      span.chave svg .svg-cor-fill {
-        color: var(--cor-componente-hover);
-      }
     }
+  }
+
+  &:hover {
+
+    span.chave svg .svg-cor-fill {
+      color: var(--cor-componente-hover);
+    }
+
   }
 
   &.selected {
@@ -23,10 +27,18 @@
       align-items: center;
       justify-content: center;
       top: calc(100% + 0.5rem);
-      right: 0;
       width: 2rem;
       height: 2rem;
     }
+
+    .adicionar-atributo {
+      right: 0;
+    }
+
+    .remover-atributo {
+      left: 0;
+    }
+
   }
 
   div.nome {
@@ -48,6 +60,7 @@
     grid-template-columns: 20% 0.3rem calc(80% - 0.3rem);
     height: 1.9rem;
     padding: 0.3rem 1.3rem 0.3rem 0.3rem;
+    pointer-events: none;
     width: 100%;
 
     span.chave {
@@ -75,13 +88,6 @@
           color: var(--cor-chave-estrangeira);
         }
 
-        &.chave-mista {
-          color: var(--cor-chave-mista);
-        }
-
-        &.chave-unica {
-          color: var(--cor-chave-unica);
-        }
       }
 
       svg.chave-escondida {
@@ -95,6 +101,7 @@
 
     span.texto {
       align-self: center;
+      pointer-events: all;
       grid-column: 3;
     }
   }

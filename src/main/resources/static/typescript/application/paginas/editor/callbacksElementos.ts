@@ -44,25 +44,6 @@ const girarEspecializacaoEsquerda = (event: MouseEvent): void => {
   especializacao.style.setProperty("rotate", `${valorNumericoRotacao}deg`);
 };
 
-/*********************************/
-/* Diagrama do Modelo Relacional */
-/*********************************/
-
-const callbackCriarAtributoRelacional = (event: MouseEvent): void => {
-  let novoAtributo: HTMLDivElement = document.createElement("div");
-  (event.target as HTMLElement).parentElement?.append(novoAtributo);
-  // noinspection JSCheckFunctionSignatures,JSDeprecatedSymbols
-  novoAtributo.outerHTML =
-    '<div class="atributo"><span class="chave"><span class="desc-chave"></span></span><span contenteditable="true" spellcheck="true" class="texto">atributo: tipo</span></div>';
-
-  let elementoEntidade: HTMLElement | null = (event.target as HTMLElement).parentElement;
-  let alturaEntidade: number | undefined = elementoEntidade?.getBoundingClientRect().height;
-
-  if (alturaEntidade) {
-    elementoEntidade?.style.setProperty("height", `calc(${alturaEntidade}px + 2rem)`);
-  }
-};
-
 /***********************/
 /* DICIONÁRIO DE DADOS */
 /***********************/

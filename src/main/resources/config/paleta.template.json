@@ -66,14 +66,6 @@
       "valorPadraoVariavel": "#00A8F3"
     },
     {
-      "nomeVariavel": "cor_chave_mista",
-      "valorPadraoVariavel": "#241A3B"
-    },
-    {
-      "nomeVariavel": "cor_chave_unica",
-      "valorPadraoVariavel": "#D6D5D4"
-    },
-    {
       "nomeVariavel": "cor_ponto_extensor",
       "valorPadraoVariavel": "#000000"
     },

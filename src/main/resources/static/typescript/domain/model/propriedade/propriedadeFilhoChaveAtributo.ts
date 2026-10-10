@@ -29,7 +29,7 @@ export default class PropriedadeFilhoChaveAtributo extends PropriedadeSelecionav
     "<path d='M41 127.5L60.05 116.675V138.325L41 127.5Z' fill='currentColor' class='svg-cor-fill'/>" +
     "<circle cx='45' cy='45' r='45' fill='currentColor'/>" +
     "<circle cx='45' cy='45' r='25' fill='currentColor' class='svg-cor-fill'/></svg>";
-  private _contagemElemento: number;
+  private _indiceComponente: number;
 
   constructor(
     nome: string,
@@ -49,14 +49,14 @@ export default class PropriedadeFilhoChaveAtributo extends PropriedadeSelecionav
       chavesI18nLabelsValoresPermitidos,
       valoresPermitidos,
     );
-    this._contagemElemento = 0;
+    this._indiceComponente = 0;
   }
 
   definirValorPropriedade(valor: string): void {
     let elementos: NodeListOf<HTMLElement> = this._componente.htmlComponente.querySelectorAll(
       this._classeElemento,
     );
-    let elementoAlvo: HTMLElement | null = elementos.item(this._contagemElemento);
+    let elementoAlvo: HTMLElement | null = elementos.item(this._indiceComponente);
     let tipoChave: TiposChave = TiposChave[valor.toUpperCase() as keyof typeof TiposChave];
 
     if (elementoAlvo === null) {
@@ -88,7 +88,7 @@ export default class PropriedadeFilhoChaveAtributo extends PropriedadeSelecionav
   protected pegarValorPropriedade(): string {
     let elementosSvg: NodeListOf<SVGSVGElement> =
       this._componente.htmlComponente.querySelectorAll("svg");
-    let elementoSvg: SVGSVGElement | null = elementosSvg.item(this._contagemElemento);
+    let elementoSvg: SVGSVGElement | null = elementosSvg.item(this._indiceComponente);
 
     if (elementoSvg === null) {
       return TiposChave.NONE.toString().toUpperCase();
@@ -105,11 +105,11 @@ export default class PropriedadeFilhoChaveAtributo extends PropriedadeSelecionav
     }
   }
 
-  get contagemElemento(): number {
-    return this._contagemElemento;
+  get indiceComponente(): number {
+    return this._indiceComponente;
   }
 
-  set contagemElemento(value: number) {
-    this._contagemElemento = value;
+  set indiceComponente(value: number) {
+    this._indiceComponente = value;
   }
 }
