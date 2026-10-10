@@ -127,6 +127,38 @@ export default class ConectarAtributoCommand implements ICommand {
       let componentes: ComponenteDiagrama[] = this._repositorioComponentes.listar();
       this._componenteAtributo = componentes.at(componentes.length - 1) || null;
 
+      if (this._componenteAtributo) {
+        this._componenteAtributo.calcularPontoLateralComponente = function (
+          lateralComponente: LateraisComponente,
+        ): Ponto {
+          let estiloComponente: CSSStyleDeclaration = this.pegarEstiloElemento();
+          let tamanhoBorda: number = converterPixeisParaNumero(estiloComponente.borderWidth);
+          let x: number = 0;
+          let y: number = 0;
+
+          switch (lateralComponente) {
+            case LateraisComponente.OESTE:
+              x = converterPixeisParaNumero(estiloComponente.left) + tamanhoBorda;
+              y =
+                converterPixeisParaNumero(estiloComponente.top) +
+                converterPixeisParaNumero(estiloComponente.height) / 2;
+              break;
+
+            case LateraisComponente.LESTE:
+              x =
+                converterPixeisParaNumero(estiloComponente.left) +
+                converterPixeisParaNumero(estiloComponente.width) -
+                tamanhoBorda;
+              y =
+                converterPixeisParaNumero(estiloComponente.top) +
+                converterPixeisParaNumero(estiloComponente.height) / 2;
+              break;
+          }
+
+          return new Ponto(x, y);
+        };
+      }
+
       let lateralComponente: LateraisComponente = calcularLateralComponente(
         this._componenteAlvo.htmlComponente,
         this._pontoAlvo,
