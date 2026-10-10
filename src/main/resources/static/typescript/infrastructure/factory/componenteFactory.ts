@@ -16,6 +16,8 @@ import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import ValoresJSONComponente from "domain/json/valoresJSONComponente";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
+import NomesComponente from "domain/enum/nomesComponente";
+import ComponenteTabelaRelacional from "domain/model/componente/componenteTabelaRelacional";
 
 export default class ComponenteFactory {
   public static readonly PROPRIEDADE_ID_ABA: string = "data-indice-aba";
@@ -50,7 +52,14 @@ export default class ComponenteFactory {
         elementoHTML.classList.add(ComponenteDiagrama.CLASSE_BASE_COMPONENTE);
         elementoHTML.classList.add(...valores.classesElemento);
 
-        let componente: ComponenteDiagrama = new ComponenteDiagrama(elementoHTML, []);
+        let componente: ComponenteDiagrama;
+
+        if (nomeComponente === NomesComponente.TABELA_RELACIONAL) {
+          componente = new ComponenteTabelaRelacional(elementoHTML, []);
+        } else {
+          componente = new ComponenteDiagrama(elementoHTML, []);
+        }
+
         for (const propriedade of valores.propriedades) {
           let label: string = await traduzirChaveI18n(propriedade.chaveI18nLabel);
 

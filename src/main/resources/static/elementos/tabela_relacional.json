@@ -1,6 +1,6 @@
 {
   "$schema": ".elemento.schema.json",
-  "valorHtmlInterno": "<div contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">tbEntidade</div><div class=\"atributo\"><span class=\"chave\"><span class=\"desc-chave\"></span></span><span contenteditable=\"true\" spellcheck=\"true\" class=\"texto\">atributo: tipo</span></div><button>-</button><button onclick=\"callbackCriarAtributoRelacional(event)\">+</button>",
+  "valorHtmlInterno": "<div contenteditable=\"true\" spellcheck=\"true\" class=\"nome\">tbEntidade</div><div class=\"atributo\"><span class=\"chave\"><span class=\"desc-chave\"></span></span><span contenteditable=\"true\" spellcheck=\"true\" class=\"texto\">atributo: tipo</span></div><button class=\"remover-atributo\">-</button><button class=\"adicionar-atributo\">+</button>",
   "classesElemento": ["elemento-tabela-relacional"],
   "recebePontoExtensor": true,
   "recebeSetaConectora": true,
