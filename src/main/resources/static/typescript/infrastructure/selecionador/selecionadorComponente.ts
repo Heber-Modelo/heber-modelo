@@ -31,6 +31,7 @@ export default class SelecionadorComponente {
     this.reposicionarPontosExtensores();
     this.moverSetasParaComponenteSelecionado();
     this.componenteSelecionado?.atualizarOuvintes();
+    this.componenteSelecionado?.atualizarPropriedades();
   }
 
   public selecionarElemento(componente: ComponenteDiagrama): void {

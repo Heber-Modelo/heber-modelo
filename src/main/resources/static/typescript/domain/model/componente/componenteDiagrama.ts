@@ -47,6 +47,12 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
     return this._propriedades;
   }
 
+  public atualizarPropriedades(): void {
+    this._propriedades.forEach((propriedade: PropriedadeComponente): void =>
+      propriedade.atualizarInput(),
+    );
+  }
+
   public pegarEstiloElemento(): CSSStyleDeclaration {
     return getComputedStyle(this._htmlComponente);
   }

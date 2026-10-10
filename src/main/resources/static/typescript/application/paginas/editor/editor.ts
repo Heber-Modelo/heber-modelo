@@ -135,10 +135,8 @@ function mouseUpPararMoverElemento(event: Event): void {
   document.removeEventListener("mousemove", dragElement);
   document.body.style.removeProperty("user-select");
 
-  if (selecionadorComponente.componenteSelecionado) {
-    selecionadorComponente.mostrarPontosExtensores();
-    selecionadorComponente.reposicionarPontosExtensores();
-  }
+  selecionadorComponente.mostrarPontosExtensores();
+  selecionadorComponente.atualizar();
 }
 
 function dragElement(event: MouseEvent): void {
@@ -149,13 +147,7 @@ function dragElement(event: MouseEvent): void {
   componenteAtual.style.left = `${x}px`;
   componenteAtual.style.top = `${y}px`;
 
-  let componente: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(
-    event.target as HTMLElement,
-  );
-
-  if (componente === null) return;
-  selecionadorComponente.reposicionarSetasConectoras(componente);
-  componente.atualizarOuvintes();
+  selecionadorComponente.atualizar();
 }
 
 /***********************/
@@ -812,6 +804,8 @@ spanButtonImportar?.addEventListener("click", (): void => {
 let teclaAnterior: string | null = null;
 
 document.addEventListener("keydown", (event: KeyboardEvent): void => {
+  selecionadorComponente.componenteSelecionado?.atualizarPropriedades();
+
   if (teclaAnterior === null) {
     teclaAnterior = event.key;
   }

@@ -37,6 +37,13 @@ export default class PropriedadeComponente {
   protected _sufixo: string;
   protected _label: string;
   protected _classeElemento: string;
+  protected _input: HTMLInputElement | undefined;
+
+  public atualizarInput(): void {
+    if (this._input) {
+      this._input.value = this.pegarValorPropriedade();
+    }
+  }
 
   protected pegarValorPropriedade(): string {
     return (
@@ -70,16 +77,16 @@ export default class PropriedadeComponente {
 
   public criarElementoInputPropriedade(): HTMLLabelElement {
     let labelInput: HTMLLabelElement = document.createElement("label");
-    let elementoInput: HTMLInputElement = document.createElement("input");
+    this._input = document.createElement("input");
 
-    elementoInput.addEventListener("input", (): void => {
-      this.definirValorPropriedade(elementoInput.value);
+    this._input.addEventListener("input", (): void => {
+      this.definirValorPropriedade((this._input as HTMLInputElement).value);
       this._componente.atualizarOuvintes();
     });
 
-    elementoInput.value = this.pegarValorPropriedade();
+    this._input.value = this.pegarValorPropriedade();
     labelInput.innerText = this.formatarLabel();
-    labelInput.appendChild(elementoInput);
+    labelInput.appendChild(this._input);
     labelInput.classList.add(PropriedadeComponente.CLASSE_PROPRIEDADE_CUSTOMIZADA);
 
     return labelInput;
