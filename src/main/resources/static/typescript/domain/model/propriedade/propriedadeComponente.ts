@@ -16,7 +16,6 @@ import calcularExpressao from "domain/services/calcularValorExpressao";
 
 export default class PropriedadeComponente {
   public static readonly CLASSE_PROPRIEDADE_CUSTOMIZADA: string = "custom";
-  public static readonly PROPERTY_CHANGE_EVENT: string = "propertyChange";
 
   constructor(
     nome: string,

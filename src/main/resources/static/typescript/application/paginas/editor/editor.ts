@@ -48,13 +48,12 @@ import RepositorioTiposDiagrama from "infrastructure/repositorio/repositorioTipo
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import "infrastructure/variaveisConfiguracao";
-import SeletorTipoConexao from "infrastructure/seletorTipoConexao";
 import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import DirecoesMovimento from "domain/enum/direcoesMovimento";
 import LateraisComponente from "domain/enum/lateraisComponente";
 import NomesComponente from "domain/enum/nomesComponente";
 import TiposConexao from "domain/enum/tiposConexao";
-import ChangeConnectionTypeEvent from "domain/event/changeConnectionTypeEvent";
+import PropertyChangeEvent from "domain/event/propertyChangeEvent";
 import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import ResponseTraducaoJSON from "domain/json/responseTraducaoJSON";
@@ -156,7 +155,7 @@ function dragElement(event: MouseEvent): void {
 
 registradorEventosConexao.adicionarCallback("mousedown", mouseDownSelecionarElemento);
 registradorEventosConexao.adicionarCallback(
-  ChangeConnectionTypeEvent.CHANGE_CONNECTION_TYPE_EVENT,
+  PropertyChangeEvent.PROPERTY_CHANGE_EVENT,
   trocarTipoConexao,
 );
 
@@ -293,20 +292,36 @@ tiposDiagrama?.innerText
 
 new CarregarCSSCommandBuilder().definirNomeArquivo(TiposConexao.CONEXAO_ANGULADA).build().execute();
 let fabricaConexao: ComponenteConexaoFactory = new ComponenteConexaoFactory();
-let seletorTipoConexao: SeletorTipoConexao = new SeletorTipoConexao();
 let setaPlaceholder: HTMLElement = document.querySelector("#seta-placeholder") as HTMLElement;
 let conectarComponentesCommandBuilder: ConectarComponentesCommandBuilder =
   new ConectarComponentesCommandBuilder();
 selecionadorComponente.esconderSetasConectoras();
 
 async function trocarTipoConexao(event: Event): Promise<void> {
-  let changeConnectionTypeEvent: ChangeConnectionTypeEvent = event as ChangeConnectionTypeEvent;
+  event.stopImmediatePropagation();
+  event.stopPropagation();
+
   let conexaoAlvo: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(
     event.target as HTMLElement,
   );
 
   if (conexaoAlvo === null) {
     return;
+  }
+
+  let tipoConexao: TiposConexao = TiposConexao.CONEXAO_ANGULADA;
+  let selectPropriedadeTipoConexao: HTMLSelectElement | null = document.querySelector(
+    "select[name=connectionType]",
+  );
+
+  if (selectPropriedadeTipoConexao?.options === undefined) {
+    return;
+  }
+
+  for (const option of selectPropriedadeTipoConexao?.options) {
+    if (option.selected) {
+      tipoConexao = TiposConexao[option.value as keyof typeof TiposConexao];
+    }
   }
 
   const { TrocarTipoConexaoCommandBuilder } =
@@ -319,10 +334,13 @@ async function trocarTipoConexao(event: Event): Promise<void> {
     .definirFabricaConexao(fabricaConexao)
     .definirRegistradorEventosConexao(registradorEventosConexao)
     .definirRepositorioComponentes(repositorioComponentes)
-    .definirTipoConexao(changeConnectionTypeEvent.tipoConexao)
+    .definirTipoConexao(tipoConexao)
     .build();
 
   commandHistory.saveAndExecuteCommand(command);
+  selecionadorComponente.selecionarElemento(
+    selecionadorComponente.componenteSelecionado as ComponenteDiagrama,
+  );
 }
 
 function callbackInicialSetaConectora(event: MouseEvent): void {
@@ -386,7 +404,7 @@ async function conectarElementos(event: MouseEvent): Promise<void> {
   conectarComponentesCommandBuilder
     .definirSegundoComponente(componenteAlvo)
     .definirLateralSegundoComponente(lateralSegundoComponente)
-    .definirTipoConexao(seletorTipoConexao.tipoConexaoAtual);
+    .definirTipoConexao(TiposConexao.CONEXAO_ANGULADA);
 
   if (!conectarComponentesCommandBuilder.validate()) {
     callbackFinalSetaConectora();
