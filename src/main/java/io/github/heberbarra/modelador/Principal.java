@@ -78,7 +78,7 @@ public class Principal implements WebServerFactoryCustomizer<@NonNull Configurab
     private static void iniciarJar() {
         String versao = Principal.class.getPackage().getImplementationVersion();
 
-        if (versao == null) {
+        if (versao == null || !System.getProperty("os.name").toLowerCase().contains("windows")) {
             return;
         }
 
