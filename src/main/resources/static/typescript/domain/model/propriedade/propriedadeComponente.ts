@@ -83,6 +83,10 @@ export default class PropriedadeComponente {
       this._componente.atualizarOuvintes();
     });
 
+    this._input.addEventListener("keydown", (event: KeyboardEvent): void =>
+      event.stopPropagation(),
+    );
+
     this._input.value = this.pegarValorPropriedade();
     labelInput.innerText = this.formatarLabel();
     labelInput.appendChild(this._input);
