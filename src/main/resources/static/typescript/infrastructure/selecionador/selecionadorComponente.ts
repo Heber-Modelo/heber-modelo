@@ -53,7 +53,9 @@ export default class SelecionadorComponente {
   }
 
   public mostrarPontosExtensores(): void {
-    this._pontosExtensores.forEach((ponto: PontoExtensor): void => ponto.mostrarPonto());
+    if (this._componenteSelecionado) {
+      this._pontosExtensores.forEach((ponto: PontoExtensor): void => ponto.mostrarPonto());
+    }
   }
 
   public esconderSetasConectoras(): void {
