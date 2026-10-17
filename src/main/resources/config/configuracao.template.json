@@ -210,6 +210,12 @@
       "atributo": "mostrarBotoesExtrasDiagramas",
       "tipo": "Boolean",
       "valorPadrao": false
+    },
+    {
+      "categoria": "editor",
+      "atributo": "autoAjustarTamanhoPNG",
+      "tipo": "Boolean",
+      "valorPadrao": false
     }
   ]
 }

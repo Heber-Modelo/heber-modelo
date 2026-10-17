@@ -11,6 +11,7 @@
  *
  */
 
+let autoAjustarTamanhoPNG: boolean;
 let incrementoMovimentacao: number;
 let modoAvancadoEditorPropriedades: boolean;
 let mostrarBotoesExtrasDiagramas: boolean;

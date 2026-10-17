@@ -313,6 +313,17 @@ async function salvar(tipoArquivo: TipoArquivo): Promise<void> {
   let { default: jsPDF } = await import("jspdf");
   let { toPng } = await import("html-to-image");
 
+  let alturaElementos: number;
+  let larguraElementos: number;
+
+  if (autoAjustarTamanhoPNG) {
+    alturaElementos = xhtmlWrapperElement.clientHeight + xhtmlWrapperElement.offsetHeight;
+    larguraElementos = xhtmlWrapperElement.clientWidth + xhtmlWrapperElement.offsetWidth;
+  } else {
+    alturaElementos = pngAlturaImagem;
+    larguraElementos = pngLarguraImagem;
+  }
+
   let images: string[] = await Promise.all(
     paginasXHTML
       .values()
@@ -321,8 +332,8 @@ async function salvar(tipoArquivo: TipoArquivo): Promise<void> {
           quality: 1,
           canvasHeight: pngAlturaImagem,
           canvasWidth: pngLarguraImagem,
-          height: pngAlturaImagem,
-          width: pngLarguraImagem,
+          height: alturaElementos,
+          width: larguraElementos,
         }),
       )
       .toArray(),
