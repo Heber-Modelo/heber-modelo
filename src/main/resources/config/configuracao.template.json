@@ -204,6 +204,12 @@
       "atributo": "salvarPNGLarguraPixeis",
       "tipo": "Long",
       "valorPadrao": 3820
+    },
+    {
+      "categoria": "editor",
+      "atributo": "mostrarBotoesExtrasDiagramas",
+      "tipo": "Boolean",
+      "valorPadrao": false
     }
   ]
 }

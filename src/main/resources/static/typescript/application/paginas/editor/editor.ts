@@ -351,6 +351,7 @@ inputsCarregarDiagrama.forEach((input: HTMLInputElement): void => {
     .definirCallbackCriarComponente(callbackCriarComponente)
     .definirCallbackFecharAba(fecharAba)
     .definirGeradorIDAba(geradorIDAba)
+    .definirMostrarBotoesExtras(mostrarBotoesExtrasDiagramas)
     .definirNomeDiagrama(input.value.toLowerCase())
     .definirRepositorioAbas(repositorioAbas)
     .definirRepositorioTiposDiagrama(repositorioTiposDiagrama)

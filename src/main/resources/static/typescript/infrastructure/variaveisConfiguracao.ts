@@ -13,6 +13,7 @@
 
 let incrementoMovimentacao: number;
 let modoAvancadoEditorPropriedades: boolean;
+let mostrarBotoesExtrasDiagramas: boolean;
 let pdfAlturaFolha: number;
 let pdfLarguraFolha: number;
 let pngAlturaImagem: number;
