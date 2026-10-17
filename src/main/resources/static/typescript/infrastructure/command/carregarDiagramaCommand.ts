@@ -11,24 +11,28 @@
  *
  */
 
+import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import GeradorIDAba from "infrastructure/gerador/geradorIDAba";
 import RepositorioAbas from "infrastructure/repositorio/repositorioAbas";
 import criarAba from "infrastructure/services/criarAba";
+import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
+import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
 import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
+import NomesComponente from "domain/enum/nomesComponente";
 import CommandBuilderException from "domain/exception/commandBuilderException";
 import ResponseDiagramaJSON from "domain/json/responseDiagramaJSON";
+import Aba from "domain/model/aba";
 import ICommand, { CommandResult } from "domain/model/command/iCommand";
 import ICommandBuilder from "domain/model/command/iCommandBuilder";
 import IRepositorioTiposDiagrama from "domain/model/repositorio/iRepositorioTiposDiagrama";
-import Aba from "domain/model/aba";
-import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
-import ComponenteFactory from "infrastructure/factory/componenteFactory";
-import SelecionadorComponente from "infrastructure/selecionador/selecionadorComponente";
+
+const NOMES_BOTOES_EXTRAS: string[] = [NomesComponente.CARDINALIDADE];
 
 export default class CarregarDiagramaCommand implements ICommand {
   private readonly _callbackCriarComponente: (event: Event) => void;
   private readonly _callbackFecharAba: (event: MouseEvent) => void;
   private readonly _geradorIDAba: GeradorIDAba;
+  private readonly _mostrarBotoesExtras: boolean;
   private readonly _nomeDiagrama: string;
   private readonly _repositorioAbas: RepositorioAbas;
   private readonly _repositorioTiposDiagrama: IRepositorioTiposDiagrama;
@@ -43,6 +47,7 @@ export default class CarregarDiagramaCommand implements ICommand {
     callbackCriarComponente: (event: Event) => void,
     callbackFecharAba: (event: MouseEvent) => void,
     geradorIDAba: GeradorIDAba,
+    mostrarBotoesExtras: boolean,
     nomeDiagrama: string,
     repositorioAbas: RepositorioAbas,
     repositorioTiposDiagrama: IRepositorioTiposDiagrama,
@@ -54,6 +59,7 @@ export default class CarregarDiagramaCommand implements ICommand {
     this._callbackCriarComponente = callbackCriarComponente;
     this._callbackFecharAba = callbackFecharAba;
     this._geradorIDAba = geradorIDAba;
+    this._mostrarBotoesExtras = mostrarBotoesExtras;
     this._nomeDiagrama = nomeDiagrama;
     this._repositorioAbas = repositorioAbas;
     this._repositorioTiposDiagrama = repositorioTiposDiagrama;
@@ -135,6 +141,10 @@ export default class CarregarDiagramaCommand implements ICommand {
             nomeElemento = await traduzirChaveI18n(tipoElemento.chaveI18N);
           }
 
+          if (!this._mostrarBotoesExtras && NOMES_BOTOES_EXTRAS.includes(nomeElemento)) {
+            continue;
+          }
+
           this._fieldSetElementos.append(
             await this.criarBotaoElemento(
               diagramaJSON.chaveI18N,
@@ -181,6 +191,7 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
   private _callbackCriarComponente: null | ((event: Event) => void) = null;
   private _callbackFecharAba: null | ((event: MouseEvent) => void) = null;
   private _geradorIDAba: GeradorIDAba | null = null;
+  private _mostrarBotoesExtras: boolean | null = null;
   private _nomeDiagrama: string | null = null;
   private _repositorioAbas: RepositorioAbas | null = null;
   private _repositorioTiposDiagrama: IRepositorioTiposDiagrama | null = null;
@@ -205,6 +216,12 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
 
   public definirGeradorIDAba(geradorIDAba: GeradorIDAba | null): this {
     this._geradorIDAba = geradorIDAba;
+
+    return this;
+  }
+
+  public definirMostrarBotoesExtras(mostrarBotoesExtras: boolean | null): this {
+    this._mostrarBotoesExtras = mostrarBotoesExtras;
 
     return this;
   }
@@ -268,6 +285,10 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
       throw new CommandBuilderException("gerador de id aba");
     }
 
+    if (this._mostrarBotoesExtras === null) {
+      throw new CommandBuilderException("valor de mostrar botões extras");
+    }
+
     if (this._nomeDiagrama === null) {
       throw new CommandBuilderException("nome do diagrama");
     }
@@ -300,6 +321,7 @@ export class CarregarDiagramaCommandBuilder implements ICommandBuilder<CarregarD
       this._callbackCriarComponente,
       this._callbackFecharAba,
       this._geradorIDAba,
+      this._mostrarBotoesExtras,
       this._nomeDiagrama,
       this._repositorioAbas,
       this._repositorioTiposDiagrama,

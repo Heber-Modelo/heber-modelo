@@ -15,6 +15,11 @@
       "chaveI18N": "element.entity-attribute"
     },
     {
+      "nome": "cardinalidade",
+      "tipo": "cardinalidade",
+      "chaveI18N": "element.entity-cardinality"
+    },
+    {
       "nome": "entidade",
       "tipo": "entidade",
       "chaveI18N": "element.entity"
