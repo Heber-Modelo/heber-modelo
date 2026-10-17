@@ -262,6 +262,10 @@ public class ControladorWeb {
         Optional<Double> optionalPDFLarguraFolha =
                 configurador.pegarValorConfiguracao("editor", "salvarPDFLarguraFolhaMM", double.class);
         optionalPDFLarguraFolha.ifPresent((Double largura) -> modelMap.addAttribute("pdfLarguraFolha", largura));
+        Optional<Boolean> optionalAutoAjustarTamanhoPNG =
+                configurador.pegarValorConfiguracao("editor", "autoAjustarTamanhoPNG", boolean.class);
+        optionalAutoAjustarTamanhoPNG.ifPresent((Boolean autoAjustarTamanhoPNG) ->
+                modelMap.addAttribute("autoAjustarTamanhoPNG", autoAjustarTamanhoPNG));
         Optional<Long> optionalPNGAltura =
                 configurador.pegarValorConfiguracao("editor", "salvarPNGAlturaPixeis", long.class);
         optionalPNGAltura.ifPresent((Long altura) -> modelMap.addAttribute("alturaPNG", altura));
