@@ -13,7 +13,6 @@
 
 package io.github.heberbarra.modelador.infrastructure.atualizador;
 
-import io.github.heberbarra.modelador.Principal;
 import io.github.heberbarra.modelador.application.logging.JavaLogger;
 import io.github.heberbarra.modelador.application.tradutor.TradutorWrapper;
 import io.github.heberbarra.modelador.application.usecase.hash.CalculadorHash;
@@ -50,10 +49,10 @@ public class AtualizadorPrograma implements IAtualizador {
 
     static {
         try {
-            URI arquivoJar = new URI("https://github.com/HeberBarra/%s/releases/latest/download/%s.jar"
-                    .formatted(Principal.NOME_PROGRAMA.toLowerCase(), Principal.NOME_PROGRAMA.toLowerCase()));
-            URI arquivoSha256 = new URI("https://github.com/HeberBarra/%s/releases/latest/download/SHA256SUM"
-                    .formatted(Principal.NOME_PROGRAMA.toLowerCase()));
+            URI arquivoJar =
+                    new URI("https://github.com/Heber-Modelo/Heber-Modelo/releases/latest/download/heber-modelo.jar");
+            URI arquivoSha256 =
+                    new URI("https://github.com/Heber-Modelo/Heber-Modelo/releases/latest/download/SHA256SUM");
             URL_ARQUIVO_JAR = arquivoJar.toURL();
             URL_ARQUIVO_SHA256 = arquivoSha256.toURL();
         } catch (MalformedURLException | URISyntaxException e) {
