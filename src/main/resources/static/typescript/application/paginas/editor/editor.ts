@@ -65,7 +65,6 @@ import TabelaRelacionalChangeEvent from "domain/event/tabelaRelacionalChangeEven
 /* VARIÁVEIS COMPARTILHADAS */
 /****************************/
 
-let abaPropriedades: HTMLDivElement | null = document.querySelector("section#propriedades");
 let commandHistory: CommandHistory = CommandHistoryFactory.build();
 let diagrama: HTMLElement | null = document.querySelector("main");
 let fabricaComponente: ComponenteFactory = new ComponenteFactory();
@@ -98,25 +97,12 @@ diagrama?.addEventListener("click", (event: MouseEvent): void => {
 
   if (target.tagName === "MAIN") {
     selecionadorComponente.removerSelecao();
-    limparPropriedades(abaPropriedades);
   }
 });
 
 /**************************/
 /* EDITOR DE PROPRIEDADES */
 /**************************/
-
-function limparPropriedades(abaPropriedades: HTMLElement | null): void {
-  if (abaPropriedades === null) return;
-
-  let nomesComponentes: NodeListOf<HTMLHeadingElement> = abaPropriedades.querySelectorAll("h3");
-  nomesComponentes.forEach((nomeComponente: HTMLHeadingElement): void => nomeComponente.remove());
-
-  let propriedades: NodeListOf<HTMLElement> = abaPropriedades.querySelectorAll(
-    `.${PropriedadeComponente.CLASSE_PROPRIEDADE_CUSTOMIZADA}`,
-  );
-  propriedades.forEach((propriedade: HTMLElement): void => propriedade.remove());
-}
 
 const PROPRIEDADES_MODO_AVANCADO: string[] = ["left", "top", "height", "width"];
 
@@ -153,7 +139,6 @@ function mouseDownSelecionarElemento(event: Event): void {
   }
 
   selecionadorComponente.selecionarElemento(componente);
-  limparPropriedades(abaPropriedades);
 
   let nomeComponente: HTMLHeadingElement = document.createElement("h3");
   abaPropriedades?.append(nomeComponente);
@@ -194,7 +179,6 @@ diagrama?.addEventListener(TabelaRelacionalChangeEvent.TABELA_RELACIONAL_CHANGE_
   let componenteSelecionado: ComponenteDiagrama | null =
     selecionadorComponente.componenteSelecionado;
   selecionadorComponente.removerSelecao();
-  limparPropriedades(abaPropriedades);
   componenteSelecionado?.htmlComponente.dispatchEvent(new MouseEvent("mousedown"));
   componenteSelecionado?.htmlComponente.dispatchEvent(new MouseEvent("mouseup"));
 });
@@ -315,6 +299,7 @@ async function callbackCriarComponente(event: Event): Promise<void> {
       let indiceUltimaAba: number = abas.length - 1;
       let ultimaAba: Aba = abas[indiceUltimaAba];
       selecionadorAba.selecionarAba(ultimaAba);
+      selecionadorComponente.removerSelecao();
       ultimaAba.htmlElement.setAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA, nomeDiagrama);
 
       let nomeAba: HTMLElement | null = ultimaAba.htmlElement.querySelector(
@@ -734,7 +719,6 @@ spanButtonApagar?.addEventListener("click", async (): Promise<void> => {
   commandHistory.saveAndExecuteCommand(command);
 
   selecionadorComponente.removerSelecao();
-  limparPropriedades(abaPropriedades);
 });
 
 spanButtonDeletar?.addEventListener("click", async (): Promise<void> => {
@@ -763,7 +747,6 @@ spanButtonDeletar?.addEventListener("click", async (): Promise<void> => {
     geradorIDComponente.id = 0;
 
     selecionadorComponente.removerSelecao();
-    limparPropriedades(abaPropriedades);
   }
 });
 
@@ -993,7 +976,6 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
     // Limpar seleção
     case bindings.get("removerSelecao"):
       selecionadorComponente.removerSelecao();
-      limparPropriedades(abaPropriedades);
       break;
 
     // Apagar elemento
@@ -1008,7 +990,6 @@ document.addEventListener("keydown", (event: KeyboardEvent): void => {
           commandHistory.saveAndExecuteCommand(command);
 
           selecionadorComponente.removerSelecao();
-          limparPropriedades(abaPropriedades);
         },
       );
 

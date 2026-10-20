@@ -15,6 +15,7 @@ import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import PontoExtensor from "domain/model/pontoExtensor";
 import SetaConectora from "domain/model/setaConectora";
+import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 
 export default class SelecionadorComponente {
   private _componenteSelecionado: ComponenteDiagrama | null;
@@ -44,6 +45,8 @@ export default class SelecionadorComponente {
     this._componenteSelecionado.htmlComponente.classList.add(
       ComponenteDiagrama.CLASSE_ELEMENTO_SELECIONADO,
     );
+
+    this.limparPropriedades();
     this.reposicionarPontosExtensores();
     this.reposicionarSetasConectoras(componente);
   }
@@ -103,6 +106,19 @@ export default class SelecionadorComponente {
     });
   }
 
+  private limparPropriedades(): void {
+    const abaPropriedades: HTMLDivElement | null = document.querySelector("section#propriedades");
+    if (abaPropriedades === null) return;
+
+    let nomesComponentes: NodeListOf<HTMLHeadingElement> = abaPropriedades.querySelectorAll("h3");
+    nomesComponentes.forEach((nomeComponente: HTMLHeadingElement): void => nomeComponente.remove());
+
+    let propriedades: NodeListOf<HTMLElement> = abaPropriedades.querySelectorAll(
+      `.${PropriedadeComponente.CLASSE_PROPRIEDADE_CUSTOMIZADA}`,
+    );
+    propriedades.forEach((propriedade: HTMLElement): void => propriedade.remove());
+  }
+
   public removerSelecao(): void {
     if (this._componenteSelecionado !== null) {
       this._componenteSelecionado.htmlComponente.classList.remove(
@@ -111,8 +127,9 @@ export default class SelecionadorComponente {
       this._componenteSelecionado = null;
     }
 
-    this._setasConectoras.forEach((seta: SetaConectora): void => seta.esconderSeta());
+    this.limparPropriedades();
     this.esconderPontosExtensores();
+    this.esconderSetasConectoras();
   }
 
   public moverSetasParaComponenteSelecionado(): void {
