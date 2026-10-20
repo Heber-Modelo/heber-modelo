@@ -94,10 +94,11 @@ export default class TrocarTipoConexaoCommand implements ICommand {
 
         let ouvintes: ComponenteDiagramaOuvinte[] = this._conexaoAlvo.ouvintes;
 
-        for (const ouvinte of ouvintes) {
-          this._conexaoAlvo.removerOuvinte(ouvinte, false);
-          this._novoComponenteConexao.adicionarOuvinte(ouvinte);
+        for (const item of ouvintes) {
+          this._novoComponenteConexao.adicionarOuvinte(item);
         }
+
+        this._conexaoAlvo.ouvintes = [];
 
         this._conexaoAlvo.htmlComponente.remove();
         this._repositorioComponentes.remover(this._conexaoAlvo);

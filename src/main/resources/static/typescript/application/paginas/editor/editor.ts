@@ -419,10 +419,8 @@ async function trocarTipoConexao(event: Event): Promise<void> {
     .definirTipoConexao(tipoConexao)
     .build();
 
+  selecionadorComponente.removerSelecao();
   commandHistory.saveAndExecuteCommand(command);
-  selecionadorComponente.selecionarElemento(
-    selecionadorComponente.componenteSelecionado as ComponenteDiagrama,
-  );
 }
 
 function callbackInicialSetaConectora(event: MouseEvent): void {
