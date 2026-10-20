@@ -92,6 +92,7 @@ export default class CarregarDiagramaCommand implements ICommand {
           async (novaAba: Aba): Promise<void> => {
             this._repositorioAbas.adicionar(novaAba);
             this._selecionadorAba.selecionarAba(novaAba);
+            this._selecionadorComponente.removerSelecao();
 
             this._seletorAbas.append(novaAba.htmlElement);
 
