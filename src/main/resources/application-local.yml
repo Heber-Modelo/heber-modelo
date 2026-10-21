@@ -6,6 +6,10 @@ spring:
       static-locations:
         - "file:src/main/resources/static"
         - "classpath:/static/"
+    error:
+      include-exception: true
+      include-message: always
+      include-binding-errors: always
   mandatory-file-encoding: UTF-8
   output:
     ansi:
@@ -49,10 +53,6 @@ logging:
     dateformat: E MMM dd hh:mm:ss z yy
 
 server:
-  error:
-    include-exception: true
-    include-message: always
-    include-binding-errors: always
   tomcat:
     max-http-form-post-size: 30MB
     max-swallow-size: 30MB

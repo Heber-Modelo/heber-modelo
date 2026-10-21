@@ -27,6 +27,12 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
+  web:
+    error:
+      include-exception: true
+      include-message: always
+      include-binding-errors: always
+
 server:
   tomcat:
     max-http-form-post-size: 30MB

@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <th:block th:replace="~{/fragments/head :: head}"></th:block>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
     <link rel="stylesheet" th:href="@{/css/editarFeedback.css}" />
     <title th:text="#{web.page.edit-feedback.title}"></title>
     <script th:src="@{/javascript/editarFeedback.js}" defer></script>
     <meta name="_csrf" th:content="${_csrf.token}" />
   </head>
   <body>
-    <header th:replace="~{/fragments/header :: header}"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
     <main>
       <h2 th:text="${feedback.getAtividade().getNome()}"></h2>
       <img th:src="'data:image/png;base64,' + ${feedback.getImagemAtividade()}" alt="" />
