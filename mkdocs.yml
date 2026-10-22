@@ -7,10 +7,10 @@ nav:
   - Home: index.md
   - Configuração: configuração.md
   - Diagramas:
-     - Dicionário de Dados: diagramas/dicionárioDados.md
-     - Diagrama de Entidade e Relacionamento: diagramas/diagramaEntidadeRelacionamento.md
+     - Diagrama de Entidade-Relacionamento: diagramas/diagramaEntidadeRelacionamento.md
+     - Descrição do Modelo Relacional: diagramas/descricaoModeloRelacional.md
      - Diagrama do Modelo Relacional: diagramas/diagramaModeloRelacional.md
-     - Diagrama do Modelo Relacional: diagramas/descricaoModeloRelacional.md
+     - Dicionário de Dados: diagramas/dicionárioDados.md
   - Sobre:
     - Licença: LICENSE.md
     - Política de Privacidade: políticaPrivacidade.md

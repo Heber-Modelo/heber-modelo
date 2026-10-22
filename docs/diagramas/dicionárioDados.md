@@ -1,10 +1,15 @@
 # DICIONÁRIO DE DADOS
 
-## SOBRE:
+O Dicionário de Dados é um complemento ao Diagrama do Modelo Relacional(DMR), pois descreve os seus atributos.
+Englobando as seguintes características: nome, descrição, tamanho, se pode ser nulo, regras de domínio("check"),
+se é chave, o valor padrão, e se é único. Em consequência de um ser um complemento ao DMR, o programa
+permite ativar o Dicionário de Dados apenas se o DMR também estiver ativo, caso contrário, o DMR
+será ligado automaticamente, e se for desativo, também o Dicionário de Dados o será.
 
-O dicionário de dados reúne todas as informações armazenadas e utilizadas pelo sistema. Seu objetivo é documentar os dados presentes no banco de dados, facilitando a compreensão da estrutura do projeto e a manutenção do sistema.
+Para adicionar ou remover atributos(as linhas da tabela) utilize os botões na parte de cima do Dicionário de Dados, à
+direita do nome da entidade. Vale-se ressaltar que não há nenhuma verificação em relação aos valores inseridos na tabela,
+senão o verificador ortográfico do seu navegador, ainda que os valores contradigam as regras do modelo padrão.
 
-Nele são descritos os campos de cada tabela, seus tipos de dados, restrições e finalidades. Dessa forma, é possível identificar com mais facilidade quais informações são armazenadas, como elas se relacionam e qual o papel de cada uma dentro da aplicação.
+**Referência**:
 
-!!! Warning "Documentação em Construção"
-
+ANGELLOTI, Elaini Simoni. Banco de Dados. Curitiba: Editora do Livro Técnico, 2010.
