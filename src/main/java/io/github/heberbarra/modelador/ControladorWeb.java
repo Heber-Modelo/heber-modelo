@@ -152,7 +152,7 @@ public class ControladorWeb {
         } else if (nomeSistemaOperacional.contains("nix") || nomeSistemaOperacional.contains("nux")) {
             runtime.exec(new String[] {"xdg-open", uriPrograma.toString()});
         } else if (nomeSistemaOperacional.contains("windows")) {
-            runtime.exec(new String[] {"powershell.exe", "-Command", uriPrograma.toString()});
+            runtime.exec(new String[] {"cmd.exe", "/c", "start", uriPrograma.toString()});
         } else {
             logger.warning(TradutorWrapper.tradutor.traduzirMensagem("error.browser.cannot.open"));
         }
