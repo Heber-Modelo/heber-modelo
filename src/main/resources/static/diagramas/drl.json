@@ -10,6 +10,11 @@
       "chaveI18N": "element.relational-table"
     },
     {
+      "nome": "cardinalidade",
+      "tipo": "cardinalidade",
+      "chaveI18N": "element.entity-cardinality"
+    },
+    {
       "nome": "nota",
       "tipo": "nota",
       "chaveI18N": "element.note"

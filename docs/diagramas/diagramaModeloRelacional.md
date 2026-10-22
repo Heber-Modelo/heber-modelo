@@ -1,29 +1,30 @@
-# MODELO RELACIONAL
+# DIAGRAMA DO MODELO RELACIONAL
 
+O Diagrama do Modelo Relacional(DMR) é feito a partir da Descrição do Modelo Relacional. Ambos apresentam quase todas
+os mesmos dados, distinguindo-se apenas na forma como os apresentam e no fato de que o DMR apresenta as
+cardinalidades dos relacionamentos entre as tabelas. Em consequência das regras de conversão, o DMR não deve apresentar
+relacionamentos N:N, porém, o programa não faz nenhuma verificação quanto a isso, em virtude ser uma ferramenta voltada
+ao aprendizado, cabendo aos estudantes ficarem atentos a esse detalhe.
 
-## SOBRE:
+Para adicionar ou remover atributos utilize os botões que aparecem embaixo da tabela quando selecionada. Utilizando o painel de
+propriedades, localizado na lateral direita da tela de edição, é possível trocar o nome de todos os atributos, e definir
+se eles são chaves primárias ou estrangeiras.
 
-O modelo relacional representa como os dados do sistema são organizados no banco de dados. Nele, as informações são armazenadas em tabelas, onde cada tabela possui uma finalidade específica e contém os dados necessários para o funcionamento da aplicação.
+!!! Warning "ATENÇÃO"
+    Não é possível desfazer a ação de apagar um atributo, sendo necessário recriá-lo do zero.
 
-As tabelas se relacionam por meio de chaves primárias e chaves estrangeiras, permitindo que as informações sejam conectadas de forma organizada e evitando a duplicação desnecessária de dados.
+### Tabela
 
+### Cardinalidade
 
-### Componentes do Modelo Relacional
+### Texto
 
-**Tabela:** Estrutura responsável por armazenar um conjunto de informações relacionadas a uma mesma entidade do sistema.
+Elemento adicional para permitir a inserção de textos avulsos no diagrama.
 
-**Coluna(Atributo):** Representa uma característica ou dado armazenado na tabela.
+### Nota
 
-**Registro:** Corresponde a uma linha da tabela, contendo os valores de um item específico.
+Elemento puramente decorativo, servindo para dar pequenas explicações e comentários sobre o diagrama.
 
-**Chave Primária(PK):** Campo que identifica unicamente cada registro da tabela.
+**Referência**:
 
-**Chave Estrangeira(FK):** Campo utilizado para criar relacionamentos entre tabelas.
-
-**Relacionamento:** Ligação existente entre duas ou mais tabelas do banco de dados.
-
-
-
-
-
-!!! Warning "Documentação em Construção"
+ANGELLOTI, Elaini Simoni. Banco de Dados. Curitiba: Editora do Livro Técnico, 2010.
