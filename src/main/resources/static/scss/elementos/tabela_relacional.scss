@@ -57,8 +57,8 @@
     cursor: text;
     display: grid;
     grid-column: 3;
-    grid-template-columns: 20% 0.3rem calc(80% - 0.3rem);
-    height: 1.9rem;
+    grid-template-columns: 1rem 0.3rem calc(100% - 1.3rem);
+    height: max(1.9rem, fit-content);
     padding: 0.3rem 1.3rem 0.3rem 0.3rem;
     pointer-events: none;
     width: 100%;
