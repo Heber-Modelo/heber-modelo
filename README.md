@@ -17,8 +17,8 @@
 
 <b>PROPOSTA:</b> Ferramenta para criação de diagramas UML, com funcionalidades extras para o ambiente educacional.
 
-Projeto baseado no [brModelo](https://github.com/chcandido/brModelo), visando criar uma ferramenta mais moderna,
-corrigindo algumas falhas, melhorando a experiência do usuário e permitindo maior customização.
+Projeto baseado no [brModelo](https://github.com/chcandido/brModelo), visando criar uma ferramenta mais moderna, com correção de algumas falhas,
+com uma melhor experiência do usuário e uma maior customização.
 Desenvolvido por estudantes do Curso Técnico em Informática do Instituto Federal do Paraná - Campus Curitiba, como
 projeto de conclusão de curso.
 
@@ -69,7 +69,7 @@ O programa é disponibilizado como um arquivo jar, sendo possível baixar o prog
 clonando o repositório e compilando o programa usando gradle bootJar.
 
 Para rodar o programa, basta dar dois cliques dependendo da configuração do sistema, ou utilizar o seguinte comando
-num terminal(na mesma pasta na qual o programa foi posto):[^1]
+num terminal(na mesma pasta na qual o programa foi posto)[^1]:
 
 ```shell
 java -jar heber-modelo.jar
@@ -129,9 +129,9 @@ se ter uma interface visual de acesso ao MySQL, para rodar os comandos contidos 
 
 ### Dependências:
 
-- [Gradle](https://gradle.org/) 9.7.0
+- [Gradle](https://gradle.org/) 9.8.1
 - [Java](https://www.oracle.com/java/technologies/downloads/) 25
-- [PNPM](https://pnpm.io/pt/) ^10.33.0
+- [PNPM](https://pnpm.io/pt/) ^12.14.0
 - [NodeJS](https://nodejs.org/pt) 25.2.1
 
 Para compilação da documentação:
@@ -141,7 +141,7 @@ Para compilação da documentação:
 
 Para auxiliar na execução do passo a passo:
 
-- [Just](https://just.systems/man/en/) ^1.50.0
+- [Just](https://just.systems/man/en/) ^1.58.0
 
 ### Passo a passo
 
@@ -160,6 +160,19 @@ uv run mkdocs build --clean --no-directory-urls --site-dir ./src/main/resources/
 
 ./gradlew bootRun # Para rodar o programa diretamente, ou
 ./gradlew bootJar # para gerar um jar executável do programa em ./build/libs
+```
+
+### Passo a Passo utilizando o Just
+
+```shell
+git clone https://github.com/Heber-Modelo/heber-modelo
+cd heber-modelo
+
+just setup
+just compile-sources
+
+./gradlew bootRun # Ou
+./gradlew bootJar
 ```
 
 # Funcionalidades Planejadas/Propostas
