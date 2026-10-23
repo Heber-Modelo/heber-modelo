@@ -75,6 +75,14 @@ num terminal(na mesma pasta na qual o programa foi posto)[^1]:
 java -jar heber-modelo.jar
 ```
 
+## Abertura com Clique Duplo no Jar
+
+Esta é uma funcionalidade experimental, destinada apenas aos computadores que utilizam sistema operacional Windows, e
+não possui nenhuma garantia de funcionar em todas as máquinas, devido à complexidade de iniciar uma aplicação Spring
+sem que o usuário utilize diretamente o terminal. A ideia aplicada é abrir um command prompt(CMD) quando for detectado
+que nenhum argumento foi passado para o programa num ambiente Windows, já que quando executado pelo terminal o argumento
+“-jar” seria passado ao programa.
+
 [^1]: É necessário utilizar a [versão 25 do Java](https://www.oracle.com/java/technologies/downloads/).
 
 ## Configuração do Banco de Dados
@@ -132,7 +140,7 @@ se ter uma interface visual de acesso ao MySQL, para rodar os comandos contidos 
 - [Gradle](https://gradle.org/) 9.8.1
 - [Java](https://www.oracle.com/java/technologies/downloads/) 25
 - [PNPM](https://pnpm.io/pt/) ^12.14.0
-- [NodeJS](https://nodejs.org/pt) 25.2.1
+- [NodeJS](https://nodejs.org/pt) v25.2.1
 
 Para compilação da documentação:
 
