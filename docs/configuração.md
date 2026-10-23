@@ -55,11 +55,55 @@ As `keymaps` do programa, sendo cada uma associada a uma função da página de 
 ``` toml title="config.toml"
 [editor]
   incrementoMovimentacaoElemento=10
+  modoAvancadoEditorPropriedades=false
+  abasExclusivas=true
+  salvarPDFAlturaFolhaMM=210.0
+  salvarPDFLarguraFolhaMM=297.0
+  salvarPNGAlturaPixeis=2160
+  salvarPNGLarguraPixeis=3820
+  mostrarBotoesExtrasDiagramas=false
+  autoAjustarTamanhoPNG=false
 ```
 
 #### Incremento Movimentação Elemento (Integer)
 
 Define a quantidade de pixeis que um elemento se moverá quando o usuário o movimentar usando o teclado.
+
+#### Modo Avançado Editor Propriedades (Boolean)
+
+Mostrar os seguintes campos, quando aplicáveis, no editor de propriedades: posição x, posição y, altura e largura.
+
+#### Abas Exclusivas (Boolean)
+
+Define se cada aba deve ter um, e apenas um, tipo de diagrama, com uma nova aba sendo criada caso um elemento de outro
+diagrama, diferente do da aba atual, seja criado.
+
+#### Salvar PDF Altura Folha MM (Double)
+
+Define a altura da folha dos PDFs exportados pelo programa em milímetros.
+
+#### Salvar PDF Largura Folha MM (Double)
+
+Define a largura da folha dos PDFs exportados pelo programa em milímetros.
+
+#### Salvar PNG Altura Píxels (Double)
+
+Define a altura dos PNGs exportados pelo programa em píxels.
+
+#### Salvar PNG Largura Píxels (Double)
+
+Define a largura dos PNGs exportados pelo programa em píxels.
+
+#### Mostrar Botões Extras dos Diagramas (Boolean)
+
+Mostra uma série de botões considerados "extras" de cada diagrama, por enquanto, apenas a cardinalidade se aplica nesse
+conceito, e está presente tanto no Diagrama de Entidade-Relacionamento quanto no Diagrama do Modelo Relacional.
+
+#### Auto Ajustar Tamanho PNG (Boolean)
+
+Define se o programa deve tentar ajustar automaticamente a altura e largura dos PNGs exportados(afeta, em parte, também
+os PDFs). Atenção, os resultados podem não ficar 100% de acordo, nesse caso, é possível salvar os arquivos como JSON ou
+XML para poder desligar essa opção, reiniciar a página, abrir os diagramas e exportá-los novamente.
 
 ### Ejetor
 
@@ -120,10 +164,6 @@ Define em píxeis o tamanho de cada quadrado que compõe a grade de fundo.
 
 Estas são as opções relacionadas a conexão com o banco de dados MySQL.
 
-!!! info "Aviso"
-    As funcionalidades que interagem o banco ainda não estão implementadas, por isso essas opções ainda não são revelantes
-    e podem ser ignoradas.
-
 #### Host (String)
 
 Define o `hostname` que será utilizado para efetuar a conexão com o banco de dados.
@@ -154,13 +194,29 @@ Define a `port` (porta) que deve ser utilizada pelo usuário para se conectar ao
 
 #### Domínio (String)
 
-Define o domínio que deve ser utilizado pelo usuário para se a conectar ao programa. Lembre-se de usar tanto a porta quanto o domínio na hora de acessar o programa.
+Define o domínio que deve ser utilizado pelo usuário para se a conectar ao programa. Lembre-se de usar tanto a porta
+quanto o domínio na hora de acessar o programa.
 
 #### Abrir Navegador Automaticamente (Boolean)
 
-Controla se o programa deve tentar abrir o navegador padrão do sistema de forma automática, já com uma aba aberta no domínio e porta
-do programa. Pode não funcionar em alguns sistemas devido às configurações de segurança ou seguranças.
+Controla se o programa deve tentar abrir o navegador padrão do sistema de forma automática, já com uma aba aberta
+no domínio e porta do programa. Pode não funcionar em alguns sistemas devido às configurações
+de segurança ou seguranças.
 
 #### Desativar Botão Desligar (Boolean)
 
-Desativa o botão de desligar presente na tela inicial do aplicativo, não só escondendo o botão, como também bloqueando a sua funcionalidade.
+Desativa o botão de desligar presente na tela inicial do aplicativo, não só escondendo o botão, como também
+bloqueando a sua funcionalidade.
+
+### Prova
+
+```toml title="config.toml"
+[prova]
+  limiteSegundosSemFoco=5
+```
+
+#### Limite em Segundos Sem Foco
+
+Define o tempo limite, em segundos, que os estudantes têm para voltar a aba do programa durante uma avaliação, caso
+ultrapassagem esse limite a avaliação é entregue e encerrada automaticamente. O tempo reinicia assim que o usuário volta
+à tela do programa.
