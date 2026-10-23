@@ -15,7 +15,14 @@ se eles são chaves primárias ou estrangeiras.
 
 ### Tabela
 
+Representa uma tabela no banco de dados com todos os seus atributos e relacionamentos. Cada atributo é posteriormente
+descrito no Dicionário de Dados.
+
 ### Cardinalidade
+
+Representa as restrições de número das conexões entre as tabelas, com quantos objetos um objeto daquela entidade
+pode se relacionar. Por exemplo, um diretor trabalha apenas em uma escola, mas escola pode ter mais de um diretor,
+seccionados por setor, como educação técnica, e ensino regular. Nisso, se constituiria um relacionamento 1:N.
 
 ### Texto
 
