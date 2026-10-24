@@ -171,7 +171,7 @@
       <div id="tests-list" th:if="${!provas.isEmpty()}">
         <details th:each="prova : ${provas}">
           <summary>
-            <span th:text="${prova.getTitulo()}"></span>
+            <span class="title" th:text="${prova.getTitulo()}"></span>
             <label class="publication-date">
               <span th:text="#{web.page.assignment.label.publication-date}"></span>
               <input type="datetime-local" th:value="${prova.getDataPostagem()}" />

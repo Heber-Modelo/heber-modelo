@@ -58,9 +58,21 @@ let descricaoWrapper: HTMLElement | undefined | null =
 
 atividadeSelecionadaWrapper?.style.setProperty("display", "none");
 
-function selecionarAtividade(inputTarget: HTMLInputElement): void {
-  let detailsTag: HTMLDetailsElement = inputTarget.parentElement?.parentElement
-    ?.parentElement as HTMLDetailsElement;
+function selecionarAtividade(target: HTMLButtonElement | HTMLInputElement): void {
+  let detailsTag: HTMLDetailsElement | undefined | null = undefined;
+  let elementoAtual: HTMLElement | null = target;
+  while (elementoAtual && !(elementoAtual instanceof HTMLDetailsElement)) {
+    if (elementoAtual.parentElement instanceof HTMLDetailsElement) {
+      detailsTag = elementoAtual.parentElement;
+      break;
+    }
+
+    elementoAtual = elementoAtual?.parentElement;
+  }
+
+  if (detailsTag === undefined || detailsTag === null) {
+    return;
+  }
 
   let titleElement: HTMLSpanElement | null = detailsTag.querySelector(".title");
   let deadlineElement: HTMLInputElement | null = detailsTag.querySelector(".deadline input");
@@ -72,7 +84,7 @@ function selecionarAtividade(inputTarget: HTMLInputElement): void {
   }
 
   if (codigoWrapper) {
-    codigoWrapper.value = inputTarget.value;
+    codigoWrapper.value = target.value;
   }
 
   if (dataEntregaWrapper && deadlineElement) {
@@ -131,8 +143,8 @@ buttonsIniciarProva.forEach((buttonIniciarProva: HTMLButtonElement): void => {
     }
 
     atividadeSelecionadaWrapper?.style.removeProperty("display");
-    let inputTarget: HTMLInputElement = event.target as HTMLInputElement;
-    selecionarAtividade(inputTarget);
+    let clickTarget: HTMLButtonElement = event.target as HTMLButtonElement;
+    selecionarAtividade(clickTarget);
 
     let buttonAbrirArquivo: HTMLSpanElement | null = document.querySelector("#abrir");
     let buttonNovoArquivo: HTMLSpanElement | null = document.querySelector("#novo");
