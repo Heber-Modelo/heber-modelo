@@ -60,6 +60,7 @@ import PropriedadeComponente from "domain/model/propriedade/propriedadeComponent
 import SetaConectora from "domain/model/setaConectora";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 import TabelaRelacionalChangeEvent from "domain/event/tabelaRelacionalChangeEvent";
+import TiposAtributo from "domain/enum/tiposAtributo";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -239,6 +240,10 @@ registradorEventosConexao.adicionarCallback(
   trocarTipoConexao,
 );
 
+registradorEventosElemento.adicionarCallback(
+  PropertyChangeEvent.PROPERTY_CHANGE_EVENT,
+  trocarTipoAtributo,
+);
 registradorEventosElemento.adicionarCallback("mousedown", mouseDownSelecionarElemento);
 registradorEventosElemento.adicionarCallback("mousedown", mouseDownComecarMoverElemento);
 registradorEventosElemento.adicionarCallback("mouseup", mouseUpPararMoverElemento);
@@ -400,7 +405,7 @@ async function trocarTipoConexao(event: Event): Promise<void> {
     return;
   }
 
-  for (const option of selectPropriedadeTipoConexao?.options) {
+  for (const option of selectPropriedadeTipoConexao.options) {
     if (option.selected) {
       tipoConexao = TiposConexao[option.value as keyof typeof TiposConexao];
     }
@@ -570,6 +575,56 @@ placeholderAtributo.innerText = "X";
 placeholderAtributo.id = "atributo-placeholder";
 placeholderAtributo.style.display = "none";
 placeholderAtributo.style.position = "absolute";
+
+function trocarTipoAtributo(event: Event): void {
+  event.stopImmediatePropagation();
+  event.stopPropagation();
+
+  let atributoAlvo: ComponenteDiagrama | null = repositorioComponentes.pegarPorHTML(
+    event.target as HTMLElement,
+  );
+  let marcadorAtributo: HTMLElement | undefined | null =
+    atributoAlvo?.htmlComponente.querySelector(".marcador-atributo");
+
+  if (
+    atributoAlvo === null ||
+    marcadorAtributo === undefined ||
+    marcadorAtributo === null ||
+    atributoAlvo.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE) !==
+      NomesComponente.ATRIBUTO_DER
+  ) {
+    return;
+  }
+
+  let tipoAtributo: TiposAtributo = TiposAtributo.NORMAL;
+  let selectPropriedadeTipoAtributo: HTMLSelectElement | null = document.querySelector(
+    "select[name=attributeType]",
+  );
+
+  if (selectPropriedadeTipoAtributo?.options === undefined) {
+    return;
+  }
+
+  for (const option of selectPropriedadeTipoAtributo.options) {
+    if (option.selected) {
+      tipoAtributo = TiposAtributo[option.value as keyof typeof TiposAtributo];
+    }
+  }
+
+  switch (tipoAtributo) {
+    case TiposAtributo.NORMAL:
+      marcadorAtributo.classList = "marcador-atributo";
+      break;
+
+    case TiposAtributo.DERIVADO:
+      marcadorAtributo.classList = "marcador-atributo derivado";
+      break;
+
+    case TiposAtributo.CHAVE_PRIMARIA:
+      marcadorAtributo.classList = "marcador-atributo primary-key";
+      break;
+  }
+}
 
 function trocarCallbackBtnAtributo(): void {
   let btnAtributo: HTMLButtonElement | null = document.querySelector(

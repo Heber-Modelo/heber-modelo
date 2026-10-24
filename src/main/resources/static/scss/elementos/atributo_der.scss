@@ -27,6 +27,10 @@
     margin: 0.2rem 0;
   }
 
+  .marcador-atributo.derivado {
+    border: dotted 0.1rem;
+  }
+
   .marcador-atributo.primary-key {
     background-color: var(--cor-borda);
   }
