@@ -29,6 +29,18 @@
       "classeElemento": "nome",
       "nomePropriedade": "innerText",
       "sufixo": ""
+    },
+    {
+      "chaveI18nLabel": "element.property.attribute-type.label",
+      "classeElemento": "elemento-atributo",
+      "nomePropriedade": "attributeType",
+      "sufixo": "",
+      "chavesI18nLabelsValoresPermitidos": [
+        "element.property.attribute-type.normal.label",
+        "element.property.attribute-type.derived.label",
+        "element.property.attribute-type.primary-key.label"
+      ],
+      "valoresPermitidos": ["NORMAL", "DERIVADO", "CHAVE_PRIMARIA"]
     }
   ]
 }

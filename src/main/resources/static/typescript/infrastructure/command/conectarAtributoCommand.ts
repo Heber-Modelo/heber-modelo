@@ -137,6 +137,22 @@ export default class ConectarAtributoCommand implements ICommand {
           let y: number = 0;
 
           switch (lateralComponente) {
+            case LateraisComponente.NORTE:
+              x =
+                converterPixeisParaNumero(estiloComponente.left) +
+                converterPixeisParaNumero(estiloComponente.width) / 2;
+              y = converterPixeisParaNumero(estiloComponente.top);
+              break;
+
+            case LateraisComponente.SUL:
+              x =
+                converterPixeisParaNumero(estiloComponente.left) +
+                converterPixeisParaNumero(estiloComponente.width) / 2;
+              y =
+                converterPixeisParaNumero(estiloComponente.top) +
+                converterPixeisParaNumero(estiloComponente.height);
+              break;
+
             case LateraisComponente.OESTE:
               x = converterPixeisParaNumero(estiloComponente.left) + tamanhoBorda;
               y =

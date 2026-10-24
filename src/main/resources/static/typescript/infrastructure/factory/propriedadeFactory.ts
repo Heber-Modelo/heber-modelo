@@ -19,6 +19,7 @@ import PropriedadeFilho from "domain/model/propriedade/propriedadeFilho";
 import PropriedadeFilhoChaveAtributo from "domain/model/propriedade/propriedadeFilhoChaveAtributo";
 import PropriedadeSelecionavel from "domain/model/propriedade/propriedadeSelecionavel";
 import PropriedadeSelecionavelTipoConexao from "domain/model/propriedade/propriedadeSelecionavelTipoConexao";
+import PropriedadeSelecionavelTipoAtributo from "domain/model/propriedade/propriedadeSelecionavelTipoAtributo";
 
 export default class PropriedadeFactory {
   public criarPropriedade(
@@ -32,6 +33,16 @@ export default class PropriedadeFactory {
   ): PropriedadeComponente | null {
     if (nomePropriedade === "innerText") {
       return new PropriedadeInnerText(componente, sufixo, label, classeElemento);
+    } else if (nomePropriedade === "attributeType" && valoresPermitidos) {
+      return new PropriedadeSelecionavelTipoAtributo(
+        nomePropriedade,
+        componente,
+        sufixo,
+        label,
+        classeElemento,
+        chavesI18nLabelsValoresPermitidos,
+        valoresPermitidos,
+      );
     } else if (nomePropriedade === "connectionType" && valoresPermitidos) {
       return new PropriedadeSelecionavelTipoConexao(
         nomePropriedade,
