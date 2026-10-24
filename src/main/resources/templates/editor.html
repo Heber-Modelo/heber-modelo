@@ -190,6 +190,7 @@
           </div>
           <button
             type="button"
+            th:value="${prova.getCodigo()}"
             th:if="${feedbacks.get(prova.getCodigo()).isEmpty()}"
             th:text="#{web.page.editor.assignments.begin-test.label}"
           ></button>
