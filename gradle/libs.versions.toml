@@ -1,7 +1,7 @@
 [plugins]
 spotless = { id = "com.diffplug.spotless", version = "8.10.4" }
 springdependency = { id = "io.spring.dependency-management", version = "1.1.7" }
-springboot = { id = "org.springframework.boot", version = "4.1.1" }
+springboot = { id = "org.springframework.boot", version = "4.1.2" }
 [libraries]
 cdimascioDotenv = { module = "io.github.cdimascio:dotenv-java", version = "3.2.0" }
 heberModeloAPI = { module = "io.github.heberbarra:heber-modelo-api", version = "0.1.0-ALPHA" }
