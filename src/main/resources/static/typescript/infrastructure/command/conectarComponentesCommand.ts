@@ -120,13 +120,8 @@ export default class ConectarComponentesCommand implements ICommand {
         this._diagrama.append(this._componenteConexao.htmlComponente);
       });
 
-    let nomePrimeiroComponente: string | null =
-      this._primeiroComponente.htmlComponente.getAttribute(
-        ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
-      );
-    let nomeSegundoComponente: string | null = this._segundoComponente.htmlComponente.getAttribute(
-      ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
-    );
+    let nomePrimeiroComponente: string | null = this._primeiroComponente.nome;
+    let nomeSegundoComponente: string | null = this._segundoComponente.nome;
 
     if (
       (nomePrimeiroComponente !== NomesComponente.RELACIONAMENTO ||
@@ -165,11 +160,7 @@ export default class ConectarComponentesCommand implements ICommand {
             return;
           }
 
-          if (
-            this._primeiroComponente.htmlComponente.getAttribute(
-              ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
-            ) === NomesComponente.ENTIDADE
-          ) {
+          if (this._primeiroComponente.nome === NomesComponente.ENTIDADE) {
             this._componenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
               componente.htmlComponente,
               componente.propriedades,
@@ -210,11 +201,7 @@ export default class ConectarComponentesCommand implements ICommand {
       this._diagrama.append(this._componenteCardinalidade.htmlComponente);
       this._repositorioComponente.adicionar(this._componenteCardinalidade);
 
-      if (
-        this._primeiroComponente.htmlComponente.getAttribute(
-          ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
-        ) === NomesComponente.RELACIONAMENTO
-      ) {
+      if (this._primeiroComponente.nome === NomesComponente.RELACIONAMENTO) {
         this._segundoComponente.adicionarOuvinte(this._componenteCardinalidade);
       } else {
         this._primeiroComponente.adicionarOuvinte(this._componenteCardinalidade);

@@ -29,8 +29,6 @@ export default class ComponenteDescricaoRelacional extends ComponenteDiagrama {
     let idComponente: number = Number(
       this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE),
     );
-    let nomeComponente: string =
-      this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) || "";
     let areaEdicao: HTMLElement | null = this._htmlComponente.querySelector(
       ComponenteDescricaoRelacional.CLASSE_AREA_EDICAO,
     );
@@ -39,7 +37,7 @@ export default class ComponenteDescricaoRelacional extends ComponenteDiagrama {
     return {
       idAba,
       idComponente,
-      nomeComponente,
+      nomeComponente: this.nome,
       descricaoHTML,
     } as DescricaoRelacionalJSON;
   }

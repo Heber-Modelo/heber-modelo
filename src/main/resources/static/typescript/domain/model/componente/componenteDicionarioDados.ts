@@ -35,8 +35,6 @@ export default class ComponenteDicionarioDados extends ComponenteDiagrama {
     let idComponente: number = Number(
       this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE),
     );
-    let nomeComponente: string =
-      this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) || "";
     let nomeEntidade: string = this._htmlComponente.querySelector("caption")?.innerHTML || "";
 
     let atributos: string[] = [];
@@ -64,7 +62,7 @@ export default class ComponenteDicionarioDados extends ComponenteDiagrama {
     return {
       idAba,
       idComponente,
-      nomeComponente,
+      nomeComponente: this.nome,
       nomeEntidade,
       atributos,
       descricoes,

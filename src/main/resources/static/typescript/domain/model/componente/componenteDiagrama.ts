@@ -43,18 +43,6 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
   protected _htmlComponente: HTMLDivElement;
   protected _recebeSetas: boolean = true;
 
-  get htmlComponente(): HTMLDivElement {
-    return this._htmlComponente;
-  }
-
-  set htmlComponente(novoHtmlComponente: HTMLDivElement) {
-    this._htmlComponente = novoHtmlComponente;
-  }
-
-  get propriedades(): PropriedadeComponente[] {
-    return this._propriedades;
-  }
-
   public atualizarPropriedades(): void {
     this._propriedades.forEach((propriedade: PropriedadeComponente): void =>
       propriedade.atualizarInput(),
@@ -230,11 +218,27 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
     } as ComponenteJSON;
   }
 
+  get htmlComponente(): HTMLDivElement {
+    return this._htmlComponente;
+  }
+
+  set htmlComponente(novoHtmlComponente: HTMLDivElement) {
+    this._htmlComponente = novoHtmlComponente;
+  }
+
+  get nome(): string {
+    return this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) ?? "";
+  }
+
   get ouvintes(): ComponenteDiagramaOuvinte[] {
     return this._ouvintes;
   }
 
   set ouvintes(value: ComponenteDiagramaOuvinte[]) {
     this._ouvintes = value;
+  }
+
+  get propriedades(): PropriedadeComponente[] {
+    return this._propriedades;
   }
 }

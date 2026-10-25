@@ -86,12 +86,8 @@ export default async function salvarDiagramas(
   let dicionariosDadosJSON: DicionarioDadosJSON[] = [];
 
   componentes.forEach((componenteDiagrama: ComponenteDiagrama): void => {
-    let nomeComponenteString: string =
-      componenteDiagrama.htmlComponente.getAttribute(
-        ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
-      ) || "";
     let nomeComponente: NomesComponente =
-      NomesComponente[nomeComponenteString as keyof typeof NomesComponente];
+      NomesComponente[componenteDiagrama.nome as keyof typeof NomesComponente];
 
     switch (nomeComponente) {
       case NomesComponente.EDITOR_DESCRICAO_RELACIONAL:

@@ -144,22 +144,14 @@ function mouseDownSelecionarElemento(event: Event): void {
 
   let nomeComponente: HTMLHeadingElement = document.createElement("h3");
   abaPropriedades?.append(nomeComponente);
-  nomeComponente.innerText = (
-    componente.htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) ?? ""
-  )
-    .toUpperCase()
-    .replaceAll("_", " ");
+  nomeComponente.innerText = componente.nome.toUpperCase().replaceAll("_", " ");
   adicionarPropriedades(abaPropriedades, componente.propriedades, selecionadorComponente);
 
   componente.ouvintes.forEach((ouvinte: ComponenteDiagramaOuvinte): void => {
     if (ouvinte instanceof ComponenteDiagrama && !(ouvinte instanceof AbstractComponenteConexao)) {
       let nomeComponente: HTMLHeadingElement = document.createElement("h3");
       abaPropriedades?.append(nomeComponente);
-      nomeComponente.innerText = (
-        ouvinte.htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) ?? ""
-      )
-        .toUpperCase()
-        .replaceAll("_", " ");
+      nomeComponente.innerText = ouvinte.nome.toUpperCase().replaceAll("_", " ");
       adicionarPropriedades(abaPropriedades, ouvinte.propriedades, selecionadorComponente);
     }
   });
@@ -500,12 +492,8 @@ async function conectarElementos(event: MouseEvent): Promise<void> {
   }
 
   if (
-    conectarComponentesCommandBuilder.primeiroComponente?.htmlComponente.getAttribute(
-      ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
-    ) === NomesComponente.ENTIDADE &&
-    conectarComponentesCommandBuilder.segundoComponente?.htmlComponente.getAttribute(
-      ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
-    ) === NomesComponente.ENTIDADE
+    conectarComponentesCommandBuilder.primeiroComponente?.nome === NomesComponente.ENTIDADE &&
+    conectarComponentesCommandBuilder.segundoComponente?.nome === NomesComponente.ENTIDADE
   ) {
     const { ConectarDuasEntidadesCommandBuilder } =
       await import("infrastructure/command/conectarDuasEntidadesCommand");
@@ -519,12 +507,9 @@ async function conectarElementos(event: MouseEvent): Promise<void> {
   }
 
   if (
-    conectarComponentesCommandBuilder.primeiroComponente?.htmlComponente.getAttribute(
-      ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
-    ) === NomesComponente.TABELA_RELACIONAL &&
-    conectarComponentesCommandBuilder.segundoComponente?.htmlComponente.getAttribute(
-      ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
-    ) === NomesComponente.TABELA_RELACIONAL
+    conectarComponentesCommandBuilder.primeiroComponente?.nome ===
+      NomesComponente.TABELA_RELACIONAL &&
+    conectarComponentesCommandBuilder.segundoComponente?.nome === NomesComponente.TABELA_RELACIONAL
   ) {
     const { ConectarDuasEntidadesRelacionaisCommandBuilder } =
       await import("infrastructure/command/conectarDuasEntidadesRelacionaisCommand");
@@ -590,11 +575,9 @@ function trocarTipoAtributo(event: Event): void {
     atributoAlvo?.htmlComponente.querySelector(".marcador-atributo");
 
   if (
-    atributoAlvo === null ||
     marcadorAtributo === undefined ||
     marcadorAtributo === null ||
-    atributoAlvo.htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) !==
-      NomesComponente.ATRIBUTO_DER
+    atributoAlvo?.nome !== NomesComponente.ATRIBUTO_DER
   ) {
     return;
   }
