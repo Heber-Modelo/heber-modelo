@@ -11,10 +11,9 @@
  *
  */
 
-export default interface DicionarioDadosJSON {
-  idAba: number;
-  idComponente: number;
-  nomeComponente: string;
+import BaseJSONComponente from "domain/json/baseJSONComponente";
+
+export default interface DicionarioDadosJSON extends BaseJSONComponente {
   nomeEntidade: string;
 
   atributos: string[];

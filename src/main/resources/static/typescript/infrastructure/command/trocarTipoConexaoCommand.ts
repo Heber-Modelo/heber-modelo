@@ -77,14 +77,14 @@ export default class TrocarTipoConexaoCommand implements ICommand {
         );
 
         let idAba: string | null = this._conexaoAlvo.htmlComponente.getAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
         );
         let idConexao: string | null = this._conexaoAlvo.htmlComponente.getAttribute(
           ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
         );
 
         this._novoComponenteConexao.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           `${idAba}`,
         );
         this._novoComponenteConexao.htmlComponente.setAttribute(

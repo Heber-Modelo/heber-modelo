@@ -132,7 +132,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
           `${(primeiroPonto.y + segundoPonto.y) / 2 - componenteBoundingRect.height / 2}px`,
         );
         componente.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
         componente.htmlComponente.setAttribute(
@@ -153,7 +153,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
         );
 
         primeiraConexao.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
         primeiraConexao.htmlComponente.setAttribute(
@@ -183,7 +183,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
         this._diagrama.append(primeiraCardinalidade.htmlComponente);
 
         primeiraCardinalidade.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
         primeiraCardinalidade.htmlComponente.setAttribute(
@@ -217,7 +217,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
         );
 
         segundaConexao.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
         segundaConexao.htmlComponente.setAttribute(
@@ -247,7 +247,7 @@ export default class ConectarDuasEntidadesCommand implements ICommand {
         this._diagrama.append(segundaCardinalidade.htmlComponente);
 
         segundaCardinalidade.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
         segundaCardinalidade.htmlComponente.setAttribute(

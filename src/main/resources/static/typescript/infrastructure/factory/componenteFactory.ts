@@ -17,17 +17,11 @@ import ValoresJSONComponente from "domain/json/valoresJSONComponente";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 import NomesComponente from "domain/enum/nomesComponente";
+import ComponenteDescricaoRelacional from "domain/model/componente/componenteDescricaoRelacional";
+import ComponenteDicionarioDados from "domain/model/componente/componenteDicionarioDados";
 import ComponenteTabelaRelacional from "domain/model/componente/componenteTabelaRelacional";
 
 export default class ComponenteFactory {
-  public static readonly PROPRIEDADE_ID_ABA: string = "data-indice-aba";
-  public static readonly PROPRIEDADE_CHAVE_I18N_DIAGRAMA: string = "data-chave-i18n-diagrama";
-  public static readonly PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
-  public static readonly PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string =
-    "data-recebe-pontos-extensores";
-  public static readonly PROPRIEDADE_RECEBE_SETAS_CONECTORAS: string =
-    "data-recebe-setas-conectoras";
-
   private async pegarJSON(nomeComponente: string): Promise<ValoresJSONComponente> {
     return await fetch(`/elementos/${nomeComponente.toLowerCase()}.json`).then(
       (response: Response): Promise<ValoresJSONComponente> => response.json(),
@@ -40,13 +34,13 @@ export default class ComponenteFactory {
         let fabricaPropriedade: PropriedadeFactory = new PropriedadeFactory();
         let elementoHTML: HTMLDivElement = document.createElement("div");
         elementoHTML.innerHTML = valores.valorHtmlInterno;
-        elementoHTML.setAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE, nomeComponente);
+        elementoHTML.setAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE, nomeComponente);
         elementoHTML.setAttribute(
-          ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
+          ComponenteDiagrama.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
           valores.recebePontoExtensor,
         );
         elementoHTML.setAttribute(
-          ComponenteFactory.PROPRIEDADE_RECEBE_SETAS_CONECTORAS,
+          ComponenteDiagrama.PROPRIEDADE_RECEBE_SETAS_CONECTORAS,
           valores.recebeSetaConectora,
         );
         elementoHTML.classList.add(ComponenteDiagrama.CLASSE_BASE_COMPONENTE);
@@ -56,6 +50,10 @@ export default class ComponenteFactory {
 
         if (nomeComponente === NomesComponente.TABELA_RELACIONAL) {
           componente = new ComponenteTabelaRelacional(elementoHTML, []);
+        } else if (nomeComponente === NomesComponente.EDITOR_DESCRICAO_RELACIONAL) {
+          componente = new ComponenteDescricaoRelacional(elementoHTML);
+        } else if (nomeComponente === NomesComponente.TABELA_DICIONARIO_DADOS) {
+          componente = new ComponenteDicionarioDados(elementoHTML);
         } else {
           componente = new ComponenteDiagrama(elementoHTML, []);
         }

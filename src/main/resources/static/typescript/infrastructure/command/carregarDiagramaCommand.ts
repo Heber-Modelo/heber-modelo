@@ -11,7 +11,6 @@
  *
  */
 
-import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import GeradorIDAba from "infrastructure/gerador/geradorIDAba";
 import RepositorioAbas from "infrastructure/repositorio/repositorioAbas";
 import criarAba from "infrastructure/services/criarAba";
@@ -22,6 +21,7 @@ import NomesComponente from "domain/enum/nomesComponente";
 import CommandBuilderException from "domain/exception/commandBuilderException";
 import ResponseDiagramaJSON from "domain/json/responseDiagramaJSON";
 import Aba from "domain/model/aba";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import ICommand, { CommandResult } from "domain/model/command/iCommand";
 import ICommandBuilder from "domain/model/command/iCommandBuilder";
 import IRepositorioTiposDiagrama from "domain/model/repositorio/iRepositorioTiposDiagrama";
@@ -81,8 +81,8 @@ export default class CarregarDiagramaCommand implements ICommand {
     let textoSimboloSvg: string = await responseSimbolo.text();
     botao.classList.add("btn-criar-elemento");
     botao.setAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA, nomeDiagrama);
-    botao.setAttribute(ComponenteFactory.PROPRIEDADE_CHAVE_I18N_DIAGRAMA, chaveI18NDiagrama);
-    botao.setAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE, tipoElemento);
+    botao.setAttribute(ComponenteDiagrama.PROPRIEDADE_CHAVE_I18N_DIAGRAMA, chaveI18NDiagrama);
+    botao.setAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE, tipoElemento);
     botao.title = nomeElemento;
     botao.innerHTML = `${textoSimboloSvg} <h3>${nomeElemento.toUpperCase()}</h3>`;
 

@@ -11,18 +11,17 @@
  *
  */
 
-import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import NomesComponente from "domain/enum/nomesComponente";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import Ponto from "domain/model/ponto";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
 
-export default function colectarPosicoesAtributos(componentes: ComponenteDiagrama[]): Ponto[] {
+export default function coletarPosicoesAtributos(componentes: ComponenteDiagrama[]): Ponto[] {
   let pontos: Ponto[] = [];
 
   for (const componente of componentes) {
     if (
-      componente.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE) ===
+      componente.htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) ===
       NomesComponente.ATRIBUTO_DER
     ) {
       let x: number = converterPixeisParaNumero(

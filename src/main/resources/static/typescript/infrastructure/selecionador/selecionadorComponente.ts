@@ -11,7 +11,6 @@
  *
  */
 
-import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import PontoExtensor from "domain/model/pontoExtensor";
 import SetaConectora from "domain/model/setaConectora";
@@ -72,7 +71,7 @@ export default class SelecionadorComponente {
   public reposicionarPontosExtensores(): void {
     let recebePontosExtensores: string | null | undefined =
       this._componenteSelecionado?.htmlComponente.getAttribute(
-        ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
+        ComponenteDiagrama.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
       );
 
     if (recebePontosExtensores === "false") {
@@ -92,7 +91,7 @@ export default class SelecionadorComponente {
   public reposicionarSetasConectoras(componente: ComponenteDiagrama): void {
     let recebeSetasConectoras: string | null | undefined =
       this._componenteSelecionado?.htmlComponente.getAttribute(
-        ComponenteFactory.PROPRIEDADE_RECEBE_SETAS_CONECTORAS,
+        ComponenteDiagrama.PROPRIEDADE_RECEBE_SETAS_CONECTORAS,
       );
 
     if (recebeSetasConectoras === "false") {
@@ -136,14 +135,6 @@ export default class SelecionadorComponente {
     if (this._componenteSelecionado !== null) {
       this.reposicionarSetasConectoras(this._componenteSelecionado);
     }
-  }
-
-  public pegarHTMLElementoSelecionado(): HTMLElement | null {
-    if (this._componenteSelecionado === null) {
-      return null;
-    }
-
-    return this._componenteSelecionado.htmlComponente;
   }
 
   get componenteSelecionado(): ComponenteDiagrama | null {

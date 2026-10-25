@@ -108,7 +108,7 @@ export default class ConectarComponentesCommand implements ICommand {
           this._segundoComponente,
         );
         this._componenteConexao.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
         this._componenteConexao.htmlComponente.setAttribute(
@@ -122,10 +122,10 @@ export default class ConectarComponentesCommand implements ICommand {
 
     let nomePrimeiroComponente: string | null =
       this._primeiroComponente.htmlComponente.getAttribute(
-        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+        ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
       );
     let nomeSegundoComponente: string | null = this._segundoComponente.htmlComponente.getAttribute(
-      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+      ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
     );
 
     if (
@@ -167,7 +167,7 @@ export default class ConectarComponentesCommand implements ICommand {
 
           if (
             this._primeiroComponente.htmlComponente.getAttribute(
-              ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+              ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
             ) === NomesComponente.ENTIDADE
           ) {
             this._componenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
@@ -212,7 +212,7 @@ export default class ConectarComponentesCommand implements ICommand {
 
       if (
         this._primeiroComponente.htmlComponente.getAttribute(
-          ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+          ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
         ) === NomesComponente.RELACIONAMENTO
       ) {
         this._segundoComponente.adicionarOuvinte(this._componenteCardinalidade);

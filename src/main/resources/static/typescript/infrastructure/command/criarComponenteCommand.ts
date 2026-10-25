@@ -67,7 +67,7 @@ export default class CriarComponenteCommand implements ICommand {
           String(this._geradorIDComponente.pegarProximoID()),
         );
         componente.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
         this._repositorioComponentes.adicionar(componente);

@@ -38,7 +38,6 @@ export default {
       baseDirectory,
       "application/paginas/editor/mostrarAtividades.ts",
     ),
-    salvar: path.resolve(baseDirectory, "application/paginas/editor/salvar.ts"),
     solicitar: path.resolve(baseDirectory, "application/paginas/solicitar.ts"),
     quill: "quill",
   },

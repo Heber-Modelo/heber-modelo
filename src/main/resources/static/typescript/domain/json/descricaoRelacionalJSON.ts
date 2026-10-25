@@ -11,9 +11,8 @@
  *
  */
 
-export default interface DescricaoRelacionalJSON {
-  idAba: number;
-  idComponente: number;
-  nomeComponente: string;
+import BaseJSONComponente from "domain/json/baseJSONComponente";
+
+export default interface DescricaoRelacionalJSON extends BaseJSONComponente {
   descricaoHTML: string;
 }

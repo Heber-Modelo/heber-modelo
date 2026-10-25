@@ -1,8 +1,4 @@
 endOfLine: lf
-importOrder:
-  - ^application/(.*)$
-  - ^infrastructure/(.*)$
-  - ^domain/(.*)$
 importOrderSortSpecifiers: true
 printWidth: 100
 tabWidth: 2

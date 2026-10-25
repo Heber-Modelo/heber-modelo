@@ -11,7 +11,7 @@
  *
  */
 
-enum TipoArquivo {
+enum OpcoesSalvar {
   BANCO,
   JSON,
   PDF,
@@ -20,4 +20,4 @@ enum TipoArquivo {
   XML,
 }
 
-export default TipoArquivo;
+export default OpcoesSalvar;

@@ -48,8 +48,11 @@ import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import DirecoesMovimento from "domain/enum/direcoesMovimento";
 import LateraisComponente from "domain/enum/lateraisComponente";
 import NomesComponente from "domain/enum/nomesComponente";
+import OpcoesSalvar from "domain/enum/opcoesSalvar";
+import TiposAtributo from "domain/enum/tiposAtributo";
 import TiposConexao from "domain/enum/tiposConexao";
 import PropertyChangeEvent from "domain/event/propertyChangeEvent";
+import TabelaRelacionalChangeEvent from "domain/event/tabelaRelacionalChangeEvent";
 import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
@@ -59,8 +62,6 @@ import Ponto from "domain/model/ponto";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 import SetaConectora from "domain/model/setaConectora";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
-import TabelaRelacionalChangeEvent from "domain/event/tabelaRelacionalChangeEvent";
-import TiposAtributo from "domain/enum/tiposAtributo";
 
 /****************************/
 /* VARIÁVEIS COMPARTILHADAS */
@@ -144,7 +145,7 @@ function mouseDownSelecionarElemento(event: Event): void {
   let nomeComponente: HTMLHeadingElement = document.createElement("h3");
   abaPropriedades?.append(nomeComponente);
   nomeComponente.innerText = (
-    componente.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE) ?? ""
+    componente.htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) ?? ""
   )
     .toUpperCase()
     .replaceAll("_", " ");
@@ -155,7 +156,7 @@ function mouseDownSelecionarElemento(event: Event): void {
       let nomeComponente: HTMLHeadingElement = document.createElement("h3");
       abaPropriedades?.append(nomeComponente);
       nomeComponente.innerText = (
-        ouvinte.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE) ?? ""
+        ouvinte.htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) ?? ""
       )
         .toUpperCase()
         .replaceAll("_", " ");
@@ -164,7 +165,7 @@ function mouseDownSelecionarElemento(event: Event): void {
   });
 
   let recebePontosExtensores: string | null = componente.htmlComponente.getAttribute(
-    ComponenteFactory.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
+    ComponenteDiagrama.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES,
   );
 
   if (recebePontosExtensores === "false") {
@@ -277,10 +278,12 @@ let tiposDiagrama: HTMLElement | null = document.querySelector("#tipos-diagrama"
 async function callbackCriarComponente(event: Event): Promise<void> {
   let btn: HTMLButtonElement = event.target as HTMLButtonElement;
   let chaveI18NDiagrama: string | null = btn.getAttribute(
-    ComponenteFactory.PROPRIEDADE_CHAVE_I18N_DIAGRAMA,
+    ComponenteDiagrama.PROPRIEDADE_CHAVE_I18N_DIAGRAMA,
   );
   let nomeDiagrama: string | null = btn.getAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA);
-  let nomeElemento: string | null = btn.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE);
+  let nomeElemento: string | null = btn.getAttribute(
+    ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
+  );
 
   let nomeAbaAtual: string | null | undefined =
     selecionadorAba.abaSelecionada?.htmlElement.getAttribute(Aba.ATRIBUTO_NOME_DIAGRAMA_ABA);
@@ -498,10 +501,10 @@ async function conectarElementos(event: MouseEvent): Promise<void> {
 
   if (
     conectarComponentesCommandBuilder.primeiroComponente?.htmlComponente.getAttribute(
-      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+      ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
     ) === NomesComponente.ENTIDADE &&
     conectarComponentesCommandBuilder.segundoComponente?.htmlComponente.getAttribute(
-      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+      ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
     ) === NomesComponente.ENTIDADE
   ) {
     const { ConectarDuasEntidadesCommandBuilder } =
@@ -517,10 +520,10 @@ async function conectarElementos(event: MouseEvent): Promise<void> {
 
   if (
     conectarComponentesCommandBuilder.primeiroComponente?.htmlComponente.getAttribute(
-      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+      ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
     ) === NomesComponente.TABELA_RELACIONAL &&
     conectarComponentesCommandBuilder.segundoComponente?.htmlComponente.getAttribute(
-      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+      ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
     ) === NomesComponente.TABELA_RELACIONAL
   ) {
     const { ConectarDuasEntidadesRelacionaisCommandBuilder } =
@@ -590,7 +593,7 @@ function trocarTipoAtributo(event: Event): void {
     atributoAlvo === null ||
     marcadorAtributo === undefined ||
     marcadorAtributo === null ||
-    atributoAlvo.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE) !==
+    atributoAlvo.htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) !==
       NomesComponente.ATRIBUTO_DER
   ) {
     return;
@@ -628,7 +631,7 @@ function trocarTipoAtributo(event: Event): void {
 
 function trocarCallbackBtnAtributo(): void {
   let btnAtributo: HTMLButtonElement | null = document.querySelector(
-    `button[${ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE}='${NomesComponente.ATRIBUTO_DER}']`,
+    `button[${ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE}='${NomesComponente.ATRIBUTO_DER}']`,
   );
 
   if (btnAtributo) {
@@ -663,7 +666,7 @@ async function callbackTerminarConexaoAtributo(event: MouseEvent): Promise<void>
 
   let elementoAlvo: HTMLElement = event.target as HTMLElement;
   let nomeElemento: string | null = elementoAlvo.getAttribute(
-    ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+    ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
   );
 
   if (!nomeElemento) {
@@ -677,7 +680,7 @@ async function callbackTerminarConexaoAtributo(event: MouseEvent): Promise<void>
 
     for (const componenteAbaAtual of componentesVisiveis) {
       let nomeComponente: string | null = componenteAbaAtual.getAttribute(
-        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+        ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
       );
 
       if (
@@ -916,6 +919,41 @@ async function criarNovaAba(): Promise<void> {
 }
 
 buttonNovaAba?.addEventListener("click", criarNovaAba);
+
+/*****************************/
+/* SALVAR / EXPORTAR ARQUIVO */
+/*****************************/
+
+(async (): Promise<void> => {
+  let { default: salvarDiagramas } = await import("application/paginas/editor/salvarDiagramas");
+
+  let spanSalvarJSON: HTMLSpanElement | null = document.querySelector("#save-type-json");
+  let spanSalvarXML: HTMLSpanElement | null = document.querySelector("#save-type-xml");
+  let spanExportarPDF: HTMLSpanElement | null = document.querySelector("#export-type-pdf");
+  let spanExportarPNG: HTMLSpanElement | null = document.querySelector("#export-type-png");
+  let spanExportarSVG: HTMLSpanElement | null = document.querySelector("#export-type-svg");
+  let buttonEnviarAtividade: HTMLButtonElement | null =
+    document.querySelector("#btn-enviar-atividade");
+
+  spanSalvarJSON?.addEventListener("click", (): Promise<void> =>
+    salvarDiagramas(repositorioComponentes, OpcoesSalvar.JSON),
+  );
+  spanSalvarXML?.addEventListener("click", (): Promise<void> =>
+    salvarDiagramas(repositorioComponentes, OpcoesSalvar.XML),
+  );
+  spanExportarPDF?.addEventListener("click", (): Promise<void> =>
+    salvarDiagramas(repositorioComponentes, OpcoesSalvar.PDF),
+  );
+  spanExportarPNG?.addEventListener("click", (): Promise<void> =>
+    salvarDiagramas(repositorioComponentes, OpcoesSalvar.PNG),
+  );
+  spanExportarSVG?.addEventListener("click", (): Promise<void> =>
+    salvarDiagramas(repositorioComponentes, OpcoesSalvar.SVG),
+  );
+  buttonEnviarAtividade?.addEventListener("click", (): Promise<void> =>
+    salvarDiagramas(repositorioComponentes, OpcoesSalvar.BANCO),
+  );
+})();
 
 /********************/
 /* IMPORTAR ARQUIVO */
