@@ -12,11 +12,14 @@
  */
 
 import LateraisComponente from "domain/enum/lateraisComponente";
+import ComponenteConexaoMetaDadosJSON from "domain/json/componenteConexaoMetaDadosJSON";
+import ComponenteMetaDadosJSON from "domain/json/componenteMetaDadosJSON";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 import Ponto from "domain/model/ponto";
 import PropertyChangeEvent from "domain/event/propertyChangeEvent";
+import NomesComponente from "domain/enum/nomesComponente";
 
 export default abstract class AbstractComponenteConexao
   extends ComponenteDiagrama
@@ -107,6 +110,25 @@ export default abstract class AbstractComponenteConexao
 
   isDependente(): boolean {
     return true;
+  }
+
+  metaDadosToJSON(): ComponenteMetaDadosJSON | undefined {
+    return {
+      primeiroPonto: {
+        x: this._ponto1.x,
+        y: this._ponto1.y,
+      },
+      segundoPonto: {
+        x: this._ponto2.x,
+        y: this._ponto2.y,
+      },
+      lateralPrimeiroComponente: this._lateralPrimeiroPonto,
+      lateralSegundoComponente: this._lateralSegundoPonto,
+      idPrimeiroComponente: this._primeiroComponente.id,
+      idSegundoComponente: this._segundoComponente.id,
+      idComponenteSelf: this.id,
+      tipo: NomesComponente[this.nome.toUpperCase() as keyof typeof NomesComponente],
+    } as ComponenteConexaoMetaDadosJSON;
   }
 
   get primeiroPonto(): Ponto {

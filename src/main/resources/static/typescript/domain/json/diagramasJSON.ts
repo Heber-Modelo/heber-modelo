@@ -13,6 +13,8 @@
 
 import AbaJSON from "domain/json/abaJSON";
 import ComponenteJSON from "domain/json/componenteJSON";
+import ComponenteCardinalidadeMetaDadosJSON from "domain/json/componenteCardinalidadeMetaDadosJSON";
+import ComponenteConexaoMetaDadosJSON from "domain/json/componenteConexaoMetaDadosJSON";
 import DescricaoRelacionalJSON from "domain/json/descricaoRelacionalJSON";
 import DicionarioDadosJSON from "domain/json/dicionarioDadosJSON";
 
@@ -25,4 +27,7 @@ export default interface DiagramasJSON {
   components: ComponenteJSON[];
   relationalDescriptions: DescricaoRelacionalJSON[];
   dataDictionaries: DicionarioDadosJSON[];
+
+  metaDadosCardinalidades: ComponenteCardinalidadeMetaDadosJSON[];
+  metaDadosConexoes: ComponenteConexaoMetaDadosJSON[];
 }

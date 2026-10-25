@@ -15,6 +15,8 @@ import traduzirChaveI18n from "infrastructure/services/traduzirChaveI18n";
 import NomesComponente from "domain/enum/nomesComponente";
 import AbaJSON from "domain/json/abaJSON";
 import ComponenteJSON from "domain/json/componenteJSON";
+import ComponenteCardinalidadeMetaDadosJSON from "domain/json/componenteCardinalidadeMetaDadosJSON";
+import ComponenteConexaoMetaDadosJSON from "domain/json/componenteConexaoMetaDadosJSON";
 import DescricaoRelacionalJSON from "domain/json/descricaoRelacionalJSON";
 import DicionarioDadosJSON from "domain/json/dicionarioDadosJSON";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
@@ -85,11 +87,30 @@ export default async function salvarDiagramas(
   let descricoesRelacionaisJSON: DescricaoRelacionalJSON[] = [];
   let dicionariosDadosJSON: DicionarioDadosJSON[] = [];
 
+  let metaDadosCardinalidades: ComponenteCardinalidadeMetaDadosJSON[] = [];
+  let metaDadosConexoes: ComponenteConexaoMetaDadosJSON[] = [];
+
   componentes.forEach((componenteDiagrama: ComponenteDiagrama): void => {
     let nomeComponente: NomesComponente =
-      NomesComponente[componenteDiagrama.nome as keyof typeof NomesComponente];
+      NomesComponente[componenteDiagrama.nome.toUpperCase() as keyof typeof NomesComponente];
 
     switch (nomeComponente) {
+      case NomesComponente.CARDINALIDADE:
+        componentesJSON.push(componenteDiagrama.toJSON() as ComponenteJSON);
+        metaDadosCardinalidades.push(
+          componenteDiagrama.metaDadosToJSON() as ComponenteCardinalidadeMetaDadosJSON,
+        );
+        break;
+
+      case NomesComponente.CONEXAO_ANGULADA:
+      case NomesComponente.CONEXAO_ENTIDADE_FRACA:
+      case NomesComponente.CONEXAO_SETA:
+        componentesJSON.push(componenteDiagrama.toJSON() as ComponenteJSON);
+        metaDadosConexoes.push(
+          componenteDiagrama.metaDadosToJSON() as ComponenteConexaoMetaDadosJSON,
+        );
+        break;
+
       case NomesComponente.EDITOR_DESCRICAO_RELACIONAL:
         descricoesRelacionaisJSON.push(componenteDiagrama.toJSON() as DescricaoRelacionalJSON);
         break;
@@ -111,6 +132,8 @@ export default async function salvarDiagramas(
     components: componentesJSON,
     relationalDescriptions: descricoesRelacionaisJSON,
     dataDictionaries: dicionariosDadosJSON,
+    metaDadosCardinalidades,
+    metaDadosConexoes,
   };
 
   if (opcaoSalvar === OpcoesSalvar.JSON) {

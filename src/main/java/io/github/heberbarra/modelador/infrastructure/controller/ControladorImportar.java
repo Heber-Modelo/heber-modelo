@@ -247,7 +247,9 @@ public class ControladorImportar {
                 tabs,
                 componentesJSON,
                 descricoesRelacionaisJSON,
-                dicionariosDadosJSONS);
+                dicionariosDadosJSONS,
+                new ArrayList<>(),
+                new ArrayList<>());
 
         ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String jsonContent = objectWriter.writeValueAsString(diagramasJSON);

@@ -12,13 +12,14 @@
  */
 
 import LateraisComponente from "domain/enum/lateraisComponente";
+import BaseJSONComponente from "domain/json/baseJSONComponente";
+import ComponenteJSON from "domain/json/componenteJSON";
+import ComponenteMetaDadosJSON from "domain/json/componenteMetaDadosJSON";
 import ComponenteDiagramaOuvido from "domain/model/componente/componenteDiagramaOuvido";
 import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
 import Ponto from "domain/model/ponto";
 import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero";
-import ComponenteJSON from "domain/json/componenteJSON";
-import BaseJSONComponente from "domain/json/baseJSONComponente";
 
 export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
   public static readonly CLASSE_BASE_COMPONENTE: string = "componente";
@@ -211,6 +212,10 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
       width,
       rotation,
     } as ComponenteJSON;
+  }
+
+  public metaDadosToJSON(): ComponenteMetaDadosJSON | undefined {
+    return undefined;
   }
 
   get htmlComponente(): HTMLDivElement {
