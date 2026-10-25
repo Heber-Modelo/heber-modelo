@@ -9,5 +9,5 @@ hibernateCore = { module = "org.hibernate.orm:hibernate-core", version = "7.4.13
 jakartaXML = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.5" }
 jlineJansi = { module = "org.jline:jansi", version = "4.4.8" }
 jsoup = { module = "org.jsoup:jsoup", version = "1.23.2" }
-mysqlConnector = { module = "com.mysql:mysql-connector-j", version = "26.7.0" }
+mysqlConnector = { module = "com.mysql:mysql-connector-j", version = "26.10.0" }
 tomlj = { module = "org.tomlj:tomlj", version = "2.2.0" }
