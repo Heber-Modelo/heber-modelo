@@ -43,8 +43,8 @@ importers:
         specifier: ^3.9.10
         version: 3.9.10
       sass:
-        specifier: ^1.105.1
-        version: 1.105.1
+        specifier: ^1.106.1
+        version: 1.106.1
       style-loader:
         specifier: ^4.0.0
         version: 4.0.0(webpack@5.111.1)
@@ -1525,8 +1525,8 @@ packages:
     resolution: {integrity: sha512-9aZLIrhRaD97sgVhtJOW6ckOEh6/GnvQtdVNfdZ6s67+3/XwLS9lBcQYzEEhYVeUowN7pRzMLsyGhK2i/xvWbw==}
     engines: {node: '>= 0.8.15'}
 
-  sass@1.105.1:
-    resolution: {integrity: sha512-1CnAWPyrrnVQzXGB/DUep1vYCKCm1CIBr+YxjjiW6wk9qtzemnGP4qicH56T2F9S4Hjtv/Ne3jDz8JqfdDU4oA==}
+  sass@1.106.1:
+    resolution: {integrity: sha512-kD+Gi66vycZcbJt+42NC4z4PXNMcCajVrJPhqoKKXy5cOBMmJQt052CxIBcRjwYXeImHYOpu/ydWWGZQIenl7A==}
     engines: {node: '>=20.19.0'}
     hasBin: true
 
@@ -3211,7 +3211,7 @@ snapshots:
   rgbcolor@1.0.1:
     optional: true
 
-  sass@1.105.1:
+  sass@1.106.1:
     dependencies:
       chokidar: 5.0.0
       immutable: 5.1.9
