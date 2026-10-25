@@ -177,14 +177,9 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
     let idAba: number = Number(
       this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_ID_ABA),
     );
-    let idComponente: number = Number(
-      this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE),
-    );
     let idsOuvintes: number[] = this.extrairElementosLista(
       this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADES_IDS_OUVINTES),
     ).map((id: string): number => Number(id));
-    let nomeComponente: string =
-      this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) || "";
     let classes: string[] = this._htmlComponente.classList.values().toArray();
 
     let recebePontosExtensores: boolean =
@@ -203,8 +198,8 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
 
     return {
       idAba,
-      idComponente,
-      nomeComponente,
+      idComponente: this.id,
+      nomeComponente: this.nome,
       classes,
       idsOuvintes,
       recebePontosExtensores,
@@ -224,6 +219,14 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
 
   set htmlComponente(novoHtmlComponente: HTMLDivElement) {
     this._htmlComponente = novoHtmlComponente;
+  }
+
+  get id(): number {
+    return Number(this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE));
+  }
+
+  set id(novoId: number) {
+    this._htmlComponente.setAttribute(ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE, `${novoId}`);
   }
 
   get nome(): string {

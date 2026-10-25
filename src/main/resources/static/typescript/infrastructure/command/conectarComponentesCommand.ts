@@ -111,10 +111,7 @@ export default class ConectarComponentesCommand implements ICommand {
           ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
-        this._componenteConexao.htmlComponente.setAttribute(
-          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
+        this._componenteConexao.id = this._geradorIDComponente.pegarProximoID();
         this._registradorEventosConexao.registrarEventos(this._componenteConexao.htmlComponente);
         this._repositorioComponente.adicionar(this._componenteConexao);
         this._diagrama.append(this._componenteConexao.htmlComponente);
@@ -150,10 +147,7 @@ export default class ConectarComponentesCommand implements ICommand {
         this._diagrama.append(componente.htmlComponente);
         this._registradorEventosElemento.registrarEventos(componente.htmlComponente);
         this._repositorioComponente.adicionar(componente);
-        componente.htmlComponente.setAttribute(
-          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
+        componente.id = this._geradorIDComponente.pegarProximoID();
 
         setTimeout((): void => {
           if (this._componenteConexao === undefined) {

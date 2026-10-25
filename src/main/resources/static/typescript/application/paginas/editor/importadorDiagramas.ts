@@ -206,10 +206,7 @@ export default class ImportadorDiagramas {
       novoComponente.htmlComponente.innerHTML = component.innerHTML;
 
       novoComponente.htmlComponente.setAttribute(Aba.ATRIBUTO_INDICE_ABA, `${component.idAba}`);
-      novoComponente.htmlComponente.setAttribute(
-        ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-        `${component.idComponente}`,
-      );
+      novoComponente.id = component.idComponente;
 
       if (component.height !== -1) {
         novoComponente.htmlComponente.style.setProperty("height", `${component.height}px`);
@@ -245,10 +242,7 @@ export default class ImportadorDiagramas {
         Aba.ATRIBUTO_INDICE_ABA,
         `${relationalDescription.idAba}`,
       );
-      componenteEditor.htmlComponente.setAttribute(
-        ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-        `${relationalDescription.idComponente}`,
-      );
+      componenteEditor.id = relationalDescription.idComponente;
 
       this._registradorEventosElemento.registrarEventos(componenteEditor.htmlComponente);
       this._repositorioComponentes.adicionar(componenteEditor);
@@ -298,10 +292,7 @@ export default class ImportadorDiagramas {
         Aba.ATRIBUTO_INDICE_ABA,
         `${dataDictionary.idAba}`,
       );
-      componenteDicionario.htmlComponente.setAttribute(
-        ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-        `${dataDictionary.idComponente}`,
-      );
+      componenteDicionario.id = dataDictionary.idComponente;
 
       let botaoCriarLinha: HTMLButtonElement | null =
         componenteDicionario.htmlComponente.querySelector(
