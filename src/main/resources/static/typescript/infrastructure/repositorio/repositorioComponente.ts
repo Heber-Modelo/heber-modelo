@@ -32,6 +32,14 @@ export default class RepositorioComponente implements IRepositorioComponente {
     }
   }
 
+  public atualizarPorID(id: number, componenteDiagrama: ComponenteDiagrama): void {
+    for (let i: number = 0; i < this._componentesDiagrama.length; i++) {
+      if (this._componentesDiagrama[i].id === id) {
+        this._componentesDiagrama[i] = componenteDiagrama;
+      }
+    }
+  }
+
   public remover(componente: ComponenteDiagrama): void {
     let id: number = componente.pegarIDElemento();
     this.removerPorID(id);

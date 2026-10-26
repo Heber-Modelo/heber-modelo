@@ -15,9 +15,11 @@ import CarregarCSSCommand, {
   CarregarCSSCommandBuilder,
 } from "infrastructure/command/carregarCSSCommand";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import GeradorIDAba from "infrastructure/gerador/geradorIDAba";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import LateraisComponente from "domain/enum/lateraisComponente";
 import AbaJSON from "domain/json/abaJSON";
@@ -28,8 +30,6 @@ import ComponenteCardinalidadeRelacionamento from "domain/model/componente/compo
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import Ponto from "domain/model/ponto";
 import IRepositorioAbas from "domain/model/repositorio/iRepositorioAbas";
-import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
-import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import TiposConexao from "domain/enum/tiposConexao";
 
 export default class ImportadorDiagramas {
@@ -43,7 +43,7 @@ export default class ImportadorDiagramas {
   private readonly _registradorEventosConexao: RegistradorEventosConexao;
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioAbas: IRepositorioAbas;
-  private readonly _repositorioComponentes: IRepositorioComponente;
+  private readonly _repositorioComponentes: RepositorioComponente;
   private readonly _selecionadorAba: SelecionadorAba;
   private readonly _seletorAbas: HTMLElement | null;
   private _dados: DiagramasJSON | undefined;
@@ -58,7 +58,7 @@ export default class ImportadorDiagramas {
     registradorEventosConexao: RegistradorEventosConexao,
     registradorEventosElemento: RegistradorEventosElemento,
     repositorioAbas: IRepositorioAbas,
-    repositorioComponentes: IRepositorioComponente,
+    repositorioComponentes: RepositorioComponente,
     selecionadorAba: SelecionadorAba,
     seletorAbas: HTMLElement | null,
   ) {
@@ -198,14 +198,13 @@ export default class ImportadorDiagramas {
       let novoComponente: ComponenteDiagrama = await this._fabricaComponente.criarComponente(
         component.nomeComponente,
       );
-      this._registradorEventosElemento.registrarEventos(novoComponente.htmlComponente);
 
       if (
-        component.classes.filter((componentClass: string): void => {
-          componentClass.includes("conexao");
-        }).length > 0
+        component.classes.filter((componentClass: string): boolean =>
+          componentClass.includes("conexao"),
+        ).length === 0
       ) {
-        this._registradorEventosConexao.registrarEventos(novoComponente.htmlComponente);
+        this._registradorEventosElemento.registrarEventos(novoComponente.htmlComponente);
       }
 
       this._repositorioComponentes.adicionar(novoComponente);
@@ -269,7 +268,7 @@ export default class ImportadorDiagramas {
           componenteRelacionamento,
           lateralComponente,
         );
-      this._repositorioComponentes.atualizar(componenteCardinalidade);
+      this._repositorioComponentes.atualizarPorID(componente.id, componenteCardinalidade);
     }
 
     for (let metaDados of this._dados.metaDadosConexoes) {
@@ -310,7 +309,8 @@ export default class ImportadorDiagramas {
         primeiroComponente,
         segundoComponente,
       );
-      this._repositorioComponentes.atualizar(componenteConexao);
+      this._registradorEventosConexao.registrarEventos(componenteConexao.htmlComponente);
+      this._repositorioComponentes.atualizarPorID(componente.id, componenteConexao);
     }
 
     this._repositorioComponentes
