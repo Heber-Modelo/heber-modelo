@@ -18,7 +18,7 @@ import io.github.heberbarra.modelador.domain.model.xhtml.XHTMLConvertable;
 public class MetaDadosComponenteJSON implements XHTMLConvertable {
     public static final String CLASSE_META_DADOS = "metadados";
     public static final String PROPRIEDADE_ID_SELF = "data-id-self";
-    public static final String PROPRIEDADE_TIPO_METADADOS = "data-tipo-metados";
+    public static final String PROPRIEDADE_TIPO_METADADOS = "data-tipo-metadados";
 
     protected int idComponenteSelf;
     protected String tipo;

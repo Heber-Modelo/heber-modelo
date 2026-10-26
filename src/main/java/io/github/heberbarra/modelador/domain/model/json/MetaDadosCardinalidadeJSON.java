@@ -31,7 +31,7 @@ public class MetaDadosCardinalidadeJSON extends MetaDadosComponenteJSON {
 
     @Override
     public String toXHTML() {
-        return "<div class=\"%s\" ><div %s=\"%d\"></div><div %s=\"%s\"></div>"
+        return "<div class=\"%s\" %s=\"%d\" %s=\"%s\">"
                         .formatted(
                                 CLASSE_META_DADOS,
                                 PROPRIEDADE_ID_SELF,

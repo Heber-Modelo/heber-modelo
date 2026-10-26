@@ -31,12 +31,17 @@ import io.github.heberbarra.modelador.domain.model.json.ComponenteJSON;
 import io.github.heberbarra.modelador.domain.model.json.DescricaoRelacionalJSON;
 import io.github.heberbarra.modelador.domain.model.json.DiagramasJSON;
 import io.github.heberbarra.modelador.domain.model.json.DicionarioDadosJSON;
+import io.github.heberbarra.modelador.domain.model.json.MetaDadosCardinalidadeJSON;
+import io.github.heberbarra.modelador.domain.model.json.MetaDadosComponenteJSON;
+import io.github.heberbarra.modelador.domain.model.json.MetaDadosConexaoJSON;
+import io.github.heberbarra.modelador.domain.model.json.PontoJSON;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -240,6 +245,117 @@ public class ControladorImportar {
                     unicos));
         }
 
+        List<MetaDadosCardinalidadeJSON> metaDadosCardinalidadesJSON = new ArrayList<>();
+        List<MetaDadosConexaoJSON> metaDadosConexoesJSON = new ArrayList<>();
+        Elements metaDadosComponentes = parsedXHTML.getElementsByClass(MetaDadosComponenteJSON.CLASSE_META_DADOS);
+        for (Element metaDadosComponente : metaDadosComponentes) {
+            String tipoComponente = metaDadosComponente.attr(MetaDadosComponenteJSON.PROPRIEDADE_TIPO_METADADOS);
+            int idComponenteSelf =
+                    Integer.parseInt(metaDadosComponente.attr(MetaDadosComponenteJSON.PROPRIEDADE_ID_SELF));
+
+            if (Objects.equals(tipoComponente, "cardinalidade")) {
+                Optional<Element> idComponenteConexaoWrapper = Optional.ofNullable(metaDadosComponente
+                        .getElementsByClass(MetaDadosCardinalidadeJSON.CLASSE_ID_CONEXAO)
+                        .first());
+                Optional<Element> idComponenteRelacionamentoWrapper = Optional.ofNullable(metaDadosComponente
+                        .getElementsByClass(MetaDadosCardinalidadeJSON.CLASSE_ID_RELACIONAMENTO)
+                        .first());
+
+                int idComponenteConexao = 0;
+                int idComponenteRelacionamento = 0;
+
+                if (idComponenteConexaoWrapper.isPresent()) {
+                    idComponenteConexao =
+                            Integer.parseInt(idComponenteConexaoWrapper.get().text());
+                }
+
+                if (idComponenteRelacionamentoWrapper.isPresent()) {
+                    idComponenteRelacionamento = Integer.parseInt(
+                            idComponenteRelacionamentoWrapper.get().text());
+                }
+
+                metaDadosCardinalidadesJSON.add(new MetaDadosCardinalidadeJSON(
+                        idComponenteSelf, tipoComponente, idComponenteConexao, idComponenteRelacionamento));
+            } else {
+                Optional<Element> primeiroPontoWrapper = Optional.ofNullable(metaDadosComponente
+                        .getElementsByClass(MetaDadosConexaoJSON.CLASSE_PRIMEIRO_PONTO)
+                        .first());
+                Optional<Element> segundoPontoWrapper = Optional.ofNullable(metaDadosComponente
+                        .getElementsByClass(MetaDadosConexaoJSON.CLASSE_SEGUNDO_PONTO)
+                        .first());
+                Optional<Element> idPrimeiroComponenteWrapper = Optional.ofNullable(metaDadosComponente
+                        .getElementsByClass(MetaDadosConexaoJSON.CLASSE_ID_PRIMEIRO_COMPONENTE)
+                        .first());
+                Optional<Element> idSegundoComponenteWrapper = Optional.ofNullable(metaDadosComponente
+                        .getElementsByClass(MetaDadosConexaoJSON.CLASSE_ID_SEGUNDO_COMPONENTE)
+                        .first());
+                Optional<Element> primeiraLateralWrapper = Optional.ofNullable(metaDadosComponente
+                        .getElementsByClass(MetaDadosConexaoJSON.CLASSE_PRIMEIRA_LATERAL)
+                        .first());
+                Optional<Element> segundaLateralWrapper = Optional.ofNullable(metaDadosComponente
+                        .getElementsByClass(MetaDadosConexaoJSON.CLASSE_SEGUNDA_LATERAL)
+                        .first());
+
+                PontoJSON primeiroPonto = new PontoJSON();
+                if (primeiroPontoWrapper.isPresent()) {
+                    primeiroPonto.setX(Double.parseDouble(primeiroPontoWrapper
+                            .get()
+                            .attr(MetaDadosConexaoJSON.PROPRIEDADE_X_PONTO)
+                            .replace(",", ".")));
+                    primeiroPonto.setY(Double.parseDouble(primeiroPontoWrapper
+                            .get()
+                            .attr(MetaDadosConexaoJSON.PROPRIEDADE_Y_PONTO)
+                            .replace(",", ".")));
+                }
+
+                PontoJSON segundoPonto = new PontoJSON();
+                if (segundoPontoWrapper.isPresent()) {
+                    segundoPonto.setX(Double.parseDouble(segundoPontoWrapper
+                            .get()
+                            .attr(MetaDadosConexaoJSON.PROPRIEDADE_X_PONTO)
+                            .replace(",", ".")));
+                    segundoPonto.setY(Double.parseDouble(segundoPontoWrapper
+                            .get()
+                            .attr(MetaDadosConexaoJSON.PROPRIEDADE_Y_PONTO)
+                            .replace(",", ".")));
+                }
+
+                int idPrimeiroComponente = 0;
+                if (idPrimeiroComponenteWrapper.isPresent()) {
+                    idPrimeiroComponente =
+                            Integer.parseInt(idPrimeiroComponenteWrapper.get().text());
+                }
+
+                int idSegundoComponente = 0;
+                if (idSegundoComponenteWrapper.isPresent()) {
+                    idSegundoComponente =
+                            Integer.parseInt(idSegundoComponenteWrapper.get().text());
+                }
+
+                int primeiraLateral = 0;
+                if (primeiraLateralWrapper.isPresent()) {
+                    primeiraLateral =
+                            Integer.parseInt(primeiraLateralWrapper.get().text());
+                }
+
+                int segundaLateral = 0;
+                if (segundaLateralWrapper.isPresent()) {
+                    segundaLateral =
+                            Integer.parseInt(segundaLateralWrapper.get().text());
+                }
+
+                metaDadosConexoesJSON.add(new MetaDadosConexaoJSON(
+                        idComponenteSelf,
+                        tipoComponente,
+                        primeiroPonto,
+                        segundoPonto,
+                        primeiraLateral,
+                        segundaLateral,
+                        idPrimeiroComponente,
+                        idSegundoComponente));
+            }
+        }
+
         DiagramasJSON diagramasJSON = new DiagramasJSON(
                 creationDateTime,
                 cssFiles,
@@ -248,8 +364,8 @@ public class ControladorImportar {
                 componentesJSON,
                 descricoesRelacionaisJSON,
                 dicionariosDadosJSONS,
-                new ArrayList<>(),
-                new ArrayList<>());
+                metaDadosCardinalidadesJSON,
+                metaDadosConexoesJSON);
 
         ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String jsonContent = objectWriter.writeValueAsString(diagramasJSON);
