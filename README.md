@@ -137,7 +137,7 @@ se ter uma interface visual de acesso ao MySQL, para rodar os comandos contidos 
 
 ### Dependências:
 
-- [Gradle](https://gradle.org/) 9.8.1
+- [Gradle](https://gradle.org/) 9.8.2
 - [Java](https://www.oracle.com/java/technologies/downloads/) 25
 - [PNPM](https://pnpm.io/pt/) ^12.14.0
 - [NodeJS](https://nodejs.org/pt) v25.2.1
