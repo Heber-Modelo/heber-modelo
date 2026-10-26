@@ -946,6 +946,7 @@ let importadorDiagramas: ImportadorDiagramas = new ImportadorDiagramas(
   abaPadrao,
   diagrama,
   fabricaComponente,
+  fabricaConexao,
   fecharAba,
   geradorIDAba,
   registradorEventosConexao,
