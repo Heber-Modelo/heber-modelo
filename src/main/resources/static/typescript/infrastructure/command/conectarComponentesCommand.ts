@@ -108,25 +108,17 @@ export default class ConectarComponentesCommand implements ICommand {
           this._segundoComponente,
         );
         this._componenteConexao.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
-        this._componenteConexao.htmlComponente.setAttribute(
-          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
+        this._componenteConexao.id = this._geradorIDComponente.pegarProximoID();
         this._registradorEventosConexao.registrarEventos(this._componenteConexao.htmlComponente);
         this._repositorioComponente.adicionar(this._componenteConexao);
         this._diagrama.append(this._componenteConexao.htmlComponente);
       });
 
-    let nomePrimeiroComponente: string | null =
-      this._primeiroComponente.htmlComponente.getAttribute(
-        ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-      );
-    let nomeSegundoComponente: string | null = this._segundoComponente.htmlComponente.getAttribute(
-      ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-    );
+    let nomePrimeiroComponente: string | null = this._primeiroComponente.nome;
+    let nomeSegundoComponente: string | null = this._segundoComponente.nome;
 
     if (
       (nomePrimeiroComponente !== NomesComponente.RELACIONAMENTO ||
@@ -155,21 +147,14 @@ export default class ConectarComponentesCommand implements ICommand {
         this._diagrama.append(componente.htmlComponente);
         this._registradorEventosElemento.registrarEventos(componente.htmlComponente);
         this._repositorioComponente.adicionar(componente);
-        componente.htmlComponente.setAttribute(
-          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
+        componente.id = this._geradorIDComponente.pegarProximoID();
 
         setTimeout((): void => {
           if (this._componenteConexao === undefined) {
             return;
           }
 
-          if (
-            this._primeiroComponente.htmlComponente.getAttribute(
-              ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-            ) === NomesComponente.ENTIDADE
-          ) {
+          if (this._primeiroComponente.nome === NomesComponente.ENTIDADE) {
             this._componenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
               componente.htmlComponente,
               componente.propriedades,
@@ -210,11 +195,7 @@ export default class ConectarComponentesCommand implements ICommand {
       this._diagrama.append(this._componenteCardinalidade.htmlComponente);
       this._repositorioComponente.adicionar(this._componenteCardinalidade);
 
-      if (
-        this._primeiroComponente.htmlComponente.getAttribute(
-          ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
-        ) === NomesComponente.RELACIONAMENTO
-      ) {
+      if (this._primeiroComponente.nome === NomesComponente.RELACIONAMENTO) {
         this._segundoComponente.adicionarOuvinte(this._componenteCardinalidade);
       } else {
         this._primeiroComponente.adicionarOuvinte(this._componenteCardinalidade);

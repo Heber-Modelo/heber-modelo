@@ -50,7 +50,7 @@ export default class ColarComponenteCommand implements ICommand {
       setTimeout((): void => {
         let ultimoElemento: HTMLDivElement = this._diagrama.lastElementChild as HTMLDivElement;
         let nomeNovoComponente: string | null = ultimoElemento.getAttribute(
-          ComponenteFactory.PROPRIEDADE_NOME_COMPONENTE,
+          ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE,
         );
         if (nomeNovoComponente !== null) {
           this._registradorEventos.registrarEventos(ultimoElemento);

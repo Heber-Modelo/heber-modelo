@@ -106,13 +106,10 @@ export default class ConectarDuasEntidadesRelacionaisCommand implements ICommand
       .criarComponente(this._tipoConexao)
       .then(async (componente: ComponenteDiagrama): Promise<void> => {
         componente.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
-        componente.htmlComponente.setAttribute(
-          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
+        componente.id = this._geradorIDComponente.pegarProximoID();
 
         this._componenteConexao = this._fabricaConexao.criarConexao(
           this._tipoConexao,
@@ -137,13 +134,10 @@ export default class ConectarDuasEntidadesRelacionaisCommand implements ICommand
         this._diagrama.append(primeiraCardinalidade.htmlComponente);
 
         primeiraCardinalidade.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
-        primeiraCardinalidade.htmlComponente.setAttribute(
-          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
+        primeiraCardinalidade.id = this._geradorIDComponente.pegarProximoID();
 
         this._primeiroComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
           primeiraCardinalidade.htmlComponente,
@@ -164,13 +158,10 @@ export default class ConectarDuasEntidadesRelacionaisCommand implements ICommand
         this._diagrama.append(segundaCardinalidade.htmlComponente);
 
         segundaCardinalidade.htmlComponente.setAttribute(
-          ComponenteFactory.PROPRIEDADE_ID_ABA,
+          ComponenteDiagrama.PROPRIEDADE_ID_ABA,
           String(this._selecionadorAba.abaSelecionada?.id),
         );
-        segundaCardinalidade.htmlComponente.setAttribute(
-          ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-          String(this._geradorIDComponente.pegarProximoID()),
-        );
+        segundaCardinalidade.id = this._geradorIDComponente.pegarProximoID();
 
         this._segundoComponenteCardinalidade = new ComponenteCardinalidadeRelacionamento(
           segundaCardinalidade.htmlComponente,

@@ -12,6 +12,9 @@
  */
 
 import LateraisComponente from "domain/enum/lateraisComponente";
+import BaseJSONComponente from "domain/json/baseJSONComponente";
+import ComponenteJSON from "domain/json/componenteJSON";
+import ComponenteMetaDadosJSON from "domain/json/componenteMetaDadosJSON";
 import ComponenteDiagramaOuvido from "domain/model/componente/componenteDiagramaOuvido";
 import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
@@ -21,8 +24,15 @@ import converterPixeisParaNumero from "domain/services/converterPixeisParaNumero
 export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
   public static readonly CLASSE_BASE_COMPONENTE: string = "componente";
   public static readonly CLASSE_ELEMENTO_SELECIONADO: string = "selected";
+  public static readonly PROPRIEDADE_CHAVE_I18N_DIAGRAMA: string = "data-chave-i18n-diagrama";
+  public static readonly PROPRIEDADE_ID_ABA: string = "data-indice-aba";
   public static readonly PROPRIEDADE_ID_COMPONENTE: string = "data-id";
   public static readonly PROPRIEDADES_IDS_OUVINTES: string = "data-ids-ouvintes";
+  public static readonly PROPRIEDADE_NOME_COMPONENTE: string = "data-nome-componente";
+  public static readonly PROPRIEDADE_RECEBE_PONTOS_EXTENSORES: string =
+    "data-recebe-pontos-extensores";
+  public static readonly PROPRIEDADE_RECEBE_SETAS_CONECTORAS: string =
+    "data-recebe-setas-conectoras";
 
   constructor(htmlComponente: HTMLDivElement, propriedades: PropriedadeComponente[] | null) {
     this._htmlComponente = htmlComponente;
@@ -33,18 +43,6 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
   private _ouvintes: ComponenteDiagramaOuvinte[] = [];
   protected _htmlComponente: HTMLDivElement;
   protected _recebeSetas: boolean = true;
-
-  get htmlComponente(): HTMLDivElement {
-    return this._htmlComponente;
-  }
-
-  set htmlComponente(novoHtmlComponente: HTMLDivElement) {
-    this._htmlComponente = novoHtmlComponente;
-  }
-
-  get propriedades(): PropriedadeComponente[] {
-    return this._propriedades;
-  }
 
   public atualizarPropriedades(): void {
     this._propriedades.forEach((propriedade: PropriedadeComponente): void =>
@@ -165,11 +163,90 @@ export default class ComponenteDiagrama implements ComponenteDiagramaOuvido {
     return ouvintesRemovidos;
   }
 
+  private extrairElementosLista(tipos: string | null | undefined): string[] {
+    if (!tipos) {
+      return [];
+    }
+
+    return tipos
+      .substring(1, tipos.length - 1)
+      .split(",")
+      .map((tipo: string): string => tipo.trim());
+  }
+
+  public toJSON(): BaseJSONComponente {
+    let idAba: number = Number(
+      this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_ID_ABA),
+    );
+    let idsOuvintes: number[] = this.extrairElementosLista(
+      this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADES_IDS_OUVINTES),
+    ).map((id: string): number => Number(id));
+    let classes: string[] = this._htmlComponente.classList.values().toArray();
+
+    let recebePontosExtensores: boolean =
+      this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_RECEBE_PONTOS_EXTENSORES) ==
+      "true";
+    let recebeSetasConectoras: boolean =
+      this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_RECEBE_SETAS_CONECTORAS) ==
+      "true";
+
+    let estiloComponente: CSSStyleDeclaration = getComputedStyle(this._htmlComponente);
+    let x: number = converterPixeisParaNumero(estiloComponente.left) || -1;
+    let y: number = converterPixeisParaNumero(estiloComponente.top) || -1;
+    let height: number = converterPixeisParaNumero(estiloComponente.height) || -1;
+    let width: number = converterPixeisParaNumero(estiloComponente.width) || -1;
+    let rotation: string = estiloComponente.rotate;
+
+    return {
+      idAba,
+      idComponente: this.id,
+      nomeComponente: this.nome,
+      classes,
+      idsOuvintes,
+      recebePontosExtensores,
+      recebeSetasConectoras,
+      innerHTML: this._htmlComponente.innerHTML,
+      x,
+      y,
+      height,
+      width,
+      rotation,
+    } as ComponenteJSON;
+  }
+
+  public metaDadosToJSON(): ComponenteMetaDadosJSON | undefined {
+    return undefined;
+  }
+
+  get htmlComponente(): HTMLDivElement {
+    return this._htmlComponente;
+  }
+
+  set htmlComponente(novoHtmlComponente: HTMLDivElement) {
+    this._htmlComponente = novoHtmlComponente;
+  }
+
+  get id(): number {
+    return Number(this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE));
+  }
+
+  set id(novoId: number) {
+    this._htmlComponente.setAttribute(ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE, `${novoId}`);
+  }
+
+  get nome(): string {
+    return this._htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_NOME_COMPONENTE) ?? "";
+  }
+
   get ouvintes(): ComponenteDiagramaOuvinte[] {
     return this._ouvintes;
   }
 
   set ouvintes(value: ComponenteDiagramaOuvinte[]) {
     this._ouvintes = value;
+  }
+
+  get propriedades(): PropriedadeComponente[] {
+    return this._propriedades;
   }
 }

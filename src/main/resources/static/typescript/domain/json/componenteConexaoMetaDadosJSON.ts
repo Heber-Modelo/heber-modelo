@@ -11,13 +11,15 @@
  *
  */
 
-enum TipoArquivo {
-  BANCO,
-  JSON,
-  PDF,
-  PNG,
-  SVG,
-  XML,
-}
+import LateraisComponente from "domain/enum/lateraisComponente";
+import ComponenteMetaDadosJSON from "domain/json/componenteMetaDadosJSON";
+import Ponto from "domain/model/ponto";
 
-export default TipoArquivo;
+export default interface ComponenteConexaoMetaDadosJSON extends ComponenteMetaDadosJSON {
+  primeiroPonto: { x: number; y: number };
+  segundoPonto: { x: number; y: number };
+  lateralPrimeiroComponente: LateraisComponente;
+  lateralSegundoComponente: LateraisComponente;
+  idPrimeiroComponente: number;
+  idSegundoComponente: number;
+}

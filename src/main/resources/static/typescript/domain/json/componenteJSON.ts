@@ -11,10 +11,9 @@
  *
  */
 
-export default interface ComponenteJSON {
-  idAba: number;
-  idComponente: number;
-  nomeComponente: string;
+import BaseJSONComponente from "domain/json/baseJSONComponente";
+
+export default interface ComponenteJSON extends BaseJSONComponente {
   classes: string[];
   idsOuvintes: number[];
   recebePontosExtensores: boolean;

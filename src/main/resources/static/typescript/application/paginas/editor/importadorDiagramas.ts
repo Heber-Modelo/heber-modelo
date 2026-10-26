@@ -15,28 +15,35 @@ import CarregarCSSCommand, {
   CarregarCSSCommandBuilder,
 } from "infrastructure/command/carregarCSSCommand";
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
+import ComponenteConexaoFactory from "infrastructure/factory/componenteConexaoFactory";
 import GeradorIDAba from "infrastructure/gerador/geradorIDAba";
 import RegistradorEventosConexao from "infrastructure/registrador/registradorEventosConexao";
 import RegistradorEventosElemento from "infrastructure/registrador/registradorEventosElemento";
+import RepositorioComponente from "infrastructure/repositorio/repositorioComponente";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
+import LateraisComponente from "domain/enum/lateraisComponente";
 import AbaJSON from "domain/json/abaJSON";
 import DiagramasJSON from "domain/json/diagramasJSON";
 import Aba from "domain/model/aba";
+import AbstractComponenteConexao from "domain/model/componente/abstractComponenteConexao";
+import ComponenteCardinalidadeRelacionamento from "domain/model/componente/componenteCardinalidadeRelacionamento";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
+import Ponto from "domain/model/ponto";
 import IRepositorioAbas from "domain/model/repositorio/iRepositorioAbas";
-import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
+import TiposConexao from "domain/enum/tiposConexao";
 
 export default class ImportadorDiagramas {
   public static readonly CLASSE_AREA_EDICAO: string = ".ql-editor";
   private readonly _abaPadrao: Aba;
   private readonly _diagrama: HTMLElement | null;
   private readonly _fabricaComponente: ComponenteFactory;
+  private readonly _fabricaConexao: ComponenteConexaoFactory;
   private readonly _fecharAba: (event: MouseEvent) => void;
   private readonly _geradorIDAba: GeradorIDAba;
   private readonly _registradorEventosConexao: RegistradorEventosConexao;
   private readonly _registradorEventosElemento: RegistradorEventosElemento;
   private readonly _repositorioAbas: IRepositorioAbas;
-  private readonly _repositorioComponentes: IRepositorioComponente;
+  private readonly _repositorioComponentes: RepositorioComponente;
   private readonly _selecionadorAba: SelecionadorAba;
   private readonly _seletorAbas: HTMLElement | null;
   private _dados: DiagramasJSON | undefined;
@@ -45,18 +52,20 @@ export default class ImportadorDiagramas {
     abaPadrao: Aba,
     diagrama: HTMLElement | null,
     fabricaComponente: ComponenteFactory,
+    fabricaConexao: ComponenteConexaoFactory,
     fecharAba: (event: MouseEvent) => void,
     geradorIDAba: GeradorIDAba,
     registradorEventosConexao: RegistradorEventosConexao,
     registradorEventosElemento: RegistradorEventosElemento,
     repositorioAbas: IRepositorioAbas,
-    repositorioComponentes: IRepositorioComponente,
+    repositorioComponentes: RepositorioComponente,
     selecionadorAba: SelecionadorAba,
     seletorAbas: HTMLElement | null,
   ) {
     this._abaPadrao = abaPadrao;
     this._diagrama = diagrama;
     this._fabricaComponente = fabricaComponente;
+    this._fabricaConexao = fabricaConexao;
     this._fecharAba = fecharAba;
     this._geradorIDAba = geradorIDAba;
     this._registradorEventosConexao = registradorEventosConexao;
@@ -174,7 +183,6 @@ export default class ImportadorDiagramas {
     }
   }
 
-  // TODO: Ajustar ouvintes
   async carregarComponentes(): Promise<void> {
     if (!this._dados) {
       return;
@@ -190,14 +198,13 @@ export default class ImportadorDiagramas {
       let novoComponente: ComponenteDiagrama = await this._fabricaComponente.criarComponente(
         component.nomeComponente,
       );
-      this._registradorEventosElemento.registrarEventos(novoComponente.htmlComponente);
 
       if (
-        component.classes.filter((componentClass: string): void => {
-          componentClass.includes("conexao");
-        }).length > 0
+        component.classes.filter((componentClass: string): boolean =>
+          componentClass.includes("conexao"),
+        ).length === 0
       ) {
-        this._registradorEventosConexao.registrarEventos(novoComponente.htmlComponente);
+        this._registradorEventosElemento.registrarEventos(novoComponente.htmlComponente);
       }
 
       this._repositorioComponentes.adicionar(novoComponente);
@@ -206,10 +213,7 @@ export default class ImportadorDiagramas {
       novoComponente.htmlComponente.innerHTML = component.innerHTML;
 
       novoComponente.htmlComponente.setAttribute(Aba.ATRIBUTO_INDICE_ABA, `${component.idAba}`);
-      novoComponente.htmlComponente.setAttribute(
-        ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-        `${component.idComponente}`,
-      );
+      novoComponente.id = component.idComponente;
 
       if (component.height !== -1) {
         novoComponente.htmlComponente.style.setProperty("height", `${component.height}px`);
@@ -226,6 +230,92 @@ export default class ImportadorDiagramas {
       novoComponente.htmlComponente.style.setProperty("left", `${component.x}px`);
       novoComponente.htmlComponente.style.setProperty("top", `${component.y}px`);
     }
+
+    for (let metaDados of this._dados.metaDadosCardinalidades) {
+      let componente: ComponenteDiagrama | null = this._repositorioComponentes.pegar(
+        metaDados.idComponenteSelf,
+      );
+      let componenteConexao: ComponenteDiagrama | null = this._repositorioComponentes.pegar(
+        metaDados.idComponenteConexao,
+      );
+      let componenteDiagrama: ComponenteDiagrama | null = this._repositorioComponentes.pegar(
+        metaDados.idComponenteDiagrama,
+      );
+      let componenteRelacionamento: ComponenteDiagrama | null = this._repositorioComponentes.pegar(
+        metaDados.idComponenteRelacionamento,
+      );
+      let lateralComponente: LateraisComponente =
+        LateraisComponente[
+          LateraisComponente[metaDados.lateralComponente] as keyof typeof LateraisComponente
+        ];
+
+      if (
+        componente === null ||
+        componenteConexao === null ||
+        componenteDiagrama === null ||
+        componenteRelacionamento === null ||
+        lateralComponente === null
+      ) {
+        continue;
+      }
+
+      let componenteCardinalidade: ComponenteCardinalidadeRelacionamento =
+        new ComponenteCardinalidadeRelacionamento(
+          componente.htmlComponente,
+          componente.propriedades,
+          componenteDiagrama,
+          componenteConexao,
+          componenteRelacionamento,
+          lateralComponente,
+        );
+      this._repositorioComponentes.atualizarPorID(componente.id, componenteCardinalidade);
+    }
+
+    for (let metaDados of this._dados.metaDadosConexoes) {
+      let componente: ComponenteDiagrama | null = this._repositorioComponentes.pegar(
+        metaDados.idComponenteSelf,
+      );
+      let ponto1: Ponto = new Ponto(metaDados.primeiroPonto.x, metaDados.primeiroPonto.y);
+      let ponto2: Ponto = new Ponto(metaDados.segundoPonto.x, metaDados.segundoPonto.y);
+      let lateralPrimeiroComponente: LateraisComponente =
+        LateraisComponente[
+          LateraisComponente[metaDados.lateralPrimeiroComponente] as keyof typeof LateraisComponente
+        ];
+      let lateralSegundoComponente: LateraisComponente =
+        LateraisComponente[
+          LateraisComponente[metaDados.lateralSegundoComponente] as keyof typeof LateraisComponente
+        ];
+      let primeiroComponente: ComponenteDiagrama | null = this._repositorioComponentes.pegar(
+        metaDados.idPrimeiroComponente,
+      );
+      let segundoComponente: ComponenteDiagrama | null = this._repositorioComponentes.pegar(
+        metaDados.idSegundoComponente,
+      );
+      let tipoConexao: TiposConexao =
+        TiposConexao[metaDados.tipo.toUpperCase() as keyof typeof TiposConexao];
+
+      if (componente === null || primeiroComponente === null || segundoComponente === null) {
+        continue;
+      }
+
+      let componenteConexao: AbstractComponenteConexao = this._fabricaConexao.criarConexao(
+        tipoConexao,
+        componente.htmlComponente,
+        componente.propriedades,
+        ponto1,
+        ponto2,
+        lateralPrimeiroComponente,
+        lateralSegundoComponente,
+        primeiroComponente,
+        segundoComponente,
+      );
+      this._registradorEventosConexao.registrarEventos(componenteConexao.htmlComponente);
+      this._repositorioComponentes.atualizarPorID(componente.id, componenteConexao);
+    }
+
+    this._repositorioComponentes
+      .listar()
+      .forEach((componente: ComponenteDiagrama): void => componente.atualizarOuvintes());
   }
 
   async carregarDescricoes(): Promise<void> {
@@ -245,10 +335,7 @@ export default class ImportadorDiagramas {
         Aba.ATRIBUTO_INDICE_ABA,
         `${relationalDescription.idAba}`,
       );
-      componenteEditor.htmlComponente.setAttribute(
-        ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-        `${relationalDescription.idComponente}`,
-      );
+      componenteEditor.id = relationalDescription.idComponente;
 
       this._registradorEventosElemento.registrarEventos(componenteEditor.htmlComponente);
       this._repositorioComponentes.adicionar(componenteEditor);
@@ -298,10 +385,7 @@ export default class ImportadorDiagramas {
         Aba.ATRIBUTO_INDICE_ABA,
         `${dataDictionary.idAba}`,
       );
-      componenteDicionario.htmlComponente.setAttribute(
-        ComponenteDiagrama.PROPRIEDADE_ID_COMPONENTE,
-        `${dataDictionary.idComponente}`,
-      );
+      componenteDicionario.id = dataDictionary.idComponente;
 
       let botaoCriarLinha: HTMLButtonElement | null =
         componenteDicionario.htmlComponente.querySelector(

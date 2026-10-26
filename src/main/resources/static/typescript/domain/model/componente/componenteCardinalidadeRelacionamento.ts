@@ -12,6 +12,9 @@
  */
 
 import LateraisComponente from "domain/enum/lateraisComponente";
+import NomesComponente from "domain/enum/nomesComponente";
+import ComponenteCardinalidadeMetaDadosJSON from "domain/json/componenteCardinalidadeMetaDadosJSON";
+import ComponenteMetaDadosJSON from "domain/json/componenteMetaDadosJSON";
 import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 import ComponenteDiagramaOuvinte from "domain/model/componente/componenteDiagramaOuvinte";
 import PropriedadeComponente from "domain/model/propriedade/propriedadeComponente";
@@ -102,5 +105,16 @@ export default class ComponenteCardinalidadeRelacionamento
 
   isDependente(): boolean {
     return true;
+  }
+
+  metaDadosToJSON(): ComponenteMetaDadosJSON | undefined {
+    return {
+      idComponenteSelf: this.id,
+      idComponenteConexao: this._componenteConexao.id,
+      idComponenteDiagrama: this._componente.id,
+      idComponenteRelacionamento: this._componenteRelacionamento.id,
+      lateralComponente: this._lateralComponente,
+      tipo: NomesComponente.CARDINALIDADE,
+    } as ComponenteCardinalidadeMetaDadosJSON;
   }
 }

@@ -24,7 +24,7 @@ import RegistradorEventosElemento from "infrastructure/registrador/registradorEv
 import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import SelecionadorAba from "infrastructure/selecionador/selecionadorAba";
 import calcularPosicaoAtributo from "infrastructure/services/calcularPosicaoAtributo";
-import colectarPosicoesAtributos from "infrastructure/services/colectarPosicoesAtributos";
+import coletarPosicoesAtributos from "infrastructure/services/coletarPosicoesAtributos";
 import ICommandBuilder from "domain/model/command/iCommandBuilder";
 import LateraisComponente from "domain/enum/lateraisComponente";
 import NomesComponente from "domain/enum/nomesComponente";
@@ -84,9 +84,7 @@ export default class ConectarAtributoCommand implements ICommand {
       return;
     }
 
-    let posicoesOcupadas: Ponto[] = colectarPosicoesAtributos(
-      this._repositorioComponentes.listar(),
-    );
+    let posicoesOcupadas: Ponto[] = coletarPosicoesAtributos(this._repositorioComponentes.listar());
     // A última posição da lista é do atributo atual
     posicoesOcupadas.pop();
 

@@ -36,6 +36,7 @@ public class DiagramasJSON implements XHTMLConvertable {
     private static final Logger logger = JavaLogger.obterLogger(DiagramasJSON.class.toString());
     public static final String CREATION_DATE_ID = "creation-datetime";
     public static final String CSS_FILES_ID = "css-files";
+    public static final String META_DATA_ID = "meta-data";
     public static final String TYPES_ID = "types";
     public static final String PROPRIEDADE_ID_ABA = "data-indice-aba";
     public static final String PROPRIEDADE_NOME_ABA = "data-nome-aba";
@@ -50,6 +51,9 @@ public class DiagramasJSON implements XHTMLConvertable {
     List<DescricaoRelacionalJSON> relationalDescriptions;
     List<DicionarioDadosJSON> dataDictionaries;
 
+    List<MetaDadosCardinalidadeJSON> metaDadosCardinalidades;
+    List<MetaDadosConexaoJSON> metaDadosConexoes;
+
     public DiagramasJSON() {
         acessadorRecurso = new AcessadorRecursos();
     }
@@ -61,7 +65,9 @@ public class DiagramasJSON implements XHTMLConvertable {
             List<AbaJSON> tabs,
             List<ComponenteJSON> components,
             List<DescricaoRelacionalJSON> relationalDescriptions,
-            List<DicionarioDadosJSON> dataDictionaries) {
+            List<DicionarioDadosJSON> dataDictionaries,
+            List<MetaDadosCardinalidadeJSON> metaDadosCardinalidades,
+            List<MetaDadosConexaoJSON> metaDadosConexoes) {
         acessadorRecurso = new AcessadorRecursos();
 
         this.creationDate = creationDate;
@@ -71,6 +77,8 @@ public class DiagramasJSON implements XHTMLConvertable {
         this.components = components;
         this.relationalDescriptions = relationalDescriptions;
         this.dataDictionaries = dataDictionaries;
+        this.metaDadosCardinalidades = metaDadosCardinalidades;
+        this.metaDadosConexoes = metaDadosConexoes;
     }
 
     @Override
@@ -172,7 +180,18 @@ public class DiagramasJSON implements XHTMLConvertable {
             builder.append("</fieldset>%n".formatted());
         }
 
-        builder.append("</body></html>");
+        builder.append("<div style=\"display: none;\" id=\"%s\">%n".formatted(META_DATA_ID));
+        for (MetaDadosCardinalidadeJSON metaDadasCardinalidadeJSON : metaDadosCardinalidades) {
+            builder.append(metaDadasCardinalidadeJSON.toXHTML());
+            builder.append("%n".formatted());
+        }
+
+        for (MetaDadosConexaoJSON metaDadosConexaoJSON : metaDadosConexoes) {
+            builder.append(metaDadosConexaoJSON.toXHTML());
+            builder.append("%n".formatted());
+        }
+
+        builder.append("</div>%n</body>%n</html>".formatted());
 
         return builder.toString();
     }
@@ -249,5 +268,21 @@ public class DiagramasJSON implements XHTMLConvertable {
 
     public void setDataDictionaries(List<DicionarioDadosJSON> dataDictionaries) {
         this.dataDictionaries = dataDictionaries;
+    }
+
+    public List<MetaDadosCardinalidadeJSON> getMetaDadosCardinalidades() {
+        return metaDadosCardinalidades;
+    }
+
+    public void setMetaDadosCardinalidades(List<MetaDadosCardinalidadeJSON> metaDadosCardinalidades) {
+        this.metaDadosCardinalidades = metaDadosCardinalidades;
+    }
+
+    public List<MetaDadosConexaoJSON> getMetaDadosConexoes() {
+        return metaDadosConexoes;
+    }
+
+    public void setMetaDadosConexoes(List<MetaDadosConexaoJSON> metaDadosConexoes) {
+        this.metaDadosConexoes = metaDadosConexoes;
     }
 }

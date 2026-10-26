@@ -11,9 +11,9 @@
  *
  */
 
-import ComponenteFactory from "infrastructure/factory/componenteFactory";
 import Aba from "domain/model/aba";
 import IRepositorioComponente from "domain/model/repositorio/iRepositorioComponente";
+import ComponenteDiagrama from "domain/model/componente/componenteDiagrama";
 
 export default class SelecionadorAba {
   public static readonly CLASSE_ABA_SELECIONADA: string = "selected";
@@ -29,7 +29,7 @@ export default class SelecionadorAba {
 
     for (const componente of this._iRepositorioComponente.listar()) {
       if (
-        Number(componente.htmlComponente.getAttribute(ComponenteFactory.PROPRIEDADE_ID_ABA)) ===
+        Number(componente.htmlComponente.getAttribute(ComponenteDiagrama.PROPRIEDADE_ID_ABA)) ===
         idAba
       ) {
         componente.htmlComponente.style.removeProperty("display");
