@@ -257,16 +257,29 @@ public class ControladorImportar {
                 Optional<Element> idComponenteConexaoWrapper = Optional.ofNullable(metaDadosComponente
                         .getElementsByClass(MetaDadosCardinalidadeJSON.CLASSE_ID_CONEXAO)
                         .first());
+                Optional<Element> idComponenteDiagramaWrapper = Optional.ofNullable(metaDadosComponente
+                        .getElementsByClass(MetaDadosCardinalidadeJSON.CLASSE_ID_COMPONENTE)
+                        .first());
                 Optional<Element> idComponenteRelacionamentoWrapper = Optional.ofNullable(metaDadosComponente
                         .getElementsByClass(MetaDadosCardinalidadeJSON.CLASSE_ID_RELACIONAMENTO)
                         .first());
+                Optional<Element> lateralComponenteWrapper = Optional.ofNullable(metaDadosComponente
+                        .getElementsByClass(MetaDadosCardinalidadeJSON.CLASSE_LATERAL_COMPONENTE)
+                        .first());
 
                 int idComponenteConexao = 0;
+                int idComponenteDiagrama = 0;
                 int idComponenteRelacionamento = 0;
+                int lateralComponente = 0;
 
                 if (idComponenteConexaoWrapper.isPresent()) {
                     idComponenteConexao =
                             Integer.parseInt(idComponenteConexaoWrapper.get().text());
+                }
+
+                if (idComponenteDiagramaWrapper.isPresent()) {
+                    idComponenteDiagrama =
+                            Integer.parseInt(idComponenteDiagramaWrapper.get().text());
                 }
 
                 if (idComponenteRelacionamentoWrapper.isPresent()) {
@@ -274,8 +287,18 @@ public class ControladorImportar {
                             idComponenteRelacionamentoWrapper.get().text());
                 }
 
+                if (lateralComponenteWrapper.isPresent()) {
+                    lateralComponente =
+                            Integer.parseInt(lateralComponenteWrapper.get().text());
+                }
+
                 metaDadosCardinalidadesJSON.add(new MetaDadosCardinalidadeJSON(
-                        idComponenteSelf, tipoComponente, idComponenteConexao, idComponenteRelacionamento));
+                        idComponenteSelf,
+                        tipoComponente,
+                        idComponenteConexao,
+                        idComponenteDiagrama,
+                        idComponenteRelacionamento,
+                        lateralComponente));
             } else {
                 Optional<Element> primeiroPontoWrapper = Optional.ofNullable(metaDadosComponente
                         .getElementsByClass(MetaDadosConexaoJSON.CLASSE_PRIMEIRO_PONTO)

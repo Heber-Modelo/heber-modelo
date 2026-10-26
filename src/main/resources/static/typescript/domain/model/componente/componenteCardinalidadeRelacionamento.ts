@@ -111,7 +111,9 @@ export default class ComponenteCardinalidadeRelacionamento
     return {
       idComponenteSelf: this.id,
       idComponenteConexao: this._componenteConexao.id,
+      idComponenteDiagrama: this._componente.id,
       idComponenteRelacionamento: this._componenteRelacionamento.id,
+      lateralComponente: this._lateralComponente,
       tipo: NomesComponente.CARDINALIDADE,
     } as ComponenteCardinalidadeMetaDadosJSON;
   }

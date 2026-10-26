@@ -11,9 +11,12 @@
  *
  */
 
+import LateraisComponente from "domain/enum/lateraisComponente";
 import ComponenteMetaDadosJSON from "domain/json/componenteMetaDadosJSON";
 
 export default interface ComponenteCardinalidadeMetaDadosJSON extends ComponenteMetaDadosJSON {
   idComponenteConexao: number;
+  idComponenteDiagrama: number;
   idComponenteRelacionamento: number;
+  lateralComponente: LateraisComponente;
 }
